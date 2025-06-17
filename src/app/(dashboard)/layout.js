@@ -1,0 +1,101 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+
+import { usePathname, useRouter } from "next/navigation";
+import TopHeader from "@/components/layout/TopHeader";
+import Header from "@/components/layout/Header";
+import { useDispatch, useSelector } from "react-redux";
+import { initializeAuth } from "@/redux/slices/authSlice";
+
+import Sidebar from "@/components/layout/Sidebar";
+
+export default function DashboardLayout({ children }) {
+  const [activeTab, setActiveTab] = useState("Home");
+
+  const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const token = useSelector((state) => state.auth.token);
+
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
+
+  useEffect(() => {
+    if (!token) return;
+
+    try {
+      const { exp } = JSON.parse(atob(token.split(".")[1]));
+      const expiryTime = exp * 1000;
+      const currentTime = Date.now();
+      const timeout = setTimeout(() => {
+        localStorage.removeItem("token");
+        router.push("/");
+      }, expiryTime - currentTime);
+
+      return () => clearTimeout(timeout);
+    } catch (err) {
+      console.error("Auto-logout error:", err);
+    }
+  }, [token, router]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+  // 🧠 Update active tab based on route
+  useEffect(() => {
+    setActiveTab((prevTab) => {
+      if (
+        pathname === "/sld" ||
+        pathname === "/sld_meters1" ||
+        pathname === "/Logs1" ||
+        pathname === "/log_detail1"
+      )
+        return "Diagram";
+      else if (
+        pathname === "/custom_trend" ||
+        pathname === "/comparison_trends"
+      )
+        return "Trends";
+      else if (
+        pathname === "/add_roles" ||
+        pathname === "/add_user" ||
+        pathname === "/view_users"
+      )
+        return "Setting";
+      else if (pathname === "/Recent_Alarms" || pathname === "/All_Alarms")
+        return "Alarms";
+      else if (pathname === "/energy_cost" || pathname === "/energy_usage")
+        return "Reports";
+      return prevTab;
+    });
+  }, [pathname]);
+
+  if (!isAuthenticated) return null;
+
+  return (
+    <div className={` flex flex-col bg-[#f7f7f7] dark:bg-gray-900`}>
+      <TopHeader />
+      <Header handleTabClick={handleTabClick} />
+
+      <div className="flex px-4 gap-[13px]">
+        <Sidebar activeTab={activeTab} handleTabClick={handleTabClick} />
+        <main
+          className="flex-1 shadow w-full  rounded-xl p-2  overflow-x-hidden overflow-y-auto bg-center bg-contain bg-no-repeat pt-3 pr-3"
+          style={{ backgroundImage: 'url("./bglogo.png")' }}
+        >
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
