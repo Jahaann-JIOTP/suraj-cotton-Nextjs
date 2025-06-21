@@ -9,9 +9,16 @@ export default function SidebarMenu({ tab, iscollapese }) {
   const [openDropdownIndex, setOpenDropdownIndex] = useState(0);
   const [isClient, setIsClient] = useState(false);
   const path = usePathname();
+
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    const matchedIndex = links.findIndex((item) =>
+      item.submenu?.some((sub) => sub.href === path)
+    );
+    if (matchedIndex !== -1) {
+      setOpenDropdownIndex(matchedIndex);
+    }
+  }, [path, links]);
   return (
     <div className="space-y-2 py-2 px-2 w-full">
       {links.map((item, index) => {
@@ -54,7 +61,7 @@ export default function SidebarMenu({ tab, iscollapese }) {
                     },
                     arrow: {
                       sx: {
-                        color: "#025697", // arrow color
+                        color: "#025697",
                       },
                     },
                   }}

@@ -12,6 +12,7 @@ import Sidebar from "@/components/layout/Sidebar";
 
 export default function DashboardLayout({ children }) {
   const [activeTab, setActiveTab] = useState("Home");
+  const [authChecked, setAuthChecked] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -21,14 +22,18 @@ export default function DashboardLayout({ children }) {
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
-    dispatch(initializeAuth());
+    const checkAuth = async () => {
+      await dispatch(initializeAuth());
+      setAuthChecked(true);
+    };
+    checkAuth();
   }, [dispatch]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/");
+    if (authChecked && !isAuthenticated) {
+      router.replace("/");
     }
-  }, [isAuthenticated, router]);
+  }, [authChecked, isAuthenticated, router]);
 
   useEffect(() => {
     if (!token) return;
@@ -83,14 +88,16 @@ export default function DashboardLayout({ children }) {
   if (!isAuthenticated) return null;
 
   return (
-    <div className={` flex flex-col bg-[#f7f7f7] dark:bg-gray-900`}>
+    <div
+      className={` flex flex-col bg-[#f7f7f7] dark:bg-gray-900 overflow-hidden`}
+    >
       <TopHeader />
       <Header handleTabClick={handleTabClick} />
 
-      <div className="flex px-4 gap-[13px]">
+      <div className="flex px-4 gap-[0.7vw]">
         <Sidebar activeTab={activeTab} handleTabClick={handleTabClick} />
         <main
-          className="flex-1 shadow w-full  rounded-xl p-2  overflow-x-hidden overflow-y-auto bg-center bg-contain bg-no-repeat pt-3 pr-3"
+          className="w-full h-[87vh] overflow-x-hidden overflow-y-auto bg-center bg-contain bg-no-repeat"
           style={{ backgroundImage: 'url("./bglogo.png")' }}
         >
           {children}

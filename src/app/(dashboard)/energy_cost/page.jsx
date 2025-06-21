@@ -1,7 +1,12 @@
+import DashboardPage from "@/components/testSourcecode";
 import React from "react";
 
 const page = () => {
-  return <div>All Alarms</div>;
+  return (
+    <div>
+      <DashboardPage />
+    </div>
+  );
 };
 
 export default page;

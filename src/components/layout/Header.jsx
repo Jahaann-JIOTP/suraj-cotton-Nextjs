@@ -166,8 +166,8 @@ const Header = ({ handleTabClick }) => {
         <div
           className={`fixed top-[44px] left-0 w-full z-[999] transition-all duration-500 ${
             isDropdownOpen
-              ? "opacity-100 max-h-[1000px]"
-              : "opacity-0 max-h-0 overflow-hidden"
+              ? "flex max-h-[1000px]"
+              : "hidden max-h-0 overflow-hidden"
           }`}
         >
           <MobileSidebar
@@ -178,9 +178,6 @@ const Header = ({ handleTabClick }) => {
       </div>
       {/* Bell Icon */}
       <div className="flex items-center justify-center">
-        <div className=" flex items-center">
-          <ThemeSwitcher />
-        </div>
         <div className="relative mr-4 mt-1">
           <div className="relative inline-block">
             <img
@@ -254,6 +251,9 @@ const Header = ({ handleTabClick }) => {
               </ul>
             </div>
           )}
+        </div>
+        <div className=" flex items-center pr-4">
+          <ThemeSwitcher />
         </div>
       </div>
     </header>

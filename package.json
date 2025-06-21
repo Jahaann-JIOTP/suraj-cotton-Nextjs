@@ -1,5 +1,5 @@
 {
-  "name": "jahaann-ems-template",
+  "name": "suraj_cotton_nextjs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@amcharts/amcharts4": "^4.10.40",
+    "@amcharts/amcharts5": "^5.13.3",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -16,8 +18,10 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@mui/material": "^7.1.1",
     "@mui/styled-engine-sc": "^7.1.1",
+    "@radix-ui/react-dropdown-menu": "^2.1.15",
     "@radix-ui/react-slot": "^1.2.3",
     "@reduxjs/toolkit": "^2.8.2",
+    "@sweetalert2/theme-dark": "^5.0.27",
     "axios": "^1.10.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -27,11 +31,13 @@
     "next": "15.3.3",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
     "react-toastify": "^11.0.5",
     "styled-components": "^6.1.19",
+    "sweetalert2": "^11.22.0",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {

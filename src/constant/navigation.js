@@ -8,6 +8,7 @@ import {
 
 import PowerIcon from "../../public/sidebarIcons/PowerIcon";
 import TransformerIcon from "../../public/sidebarIcons/Transformer";
+import EnergySankey from "../../public/sidebarIcons/energySankey";
 import Unit4Lt1 from "../../public/sidebarIcons/Unit4Lt1";
 import PlantOverview from "../../public/sidebarIcons/PlantOverview";
 
@@ -80,14 +81,14 @@ export const sidebarLinksMap = {
         },
         {
           id: 1,
-          title: "Gen. Summary",
-          href: "/gen-summary",
+          title: "Power Summary",
+          href: "/power-summary",
           icon: PlantOverview,
         },
         {
           id: 2,
-          title: "Transformer",
-          href: "/Transformer",
+          title: "Transformers",
+          href: "/transformers",
           icon: TransformerIcon,
         },
       ],
@@ -95,7 +96,7 @@ export const sidebarLinksMap = {
     {
       id: 1,
       title: "Energy Sankeys",
-      icon: TransformerIcon,
+      icon: EnergySankey,
       submenu: [
         {
           id: 3,
