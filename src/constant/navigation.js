@@ -38,7 +38,7 @@ export const privilegeConfig = {
     href: "/all-alarms",
     icon: faBell,
     label: "ALARMS",
-    matchPaths: ["/alarms", "/all-alarms", "/Recent_Alarms"],
+    matchPaths: ["/all-alarms", "/Recent_Alarms"],
     tab: "Alarms",
   },
   Reports: {

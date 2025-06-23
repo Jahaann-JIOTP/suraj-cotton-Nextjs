@@ -97,7 +97,7 @@ export default function DashboardLayout({ children }) {
       <div className="flex px-4 gap-[0.7vw]">
         <Sidebar activeTab={activeTab} handleTabClick={handleTabClick} />
         <main
-          className="w-full h-[87vh] overflow-x-hidden overflow-y-auto bg-center bg-contain bg-no-repeat"
+          className="w-full h-[81vh] overflow-x-hidden overflow-y-auto bg-center bg-contain bg-no-repeat"
           style={{ backgroundImage: 'url("./bglogo.png")' }}
         >
           {children}
