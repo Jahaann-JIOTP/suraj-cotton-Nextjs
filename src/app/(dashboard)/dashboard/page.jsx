@@ -22,16 +22,36 @@ const Dashboard = () => {
       {/* second section first of small divs */}
       <div className="mt-3 md:mt-[0.7vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
-          <SingleValueDiv title="HT Generation" value="7373.98" unit="kWh" />
+          <SingleValueDiv
+            title="HT Generation"
+            value="7373.98"
+            unit="kWh"
+            height="4rem"
+          />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
-          <SingleValueDiv title="LT Generation" value="8883.98" unit="kWh" />
+          <SingleValueDiv
+            title="LT Generation"
+            value="8883.98"
+            unit="kWh"
+            height="4rem"
+          />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
-          <SingleValueDiv title="Solar Generation" value="8883.98" unit="kWh" />
+          <SingleValueDiv
+            title="Solar Generation"
+            value="8883.98"
+            unit="kWh"
+            height="4rem"
+          />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
-          <SingleValueDiv title="WAPDA Import" value="7083.98" unit="kWh" />
+          <SingleValueDiv
+            title="WAPDA Import"
+            value="7083.98"
+            unit="kWh"
+            height="4rem"
+          />
         </div>
       </div>
       {/* charts firlst section */}
@@ -45,6 +65,7 @@ const Dashboard = () => {
                 title="Total Generation"
                 value="7373.98"
                 unit="kWh"
+                height="4rem"
               />
             </div>
             <div className="w-full md:w-[48.7%]">
@@ -52,6 +73,7 @@ const Dashboard = () => {
                 title="Total Energy Input"
                 value="7373.98"
                 unit="kWh"
+                height="4rem"
               />
             </div>
           </div>
@@ -73,6 +95,7 @@ const Dashboard = () => {
                 title="Total Generation"
                 value="7373.98"
                 unit="kWh"
+                height="4rem"
               />
             </div>
             <div className="w-full md:w-[48.7%]">
@@ -80,6 +103,7 @@ const Dashboard = () => {
                 title="Total Energy Input"
                 value="7373.98"
                 unit="kWh"
+                height="4rem"
               />
             </div>
           </div>
@@ -88,16 +112,36 @@ const Dashboard = () => {
       {/* small divs second section */}
       <div className="mt-3 md:mt-[0.7vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="HT Generation" value="7373.98" unit="kWh" />
+          <SingleValueDiv
+            title="HT Generation"
+            value="7373.98"
+            unit="kWh"
+            height="4rem"
+          />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="LT Generation" value="8883.98" unit="kWh" />
+          <SingleValueDiv
+            title="LT Generation"
+            value="8883.98"
+            unit="kWh"
+            height="4rem"
+          />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="Solar Generation" value="8883.98" unit="kWh" />
+          <SingleValueDiv
+            title="Solar Generation"
+            value="8883.98"
+            unit="kWh"
+            height="4rem"
+          />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="WAPDA Import" value="7083.98" unit="kWh" />
+          <SingleValueDiv
+            title="WAPDA Import"
+            value="7083.98"
+            unit="kWh"
+            height="4rem"
+          />
         </div>
       </div>
       {/* comparison graphs */}

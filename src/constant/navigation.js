@@ -35,17 +35,22 @@ export const privilegeConfig = {
     tab: "Trends",
   },
   Alarms: {
-    href: "/All_Alarms",
+    href: "/all-alarms",
     icon: faBell,
     label: "ALARMS",
-    matchPaths: ["/alarms", "/All_Alarms", "/Recent_Alarms"],
+    matchPaths: ["/alarms", "/all-alarms", "/Recent_Alarms"],
     tab: "Alarms",
   },
   Reports: {
     href: "/energy_cost",
     icon: faBell,
     label: "REPORTS",
-    matchPaths: ["/energy_cost", "/energy_usage", "/energy_shift"],
+    matchPaths: [
+      "/energy_cost",
+      "/energy_usage",
+      "/energy_shift",
+      "/spindle-production",
+    ],
     tab: "Reports",
   },
   "User Management": {
@@ -149,19 +154,17 @@ export const sidebarLinksMap = {
   ],
   Alarms: [
     {
-      title: "1- All Alarms",
+      id: 0,
+      title: "Alarms",
       icon: TransformerIcon,
-      href: "/All_Alarms",
-    },
-    {
-      title: "2- Recent Alarms",
-      icon: TransformerIcon,
-      href: "/Recent_Alarms",
-    },
-    {
-      title: "3- Alarms Threshold",
-      icon: TransformerIcon,
-      href: "/alarms_threshold",
+      submenu: [
+        {
+          id: 0,
+          title: "All Alarms",
+          href: "/all-alarms",
+          icon: TransformerIcon,
+        },
+      ],
     },
   ],
   Reports: [
@@ -174,6 +177,11 @@ export const sidebarLinksMap = {
       title: "2- Energy Usage Report",
       icon: TransformerIcon,
       href: "/energy_usage",
+    },
+    {
+      title: "Spindle Production",
+      icon: PlantOverview,
+      href: "/spindle-production",
     },
   ],
   Setting: [

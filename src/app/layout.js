@@ -4,15 +4,10 @@ import { ThemeProvider } from "next-themes";
 import ReduxProvider from "@/components/reduxWrapper/ReduxWrapper";
 import ToastProvider from "@/components/toastProvider/ToastProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// const geistMono = Geist_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
 const raleway = Raleway({
   variable: "--font-raleway",
   weight: ["400", "500", "600", "700"],
@@ -33,7 +28,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${raleway.variable} ${inter.variable} antialiased bg-[#f7f7f7] dark:bg-gray-900`}
+        className={`  ${raleway.variable} ${inter.variable} antialiased bg-[#f7f7f7] dark:bg-gray-900`}
       >
         <ReduxProvider>
           <ThemeProvider

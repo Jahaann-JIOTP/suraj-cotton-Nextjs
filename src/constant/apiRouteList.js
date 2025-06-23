@@ -19,6 +19,7 @@ const config = {
     DELETE_ROLE: "/roles/delete/:id", // replace id
   },
   ALARMS: {
+    GET_ALARMS: "/alarms",
     BELL: "/bell",
     ACKNOWLEDGE: "/bell/acknowledge",
   },

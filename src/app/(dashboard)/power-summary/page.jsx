@@ -23,7 +23,7 @@ const PowerSummaryPage = () => {
             title="WAPDA 1"
             value="7373.98"
             unit="kWh"
-            height={6}
+            height="6rem"
           />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
@@ -31,7 +31,7 @@ const PowerSummaryPage = () => {
             title="WAPDA 2"
             value="8883.98"
             unit="kWh"
-            height={6}
+            height="6rem"
           />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
@@ -39,11 +39,16 @@ const PowerSummaryPage = () => {
             title="Nilgata HFO"
             value="8883.98"
             unit="kWh"
-            height={6}
+            height="6rem"
           />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
-          <SingleValueDiv title="JMS" value="7083.98" unit="kWh" height={6} />
+          <SingleValueDiv
+            title="JMS"
+            value="7083.98"
+            unit="kWh"
+            height="6rem"
+          />
         </div>
       </div>
       {/* second section */}
@@ -103,7 +108,7 @@ const PowerSummaryPage = () => {
             title="HT Generation"
             value="7373.98"
             unit="kWh"
-            height={6}
+            height="6rem"
           />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
@@ -111,7 +116,7 @@ const PowerSummaryPage = () => {
             title="LT Generation"
             value="8883.98"
             unit="kWh"
-            height={6}
+            height="6rem"
           />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
@@ -119,7 +124,7 @@ const PowerSummaryPage = () => {
             title="Solar Generation"
             value="8883.98"
             unit="kWh"
-            height={6}
+            height="6rem"
           />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
@@ -127,7 +132,7 @@ const PowerSummaryPage = () => {
             title="WAPDA Import"
             value="7083.98"
             unit="kWh"
-            height={6}
+            height="6rem"
           />
         </div>
       </div>
@@ -138,7 +143,7 @@ const PowerSummaryPage = () => {
             title="HT Generation"
             value="7373.98"
             unit="kWh"
-            height={6}
+            height="6rem"
             valueColor="#019726"
           />
         </div>
@@ -147,7 +152,7 @@ const PowerSummaryPage = () => {
             title="LT Generation"
             value="8883.98"
             unit="kWh"
-            height={6}
+            height="6rem"
             valueColor="#E40101"
           />
         </div>
@@ -156,7 +161,7 @@ const PowerSummaryPage = () => {
             title="Solar Generation"
             value="8883.98"
             unit="kWh"
-            height={6}
+            height="6rem"
             valueColor="#E40101"
           />
         </div>
@@ -165,7 +170,7 @@ const PowerSummaryPage = () => {
             title="WAPDA Import"
             value="7083.98"
             unit="kWh"
-            height={6}
+            height="6rem"
             valueColor="#E40101"
           />
         </div>
