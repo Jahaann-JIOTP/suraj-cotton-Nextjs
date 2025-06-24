@@ -68,8 +68,10 @@ export default function SidebarMenu({ tab, iscollapese }) {
                 >
                   <span>
                     <item.icon
-                      className={`w-4 h-4  dark:text-white group-hover:text-[#1A68B2] transition-all duration-300 ${
-                        activePath ? "text-[#1A68B2]" : "text-black"
+                      className={`w-4 h-4  dark:text-white  group-hover:text-[#1A68B2] transition-all duration-300 ${
+                        activePath
+                          ? "text-[#1A68B2] dark:text-[#1A68B2]"
+                          : "text-black dark:text-white"
                       }`}
                     />
                   </span>
@@ -78,12 +80,16 @@ export default function SidebarMenu({ tab, iscollapese }) {
             ) : (
               <span
                 className={`flex items-center justify-center gap-2 ${
-                  activePath ? "text-[#1A68B2]" : "text-black dark:text-white"
+                  activePath
+                    ? "text-[#1A68B2] dark:text-[#1A68B2]"
+                    : "text-black dark:text-white"
                 }`}
               >
                 <item.icon
                   className={`w-4 h-4 ${
-                    activePath ? "text-[#1A68B2]" : "text-black"
+                    activePath
+                      ? "text-[#1A68B2] dark:text-[#1A68B2]"
+                      : "text-black"
                   } dark:text-white`}
                 />
                 {item.title}

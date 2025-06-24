@@ -10,8 +10,9 @@ import { privilegeConfig } from "@/constant/navigation";
 import { privilegeOrder } from "@/constant/navigation";
 import MobileSidebar from "./MobileSidebar";
 import ThemeSwitcher from "@/themeSwitcher/ThemeSwitcher";
+import { getActiveTabFromPathname } from "@/utils/navigation-utils";
 
-const Header = ({ handleTabClick }) => {
+const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userPrivileges, setUserPrivileges] = useState([]);
@@ -21,6 +22,13 @@ const Header = ({ handleTabClick }) => {
   const [newAlarmCount, setNewAlarmCount] = useState(0);
   const [error, setError] = useState(null);
   const acknowledgedAlarms = useRef([]);
+
+  useEffect(() => {
+    const currentTab = getActiveTabFromPathname(pathname);
+    if (currentTab !== activeTab) {
+      handleTabClick(currentTab);
+    }
+  }, [pathname]);
   // fetch user details
   const fetchUserDetails = async () => {
     const token = localStorage.getItem("token");

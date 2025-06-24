@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initializeAuth } from "@/redux/slices/authSlice";
 
 import Sidebar from "@/components/layout/Sidebar";
+import { getActiveTabFromPathname } from "@/utils/navigation-utils";
 
 export default function DashboardLayout({ children }) {
   const [activeTab, setActiveTab] = useState("Home");
@@ -20,6 +21,15 @@ export default function DashboardLayout({ children }) {
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const token = useSelector((state) => state.auth.token);
+
+  useEffect(() => {
+    const currentTab = getActiveTabFromPathname(pathname);
+    setActiveTab(currentTab);
+  }, []);
+  useEffect(() => {
+    const currentTab = getActiveTabFromPathname(pathname);
+    setActiveTab(currentTab);
+  }, [pathname]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -97,7 +107,7 @@ export default function DashboardLayout({ children }) {
       <div className="flex px-4 gap-[0.7vw]">
         <Sidebar activeTab={activeTab} handleTabClick={handleTabClick} />
         <main
-          className="w-full h-[81vh] overflow-x-hidden overflow-y-auto bg-center bg-contain bg-no-repeat"
+          className="w-full h-full pb-5 md:p-auto md:h-[81vh] overflow-x-hidden overflow-y-auto bg-center bg-contain bg-no-repeat"
           style={{ backgroundImage: 'url("./bglogo.png")' }}
         >
           {children}

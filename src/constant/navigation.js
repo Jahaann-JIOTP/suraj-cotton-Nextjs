@@ -42,11 +42,11 @@ export const privilegeConfig = {
     tab: "Alarms",
   },
   Reports: {
-    href: "/energy_cost",
+    href: "/energy-usage-report",
     icon: faBell,
     label: "REPORTS",
     matchPaths: [
-      "/energy_cost",
+      "/energy-usage-report",
       "/energy_usage",
       "/energy_shift",
       "/spindle-production",
@@ -169,14 +169,9 @@ export const sidebarLinksMap = {
   ],
   Reports: [
     {
-      title: "1- Energy Cost Report",
-      icon: TransformerIcon,
-      href: "/energy_cost",
-    },
-    {
-      title: "2- Energy Usage Report",
-      icon: TransformerIcon,
-      href: "/energy_usage",
+      title: "energy-usage-report",
+      icon: PlantOverview,
+      href: "/energy-usage-report",
     },
     {
       title: "Spindle Production",
