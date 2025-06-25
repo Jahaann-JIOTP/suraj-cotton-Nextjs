@@ -27,7 +27,8 @@ const Login = () => {
     }
     setLoading(true);
     try {
-      const response = await fetch(`${config.BASE_URL}${config.AUTH.LOGIN}`, {
+      // const response = await fetch(`${config.BASE_URL}${config.AUTH.LOGIN}`, {
+      const response = await fetch(`http://localhost:5001/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,11 +36,11 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      if (response.ok && data.access_token) {
+      if (response.ok && data.token) {
         setSuccess("Login successful.");
         toast.success("Login successful!");
         setError(null);
-        dispatch(login(data.access_token));
+        dispatch(login(data.token));
         setLoading(false);
         router.push("/dashboard");
       } else {

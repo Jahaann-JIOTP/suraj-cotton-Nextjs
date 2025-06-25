@@ -19,7 +19,7 @@ export default function Roles() {
   const [showRolePopup, setShowRolePopup] = useState(false);
   const [editRole, setEditRole] = useState(null);
   const [editPrivileges, setEditPrivileges] = useState([]);
-
+  console.log("-0-------------", privileges);
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
@@ -38,15 +38,16 @@ export default function Roles() {
   const fetchRoles = async () => {
     try {
       const rolesRes = await axios.get(
-        `${config.BASE_URL}${config.ADMIN.FETCH_ROLES}`,
+        // `${config.BASE_URL}${config.ADMIN.FETCH_ROLES}`,
+        `${config.SURAJ_COTTON_BASE_URL}/roles/allrole`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       const rawRoles = rolesRes.data || [];
-      setRoles(rawRoles);
-      setFilteredRoles(rawRoles);
+      setRoles(rawRoles?.data);
+      setFilteredRoles(rawRoles?.data);
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -60,7 +61,8 @@ export default function Roles() {
   const fetchPrivileges = async () => {
     try {
       const res = await axios.get(
-        `${config.BASE_URL}${config.ADMIN.GET_PRIVILEGES}`,
+        // `${config.BASE_URL}${config.ADMIN.GET_PRIVILEGES}`,
+        `${config.SURAJ_COTTON_BASE_URL}/privelleges/allprivelleges`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -91,10 +93,10 @@ export default function Roles() {
 
     try {
       await axios.post(
-        `${config.BASE_URL}${config.ADMIN.ADD_ROLE}`,
+        `${config.SURAJ_COTTON_BASE_URL}/roles/addrole`,
         {
           name: newRole,
-          privileges: selectedPrivileges,
+          privelleges: selectedPrivileges,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -131,10 +133,11 @@ export default function Roles() {
     }
     try {
       await axios.patch(
-        `${config.BASE_URL}${config.ADMIN.UPDATE_ROLE.replace(
-          ":id",
-          editRole._id
-        )}`,
+        // `${config.BASE_URL}${config.ADMIN.UPDATE_ROLE.replace(
+        //   ":id",
+        //   editRole._id
+        // )}`,
+        `${config.SURAJ_COTTON_BASE_URL}roles/updaterole/${editRole._id}`,
         {
           name: editRole.name,
           privileges: editPrivileges,
@@ -154,7 +157,8 @@ export default function Roles() {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: err.response?.data?.message || "Failed to update privileges!",
+        // text: err.response?.data?.message || "Failed to update privileges!",
+        text: err.response?.data?.message,
         theme: theme,
       });
     }
@@ -173,7 +177,7 @@ export default function Roles() {
       if (result.isConfirmed) {
         try {
           await axios.delete(
-            `${config.BASE_URL}${config.ADMIN.DELETE_ROLE.replace(":id", id)}`,
+            `${config.SURAJ_COTTON_BASE_URL}/roles/deleterole/${id}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -244,6 +248,14 @@ export default function Roles() {
           </thead>
           <tbody>
             {filteredRoles.map((role, i) => {
+              const getPrivilegesFromRole = role.privelleges.map((priv) => {
+                return priv;
+              });
+              const privilegeNames = getPrivilegesFromRole
+                .map((id) => privileges.find((p) => p._id === id)?.name)
+                .filter(Boolean) // remove undefined if any ID not found
+                .join(", ");
+              console.log("this is privileges in table", privilegeNames);
               return (
                 <tr
                   key={role._id}
@@ -256,7 +268,8 @@ export default function Roles() {
                     {role.name}
                   </td>
                   <td className="px-4 py-2 border border-gray-300 dark:border-gray-500">
-                    {(role.privileges || []).map((p) => p.name).join(", ")}
+                    {/* {(role.privileges || []).map((p) => p)} */}
+                    {privilegeNames}
                   </td>
                   <td className="px-4 py-2 border border-gray-300 dark:border-gray-500 text-center">
                     <div className="flex justify-center gap-3">
@@ -264,7 +277,11 @@ export default function Roles() {
                         className="w-6 h-6"
                         onClick={() => {
                           setEditRole(role);
-                          setEditPrivileges(role.privileges.map((p) => p._id));
+                          setEditPrivileges(
+                            (role?.privileges).map((p) => {
+                              return p._id;
+                            })
+                          );
                           setEditRolePopup(true);
                         }}
                       >
@@ -347,11 +364,11 @@ export default function Roles() {
                       type="checkbox"
                       checked={selectedPrivileges.includes(p._id)}
                       onChange={() =>
-                        setSelectedPrivileges((prev) =>
-                          prev.includes(p._id)
+                        setSelectedPrivileges((prev) => {
+                          return prev.includes(p._id)
                             ? prev.filter((id) => id !== p._id)
-                            : [...prev, p._id]
-                        )
+                            : [...prev, p._id];
+                        })
                       }
                     />
                     {p.name}

@@ -35,16 +35,21 @@ const Header = ({ handleTabClick, activeTab }) => {
     if (!token) return;
 
     try {
-      const res = await fetch(`${config.BASE_URL}${config.USER.PROFILE}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // const res = await fetch(`${config.BASE_URL}${config.USER.PROFILE}`, {
+      const res = await fetch(
+        `${config.SURAJ_COTTON_BASE_URL}/users/myprofile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (res.ok) {
         const data = await res.json();
-        const privileges = Array.isArray(data?.role?.privileges)
-          ? data.role.privileges
+        // console.log(data?.role?.privelleges);
+        const privileges = Array.isArray(data?.role?.privelleges)
+          ? data?.role?.privelleges
               .map((p) => {
                 const name = p.name?.toLowerCase();
                 switch (name) {

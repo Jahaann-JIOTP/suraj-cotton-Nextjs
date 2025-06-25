@@ -1,4 +1,5 @@
 const config = {
+  SURAJ_COTTON_BASE_URL: "http://localhost:5001",
   BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
   AUTH: {
     LOGIN: "/auth/login",

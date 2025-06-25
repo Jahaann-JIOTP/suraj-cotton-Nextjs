@@ -4,35 +4,40 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from "@/constant/apiRouteList";
+import { useSelector } from "react-redux";
 
 export default function AddUser() {
-  const [token, setToken] = useState(null);
+  const [AuthToken, setAuthToken] = useState(null);
   const [roles, setRoles] = useState([]);
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
     password: "",
-    roleName: "",
+    roleId: "",
   });
+  console.log("this is new user", newUser.roleId);
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
-    setToken(localStorage.getItem("token"));
+    // setToken(localStorage.getItem("token"));
+    setAuthToken(token);
   }, []);
 
   useEffect(() => {
-    if (token) fetchRoles();
-  }, [token]);
+    if (AuthToken) fetchRoles();
+  }, [AuthToken]);
 
   const fetchRoles = async () => {
     try {
       const res = await axios.get(
-        `${config.BASE_URL}${config.ADMIN.FETCH_SELECTED_ROLES}`,
+        // `${config.BASE_URL}${config.ADMIN.FETCH_SELECTED_ROLES}`,
+        `${config.SURAJ_COTTON_BASE_URL}/roles/allrole`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${AuthToken}` },
         }
       );
 
-      setRoles(res.data || []); // ✅ Corrected
+      setRoles(res?.data?.data || []); // ✅ Corrected
     } catch (err) {
       Swal.fire(
         "Error",
@@ -47,7 +52,7 @@ export default function AddUser() {
       !newUser.name ||
       !newUser.email ||
       !newUser.password ||
-      !newUser.roleName
+      !newUser.roleId
     ) {
       Swal.fire("Error", "Please fill in all fields!", "error");
       return;
@@ -55,20 +60,21 @@ export default function AddUser() {
 
     try {
       await axios.post(
-        `${config.BASE_URL}${config.ADMIN.ADD_USER}`,
+        // `${config.BASE_URL}${config.ADMIN.ADD_USER}`,
+        `${config.SURAJ_COTTON_BASE_URL}/users/addUser`,
         {
           name: newUser.name,
           email: newUser.email,
           password: newUser.password,
-          role: newUser.roleName, // now roleName, not roleId
+          roleId: newUser.roleId, // now roleName, not roleId
         },
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${AuthToken}` },
         }
       );
 
       Swal.fire("Success", "User added successfully!", "success");
-      setNewUser({ name: "", email: "", password: "", roleName: "" });
+      setNewUser({ name: "", email: "", password: "", roleId: "" });
     } catch (err) {
       const message = Array.isArray(err.response?.data?.message)
         ? err.response.data.message.join("\n")
@@ -83,10 +89,10 @@ export default function AddUser() {
         Add New User
       </p>
 
-      <div className="space-y-4 mb-6">
-        <div>
+      <div className="space-y-4 mb-6 flex items-center justify-between flex-wrap gap-5">
+        <div className="w-full md:w-[45%]">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Name
+            Username
           </label>
           <input
             type="text"
@@ -97,9 +103,9 @@ export default function AddUser() {
           />
         </div>
 
-        <div>
+        <div className="w-full md:w-[45%]">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Email
+            User Email
           </label>
           <input
             type="email"
@@ -110,9 +116,9 @@ export default function AddUser() {
           />
         </div>
 
-        <div>
+        <div className="w-full md:w-[45%]">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Password
+            User Password
           </label>
           <input
             type="password"
@@ -124,16 +130,28 @@ export default function AddUser() {
             className="border-[rgba(0,0,0,0.33)] w-full px-4 py-2 rounded-md border bg-[rgba(217,217,217,0.17)] border-gray-30 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
-
-        <div>
+        {/* <div className="w-full md:w-[45%]">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Role
+            Confirm Password
+          </label>
+          <input
+            type="password"
+            placeholder="Enter password"
+            value={newUser.password}
+            onChange={(e) =>
+              setNewUser({ ...newUser, password: e.target.value })
+            }
+            className="border-[rgba(0,0,0,0.33)] w-full px-4 py-2 rounded-md border bg-[rgba(217,217,217,0.17)] border-gray-30 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div> */}
+
+        <div className="w-full md:w-[45%]">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Select Role
           </label>
           <select
-            value={newUser.roleName}
-            onChange={(e) =>
-              setNewUser({ ...newUser, roleName: e.target.value })
-            }
+            value={newUser.roleId}
+            onChange={(e) => setNewUser({ ...newUser, roleId: e.target.value })}
             className="border-[rgba(0,0,0,0.33)] w-full px-4 py-2 rounded-md border bg-[rgba(217,217,217,0.17)] border-gray-30 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1F5897]"
           >
             <option value="" className="dark:text-gray-400 dark:bg-gray-800">
@@ -143,7 +161,7 @@ export default function AddUser() {
               <option
                 key={role._id}
                 className="dark:text-gray-400 dark:bg-gray-800"
-                value={role.name}
+                value={role._id}
               >
                 {role.name}
               </option>
