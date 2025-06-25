@@ -27,7 +27,6 @@ export default function ViewUsers() {
     email: "",
     role: "",
   });
-  console.log("this is come from edit user", editUserData);
   useEffect(() => {
     // setToken(localStorage.getItem("token"));
     setAuthToken(token);
@@ -266,8 +265,8 @@ export default function ViewUsers() {
                             name: user.name,
                             email: user.email,
                             role:
-                              roles.find((r) => r.name === user.role)?._id ||
-                              "", // 🔥 Match name → _id
+                              roles.find((r) => r.name === user?.role?.name)
+                                ?._id || "", // 🔥 Match name → _id
                           });
 
                           setEditUserPopup(true);

@@ -19,7 +19,8 @@ export default function Roles() {
   const [showRolePopup, setShowRolePopup] = useState(false);
   const [editRole, setEditRole] = useState(null);
   const [editPrivileges, setEditPrivileges] = useState([]);
-  console.log("-0-------------", privileges);
+
+  console.log("////////////////////", editRole);
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
@@ -137,10 +138,10 @@ export default function Roles() {
         //   ":id",
         //   editRole._id
         // )}`,
-        `${config.SURAJ_COTTON_BASE_URL}roles/updaterole/${editRole._id}`,
+        `${config.SURAJ_COTTON_BASE_URL}/roles/updaterole/${editRole._id}`,
         {
           name: editRole.name,
-          privileges: editPrivileges,
+          privelleges: editPrivileges,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -157,8 +158,8 @@ export default function Roles() {
       Swal.fire({
         icon: "error",
         title: "Error",
-        // text: err.response?.data?.message || "Failed to update privileges!",
-        text: err.response?.data?.message,
+        text: err.response?.data?.message || "Failed to update privileges!",
+        // text: err.response?.data?.message,
         theme: theme,
       });
     }
@@ -185,8 +186,8 @@ export default function Roles() {
 
           fetchRoles();
           Swal.fire({
-            icon: "Deleted!",
-            title: "Success",
+            icon: "success",
+            title: "Deleted",
             text: "Role has been removed.",
             theme: theme,
           });
@@ -255,7 +256,6 @@ export default function Roles() {
                 .map((id) => privileges.find((p) => p._id === id)?.name)
                 .filter(Boolean) // remove undefined if any ID not found
                 .join(", ");
-              console.log("this is privileges in table", privilegeNames);
               return (
                 <tr
                   key={role._id}
@@ -278,8 +278,8 @@ export default function Roles() {
                         onClick={() => {
                           setEditRole(role);
                           setEditPrivileges(
-                            (role?.privileges).map((p) => {
-                              return p._id;
+                            role?.privelleges.map((p) => {
+                              return p;
                             })
                           );
                           setEditRolePopup(true);
@@ -397,7 +397,7 @@ export default function Roles() {
       {editRolePopup && (
         <div className="fixed inset-0 bg-[rgba(87,87,87,0.78)] bg-opacity-40 flex items-center justify-center z-50 ">
           <div className="bg-white dark:bg-gray-800 rounded-[8px] shadow-lg border-2 border-gray-300 dark:border-gray-500 border-t-[4px] border-t-[#1d5998] dark:border-t-[#1d5998] p-6 animate-fadeIn w-[500px]">
-            <p className="text-black dark:text-white font-[Raleway] text-[27.44px] font-semibold leading-none !mb-[35px]">
+            <p className="text-black capitalize dark:text-white font-[Raleway] text-[27.44px] font-semibold leading-none !mb-[35px]">
               Edit Role: {editRole?.name}
             </p>
 
@@ -406,25 +406,27 @@ export default function Roles() {
                 Update Privileges:
               </div>
               <div className="grid grid-cols-2 gap-2">
-                {privileges.map((p) => (
-                  <label
-                    key={p._id}
-                    className="flex items-center gap-2 text-gray-700 dark:text-gray-200"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={editPrivileges.includes(p._id)}
-                      onChange={() =>
-                        setEditPrivileges((prev) =>
-                          prev.includes(p._id)
-                            ? prev.filter((id) => id !== p._id)
-                            : [...prev, p._id]
-                        )
-                      }
-                    />
-                    {p.name}
-                  </label>
-                ))}
+                {privileges.map((p) => {
+                  return (
+                    <label
+                      key={p._id}
+                      className="flex items-center gap-2 text-gray-700 dark:text-gray-200"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={editPrivileges.includes(p._id)}
+                        onChange={() =>
+                          setEditPrivileges((prev) =>
+                            prev.includes(p._id)
+                              ? prev.filter((id) => id !== p._id)
+                              : [...prev, p._id]
+                          )
+                        }
+                      />
+                      {p.name}
+                    </label>
+                  );
+                })}
               </div>
             </div>
             <div className="flex justify-end gap-3">
