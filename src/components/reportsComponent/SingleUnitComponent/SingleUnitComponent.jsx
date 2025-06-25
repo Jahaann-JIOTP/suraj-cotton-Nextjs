@@ -177,7 +177,7 @@ const SingleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
         <h2 className="text-[18.62px] pb-4 font-inter font-500">
           {unit === "unit4" ? "Unit 4" : unit === "unit5" ? "Unit 5" : ""}
         </h2>
-        <div className="overflow-x-scroll  md:w-full md:overflow-x-hidden max-h-[25rem] overflow-y-auto">
+        <div className="overflow-x-scroll  md:w-full md:overflow-x-hidden max-h-[29vh] overflow-y-auto">
           <table className="table w-full border-collapse border border-gray-300 dark:border-gray-500">
             <thead className="sticky top-0 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] w-full  z-10">
               <tr className="border border-gray-300 dark:border-gray-500">

@@ -177,69 +177,156 @@ const MultipleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
         <h2 className="text-[18.62px] pb-4 font-inter font-500">
           {unit === "unit4" ? "Unit 4" : unit === "unit5" ? "Unit 5" : ""}
         </h2>
-        <div className="overflow-x-scroll  md:w-full md:overflow-x-hidden max-h-[25rem] overflow-y-auto">
-          <table className="table w-full border-collapse border border-gray-300 dark:border-gray-500">
-            <thead className="sticky top-0 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] w-full  z-10">
-              <tr className="border border-gray-300 dark:border-gray-500">
-                <th className="border border-gray-300 dark:border-gray-500 w-[30%] px-2 py-1 text-[12px] font-inter font-500">
-                  Department
-                </th>
-                <th className="border border-gray-300 dark:border-gray-500 w-[20%] px-2 py-1 text-[12px] font-inter font-500">
-                  Mcs
-                </th>
-                <th className="border border-gray-300 dark:border-gray-500 w-[20%] px-2 py-1 text-[12px] font-inter font-500">
-                  Consumed units Kwh
-                </th>
-                <th className="border border-gray-300 dark:border-gray-500 w-[30%] px-2 py-1 text-[12px] font-inter font-500">
-                  Installed Load Kw
-                </th>
-              </tr>
-            </thead>
-          </table>
-          <div className="">
-            <table className="table w-full border-collapse border border-gray-400">
-              <tbody>
-                {tableData.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400"
-                  >
-                    <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                      {item.department}
+        {/* <div className="overflow-x-scroll  flex gap-4 md:w-full md:overflow-x-hidden max-h-[29vh] overflow-y-auto"> */}
+        <div className="w-full overflow-x-auto ">
+          <div className="flex min-w-[900px] md:min-w-full gap-4 border-1 border-gray-300 dark:border-gray-500">
+            <div className="w-[50%]">
+              <table className="table w-full border-collapse border border-gray-300 dark:border-gray-500">
+                <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f] w-full  z-10">
+                  <tr className="border border-gray-300 dark:border-gray-500">
+                    <th className="border border-gray-300 dark:border-gray-500 w-[30%] px-2 py-1 text-[10px] font-inter font-500">
+                      Department
+                    </th>
+                    <th className="border border-gray-300 dark:border-gray-500 w-[17%] px-2 py-1 text-[10px] font-inter font-500">
+                      Mcs
+                    </th>
+                    <th className="border border-gray-300 dark:border-gray-500 w-[28%] px-2 py-1 text-[10px] font-inter font-500">
+                      Consumed units Kwh
+                    </th>
+                    <th className="border border-gray-300 dark:border-gray-500 w-[25%] px-2 py-1 text-[10px] font-inter font-500">
+                      Installed Load Kw
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400"
+                    >
+                      <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
+                        {item.department}
+                      </td>
+                      <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
+                        {item.mcs}
+                      </td>
+                      <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
+                        {item.consumedUnitKwh}
+                      </td>
+                      <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
+                        {item.installedLoadKw}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="border border-gray-300 dark:border-gray-500">
+                    <td className="px-2 py-1 border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
+                      Total Load
                     </td>
-                    <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                      {item.mcs}
-                    </td>
-                    <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                      {item.consumedUnitKwh}
-                    </td>
-                    <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                      {item.installedLoadKw}
+                    <td></td>
+                    <td></td>
+                    <td className="px-2 py-1 text-center text-[12px] font-inter font-500">
+                      {totalInstalledLoad}
                     </td>
                   </tr>
-                ))}
-                <tr className="border border-gray-300 dark:border-gray-500">
-                  <td className="px-2 py-1 border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
-                    Total Load
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td className="px-2 py-1 text-center text-[12px] font-inter font-500">
-                    {totalInstalledLoad}
-                  </td>
-                </tr>
-                <tr className="border border-gray-300 dark:border-gray-500">
-                  <td className="border px-2 py-1 border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
-                    No. of Spindles
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td className="text-center px-2 py-1 text-[12px] font-inter font-500">
-                    {spindles}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  <tr className="border border-gray-300 dark:border-gray-500">
+                    <td className="border px-2 py-1 border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
+                      No. of Spindles
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td className="text-center px-2 py-1 text-[12px] font-inter font-500">
+                      {spindles}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="w-[38%]">
+              <table className="table w-full border-collapse border border-gray-300 dark:border-gray-500">
+                <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f] w-full  z-10">
+                  <tr className="border border-gray-300 dark:border-gray-500">
+                    <th className="border border-gray-300 dark:border-gray-500 px-2 py-1 text-[10px] font-inter font-500">
+                      Mcs
+                    </th>
+                    <th className="border border-gray-300 dark:border-gray-500 w-[20%] px-2 py-1 text-[10px] font-inter font-500">
+                      Intalled Load Kwh
+                    </th>
+                    <th className="border border-gray-300 dark:border-gray-500 w-[30%] px-2 py-1 text-[10px] font-inter font-500">
+                      Consumed Units Kw
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400"
+                    >
+                      <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
+                        {item.mcs}
+                      </td>
+                      <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
+                        {item.consumedUnitKwh}
+                      </td>
+                      <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
+                        {item.installedLoadKw}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="border border-gray-300 dark:border-gray-500">
+                    <td className="px-2 py-1 border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
+                      Total Load
+                    </td>
+                    <td></td>
+                    <td className="px-2 py-1 text-center text-[12px] font-inter font-500">
+                      {totalInstalledLoad}
+                    </td>
+                  </tr>
+                  <tr className="border border-gray-300 dark:border-gray-500">
+                    <td className="border px-2 py-1 border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
+                      No. of Spindles
+                    </td>
+                    <td></td>
+                    <td className="text-center px-2 py-1 text-[12px] font-inter font-500">
+                      {spindles}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="w-[12%]">
+              <table className="table w-full border-collapse border border-gray-300 dark:border-gray-500">
+                <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f] w-full  z-10">
+                  <tr className="border border-gray-300 dark:border-gray-500">
+                    <th className="border border-gray-300 dark:border-gray-500 w-[30%] px-2 py-1 text-[10px] font-inter font-500">
+                      Total Consumed Units Kw
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400"
+                    >
+                      <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
+                        {item.installedLoadKw}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="border border-gray-300 dark:border-gray-500">
+                    <td className="px-2 py-1 text-center text-[12px] font-inter font-500">
+                      {totalInstalledLoad}
+                    </td>
+                  </tr>
+                  <tr className="border border-gray-300 dark:border-gray-500">
+                    <td className="text-center px-2 py-1 text-[12px] font-inter font-500">
+                      {spindles}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

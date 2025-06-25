@@ -8,10 +8,10 @@ import { RiErrorWarningFill } from "react-icons/ri";
 
 const FilterPage = () => {
   const [units, setUnits] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [unit4Spindle, setUnit4Spindle] = useState("");
-  const [unit5Spindle, setUnit5Spindle] = useState("");
+  const [startDate, setStartDate] = useState("2025-06-11");
+  const [endDate, setEndDate] = useState("2025-06-18");
+  const [unit4Spindle, setUnit4Spindle] = useState("10");
+  const [unit5Spindle, setUnit5Spindle] = useState("10");
   const [errorMessage, setErrorMessage] = useState("");
   const [showResults, setShowResults] = useState(false); // ← controls form vs results
   const spindles = Number(unit4Spindle) + Number(unit5Spindle);
@@ -60,7 +60,7 @@ const FilterPage = () => {
   };
 
   return (
-    <div className="relative   w-full h-full rounded-md border-t-3 border-[#1A68B2] bg-white dark:bg-gray-800 mx-auto">
+    <div className="relative   w-full h-full rounded-md border-t-3 pb-3 overflow-x-auto border-[#1A68B2] bg-white dark:bg-gray-800 mx-auto">
       {!showResults && errorMessage.length !== 0 && (
         <div className="flex relative md:absolute top-0 right-0 bg-[#D40000] text-[14.22px] items-center gap-3 px-5 py-1.5 rounded rounded-t-md md:rounded-tr-md text-white">
           <RiErrorWarningFill size={23} />
@@ -194,8 +194,7 @@ const FilterPage = () => {
           units={units}
           startDate={startDate}
           endDate={endDate}
-          unit4Spindle={unit4Spindle}
-          unit5Spindle={unit5Spindle}
+          spindles={spindles}
         />
       )}
     </div>
