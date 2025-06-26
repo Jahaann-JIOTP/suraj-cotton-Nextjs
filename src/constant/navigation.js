@@ -11,6 +11,7 @@ import TransformerIcon from "../../public/sidebarIcons/Transformer";
 import EnergySankey from "../../public/sidebarIcons/energySankey";
 import Unit4Lt1 from "../../public/sidebarIcons/Unit4Lt1";
 import PlantOverview from "../../public/sidebarIcons/PlantOverview";
+import { GoDotFill } from "react-icons/go";
 
 export const privilegeConfig = {
   Dashboard: {
@@ -53,7 +54,8 @@ export const privilegeConfig = {
     ],
     tab: "Reports",
   },
-  "User Management": {
+  // "User Management": {
+  Setting: {
     href: "/add_roles",
     icon: faGear,
     label: "USER MANAGEMENT",
@@ -68,7 +70,7 @@ export const privilegeOrder = [
   "Trends",
   "Alarms",
   "Reports",
-  "User Management",
+  "Setting",
 ];
 
 export const sidebarLinksMap = {
@@ -181,8 +183,8 @@ export const sidebarLinksMap = {
   ],
   Setting: [
     {
-      title: "1- User Management",
-      icon: TransformerIcon,
+      title: "User Management",
+      icon: GoDotFill,
       href: "/add_roles",
     },
   ],

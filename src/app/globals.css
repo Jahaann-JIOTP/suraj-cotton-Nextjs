@@ -170,3 +170,18 @@
 .trapezoid {
   clip-path: polygon(30% 0%, 60% 0%, 100% 100%, 0% 100%);
 }
+.meterReadingUnit4,
+.meterReadingUnit4Lt2,
+.meterReadingUnit4Lt1 {
+  color: rgb(5, 248, 5);
+  font-weight: 500;
+}
+.meterReadingUnit4 {
+  font-size: 19px;
+}
+.meterReadingUnit4Lt1 {
+  font-size: 16px;
+}
+.meterReadingUnit4Lt2 {
+  font-size: 17px;
+}

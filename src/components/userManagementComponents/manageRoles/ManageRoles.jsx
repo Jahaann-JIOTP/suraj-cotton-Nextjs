@@ -20,7 +20,6 @@ export default function Roles() {
   const [editRole, setEditRole] = useState(null);
   const [editPrivileges, setEditPrivileges] = useState([]);
 
-  console.log("////////////////////", editRole);
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
@@ -133,14 +132,10 @@ export default function Roles() {
       return;
     }
     try {
-      await axios.patch(
-        // `${config.BASE_URL}${config.ADMIN.UPDATE_ROLE.replace(
-        //   ":id",
-        //   editRole._id
-        // )}`,
+      await axios.put(
         `${config.SURAJ_COTTON_BASE_URL}/roles/updaterole/${editRole._id}`,
         {
-          name: editRole.name,
+          name: editRole?.name,
           privelleges: editPrivileges,
         },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -256,6 +251,12 @@ export default function Roles() {
                 .map((id) => privileges.find((p) => p._id === id)?.name)
                 .filter(Boolean) // remove undefined if any ID not found
                 .join(", ");
+              console.log(
+                "this is privileges",
+                privilegeNames === "Setting"
+                  ? "User Management"
+                  : privilegeNames
+              );
               return (
                 <tr
                   key={role._id}
@@ -268,7 +269,6 @@ export default function Roles() {
                     {role.name}
                   </td>
                   <td className="px-4 py-2 border border-gray-300 dark:border-gray-500">
-                    {/* {(role.privileges || []).map((p) => p)} */}
                     {privilegeNames}
                   </td>
                   <td className="px-4 py-2 border border-gray-300 dark:border-gray-500 text-center">

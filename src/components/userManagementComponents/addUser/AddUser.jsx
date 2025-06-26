@@ -5,21 +5,23 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import config from "@/constant/apiRouteList";
 import { useSelector } from "react-redux";
+import { useTheme } from "next-themes";
 
 export default function AddUser() {
   const [AuthToken, setAuthToken] = useState(null);
   const [roles, setRoles] = useState([]);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
     password: "",
     roleId: "",
   });
-  console.log("this is new user", newUser.roleId);
+  const { theme } = useTheme();
+
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
-    // setToken(localStorage.getItem("token"));
     setAuthToken(token);
   }, []);
 
@@ -56,6 +58,15 @@ export default function AddUser() {
     ) {
       Swal.fire("Error", "Please fill in all fields!", "error");
       return;
+    }
+
+    if (newUser.password !== confirmPassword) {
+      Swal.fire({
+        icon: "error",
+        title: "Warning!",
+        text: "Password and Confirm Password Must be Matched!",
+        theme: theme,
+      });
     }
 
     try {
@@ -130,20 +141,18 @@ export default function AddUser() {
             className="border-[rgba(0,0,0,0.33)] w-full px-4 py-2 rounded-md border bg-[rgba(217,217,217,0.17)] border-gray-30 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
-        {/* <div className="w-full md:w-[45%]">
+        <div className="w-full md:w-[45%]">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Confirm Password
           </label>
           <input
             type="password"
             placeholder="Enter password"
-            value={newUser.password}
-            onChange={(e) =>
-              setNewUser({ ...newUser, password: e.target.value })
-            }
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             className="border-[rgba(0,0,0,0.33)] w-full px-4 py-2 rounded-md border bg-[rgba(217,217,217,0.17)] border-gray-30 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-        </div> */}
+        </div>
 
         <div className="w-full md:w-[45%]">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

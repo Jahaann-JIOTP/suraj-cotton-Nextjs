@@ -47,31 +47,8 @@ const Header = ({ handleTabClick, activeTab }) => {
 
       if (res.ok) {
         const data = await res.json();
-        // console.log(data?.role?.privelleges);
-        const privileges = Array.isArray(data?.role?.privelleges)
-          ? data?.role?.privelleges
-              .map((p) => {
-                const name = p.name?.toLowerCase();
-                switch (name) {
-                  case "dashboard":
-                    return "Dashboard";
-                  case "diagram":
-                    return "Diagram";
-                  case "trends":
-                    return "Trends";
-                  case "alarms":
-                    return "Alarms";
-                  case "reports":
-                    return "Reports";
-                  case "settings":
-                    return "User Management";
-                  default:
-                    return null;
-                }
-              })
-              .filter(Boolean)
-          : [];
-
+        const privileges = data?.role?.privelleges?.map((p) => p.name) || [];
+        console.log("User privileges:", privileges);
         setUserPrivileges(privileges);
       } else {
         console.error("Failed to fetch user profile");
@@ -145,7 +122,7 @@ const Header = ({ handleTabClick, activeTab }) => {
         onClick={() => handleTabClick(config.tab)}
       >
         <p
-          className={`px-3 py-1 cursor-pointer rounded-lg flex gap-1 ${
+          className={`px-3 py-1 cursor-pointer rounded-sm flex gap-1 ${
             isActive
               ? "bg-white text-black dark:bg-gray-700 dark:text-white"
               : ""
