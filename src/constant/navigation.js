@@ -4,6 +4,7 @@ import {
   faProjectDiagram,
   faArrowTrendUp,
   faBell,
+  faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
 
 import PowerIcon from "../../public/sidebarIcons/PowerIcon";
@@ -12,6 +13,7 @@ import EnergySankey from "../../public/sidebarIcons/energySankey";
 import Unit4Lt1 from "../../public/sidebarIcons/Unit4Lt1";
 import PlantOverview from "../../public/sidebarIcons/PlantOverview";
 import { GoDotFill } from "react-icons/go";
+import { BsFillDiagram3Fill } from "react-icons/bs";
 
 export const privilegeConfig = {
   Dashboard: {
@@ -44,7 +46,7 @@ export const privilegeConfig = {
   },
   Reports: {
     href: "/energy-usage-report",
-    icon: faBell,
+    icon: faBookOpen,
     label: "REPORTS",
     matchPaths: [
       "/energy-usage-report",
@@ -136,13 +138,13 @@ export const sidebarLinksMap = {
     {
       id: 0,
       title: "Songle Line Diagram",
-      icon: TransformerIcon,
+      icon: BsFillDiagram3Fill,
       submenu: [
         {
           id: 0,
           title: "oneline",
           href: "/sld",
-          icon: TransformerIcon,
+          icon: BsFillDiagram3Fill,
         },
       ],
     },

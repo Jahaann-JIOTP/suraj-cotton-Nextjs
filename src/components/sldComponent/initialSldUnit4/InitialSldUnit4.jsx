@@ -1,7 +1,13 @@
+"use client";
 import React from "react";
-import { ImArrowDown } from "react-icons/im";
+import Link from "next/link";
 
-const InitialSldUnit4 = ({ setIsLT1, setIsLT2 }) => {
+import { ImArrowDown } from "react-icons/im";
+import { useRouter } from "next/navigation";
+
+const InitialSldUnit4 = () => {
+  const router = useRouter();
+
   return (
     <div className="w-full overflow-auto">
       <div className="relative w-[1200px] h-[600px] mx-auto">
@@ -13,18 +19,25 @@ const InitialSldUnit4 = ({ setIsLT1, setIsLT2 }) => {
         />
 
         {/* Buttons */}
-        <button
-          onClick={() => setIsLT1(true)}
+
+        {/* <button
+          onClick={() => router.replace("?area=lt1")}
           className="absolute top-[362px] left-[188.5px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE]  p-2 rounded cursor-pointer"
         >
           <ImArrowDown size={30} className="text-white" />
-        </button>
+        </button> */}
         <button
-          onClick={() => setIsLT2(true)}
-          className="absolute top-[362px] left-[954px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
+          onClick={() => router.replace("/sld?area=lt1")}
+          className="absolute top-[362px] left-[188.5px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
         >
           <ImArrowDown size={30} className="text-white" />
         </button>
+        {/* <button
+          onClick={() => router.push("/sld?area=lt2")}
+          className="absolute top-[362px] left-[954px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
+        >
+          <ImArrowDown size={30} className="text-white" />
+        </button> */}
 
         {/* Meter Readings */}
         {/* LT1 Power House */}

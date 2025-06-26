@@ -4,31 +4,30 @@ import { useRouter } from "next/navigation";
 
 const Unit4Lt1 = ({ setIsLT1 }) => {
   const router = useRouter();
-  console.log("this is reouter", router);
+  const handleClick = () => {
+    const id = "12345"; // You can use any dynamic value here
+    router.push(`/sld/${id}`);
+  };
   return (
     <div className="w-full overflow-auto">
       <button
-        onClick={() => setIsLT1(false)}
+        onClick={router.back()}
         className="absolute z-20 top-0 left-0 bg-gray-300 px-5 py-1 rounded"
       >
         Back
       </button>
-      <button
-        onClick={router.push("/sld?meter-1")}
-        on
-        className="bg-[#da121270] w-[20px] absolute h-[20px]"
-      >
-        click me
-      </button>
+
       <div className="relative w-[1200px] h-full mx-auto">
+        <button
+          onClick={handleClick}
+          className="absolute bg-transfarent z-10 w-[76px] top-[317px] left-[195px] h-[70px] cursor-pointer rounded-md"
+        ></button>
         {/* Diagram Image */}
         <img
           src="../../../unit-4-lt-01.png"
-          className="w-[1200px] h-full"
+          className="w-full h-full"
           alt="unit 4 sld"
         />
-
-        {/* Buttons */}
 
         {/* Meter Readings */}
 

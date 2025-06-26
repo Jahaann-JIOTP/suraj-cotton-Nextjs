@@ -1,12 +1,11 @@
+"use client";
+import { useRouter } from "next/navigation";
 import React from "react";
 
-const Unit4Lt2 = ({ setIsLT2 }) => {
+const Unit4Lt2 = () => {
   return (
     <div className="w-full overflow-auto">
-      <button
-        onClick={() => setIsLT2(false)}
-        className="absolute top-0 left-0 bg-gray-300 px-5 py-1 rounded"
-      >
+      <button className="absolute top-0 left-0 bg-gray-300 px-5 py-1 rounded">
         Back
       </button>
       <div className="relative w-[1200px] h-full mx-auto">
