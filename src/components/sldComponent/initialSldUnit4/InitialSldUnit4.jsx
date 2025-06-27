@@ -19,21 +19,14 @@ const InitialSldUnit4 = () => {
         />
 
         {/* Buttons */}
-
-        {/* <button
-          onClick={() => router.replace("?area=lt1")}
-          className="absolute top-[362px] left-[188.5px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE]  p-2 rounded cursor-pointer"
-        >
-          <ImArrowDown size={30} className="text-white" />
-        </button> */}
         <button
-          onClick={() => router.replace("/sld?area=lt1")}
+          onClick={() => router.replace("/sld?unit=unit4&area=lt1")}
           className="absolute top-[362px] left-[188.5px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
         >
           <ImArrowDown size={30} className="text-white" />
         </button>
         <button
-          onClick={() => router.push("/sld?area=lt2")}
+          onClick={() => router.push("/sld?unit=unit4&area=lt2")}
           className="absolute top-[362px] left-[954px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
         >
           <ImArrowDown size={30} className="text-white" />

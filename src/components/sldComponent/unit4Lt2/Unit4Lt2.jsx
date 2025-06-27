@@ -4,12 +4,11 @@ import React from "react";
 
 const Unit4Lt2 = ({ roundedData }) => {
   const router = useRouter();
-  console.log("this data is come from uit 4 lt 1==========>", roundedData);
   return (
     <div className="w-full overflow-auto">
       <button
         onClick={() => router.back()}
-        className="absolute top-0 left-0 cursor-pointer bg-gray-300 px-5 py-1 rounded"
+        className="absolute top-0 left-0 z-30 cursor-pointer bg-gray-300 px-5 py-1 rounded"
       >
         Back
       </button>

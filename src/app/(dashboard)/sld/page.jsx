@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 const Page = () => {
   const [meterData, setMeterData] = useState([]);
   const searchParams = useSearchParams();
+  const unit = searchParams.get("unit");
   const area = searchParams.get("area");
   const getMeterData = async () => {
     try {
@@ -42,9 +43,9 @@ const Page = () => {
   return (
     <div className="w-full h-[81vh] bg-white dark:bg-gray-800 rounded-md border-t-4 p-5 border-[#1F5897] overflow-auto">
       <div className="relative min-w-[1250px] min-h-[500px] mx-auto">
-        {area === "lt1" ? (
+        {area === "lt1" && unit === "unit4" ? (
           <Unit4Lt1 roundedData={roundedData} />
-        ) : area === "lt2" ? (
+        ) : area === "lt2" && unit === "unit4" ? (
           <Unit4Lt2 roundedData={roundedData} />
         ) : (
           <InitialSldUnit4 />

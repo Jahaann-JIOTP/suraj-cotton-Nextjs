@@ -3,77 +3,77 @@ import React from "react";
 import { useRouter } from "next/navigation";
 const singlemeterData = [
   {
-    link: "/sld?unit4-meter-1",
+    link: "U18_PLC",
     top: 317,
     left: 195,
   },
   {
-    link: "/sld?unit4-meter-2",
+    link: "U15_PLC",
     top: 317,
     left: 385,
   },
   {
-    link: "/sld?unit4-meter-3",
+    link: "U12_PLC",
     top: 317,
     left: 575,
   },
   {
-    link: "/sld?unit4-meter-4",
+    link: "U14_PLC",
     top: 317,
     left: 763,
   },
   {
-    link: "/sld?unit4-meter-5",
+    link: "U9_PLC",
     top: 392,
     left: 291,
   },
   {
-    link: "/sld?unit4-meter-6",
+    link: "U11_PLC",
     top: 392,
     left: 480,
   },
   {
-    link: "/sld?unit4-meter-7",
+    link: "U13_PLC",
     top: 392,
     left: 670,
   },
   {
-    link: "/sld?unit4-meter-8",
+    link: "U16_PLC",
     top: 393,
     left: 867,
   },
   {
-    link: "/sld?unit4-meter-9",
+    link: "U17_PLC",
     top: 600,
     left: 295,
   },
   {
-    link: "/sld?unit4-meter-10",
+    link: "U3_PLC",
     top: 600,
     left: 486,
   },
   {
-    link: "/sld?unit4-meter-11",
+    link: "U2_PLC",
     top: 600,
     left: 675,
   },
   {
-    link: "/sld?unit4-meter-12",
+    link: "U20_PLC",
     top: 600,
     left: 865,
   },
   {
-    link: "/sld?unit4-meter-13",
+    link: "U4_PLC",
     top: 676,
     left: 391,
   },
   {
-    link: "/sld?unit4-meter-14",
+    link: "U21_PLC",
     top: 676,
     left: 580,
   },
   {
-    link: "/sld?unit4-meter-15",
+    link: "U1_PLC",
     top: 676,
     left: 770,
   },
@@ -86,7 +86,7 @@ const Unit4Lt1 = ({ roundedData }) => {
     <div className="w-full overflow-auto">
       <button
         onClick={() => router.push("/sld")}
-        className="absolute top-0 left-0 cursor-pointer bg-gray-300 px-5 py-1 rounded"
+        className="absolute top-0 left-0 z-30 cursor-pointer bg-gray-300 px-5 py-1 rounded"
       >
         Back
       </button>
@@ -95,7 +95,11 @@ const Unit4Lt1 = ({ roundedData }) => {
         {singlemeterData.map((meter) => (
           <button
             key={meter.link}
-            onClick={() => router.push(meter.link)}
+            onClick={() =>
+              router.push(
+                `/sld/${meter.link}?area=unit4&lt_scheme=lt1&meter_id=${meter.link}`
+              )
+            }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
@@ -252,13 +256,13 @@ const Unit4Lt1 = ({ roundedData }) => {
         {/* ///////////////////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[613px] left-[872px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U2_PLC_ActivePower_Total}
+            {roundedData?.U20_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U2_PLC_Current_A}
+            {roundedData?.U20_PLC_Current_A}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U2_PLC_Voltage_BC}
+            {roundedData?.U20_PLC_Voltage_BC}
           </span>
         </div>
         {/* ///////////////////////// */}
