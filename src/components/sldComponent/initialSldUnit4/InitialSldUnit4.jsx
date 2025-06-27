@@ -32,12 +32,12 @@ const InitialSldUnit4 = () => {
         >
           <ImArrowDown size={30} className="text-white" />
         </button>
-        {/* <button
+        <button
           onClick={() => router.push("/sld?area=lt2")}
           className="absolute top-[362px] left-[954px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
         >
           <ImArrowDown size={30} className="text-white" />
-        </button> */}
+        </button>
 
         {/* Meter Readings */}
         {/* LT1 Power House */}

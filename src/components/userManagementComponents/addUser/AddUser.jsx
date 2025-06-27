@@ -67,6 +67,7 @@ export default function AddUser() {
         text: "Password and Confirm Password Must be Matched!",
         theme: theme,
       });
+      return;
     }
 
     try {

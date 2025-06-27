@@ -2,10 +2,15 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const Unit4Lt2 = () => {
+const Unit4Lt2 = ({ roundedData }) => {
+  const router = useRouter();
+  console.log("this data is come from uit 4 lt 1==========>", roundedData);
   return (
     <div className="w-full overflow-auto">
-      <button className="absolute top-0 left-0 bg-gray-300 px-5 py-1 rounded">
+      <button
+        onClick={() => router.back()}
+        className="absolute top-0 left-0 cursor-pointer bg-gray-300 px-5 py-1 rounded"
+      >
         Back
       </button>
       <div className="relative w-[1200px] h-full mx-auto">
@@ -15,231 +20,271 @@ const Unit4Lt2 = () => {
           className="w-[1200px] h-full"
           alt="unit 4 sld"
         />
-
         {/* Buttons */}
-
         {/* Meter Readings */}
-
-        <div className="meterReadingUnit4Lt2 absolute top-[236.15px] left-[15px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[255px] left-[15px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[274.4px] left-[15px]">
-          1572
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[239.5px] left-[8px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U6_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U6_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U6_GW01_Voltage_AB}
+          </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[236.15px] left-[223px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[255px] left-[223px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[274.4px] left-[223px]">
-          1572
-        </div>
-        {/* ///////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[236.15px] left-[430px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[255px] left-[430px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[274.4px] left-[430px]">
-          1572
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[239.5px] left-[216px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U18_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U18_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U18_GW01_Voltage_AB}
+          </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[236.15px] left-[641px]">
-          1228
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[239.5px] left-[424px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U21_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U21_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U21_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[255px] left-[641px]">
-          1398
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[239.5px] left-[634px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U21_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U21_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U21_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[274.4px] left-[641px]">
-          1572
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[239.5px] left-[842px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U9_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U9_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U9_GW01_Voltage_AB}
+          </span>
         </div>
-
-        {/* /////////////////////*/}
-        <div className="meterReadingUnit4Lt2 absolute top-[236.15px] left-[848px]">
-          1228
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[239.5px] left-[1050px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[255px] left-[848px]">
-          1398
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[361px] left-[113px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[274.4px] left-[848px]">
-          1572
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[355px] left-[322px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_Voltage_AB}
+          </span>
         </div>
-
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[236.15px] left-[1056px]">
-          1228
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[355px] left-[529px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U2_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[255px] left-[1056px]">
-          1398
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[355px] left-[738px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U5_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U5_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U5_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[274.4px] left-[1056px]">
-          1572
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[355px] left-[946px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U1_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U1_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U1_GW01_Voltage_AB}
+          </span>
         </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[356.5px] left-[120px]">
-          1228
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[562px] left-[10px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U3_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U3_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U3_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[375.3px] left-[120px]">
-          1398
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[563px] left-[226px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U16_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U16_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U16_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[395.3px] left-[120px]">
-          1572
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[563px] left-[434px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U10_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U10_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U10_GW01_Voltage_AB}
+          </span>
         </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[351px] left-[328px]">
-          1228
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[563px] left-[643px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[369.48px] left-[328px]">
-          1398
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[563px] left-[848px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[389.5px] left-[328px]">
-          1572
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[563px] left-[1055.5px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Voltage_AB}
+          </span>
         </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[351px] left-[535.5px]">
-          1228
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[685px] left-[125px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[369.48px] left-[535.5px]">
-          1398
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[685px] left-[333px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[389.5px] left-[535.5px]">
-          1572
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[685px] left-[542px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Voltage_AB}
+          </span>
         </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[351px] left-[744.55px]">
-          1228
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center border-1 justify-around gap-[4px] z-40 top-[685px] left-[750px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Voltage_AB}
+          </span>
         </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[369.48px] left-[744.55px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[389.5px] left-[744.55px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[351px] left-[953px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[369.48px] left-[953px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[389.5px] left-[953px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[558px] left-[16px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[577px] left-[16px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[597px] left-[16px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[558.5px] left-[233px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[577.5px] left-[233px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[597.3px] left-[233px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[558.5px] left-[441.2px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[577.5px] left-[441.2px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[597.3px] left-[441.2px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[558.5px] left-[650px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[577.5px] left-[650px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[597.3px] left-[650px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[558.5px] left-[854.5px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[577.5px] left-[854.5px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[597.3px] left-[854.5px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[558.5px] left-[1063px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[577.5px] left-[1063px]">
-          1398
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[597.3px] left-[1063px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[680px] left-[130px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[699px] left-[130px]">
-          1098
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[719px] left-[130px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[680px] left-[340px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[699px] left-[340px]">
-          1098
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[719px] left-[340px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[680px] left-[549px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[699px] left-[549px]">
-          1098
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[719px] left-[549px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[680px] left-[756.5px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[699px] left-[756.5px]">
-          1098
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[719px] left-[756.5px]">
-          1572
-        </div>
-        {/* /////////////////////////// */}
-        <div className="meterReadingUnit4Lt2 absolute top-[680px] left-[965px]">
-          1228
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[699px] left-[965px]">
-          1098
-        </div>
-        <div className="meterReadingUnit4Lt2 absolute top-[719px] left-[965px]">
-          1572
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[685px] left-[958px] w-[51px] h-[57px]">
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Current_A}
+          </span>
+          <span className="meterReadingUnit4Lt2">
+            {roundedData?.U15_GW01_Voltage_AB}
+          </span>
         </div>
       </div>
     </div>
