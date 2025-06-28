@@ -349,7 +349,7 @@ function CustomTrend() {
   }, [chartData, isDarkMode, selectedParameter]);
 
   return (
-    <div className="relative flex-shrink-0 w-full px-2 py-2 sm:px-4 sm:py-4 md:px-6 md:py-6 h-max lg:h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1F5897] rounded-[8px] shadow-md border-t-[4px] border-t-[#1d5999] ">
+    <div className="relative flex-shrink-0 w-full px-2 py-2 sm:px-4 sm:py-4 md:px-6 md:py-6 h-max lg:h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1F5897] rounded-[8px] shadow-md ">
       <div className="absolute inset-0" style={{ opacity: 1 }}></div>
       <div className="relative z-10 h-full flex flex-col">
         <h1 className="text-lg font-bold mb-4 font-raleway text-[#1F5897] dark:text-[#D1D5DB]">
