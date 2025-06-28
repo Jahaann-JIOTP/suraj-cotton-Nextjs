@@ -45,7 +45,7 @@ const page = ({ params }) => {
         <button
           onClick={() =>
             router.push(
-              `/sld/${id}/${activeTab}?area=${area}$lt_scheme=${ltScheme}&val=${activeTab}/meter_id=${id}`
+              `/sld/${id}/${activeTab}?lt_scheme=${ltScheme}&val=${activeTab}&meter_id=${id}`
             )
           }
           className={`bg-transparent w-[57px] h-[53px] absolute z-30 cursor-pointer`}

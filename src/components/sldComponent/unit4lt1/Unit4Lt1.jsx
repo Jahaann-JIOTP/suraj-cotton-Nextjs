@@ -116,7 +116,7 @@ const Unit4Lt1 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../unit-4-lt-01.png"
+          src="../../../Unit-4-lt1-sld.png"
           className="w-full h-full"
           alt="unit 4 sld"
         />

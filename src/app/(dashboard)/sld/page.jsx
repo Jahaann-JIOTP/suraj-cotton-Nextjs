@@ -48,7 +48,7 @@ const Page = () => {
         ) : area === "lt2" && unit === "unit4" ? (
           <Unit4Lt2 roundedData={roundedData} />
         ) : (
-          <InitialSldUnit4 />
+          <InitialSldUnit4 roundedData={roundedData} />
         )}
       </div>
     </div>

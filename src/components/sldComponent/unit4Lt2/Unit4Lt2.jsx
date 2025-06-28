@@ -15,7 +15,7 @@ const Unit4Lt2 = ({ roundedData }) => {
       <div className="relative w-[1200px] h-full mx-auto">
         {/* Diagram Image */}
         <img
-          src="../../../unit-4-lt2-sld.png"
+          src="../../../Unit-4-lt2-sld.png"
           className="w-[1200px] h-full"
           alt="unit 4 sld"
         />
@@ -27,10 +27,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U6_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U6_GW01_Current_A}
+            {roundedData?.U6_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U6_GW01_Voltage_AB}
+            {roundedData?.U6_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -39,10 +39,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U18_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U18_GW01_Current_A}
+            {roundedData?.U18_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U18_GW01_Voltage_AB}
+            {roundedData?.U18_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -51,10 +51,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U21_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U21_GW01_Current_A}
+            {roundedData?.U21_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U21_GW01_Voltage_AB}
+            {roundedData?.U21_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -63,10 +63,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U21_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U21_GW01_Current_A}
+            {roundedData?.U21_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U21_GW01_Voltage_AB}
+            {roundedData?.U21_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -75,10 +75,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U9_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U9_GW01_Current_A}
+            {roundedData?.U9_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U9_GW01_Voltage_AB}
+            {roundedData?.U9_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -87,10 +87,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U2_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Current_A}
+            {roundedData?.U2_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Voltage_AB}
+            {roundedData?.U2_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -99,10 +99,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U2_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Current_A}
+            {roundedData?.U2_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Voltage_AB}
+            {roundedData?.U2_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -111,10 +111,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U2_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Current_A}
+            {roundedData?.U2_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Voltage_AB}
+            {roundedData?.U2_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -123,10 +123,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U2_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Current_A}
+            {roundedData?.U2_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Voltage_AB}
+            {roundedData?.U2_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -135,10 +135,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U5_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U5_GW01_Current_A}
+            {roundedData?.U5_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U5_GW01_Voltage_AB}
+            {roundedData?.U5_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -147,10 +147,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U1_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U1_GW01_Current_A}
+            {roundedData?.U1_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U1_GW01_Voltage_AB}
+            {roundedData?.U1_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -159,10 +159,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U3_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U3_GW01_Current_A}
+            {roundedData?.U3_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U3_GW01_Voltage_AB}
+            {roundedData?.U3_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -171,10 +171,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U16_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U16_GW01_Current_A}
+            {roundedData?.U16_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U16_GW01_Voltage_AB}
+            {roundedData?.U16_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -183,10 +183,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U10_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U10_GW01_Current_A}
+            {roundedData?.U10_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U10_GW01_Voltage_AB}
+            {roundedData?.U10_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -195,10 +195,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U15_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Current_A}
+            {roundedData?.U15_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Voltage_AB}
+            {roundedData?.U15_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -207,10 +207,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U15_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Current_A}
+            {roundedData?.U15_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Voltage_AB}
+            {roundedData?.U15_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -219,10 +219,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U15_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Current_A}
+            {roundedData?.U15_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Voltage_AB}
+            {roundedData?.U15_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -231,10 +231,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U15_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Current_A}
+            {roundedData?.U15_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Voltage_AB}
+            {roundedData?.U15_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -243,10 +243,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U15_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Current_A}
+            {roundedData?.U15_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Voltage_AB}
+            {roundedData?.U15_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -255,10 +255,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U15_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Current_A}
+            {roundedData?.U15_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Voltage_AB}
+            {roundedData?.U15_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -267,10 +267,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U15_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Current_A}
+            {roundedData?.U15_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Voltage_AB}
+            {roundedData?.U15_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -279,10 +279,10 @@ const Unit4Lt2 = ({ roundedData }) => {
             {roundedData?.U15_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Current_A}
+            {roundedData?.U15_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Voltage_AB}
+            {roundedData?.U15_GW01_Voltage_Avg}
           </span>
         </div>
       </div>

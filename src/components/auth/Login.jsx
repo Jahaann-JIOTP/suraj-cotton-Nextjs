@@ -42,7 +42,7 @@ const Login = () => {
         setError(null);
         dispatch(login(data.token));
         setLoading(false);
-        router.push("/dashboard");
+        router.push("/sld");
       } else {
         setError(data.message || "Invalid email or password.");
         setSuccess(null);

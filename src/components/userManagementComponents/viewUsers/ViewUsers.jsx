@@ -28,7 +28,7 @@ export default function ViewUsers() {
     password: "",
     role: "",
   });
-  console.log(editUserData);
+
   useEffect(() => {
     // setToken(localStorage.getItem("token"));
     setAuthToken(token);
@@ -236,7 +236,6 @@ export default function ViewUsers() {
           </thead>
           <tbody>
             {filteredUsers.map((user, i) => {
-              // console.log("xxxxxxxxxxxxxxxxxxxx", user);
               return (
                 <tr
                   key={user._id}

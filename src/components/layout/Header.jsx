@@ -48,7 +48,7 @@ const Header = ({ handleTabClick, activeTab }) => {
       if (res.ok) {
         const data = await res.json();
         const privileges = data?.role?.privelleges?.map((p) => p.name) || [];
-        console.log("User privileges:", privileges);
+
         setUserPrivileges(privileges);
       } else {
         console.error("Failed to fetch user profile");

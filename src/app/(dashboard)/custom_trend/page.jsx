@@ -35,10 +35,16 @@ function CustomTrend() {
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (meterDropdownRef.current && !meterDropdownRef.current.contains(event.target)) {
+      if (
+        meterDropdownRef.current &&
+        !meterDropdownRef.current.contains(event.target)
+      ) {
         setShowMeters(false);
       }
-      if (parameterDropdownRef.current && !parameterDropdownRef.current.contains(event.target)) {
+      if (
+        parameterDropdownRef.current &&
+        !parameterDropdownRef.current.contains(event.target)
+      ) {
         setShowParameters(false);
       }
     }
@@ -47,20 +53,20 @@ function CustomTrend() {
   }, []);
 
   const meterMapping = {
-    "Transport": "U1_PLC",
+    Transport: "U1_PLC",
     "Unit 05 Aux": "U2_PLC",
     "Light External": "U3_PLC",
     "Light Internal ": "U4_PLC",
     "Power House 2nd Source": "U5_PLC",
-    "Turbine": "U6_PLC",
-    "Spare": "U7_PLC",
+    Turbine: "U6_PLC",
+    Spare: "U7_PLC",
     "Drawing 01": "U8_PLC",
     "Winding 01 (PLC) ": "U9_PLC",
     "Ring 01": "U10_PLC",
     "Ring 5": "U11_PLC",
     "Ring 6(Auto Cone 1-9)": "U12_PLC",
     "Comber 1": "U13_PLC",
-    "Compressor": "U14_PLC",
+    Compressor: "U14_PLC",
     "Simplex 01": "U15_PLC",
     "Compressor 02 (90kW)": "U16_PLC",
     "Ring AC ": "U17_PLC",
@@ -73,7 +79,7 @@ function CustomTrend() {
     "Winding AC": "U3_GW01",
     "Mills RES-CLNY& Workshop": "U4_GW01",
     "Card 1": "U5_GW01",
-    "Colony": "U6_GW01",
+    Colony: "U6_GW01",
     "Power House and Source": "U7_GW01",
     "Blow Room": "U8_GW01",
     "Card 2": "U9_GW01",
@@ -109,15 +115,19 @@ function CustomTrend() {
   let filteredMeters = [];
   if (area === "Unit 4") {
     const allMeters = Object.keys(meterMapping);
-    const lt1Meters = allMeters.filter((key) => meterMapping[key].endsWith("PLC"));
-    const lt2Meters = allMeters.filter((key) => meterMapping[key].endsWith("GW01"));
+    const lt1Meters = allMeters.filter((key) =>
+      meterMapping[key].endsWith("PLC")
+    );
+    const lt2Meters = allMeters.filter((key) =>
+      meterMapping[key].endsWith("GW01")
+    );
 
     if (lt === "LT_1") {
       filteredMeters = lt1Meters;
     } else if (lt === "LT_2") {
       filteredMeters = lt2Meters;
     } else if (lt === "ALL") {
-      filteredMeters = [...lt1Meters, ...lt2Meters]; 
+      filteredMeters = [...lt1Meters, ...lt2Meters];
     }
   }
 
@@ -159,17 +169,20 @@ function CustomTrend() {
           return res.json();
         })
         .then((data) => {
-          console.log("API Response:", data); // Debug log
           const formatted = data.map((item) => {
             const point = { timestamp: new Date(item.timestamp) };
             selectedMeter.forEach((m) => {
               const key = `${meterMapping[m]}_${suffixes}`;
-              point[m] = item[key] !== undefined ? parseFloat(item[key]) || null : null; // Handle undefined or invalid values
+              point[m] =
+                item[key] !== undefined ? parseFloat(item[key]) || null : null; // Handle undefined or invalid values
             });
             return point;
           });
           console.log("Formatted Chart Data:", formatted); // Debug log
-          if (formatted.length === 0 || !formatted.some(d => Object.values(d).some(v => v !== null))) {
+          if (
+            formatted.length === 0 ||
+            !formatted.some((d) => Object.values(d).some((v) => v !== null))
+          ) {
             console.warn("No valid data available for the selected criteria");
             setChartData([]);
           } else {
@@ -187,7 +200,6 @@ function CustomTrend() {
 
   useEffect(() => {
     if (chartData.length === 0) {
-      console.log("No chart data to render");
       return;
     }
 
@@ -196,7 +208,9 @@ function CustomTrend() {
 
     const chart = am4core.create("chartDiv", am4charts.XYChart);
     chart.logo.disabled = true;
-    chart.data = chartData.filter(d => d.timestamp && Object.values(d).some(v => v !== null)); // Filter out invalid data
+    chart.data = chartData.filter(
+      (d) => d.timestamp && Object.values(d).some((v) => v !== null)
+    ); // Filter out invalid data
     const textColor = isDarkMode ? "#ccc" : "#5f5f5f";
     const gridColor = isDarkMode ? "#666" : "#888"; // Updated to a more visible color for both modes
 
@@ -209,8 +223,7 @@ function CustomTrend() {
     const param = selectedParameter.trim().toLowerCase();
     if (param.includes("current a")) {
       valueAxis.title.text = "Current A (Amp)";
-    } 
-    else if (param.includes("current b")) {
+    } else if (param.includes("current b")) {
       valueAxis.title.text = "Current B (Amp)";
     } else if (param.includes("current c")) {
       valueAxis.title.text = "Current C (Amp)";
@@ -236,20 +249,20 @@ function CustomTrend() {
     valueAxis.renderer.labels.template.fill = am4core.color(textColor);
 
     const colorMap = {
-      "Transport": am4core.color("#FF9933"),
+      Transport: am4core.color("#FF9933"),
       "Unit 05 Aux": am4core.color("#A569BD"),
       "Light External": am4core.color("#F7DC6F"),
       "Light Internal ": am4core.color("#F8C471"),
       "Power House 2nd Source": am4core.color("#E74C3C"),
-      "Turbine": am4core.color("#3498DB"),
-      "Spare": am4core.color("#BDC3C7"),
+      Turbine: am4core.color("#3498DB"),
+      Spare: am4core.color("#BDC3C7"),
       "Drawing 01": am4core.color("#5DADE2"),
       "Winding 01 (PLC)": am4core.color("#2874A6"),
       "Ring 01": am4core.color("#1F618D"),
       "Ring 5": am4core.color("#2E86C1"),
       "Ring 6(Auto Cone 1-9)": am4core.color("#2980B9"),
       "Comber 1": am4core.color("#1ABC9C"),
-      "Compressor": am4core.color("#F1C40F"),
+      Compressor: am4core.color("#F1C40F"),
       "Simplex 01": am4core.color("#27AE60"),
       "Compressor 02 (90kW)": am4core.color("#F39C12"),
       "Ring AC ": am4core.color("#58D68D"),
@@ -262,7 +275,7 @@ function CustomTrend() {
       "Winding AC": am4core.color("#1D8348"),
       "Mills RES-CLNY& Workshop": am4core.color("#9B59B6"),
       "Card 1": am4core.color("#154360"),
-      "Colony": am4core.color("#A04000"),
+      Colony: am4core.color("#A04000"),
       "Power House and Source": am4core.color("#C0392B"),
       "Blow Room": am4core.color("#2471A3"),
       "Card 2": am4core.color("#1A5276"),
@@ -286,7 +299,7 @@ function CustomTrend() {
       const series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.dateX = "timestamp";
       series.dataFields.valueY = meter;
-      series.name = `${meter} (${meterMapping[meter]})`; 
+      series.name = `${meter} (${meterMapping[meter]})`;
       series.stroke = colorMap[meter] || am4core.color("#00eaff");
       series.strokeWidth = 2;
       series.tooltipText = "{dateX}: [b]{valueY}[/]";
@@ -340,26 +353,77 @@ function CustomTrend() {
     <div className="relative flex-shrink-0 w-full px-2 py-2 sm:px-4 sm:py-4 md:px-6 md:py-6 h-max lg:h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1F5897] rounded-[8px] shadow-md border-t-[4px] border-t-[#1d5999] ">
       <div className="absolute inset-0" style={{ opacity: 1 }}></div>
       <div className="relative z-10 h-full flex flex-col">
-        <h1 className="text-lg font-bold mb-4 font-raleway text-[#1F5897] dark:text-[#D1D5DB]">Customized Trend</h1>
+        <h1 className="text-lg font-bold mb-4 font-raleway text-[#1F5897] dark:text-[#D1D5DB]">
+          Customized Trend
+        </h1>
         <div className="w-full flex flex-col gap-4 mb-6 md:grid md:grid-cols-6 md:gap-4">
           <div className="w-full">
-            <label className="block text-sm font-medium text-gray-600 dark:text-gray-300" style={{ color: '#1F5897' }}>Start Date</label>
-            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full p-2 border rounded" />
+            <label
+              className="block text-sm font-medium text-gray-600 dark:text-gray-300"
+              style={{ color: "#1F5897" }}
+            >
+              Start Date
+            </label>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full p-2 border rounded"
+            />
           </div>
           <div className="w-full">
-            <label className="block text-sm font-medium text-gray-600 dark:text-gray-300" style={{ color: '#1F5897' }}>End Date</label>
-            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-full p-2 border rounded" />
+            <label
+              className="block text-sm font-medium text-gray-600 dark:text-gray-300"
+              style={{ color: "#1F5897" }}
+            >
+              End Date
+            </label>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full p-2 border rounded"
+            />
           </div>
           <div className="w-full">
-            <label className="block text-sm font-medium text-gray-600 dark:text-gray-300" style={{ color: '#1F5897' }}>Select Area</label>
-            <select value={area} onChange={(e) => { setArea(e.target.value); setSelectedMeter([]); }} className="w-full p-2 border rounded">
-              <option value="" className="dark:text-gray-300 dark:bg-gray-800">Select Area</option>
-              <option value="Unit 4" className="dark:text-gray-300 dark:bg-gray-800">UNIT 4</option>
-              <option value="Unit 5" className="dark:text-gray-300 dark:bg-gray-800">UNIT 5</option>
+            <label
+              className="block text-sm font-medium text-gray-600 dark:text-gray-300"
+              style={{ color: "#1F5897" }}
+            >
+              Select Area
+            </label>
+            <select
+              value={area}
+              onChange={(e) => {
+                setArea(e.target.value);
+                setSelectedMeter([]);
+              }}
+              className="w-full p-2 border rounded"
+            >
+              <option value="" className="dark:text-gray-300 dark:bg-gray-800">
+                Select Area
+              </option>
+              <option
+                value="Unit 4"
+                className="dark:text-gray-300 dark:bg-gray-800"
+              >
+                UNIT 4
+              </option>
+              <option
+                value="Unit 5"
+                className="dark:text-gray-300 dark:bg-gray-800"
+              >
+                UNIT 5
+              </option>
             </select>
           </div>
           <div className="w-full">
-            <label className="block text-sm font-medium text-gray-600 dark:text-gray-300" style={{ color: '#1F5897' }}>Select LT</label>
+            <label
+              className="block text-sm font-medium text-gray-600 dark:text-gray-300"
+              style={{ color: "#1F5897" }}
+            >
+              Select LT
+            </label>
             <select
               value={lt}
               onChange={(e) => {
@@ -369,25 +433,57 @@ function CustomTrend() {
               }}
               className="w-full p-2 border rounded"
             >
-              <option value="" className="dark:bg-gray-800 dark:text-gray-300">Select LT</option>
-              <option value="LT_1" className="dark:bg-gray-800 dark:text-gray-300">LT1</option>
-              <option value="LT_2" className="dark:bg-gray-800 dark:text-gray-300">LT2</option>
-              <option value="ALL" className="dark:bg-gray-800 dark:text-gray-300">Select All</option>
+              <option value="" className="dark:bg-gray-800 dark:text-gray-300">
+                Select LT
+              </option>
+              <option
+                value="LT_1"
+                className="dark:bg-gray-800 dark:text-gray-300"
+              >
+                LT1
+              </option>
+              <option
+                value="LT_2"
+                className="dark:bg-gray-800 dark:text-gray-300"
+              >
+                LT2
+              </option>
+              <option
+                value="ALL"
+                className="dark:bg-gray-800 dark:text-gray-300"
+              >
+                Select All
+              </option>
             </select>
           </div>
           <div ref={meterDropdownRef} className="relative w-full">
-            <label className="block text-sm font-medium text-gray-600 dark:text-gray-300" style={{ color: '#1F5897' }}>Select Meters</label>
-            <button onClick={() => setShowMeters(!showMeters)} className="w-full p-2 border rounded text-left bg-white dark:bg-gray-800">
-              {selectedMeter.length > 0 ? selectedMeter.join(", ") : "Select Meters"}
+            <label
+              className="block text-sm font-medium text-gray-600 dark:text-gray-300"
+              style={{ color: "#1F5897" }}
+            >
+              Select Meters
+            </label>
+            <button
+              onClick={() => setShowMeters(!showMeters)}
+              className="w-full p-2 border rounded text-left bg-white dark:bg-gray-800"
+            >
+              {selectedMeter.length > 0
+                ? selectedMeter.join(", ")
+                : "Select Meters"}
               <span className="float-right">{showMeters ? "▲" : "▼"}</span>
             </button>
             {showMeters && (
               <div className="absolute bg-white dark:bg-gray-800 border shadow z-10 w-full max-h-48 overflow-y-auto dark:text-gray-300">
                 {filteredMeters.length === 0 ? (
-                  <div className="p-2 text-gray-400 dark:text-gray-300">No meters available</div>
+                  <div className="p-2 text-gray-400 dark:text-gray-300">
+                    No meters available
+                  </div>
                 ) : (
                   filteredMeters.map((meter) => (
-                    <label key={meter} className="block px-4 py-2 hover:bg-gray-100 dark:text-gray-300">
+                    <label
+                      key={meter}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:text-gray-300"
+                    >
                       <input
                         type="checkbox"
                         value={meter}
@@ -409,15 +505,26 @@ function CustomTrend() {
             )}
           </div>
           <div ref={parameterDropdownRef} className="relative w-full">
-            <label className="block text-sm font-medium text-gray-600 dark:text-gray-300" style={{ color: '#1F5897' }}>Select Parameter</label>
-            <button onClick={() => setShowParameters(!showParameters)} className="w-full p-2 border rounded text-left bg-white dark:bg-gray-800">
+            <label
+              className="block text-sm font-medium text-gray-600 dark:text-gray-300"
+              style={{ color: "#1F5897" }}
+            >
+              Select Parameter
+            </label>
+            <button
+              onClick={() => setShowParameters(!showParameters)}
+              className="w-full p-2 border rounded text-left bg-white dark:bg-gray-800"
+            >
               {selectedParameter || "Select Parameter"}
               <span className="float-right">{showParameters ? "▲" : "▼"}</span>
             </button>
             {showParameters && (
               <div className="absolute bg-white dark:bg-gray-800 border shadow z-10 w-full max-h-48 overflow-y-auto">
                 {parameters.map((param) => (
-                  <label key={param} className="block px-4 py-2 hover:bg-gray-100">
+                  <label
+                    key={param}
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     <input
                       type="radio"
                       name="parameter"
@@ -437,7 +544,10 @@ function CustomTrend() {
           </div>
         </div>
         <div className="flex-1 w-full">
-          <div id="chartDiv" className="w-full h-[40vh]  transition-all duration-300 rounded-md bg-white dark:bg-gray-800 overflow-x-auto" >
+          <div
+            id="chartDiv"
+            className="w-full h-[40vh]  transition-all duration-300 rounded-md bg-white dark:bg-gray-800 overflow-x-auto"
+          >
             <style>
               {`
                 #chartDiv::-webkit-scrollbar {

@@ -8,7 +8,7 @@ import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 const PowerComparison = () => {
   const [isPowerComparisonFullView, setIsPowerComparisonFullView] =
     useState(false);
-  console.log("This is from power comparison ", isPowerComparisonFullView);
+
   const chartRef = useRef(null);
   const handlePowerComparisonFullView = () => {
     setIsPowerComparisonFullView((prev) => !prev);

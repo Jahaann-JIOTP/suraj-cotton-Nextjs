@@ -251,12 +251,7 @@ export default function Roles() {
                 .map((id) => privileges.find((p) => p._id === id)?.name)
                 .filter(Boolean) // remove undefined if any ID not found
                 .join(", ");
-              console.log(
-                "this is privileges",
-                privilegeNames === "Setting"
-                  ? "User Management"
-                  : privilegeNames
-              );
+
               return (
                 <tr
                   key={role._id}
