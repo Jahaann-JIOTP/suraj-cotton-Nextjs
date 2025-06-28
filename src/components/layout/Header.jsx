@@ -103,9 +103,9 @@ const Header = ({ handleTabClick, activeTab }) => {
 
   useEffect(() => {
     fetchUserDetails();
-    fetchAlarms();
-    const interval = setInterval(fetchAlarms, 5000);
-    return () => clearInterval(interval);
+    // fetchAlarms();
+    // const interval = setInterval(fetchAlarms, 5000);
+    // return () => clearInterval(interval);
   }, []);
 
   const renderLink = (key) => {
