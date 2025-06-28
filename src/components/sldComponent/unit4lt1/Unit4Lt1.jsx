@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 const singlemeterData = [
   {
-    link: "U18_PLC",
+    link: "U8_PLC",
     top: 317,
     left: 195,
   },
@@ -127,10 +127,11 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U8_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U8_PLC_Current_A}
+            {/* {roundedData?.U8_PLC_Current_A} */}
+            {roundedData?.U8_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U8_PLC_Voltage_AB}
+            {roundedData?.U8_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -139,10 +140,10 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U15_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U15_PLC_Current_A}
+            {roundedData?.U15_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U15_PLC_Voltage_AB}
+            {roundedData?.U15_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -151,10 +152,10 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U12_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U12_PLC_Current_A}
+            {roundedData?.U12_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U12_PLC_Voltage_AB}
+            {roundedData?.U12_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -163,10 +164,10 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U14_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U14_PLC_Current_A}
+            {roundedData?.U14_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U14_PLC_Voltage_AB}
+            {roundedData?.U14_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -175,10 +176,10 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U9_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U9_PLC_Current_A}
+            {roundedData?.U9_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U9_PLC_Voltage_AB}
+            {roundedData?.U9_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -187,10 +188,10 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U11_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U11_PLC_Current_A}
+            {roundedData?.U11_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U11_PLC_Voltage_AB}
+            {roundedData?.U11_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -199,10 +200,10 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U13_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U13_PLC_Current_A}
+            {roundedData?.U13_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U13_PLC_Voltage_AB}
+            {roundedData?.U13_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -211,10 +212,10 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U16_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U16_PLC_Current_A}
+            {roundedData?.U16_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U16_PLC_Voltage_AB}
+            {roundedData?.U16_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -223,10 +224,10 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U17_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U17_PLC_Current_A}
+            {roundedData?.U17_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U17_PLC_Voltage_AB}
+            {roundedData?.U17_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -235,7 +236,7 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U3_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U3_PLC_Current_A}
+            {roundedData?.U3_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U3_PLC_Voltage_BC}
@@ -247,7 +248,7 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U2_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U2_PLC_Current_A}
+            {roundedData?.U2_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U2_PLC_Voltage_BC}
@@ -259,7 +260,7 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U20_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U20_PLC_Current_A}
+            {roundedData?.U20_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U20_PLC_Voltage_BC}
@@ -268,13 +269,13 @@ const Unit4Lt1 = ({ roundedData }) => {
         {/* ///////////////////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[689px] left-[397px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_Voltage_AB}
+            {roundedData?.U4_PLC_Voltage_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_Current_A}
+            {roundedData?.U4_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_Voltage_AB}
+            {roundedData?.U4_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -283,10 +284,10 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U21_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U21_PLC_Current_A}
+            {roundedData?.U21_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U21_PLC_Voltage_AB}
+            {roundedData?.U21_PLC_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -295,10 +296,10 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U1_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U1_PLC_Current_A}
+            {roundedData?.U1_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U1_PLC_Voltage_AB}
+            {roundedData?.U1_PLC_Voltage_Avg}
           </span>
         </div>
       </div>
