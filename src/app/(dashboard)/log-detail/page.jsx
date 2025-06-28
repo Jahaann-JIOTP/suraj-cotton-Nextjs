@@ -1,5 +1,5 @@
 "use client";
-import { load } from "@amcharts/amcharts4/.internal/core/utils/Net";
+import config from "@/constant/apiRouteList";
 import { useSearchParams, useRouter } from "next/navigation";
 
 import React, { useEffect, useState } from "react";
@@ -19,20 +19,23 @@ const LogDetails = () => {
   const getMeterLogsData = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5001/logs_data`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type,
-          meters: meter_id,
-          // start_date: "2025-06-28",
-          // end_date: "2025-06-28",
-          start_date: startDate,
-          end_date: endDate,
-        }),
-      });
+      const response = await fetch(
+        `${config.SURAJ_COTTON_BASE_URL}/logs_data`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type,
+            meters: meter_id,
+            // start_date: "2025-06-28",
+            // end_date: "2025-06-28",
+            start_date: startDate,
+            end_date: endDate,
+          }),
+        }
+      );
 
       if (response.ok) {
         const resResult = await response.json(); // this is the actual data

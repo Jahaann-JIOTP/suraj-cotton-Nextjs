@@ -5,6 +5,7 @@ import InitialSldUnit4 from "@/components/sldComponent/initialSldUnit4/InitialSl
 import Unit4Lt1 from "@/components/sldComponent/unit4lt1/Unit4Lt1";
 import Unit4Lt2 from "@/components/sldComponent/unit4Lt2/Unit4Lt2";
 import React, { useEffect, useState } from "react";
+import config from "@/constant/apiRouteList";
 
 const Page = () => {
   const [meterData, setMeterData] = useState([]);
@@ -13,7 +14,9 @@ const Page = () => {
   const area = searchParams.get("area");
   const getMeterData = async () => {
     try {
-      const response = await fetch("http://localhost:5001/node-red-link ");
+      const response = await fetch(
+        `${config.SURAJ_COTTON_BASE_URL}/node-red-link`
+      );
       const resData = await response.json();
       if (response.ok) {
         setMeterData(resData);

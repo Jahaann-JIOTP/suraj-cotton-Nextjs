@@ -92,7 +92,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       </button>
 
       <div className="relative w-[1200px] h-full mx-auto">
-        {singlemeterData.map((meter) => (
+        {/* {singlemeterData.map((meter) => (
           <button
             key={meter.link}
             onClick={() =>
@@ -113,7 +113,7 @@ const Unit4Lt1 = ({ roundedData }) => {
             }}
             className={``}
           ></button>
-        ))}
+        ))} */}
         {/* Diagram Image */}
         <img
           src="../../../Unit-4-lt1-sld.png"
@@ -122,7 +122,7 @@ const Unit4Lt1 = ({ roundedData }) => {
         />
         {/* Meter Readings */}
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[328px] left-[203px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center border-1  gap-[4px] z-20 top-[319px] left-[95px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U8_PLC_ActivePower_Total}
           </span>
@@ -135,7 +135,7 @@ const Unit4Lt1 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[328px] left-[392px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[313.5px] left-[279px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U15_PLC_ActivePower_Total}
           </span>
@@ -147,7 +147,7 @@ const Unit4Lt1 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[328px] left-[582px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[313.5px] left-[464px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U12_PLC_ActivePower_Total}
           </span>
@@ -159,7 +159,7 @@ const Unit4Lt1 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[328px] left-[769px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[318px] left-[648px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U14_PLC_ActivePower_Total}
           </span>
@@ -170,8 +170,21 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U14_PLC_Voltage_Avg}
           </span>
         </div>
+        {/* {replica by yousaf shah saying the same code for each meter reading} */}
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[318px] left-[840px] w-[48px] h-[53px]">
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U14_PLC_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U14_PLC_Current_Avg}
+          </span>
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U14_PLC_Voltage_Avg}
+          </span>
+        </div>
+
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[404.5px] left-[298px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[390px] left-[192px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U9_PLC_ActivePower_Total}
           </span>
@@ -183,7 +196,7 @@ const Unit4Lt1 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[404.5px] left-[487.5px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[390px] left-[371.5px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U11_PLC_ActivePower_Total}
           </span>
@@ -195,7 +208,7 @@ const Unit4Lt1 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[404.5px] left-[677px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[390px] left-[570px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U13_PLC_ActivePower_Total}
           </span>
@@ -207,7 +220,7 @@ const Unit4Lt1 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[405px] left-[874px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[390px] left-[740px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U16_PLC_ActivePower_Total}
           </span>
@@ -218,8 +231,21 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U16_PLC_Voltage_Avg}
           </span>
         </div>
+        {/* second replica by yousaf shah saying the same code for each meter reading */}
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[390px] left-[970px] w-[48px] h-[53px]">
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U16_PLC_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U16_PLC_Current_Avg}
+          </span>
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U16_PLC_Voltage_Avg}
+          </span>
+        </div>
+
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[612px] left-[302px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[595px] left-[320px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U17_PLC_ActivePower_Total}
           </span>
@@ -231,7 +257,7 @@ const Unit4Lt1 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[613px] left-[493px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[595px] left-[500px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U3_PLC_ActivePower_Total}
           </span>
@@ -243,7 +269,7 @@ const Unit4Lt1 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[613px] left-[683px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[595px] left-[684px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U2_PLC_ActivePower_Total}
           </span>
@@ -255,7 +281,7 @@ const Unit4Lt1 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[613px] left-[872px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[595px] left-[876px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U20_PLC_ActivePower_Total}
           </span>
@@ -266,20 +292,22 @@ const Unit4Lt1 = ({ roundedData }) => {
             {roundedData?.U20_PLC_Voltage_BC}
           </span>
         </div>
-        {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[689px] left-[397px] w-[48px] h-[53px]">
+
+        {/* {another version of the same code for each meter reading}  */}
+
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[667px] left-[230px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_Voltage_Avg}
+            {roundedData?.U20_PLC_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_Current_Avg}
+            {roundedData?.U20_PLC_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_Voltage_Avg}
+            {roundedData?.U20_PLC_Voltage_BC}
           </span>
         </div>
-        {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[689px] left-[587px] w-[48px] h-[53px]">
+
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[667px] left-[420px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U21_PLC_ActivePower_Total}
           </span>
@@ -291,7 +319,31 @@ const Unit4Lt1 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[689px] left-[777px] w-[48px] h-[53px]">
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[667px] left-[600px] w-[48px] h-[53px]">
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U1_PLC_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U1_PLC_Current_Avg}
+          </span>
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U1_PLC_Voltage_Avg}
+          </span>
+        </div>
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[667px] left-[780px] w-[48px] h-[53px]">
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U1_PLC_ActivePower_Total}
+          </span>
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U1_PLC_Current_Avg}
+          </span>
+          <span className="meterReadingUnit4Lt1">
+            {roundedData?.U1_PLC_Voltage_Avg}
+          </span>
+        </div>
+        {/* ///////////////////////// */}
+        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[667px] left-[970px] w-[48px] h-[53px]">
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U1_PLC_ActivePower_Total}
           </span>
