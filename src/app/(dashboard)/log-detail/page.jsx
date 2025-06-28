@@ -3,6 +3,8 @@ import config from "@/constant/apiRouteList";
 import { useSearchParams, useRouter } from "next/navigation";
 
 import React, { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const LogDetails = () => {
   const [meterLogsData, setMeterLogsData] = useState([]);
@@ -59,7 +61,32 @@ const LogDetails = () => {
         .filter((key) => key !== "meterId")
     )
   );
-  console.log("===================>", columns);
+  const exportToExcel = () => {
+    if (meterLogsData.length === 0) {
+      alert("No data to export");
+      return;
+    }
+    // Prepare clean data excluding 'meterId'
+    const exportData = meterLogsData.map((row) => {
+      const newRow = {};
+      columns.forEach((col) => {
+        newRow[col] = row[col];
+      });
+      return newRow;
+    });
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Meter Logs");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const fileBlob = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+    saveAs(fileBlob, `meter_logs_${type}_${startDate}_to_${endDate}.xlsx`);
+  };
   return (
     <div className="h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1D5999] rounded-md px-5 py-2">
       <h1 className="font-700 font-inter text-[24px]">
@@ -92,7 +119,10 @@ const LogDetails = () => {
           </div>
         </div>
         <div className="flex items-center justify-end gap-3">
-          <button className="px-3 py-2 rounded-sm bg-gradient-to-r from-[#22C35D] to-[#15813D] text-white text-[16px] font-400 font-inter hover:scale-103 transition-all duration-500 cursor-pointer">
+          <button
+            onClick={exportToExcel}
+            className="px-3 py-2 rounded-sm bg-gradient-to-r from-[#22C35D] to-[#15813D] text-white text-[16px] font-400 font-inter hover:scale-103 transition-all duration-500 cursor-pointer"
+          >
             Export excel
           </button>
           <button

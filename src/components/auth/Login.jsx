@@ -1,5 +1,4 @@
 "use client";
-import config from "@/constant/apiRouteList";
 
 import React, { useEffect, useState } from "react";
 
@@ -7,6 +6,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { initializeAuth } from "@/redux/slices/authSlice";
+import config from "../../constant/apiRouteList";
 
 import { login } from "@/redux/slices/authSlice";
 
@@ -28,13 +28,16 @@ const Login = () => {
     setLoading(true);
     try {
       // const response = await fetch(`${config.BASE_URL}${config.AUTH.LOGIN}`, {
-      const response = await fetch(`http://localhost:5001/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        `${config.SURAJ_COTTON_BASE_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
       const data = await response.json();
       if (response.ok && data.token) {
         setSuccess("Login successful.");
@@ -56,8 +59,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-
-  
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 

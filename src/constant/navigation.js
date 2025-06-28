@@ -18,7 +18,7 @@ import { BsFillDiagram3Fill } from "react-icons/bs";
 export const privilegeConfig = {
   Dashboard: {
     // href: "/dashboard",
-     href: "#",
+    href: "#",
     icon: faDashboard,
     label: "DASHBOARD",
     matchPaths: ["/dashboard", "/status_table", "/Sanky"],
@@ -40,7 +40,7 @@ export const privilegeConfig = {
   },
   Alarms: {
     //href: "/all-alarms",
-     href: "#",
+    href: "#",
     icon: faBell,
     label: "ALARMS",
     matchPaths: ["/all-alarms", "/Recent_Alarms"],
@@ -77,7 +77,7 @@ export const privilegeOrder = [
   "Alarms",
   "Reports",
   "Setting",
-];  
+];
 
 export const sidebarLinksMap = {
   Home: [
@@ -138,67 +138,7 @@ export const sidebarLinksMap = {
       ],
     },
   ],
-  // Homee: [
-  //   {
-  //     id: 0,
-  //     title: "Plant Summary",
-  //     icon: PowerIcon,
-  //     submenu: [
-  //       {
-  //         id: 0,
-  //         title: "Plant Overview",
-  //         href: "/dashboard",
-  //         icon: PlantOverview,
-  //       },
-  //       {
-  //         id: 1,
-  //         title: "Power Summary",
-  //         href: "/power-summary",
-  //         icon: PlantOverview,
-  //       },
-  //       {
-  //         id: 2,
-  //         title: "Transformers",
-  //         href: "/transformers",
-  //         icon: TransformerIcon,
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 1,
-  //     title: "Energy Sankeys",
-  //     icon: EnergySankey,
-  //     submenu: [
-  //       {
-  //         id: 3,
-  //         title: "Unit 4 LT-1 (Sankey)",
-  //         href: "/unit-4-lt-1",
-  //         icon: Unit4Lt1,
-  //       },
-  //       {
-  //         id: 4,
-  //         title: "Unit 4 LT-2 (Sankey)",
-  //         href: "/unit-4-lt-2",
-  //         icon: Unit4Lt1,
-  //       },
-  //       {
-  //         id: 5,
-  //         title: "Unit 5 LT-3 (Sankey)",
-  //         href: "/unit-5-lt-3",
-  //         icon: Unit4Lt1,
-  //       },
-  //       {
-  //         id: 6,
-  //         title: "Unit 5 LT-4 (Sankey)",
-  //         href: "/unit-5-lt-4",
-  //         icon: Unit4Lt1,
-  //       },
-  //     ],
-  //   },
-  // ],
- 
- 
- 
+
   Diagram: [
     {
       id: 0,
@@ -237,7 +177,7 @@ export const sidebarLinksMap = {
   //   },
   // ],
 
-  Alarmss: [
+  Alarms: [
     {
       id: 0,
       title: "Alarms",
@@ -246,7 +186,8 @@ export const sidebarLinksMap = {
         {
           id: 0,
           title: "All Alarms",
-          href: "/all-alarms",
+          // href: "/all-alarms",
+          href: "#",
           icon: TransformerIcon,
         },
       ],
@@ -257,12 +198,14 @@ export const sidebarLinksMap = {
     {
       title: "energy-usage-report",
       icon: PlantOverview,
-      href: "/energy-usage-report",
+      // href: "/energy-usage-report",
+      href: "#",
     },
     {
       title: "Spindle Production",
       icon: PlantOverview,
-      href: "/spindle-production",
+      // href: "/spindle-production",
+      href: "#",
     },
   ],
 
@@ -278,7 +221,6 @@ export const sidebarLinksMap = {
       href: "/spindle-production",
     },
   ],
-
 
   Setting: [
     {

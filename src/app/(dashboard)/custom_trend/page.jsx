@@ -4,6 +4,7 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import config from "@/constant/apiRouteList";
 function CustomTrend() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -146,9 +147,7 @@ function CustomTrend() {
       const suffixes = parameterMapping[selectedParameter];
       const LT_selections = lt === "ALL" ? "ALL" : lt;
 
-      const apiUrl = "http://localhost:5001/trends";
-
-      fetch(apiUrl, {
+      fetch(`${config.SURAJ_COTTON_BASE_URL}/trends`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

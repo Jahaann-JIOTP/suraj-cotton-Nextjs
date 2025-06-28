@@ -16,7 +16,7 @@ const AllAlarmPage = () => {
   const rowsPerPage = 14;
   const paginationBtn =
     "px-3 py-2 text-sm rounded-md border border-gray-300 bg-gradient-to-b from-gray-100 to-gray-300 text-gray-800 hover:from-gray-200 hover:to-gray-400 hover:text-gray-900 transition duration-300";
-  
+
   const removeDuplicates = (alarms) => {
     const seen = new Set();
     return alarms.filter((alarm) => {
@@ -26,16 +26,15 @@ const AllAlarmPage = () => {
     });
   };
 
-  
   useEffect(() => {
     const fetchData = () => {
       setLoading(true);
       axios
-        .get(`${config.BASE_URL}${config.ALARMS.GET_ALARMS}`) 
+        .get(`${config.BASE_URL}${config.ALARMS.GET_ALARMS}`)
         .then((response) => {
           const alarms = response.data?.alarms || [];
           const formattedAlarms = alarms.map((alarm) => ({
-            _id: alarm._id, 
+            _id: alarm._id,
             state: alarm.end_time ? "Inactive" : "Active", // sets state based on end_time
             Source: alarm.Source,
             Status: alarm.status1,
@@ -75,7 +74,6 @@ const AllAlarmPage = () => {
     return { color: "bg-green-500", image: null };
   };
 
-  
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);

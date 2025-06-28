@@ -5,7 +5,7 @@ import config from "@/constant/apiRouteList";
 
 const page = ({ params }) => {
   // const [activeTab, setActiveTab] = useState("voltage");
-  const [activeTab, setActiveTab] = useState("energy");
+  const [activeTab, setActiveTab] = useState("voltage");
   const [data, setData] = useState([]);
   const { id } = use(params);
   const router = useRouter();
@@ -40,7 +40,7 @@ const page = ({ params }) => {
 
   // get prefixes of keys
   const suffixTags = {};
-  const prefix = "U8_PLC_";
+  const prefix = `${id}_`;
 
   for (const key in data) {
     if (key.startsWith(prefix)) {
@@ -50,7 +50,6 @@ const page = ({ params }) => {
       suffixTags[key] = Math.round(data[key] * 100) / 100;
     }
   }
-
   console.log(suffixTags);
   useEffect(() => {
     getSingleMeterData();
@@ -94,108 +93,170 @@ const page = ({ params }) => {
         {/* values */}
         {activeTab === "voltage" ? (
           <>
-            <div className="absolute top-[260px] left-[100px]">
-              {suffixTags.Voltage_CA}
+            <div className="absolute meterDataText top-[261px] left-[49px]">
+              {suffixTags.Voltage_CA} V ca
             </div>
-            <div className="absolute top-[200px] left-[200px]">
-              {suffixTags.Voltage_AB}
+            <div className="absolute meterDataText top-[204px] left-[196px]">
+              {suffixTags.Voltage_BC} V bc
             </div>
-            <div className="absolute top-[310px] left-[200px]">
-              {suffixTags.Voltage_BC}
+            <div className="absolute meterDataText top-[306px] left-[197px]">
+              {suffixTags.Voltage_AB} V ab
             </div>
-            <div className="absolute top-[140px] left-[400px]">
-              {suffixTags.Current_C}
+            <div className="absolute meterDataText top-[134.5px] left-[353px]">
+              {suffixTags.Current_C} A c
             </div>
-            <div className="absolute top-[250px] left-[400px]">
-              {suffixTags.Current_B}
+            <div className="absolute meterDataText top-[255px] left-[353px]">
+              {suffixTags.Current_B} A b
             </div>
-            <div className="absolute top-[370px] left-[400px]">
-              {suffixTags.Current_A}
+            <div className="absolute meterDataText top-[367px] left-[353px]">
+              {suffixTags.Current_A} A a
             </div>
-            <div className="absolute top-[570px] left-[200px]">
-              {suffixTags.Voltage_Avg}
+            <div className="absolute meterDataText top-[571px] left-[195px]">
+              {suffixTags.Voltage_Avg} V
             </div>
-            <div className="absolute top-[520px] left-[400px]">
-              {suffixTags.Current_Avg}
+            <div className="absolute meterDataText top-[509px] left-[355px]">
+              {suffixTags.Current_Avg} A
             </div>
-            <div className="absolute top-[135px] left-[580px]">N/A</div>
-            <div className="absolute top-[255px] left-[580px]">N/A</div>
-            <div className="absolute top-[370px] left-[580px]">N/A</div>
-            <div className="absolute top-[440px] left-[580px]">
-              {suffixTags.ActivePower_Total}
+            <div className="absolute meterDataText top-[135px] left-[562px]">
+              N/A
             </div>
-            <div className="absolute top-[510px] left-[580px]">
-              {suffixTags.ReactivePower_Total}
+            <div className="absolute meterDataText top-[255px] left-[562px]">
+              N/A
             </div>
-            <div className="absolute top-[570px] left-[580px]">
-              {suffixTags.ApparentPower_Total}
+            <div className="absolute meterDataText top-[368px] left-[562px]">
+              N/A
             </div>
-            <div className="absolute top-[490px] left-[720px]">
-              {suffixTags.Voltage_AN}
+            <div className="absolute meterDataText top-[440px] left-[540px]">
+              {suffixTags.ActivePower_Total} kW
             </div>
-            <div className="absolute top-[490px] left-[860px]">
-              {suffixTags.Voltage_BN}
+            <div className="absolute meterDataText top-[510px] left-[540px]">
+              {suffixTags.ReactivePower_Total} kVAR
             </div>
-            <div className="absolute top-[490px] left-[1030px]">
-              {suffixTags.Voltage_CN}
+            <div className="absolute meterDataText top-[570px] left-[540px]">
+              {suffixTags.ApparentPower_Total} kVA
             </div>
-            <div className="absolute top-[215px] left-[1180px]">N/A</div>
-            <div className="absolute top-[280px] left-[1180px]">
+            <div className="absolute meterDataText top-[489px] left-[713px]">
+              {suffixTags.Voltage_AN} V an
+            </div>
+            <div className="absolute meterDataText top-[489px] left-[855px]">
+              {suffixTags.Voltage_BN} V bn
+            </div>
+            <div className="absolute meterDataText top-[489px] left-[1003px]">
+              {suffixTags.Voltage_CN} V cn
+            </div>
+            <div className="absolute meterDataText top-[215px] left-[1195px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[280px] left-[1195px]">
               {suffixTags.PowerFactor_Avg}
             </div>
-            <div className="absolute top-[340px] left-[1180px]">N/A</div>
-            <div className="absolute top-[400px] left-[1180px]">N/A</div>
-            <div className="absolute top-[460px] left-[1180px]">N/A</div>
-            <div className="absolute top-[520px] left-[1180px]">
-              {suffixTags.Voltage_LN_Avg}
+            <div className="absolute meterDataText top-[340px] left-[1195px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[400px] left-[1195px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[464px] left-[1195px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[526px] left-[1180px]">
+              {suffixTags.Voltage_LN_Avg} V
             </div>
           </>
         ) : activeTab === "power" ? (
           <>
-            <div className="absolute top-[305px] left-[190px]">N/A</div>
-            <div className="absolute top-[390px] left-[190px]">N/A</div>
-            <div className="absolute top-[470px] left-[190px]">N/A</div>
-            <div className="absolute top-[305px] left-[530px]">N/A</div>
-            <div className="absolute top-[390px] left-[530px]">N/A</div>
-            <div className="absolute top-[470px] left-[530px]">N/A</div>
-            <div className="absolute top-[305px] left-[870px]">N/A</div>
-            <div className="absolute top-[390px] left-[870px]">N/A</div>
-            <div className="absolute top-[470px] left-[870px]">N/A</div>
-            <div className="absolute top-[305px] left-[1020px]">N/A</div>
-            <div className="absolute top-[390px] left-[1020px]">N/A</div>
-            <div className="absolute top-[470px] left-[1020px]">N/A</div>
-            <div className="absolute top-[305px] left-[1180px]">N/A</div>
-            <div className="absolute top-[390px] left-[1180px]">N/A</div>
-            <div className="absolute top-[470px] left-[1180px]">N/A</div>
+            <div className="absolute meterDataText top-[305px] left-[170px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[388px] left-[170px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[468px] left-[170px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[305px] left-[530px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[388px] left-[530px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[468px] left-[530px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[306px] left-[855px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[389px] left-[855px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[471px] left-[855px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[305px] left-[1015px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[390px] left-[1015px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[470px] left-[1015px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[305px] left-[1175px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[390px] left-[1175px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[470px] left-[1175px]">
+              N/A
+            </div>
 
-            <div className="absolute top-[560px] left-[870px]">
+            <div className="absolute meterDataText top-[558px] left-[855px]">
               {suffixTags.ApparentPower_Total}
             </div>
-            <div className="absolute top-[560px] left-[1020px]">
+            <div className="absolute meterDataText top-[558px] left-[1015px]">
               {suffixTags.ActivePower_Total}
             </div>
-            <div className="absolute top-[560px] left-[1180px]">
+            <div className="absolute meterDataText top-[557px] left-[1175px]">
               {suffixTags.ReactivePower_Total}
             </div>
           </>
         ) : activeTab === "energy" ? (
           <>
-            <div className="absolute top-[230px] left-[350px]">N/A</div>
-            <div className="absolute top-[320px] left-[350px]">N/A</div>
-            <div className="absolute top-[410px] left-[350px]">N/A</div>
-            <div className="absolute top-[230px] left-[630px]">N/A</div>
-            <div className="absolute top-[320px] left-[630px]">N/A</div>
-            <div className="absolute top-[410px] left-[630px]">N/A</div>
-            <div className="absolute top-[230px] left-[860px]">N/A</div>
-            <div className="absolute top-[320px] left-[860px]">N/A</div>
-            <div className="absolute top-[410px] left-[860px]">N/A</div>
-            <div className="absolute top-[490px] left-[370px]">
+            <div className="absolute meterDataText top-[232px] left-[390px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[320px] left-[390px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[408px] left-[390px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[230px] left-[630px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[320px] left-[630px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[410px] left-[630px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[230px] left-[870px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[320px] left-[870px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[410px] left-[870px]">
+              N/A
+            </div>
+            <div className="absolute meterDataText top-[493px] left-[390px]">
               {suffixTags.ApparentPower_Total}
             </div>
-            <div className="absolute top-[490px] left-[630px]">
+            <div className="absolute meterDataText top-[493px] left-[630px]">
               {suffixTags.ActivePower_Total}
             </div>
-            <div className="absolute top-[490px] left-[860px]">
+            <div className="absolute meterDataText top-[493px] left-[870px]">
               {suffixTags.ReactivePower_Total}
             </div>
           </>

@@ -16,7 +16,7 @@ const page = ({ params }) => {
         <h1 className="font-semibold text-2xl font-inter pb-4">Logs</h1>
         <button
           onClick={() => router.back()}
-          className="absolute top-[90px] left-[1110px] z-30 w-[135px] h-[45px]"
+          className="absolute top-[90px] left-[1110px] cursor-pointer z-30 w-[135px] h-[45px]"
         ></button>
         {type === "voltage" ? (
           <img src="../../voltage-logs.png" alt="Voltage logs" />
