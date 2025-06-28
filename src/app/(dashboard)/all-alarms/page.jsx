@@ -16,7 +16,7 @@ const AllAlarmPage = () => {
   const rowsPerPage = 14;
   const paginationBtn =
     "px-3 py-2 text-sm rounded-md border border-gray-300 bg-gradient-to-b from-gray-100 to-gray-300 text-gray-800 hover:from-gray-200 hover:to-gray-400 hover:text-gray-900 transition duration-300";
-  // Utility function to remove duplicates
+  
   const removeDuplicates = (alarms) => {
     const seen = new Set();
     return alarms.filter((alarm) => {
@@ -26,16 +26,16 @@ const AllAlarmPage = () => {
     });
   };
 
-  // Fetch data periodically using useEffect
+  
   useEffect(() => {
     const fetchData = () => {
       setLoading(true);
       axios
-        .get(`${config.BASE_URL}${config.ALARMS.GET_ALARMS}`) // Update to your backend API URL
+        .get(`${config.BASE_URL}${config.ALARMS.GET_ALARMS}`) 
         .then((response) => {
           const alarms = response.data?.alarms || [];
           const formattedAlarms = alarms.map((alarm) => ({
-            _id: alarm._id, // required for uniqueness
+            _id: alarm._id, 
             state: alarm.end_time ? "Inactive" : "Active", // sets state based on end_time
             Source: alarm.Source,
             Status: alarm.status1,
@@ -75,7 +75,7 @@ const AllAlarmPage = () => {
     return { color: "bg-green-500", image: null };
   };
 
-  // Pagination logic
+  
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
@@ -107,12 +107,6 @@ const AllAlarmPage = () => {
 
   return (
     <div className="relative w-full  bg-white dark:bg-gray-800 rounded-md border-t-3 border-t-[#1F5897]">
-      {/* Header */}
-
-      {/* <div
-        className="absolute inset-0 bg-[#fff] dark:bg-gray-800"
-        style={{ opacity: 1 }}
-      ></div> */}
       <div className="flex justify-between items-center px-6 py-4 border-b dark:border-b-gray-500 border-gray-200 z-10 relative">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
           All Alarms
@@ -130,5 +124,4 @@ const AllAlarmPage = () => {
     </div>
   );
 };
-
 export default AllAlarmPage;

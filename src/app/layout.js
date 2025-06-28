@@ -4,10 +4,7 @@ import { ThemeProvider } from "next-themes";
 import ReduxProvider from "@/components/reduxWrapper/ReduxWrapper";
 import ToastProvider from "@/components/toastProvider/ToastProvider";
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
+
 const raleway = Raleway({
   variable: "--font-raleway",
   weight: ["400", "500", "600", "700"],

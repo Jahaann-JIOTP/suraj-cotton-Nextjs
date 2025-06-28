@@ -57,7 +57,7 @@ const Login = () => {
     }
   };
 
-  // ///////////
+  
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
@@ -67,7 +67,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/dashboard");
+      router.push("/sld");
     }
   }, [isAuthenticated, router]);
   if (isAuthenticated) return null;
