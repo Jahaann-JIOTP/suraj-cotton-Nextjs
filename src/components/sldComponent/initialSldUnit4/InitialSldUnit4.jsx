@@ -6,24 +6,28 @@ import { useRouter } from "next/navigation";
 const unit4MeterData = [
   {
     link: "U19_PLC",
+    title: "Diesel IC",
     top: 187,
     left: 110,
     ltScheme: "LT_1",
   },
   {
     link: "U21_PLC",
+    title: "Wapda IC",
     top: 187,
     left: 262,
     ltScheme: "LT_1",
   },
   {
     link: "U17_GW01",
+    title: "Power House",
     top: 187,
     left: 848,
     ltScheme: "LT_2",
   },
   {
     link: "U23_GW01",
+    title: "Wapda IC",
     top: 187,
     left: 1000,
     ltScheme: "LT_2",
@@ -40,7 +44,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/sld/${meter.link}?area=Unit_4&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}`
+                `/meter?area=Unit_4&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
