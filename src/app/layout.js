@@ -4,7 +4,6 @@ import { ThemeProvider } from "next-themes";
 import ReduxProvider from "@/components/reduxWrapper/ReduxWrapper";
 import ToastProvider from "@/components/toastProvider/ToastProvider";
 
-
 const raleway = Raleway({
   variable: "--font-raleway",
   weight: ["400", "500", "600", "700"],
@@ -31,7 +30,7 @@ export default function RootLayout({ children }) {
           <ThemeProvider
             enableSystem={true}
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
           >
             {children}
             <ToastProvider />

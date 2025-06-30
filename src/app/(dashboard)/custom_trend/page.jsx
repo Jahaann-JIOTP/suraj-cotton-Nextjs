@@ -5,6 +5,7 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import config from "@/constant/apiRouteList";
+
 function CustomTrend() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -102,15 +103,28 @@ function CustomTrend() {
 
   const parameterMapping = {
     "Del Active Energy  ": "Del_ActiveEnergy",
-    " Current A    ": "Current_A",
-    "Current B     ": "Current_B",
-    "Current C     ": "Current_C",
-    "Power Factor A   ": "PowerFactor_A",
-    "Power Factor B    ": "PowerFactor_B",
-    "Power Factor C     ": "PowerFactor_C",
-    "Active Power ": "ActivePower_Total",
+    "Active Power Total ": "ActivePower_Total",
+    "Current A": "Current_A",
+    "Current B": "Current_B",
+    "Current C": "Current_C",
+    "Current Avg": "Current_Avg",
+    "Voltage AB": "Voltage_AB",
+    "Voltage BC": "Voltage_BC",
+    "Voltage CA": "Voltage_CA",
+    "Voltage Avg": "Voltage_Avg",
+    "Voltage AN": "Voltage_AN",
+    "Voltage BN": "Voltage_BN",
+    "Voltage CN": "Voltage_CN",
+    "Voltage LN Avg": "Voltage_LN_Avg",
+    "Power Factor A": "PowerFactor_A",
+    "Power Factor B": "PowerFactor_B",
+    "Power Factor C ": "PowerFactor_C",
+    "Power Factor Avg ": "PowerFactor_Avg",
     "Reactive power Total ": "ReactivePower_Total",
     "Apparent Power Total  ": "ApparentPower_Total",
+    "Harmonics V1 ": "Harmonics_V1_THD",
+    "Harmonics V2 ": "Harmonics_V2_THD",
+    "Harmonics V3  ": "Harmonics_V3_THD",
   };
 
   let filteredMeters = [];
@@ -173,14 +187,16 @@ function CustomTrend() {
             selectedMeter.forEach((m) => {
               const key = `${meterMapping[m]}_${suffixes}`;
               point[m] =
-                item[key] !== undefined ? parseFloat(item[key]) || null : null; // Handle undefined or invalid values
+                item[key] !== undefined ? parseFloat(item[key]) || null : null;
             });
             return point;
           });
-          console.log("Formatted Chart Data:", formatted); // Debug log
+          console.log("Formatted Chart Data for Transport:", formatted);
           if (
             formatted.length === 0 ||
-            !formatted.some((d) => Object.values(d).some((v) => v !== null))
+            !formatted.some((d) =>
+              Object.values(d).some((v) => v !== null && v !== 0)
+            )
           ) {
             console.warn("No valid data available for the selected criteria");
             setChartData([]);
@@ -193,7 +209,7 @@ function CustomTrend() {
           setChartData([]);
         });
     } else {
-      setChartData([]); // Clear chart data if conditions are not met
+      setChartData([]);
     }
   }, [startDate, endDate, area, lt, selectedMeter, selectedParameter]);
 
@@ -207,11 +223,10 @@ function CustomTrend() {
 
     const chart = am4core.create("chartDiv", am4charts.XYChart);
     chart.logo.disabled = true;
-    chart.data = chartData.filter(
-      (d) => d.timestamp && Object.values(d).some((v) => v !== null)
-    ); // Filter out invalid data
+    chart.data = chartData;
+
     const textColor = isDarkMode ? "#ccc" : "#5f5f5f";
-    const gridColor = isDarkMode ? "#666" : "#888"; // Updated to a more visible color for both modes
+    const gridColor = isDarkMode ? "#666" : "#888";
 
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.baseInterval = { timeUnit: "second", count: 1 };
@@ -226,23 +241,48 @@ function CustomTrend() {
       valueAxis.title.text = "Current B (Amp)";
     } else if (param.includes("current c")) {
       valueAxis.title.text = "Current C (Amp)";
-    } else if (param.includes("Del Active Energy")) {
-      valueAxis.title.text = "Del Active Energy (kWH)";
+    } else if (param.includes("current avg")) {
+      valueAxis.title.text = "Current Average (Amp)";
+    } else if (param.includes("del active energy")) {
+      valueAxis.title.text = "Delivered Active Energy (kWh)";
+    } else if (param.includes("active power total")) {
+      valueAxis.title.text = "Active Power Total (kW)";
+    } else if (param.includes("voltage ab")) {
+      valueAxis.title.text = "Voltage AB (Volt)";
+    } else if (param.includes("voltage bc")) {
+      valueAxis.title.text = "Voltage BC (Volt)";
+    } else if (param.includes("voltage ca")) {
+      valueAxis.title.text = "Voltage CA (Volt)";
+    } else if (param.includes("voltage avg")) {
+      valueAxis.title.text = "Voltage Average (Volt)";
+    } else if (param.includes("voltage an")) {
+      valueAxis.title.text = "Voltage AN (Volt)";
+    } else if (param.includes("voltage bn")) {
+      valueAxis.title.text = "Voltage BN (Volt)";
+    } else if (param.includes("voltage cn")) {
+      valueAxis.title.text = "Voltage CN (Volt)";
+    } else if (param.includes("voltage ln avg")) {
+      valueAxis.title.text = "Voltage LN Average (Volt)";
     } else if (param.includes("power factor a")) {
       valueAxis.title.text = "Power Factor A";
     } else if (param.includes("power factor b")) {
       valueAxis.title.text = "Power Factor B";
     } else if (param.includes("power factor c")) {
       valueAxis.title.text = "Power Factor C";
-    } else if (param.includes("apparent power total")) {
-      valueAxis.title.text = "Apparent Power Total (kVA)";
+    } else if (param.includes("power factor avg")) {
+      valueAxis.title.text = "Power Factor Average";
     } else if (param.includes("reactive power total")) {
       valueAxis.title.text = "Reactive Power Total (kVAR)";
-    } else if (param.includes("active power")) {
-      valueAxis.title.text = "Active Power (kW)";
-    } else {
-      valueAxis.title.text = selectedParameter.trim();
+    } else if (param.includes("apparent power total")) {
+      valueAxis.title.text = "Apparent Power Total (kVA)";
+    } else if (param.includes("harmonics v1")) {
+      valueAxis.title.text = "Harmonics V1 THD (%)";
+    } else if (param.includes("harmonics v2")) {
+      valueAxis.title.text = "Harmonics V2 THD (%)";
+    } else if (param.includes("harmonics v3")) {
+      valueAxis.title.text = "Harmonics V3 THD (%)";
     }
+
     valueAxis.title.fill = am4core.color(textColor);
     valueAxis.renderer.grid.template.stroke = am4core.color(gridColor);
     valueAxis.renderer.labels.template.fill = am4core.color(textColor);
@@ -283,7 +323,7 @@ function CustomTrend() {
       "Card Filter (Bypass)": am4core.color("#7FB3D5"),
       "Wapda + HFO + Gas Incoming ": am4core.color("#ffc107"),
       "D/R Card Filter": am4core.color("#D98880"),
-      "Ring 02 (Auto Cone 10-18)": am4core.color("#2C3E50 "),
+      "Ring 02 (Auto Cone 10-18)": am4core.color("#2C3E50"),
       "Ring 04": am4core.color("#566573"),
       "Ring 03": am4core.color("#34495E"),
       "Bale Press": am4core.color("#873600"),
@@ -294,16 +334,18 @@ function CustomTrend() {
       "Wapda 1 Incoming": am4core.color("#B03A2E"),
     };
 
-    selectedMeter.forEach((meter, i) => {
-      const series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.dateX = "timestamp";
-      series.dataFields.valueY = meter;
-      series.name = `${meter} (${meterMapping[meter]})`;
-      series.stroke = colorMap[meter] || am4core.color("#00eaff");
-      series.strokeWidth = 2;
-      series.tooltipText = "{dateX}: [b]{valueY}[/]";
-      series.show(); // Ensure series is visible
-    });
+    if (selectedMeter.length > 0) {
+      selectedMeter.forEach((meter) => {
+        const series = chart.series.push(new am4charts.LineSeries());
+        series.dataFields.dateX = "timestamp";
+        series.dataFields.valueY = meter;
+        series.name = `${meter}`;
+        series.stroke = colorMap[meter] || am4core.color("#00eaff");
+        series.strokeWidth = 2;
+        series.tooltipText = "{dateX}: [b]{valueY}[/]";
+        series.show();
+      });
+    }
 
     chart.cursor = new am4charts.XYCursor();
     chart.scrollbarX = new am4charts.XYChartScrollbar();
@@ -333,14 +375,14 @@ function CustomTrend() {
     chart.legend.labels.template.fill = am4core.color(textColor);
     chart.exporting.menu = new am4core.ExportMenu();
     chart.exporting.filePrefix = "Customized_Trends";
-    chart.exporting.menu.align = "right";
+    chart.exporting.menu.align = "left";
     chart.exporting.menu.verticalAlign = "top";
     chart.exporting.formatOptions.getKey("json").disabled = true;
     chart.exporting.formatOptions.getKey("html").disabled = true;
     chart.exporting.formatOptions.getKey("csv").disabled = true;
     chart.exporting.formatOptions.getKey("pdf").disabled = true;
     chart.exporting.menu.items[0].icon =
-      "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIxNnB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk9L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJJY29ucyB3aXRoIG51bWJlcnMiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iR3JvdXAiIHRrcmFuc2Zvcm09InRyYW5zbGF0ZSgtNzIwLjAwMDAwMCwgLTQzMi4wMDAwMDApIj48cGF0aCBkPSJNNzIxLDQ0NiBMNzMzLDQ0NiBMNzMzLDQ0MyBMNzM1LDQ0MyBMNzM1LDQ0NiBMNzM1LDQ0OCBMNzIxLDQ0OCBaIE07MjEsNDQzIEw3MjMsNDQzIEw3MjMsODQ2IEw3MjEsNDQ2IFogTTcyNiw0MzMgTDczMCw0MzMgTDczMCw0NDAgTDczMiw0NDggTDcyOCw0NDUgTDcyNCw0NDggTDcyNiw0NDggWiBNNzI2LDQzMyIgIGlkPSJSZWN0YW5nbGUgMjE3Ii8+PC9nPjwvZz48L3N2Zz4=";
+      "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIxNnB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJJY29ucyB3aXRoIG51bWJlcnMiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iR3JvdXAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC03MjAuMDAwMDAwLCAtNDMyLjAwMDAwMCkiPjxwYXRoIGQ9Ik03MjEsNDQ2IEw3MzMsNDQ2IEw3MzMsNDQzIEw3MzUsNDQzIEw3MzUsNDQ2IEw3MzUsNDQ4IEw3MjEsNDQ4IFogTTcyMSw0NDMgTDcyMyw0NDMgTDcyMyw0NDYgTDcyMSw0NDYgWiBNNzI2LDQzMyBMNzMwLDQzMyBMNzMwLDQ0MCBMNzMyLDQ0MCBMNzI4LDQ0NSBMNzI0LDQ0MCBMNzI2LDQ0MCBaIE07MjYsNDMzIiBpZD0iUmVjdGFuZ2xlIDIxNyIvPjwvZz48L2c+PC9zdmc+";
 
     return () => {
       chart.dispose();
@@ -428,7 +470,7 @@ function CustomTrend() {
               onChange={(e) => {
                 const value = e.target.value;
                 setLt(value);
-                setSelectedMeter([]); // Reset selected meters when LT changes
+                setSelectedMeter([]);
               }}
               className="w-full p-2 border rounded"
             >
@@ -467,7 +509,9 @@ function CustomTrend() {
               className="w-full p-2 border rounded text-left bg-white dark:bg-gray-800"
             >
               {selectedMeter.length > 0
-                ? selectedMeter.join(", ")
+                ? `${selectedMeter[0]}${
+                    selectedMeter.length > 1 ? ", ..." : ""
+                  }`
                 : "Select Meters"}
               <span className="float-right">{showMeters ? "▲" : "▼"}</span>
             </button>
@@ -545,7 +589,12 @@ function CustomTrend() {
         <div className="flex-1 w-full">
           <div
             id="chartDiv"
-            className="w-full h-[40vh]  transition-all duration-300 rounded-md bg-white dark:bg-gray-800 overflow-x-auto"
+            className="w-full transition-all duration-300 rounded-md bg-white dark:bg-gray-800 overflow-x-auto"
+            style={{
+              height: "60vh",
+              minHeight: "220px",
+              maxHeight: "98%",
+            }}
           >
             <style>
               {`
@@ -558,6 +607,15 @@ function CustomTrend() {
                 }
                 #chartDiv::-webkit-scrollbar-thumb:hover {
                   background-color: #555;
+                }
+                @media (max-width: 1024px) {
+                  #chartDiv { height: 45vh !important; min-height: 180px; }
+                }
+                @media (max-width: 768px) {
+                  #chartDiv { height: 35vh !important; min-height: 140px; }
+                }
+                @media (max-width: 480px) {
+                  #chartDiv { height: 28vh !important; min-height: 100px; }
                 }
               `}
             </style>

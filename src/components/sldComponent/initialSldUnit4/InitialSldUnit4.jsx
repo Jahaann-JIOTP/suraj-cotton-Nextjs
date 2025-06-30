@@ -40,7 +40,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/sld/${meter.link}?area=unit4&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}`
+                `/sld/${meter.link}?area=Unit_4&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}`
               )
             }
             style={{

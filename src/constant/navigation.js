@@ -28,7 +28,7 @@ export const privilegeConfig = {
     href: "/sld",
     icon: faProjectDiagram,
     label: "DIAGRAM",
-    matchPaths: ["/sld", "/sld_meters", "/Logs", "/log_detail"],
+    matchPaths: ["/sld", "/meter", "/logs", "/log-detail"],
     tab: "Diagram",
   },
   Trends: {
@@ -142,7 +142,7 @@ export const sidebarLinksMap = {
   Diagram: [
     {
       id: 0,
-      title: "Songle Line Diagram",
+      title: "Single Line Diagram",
       icon: BsFillDiagram3Fill,
       submenu: [
         {
@@ -161,21 +161,6 @@ export const sidebarLinksMap = {
       href: "/custom_trend",
     },
   ],
-  // Alarms: [
-  //   {
-  //     id: 0,
-  //     title: "Alarms",
-  //     icon: TransformerIcon,
-  //     submenu: [
-  //       {
-  //         id: 0,
-  //         title: "All Alarms",
-  //         href: "/all-alarms",
-  //         icon: TransformerIcon,
-  //       },
-  //     ],
-  //   },
-  // ],
 
   Alarms: [
     {
@@ -194,33 +179,33 @@ export const sidebarLinksMap = {
     },
   ],
 
-  Reports: [
-    {
-      title: "energy-usage-report",
-      icon: PlantOverview,
-      // href: "/energy-usage-report",
-      href: "#",
-    },
-    {
-      title: "Spindle Production",
-      icon: PlantOverview,
-      // href: "/spindle-production",
-      href: "#",
-    },
-  ],
+  // Reports: [
+  //   {
+  //     title: "energy-usage-report",
+  //     icon: PlantOverview,
+  //     // href: "/energy-usage-report",
+  //     href: "#",
+  //   },
+  //   {
+  //     title: "Spindle Production",
+  //     icon: PlantOverview,
+  //     // href: "/spindle-production",
+  //     href: "#",
+  //   },
+  // ],
 
-  Reportss: [
-    {
-      title: "energy-usage-report",
-      icon: PlantOverview,
-      href: "/energy-usage-report",
-    },
-    {
-      title: "Spindle Production",
-      icon: PlantOverview,
-      href: "/spindle-production",
-    },
-  ],
+  // Reportss: [
+  //   {
+  //     title: "energy-usage-report",
+  //     icon: PlantOverview,
+  //     href: "/energy-usage-report",
+  //   },
+  //   {
+  //     title: "Spindle Production",
+  //     icon: PlantOverview,
+  //     href: "/spindle-production",
+  //   },
+  // ],
 
   Setting: [
     {
