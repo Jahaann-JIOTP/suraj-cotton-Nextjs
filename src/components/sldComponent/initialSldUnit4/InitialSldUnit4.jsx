@@ -26,7 +26,7 @@ const unit4MeterData = [
     ltScheme: "LT_2",
   },
   {
-    link: "U22_GW01",
+    link: "U13_GW01",
     title: "Wapda IC",
     top: 187,
     left: 1000,
@@ -119,13 +119,13 @@ const InitialSldUnit4 = ({ roundedData }) => {
         </div>
         <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[200px] left-[1008px]  w-[58px] h-[59px]">
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U22_GW01_ActivePower_Total}
+            {roundedData?.U13_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U22_GW01_Current_Avg}
+            {roundedData?.U13_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U22_GW01_Voltage_Avg}
+            {roundedData?.U13_GW01_Voltage_Avg}
           </span>
         </div>
       </div>
