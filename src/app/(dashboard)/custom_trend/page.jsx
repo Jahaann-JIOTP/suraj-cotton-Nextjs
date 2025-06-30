@@ -342,7 +342,7 @@ function CustomTrend() {
         series.name = `${meter}`;
         series.stroke = colorMap[meter] || am4core.color("#00eaff");
         series.strokeWidth = 2;
-        series.tooltipText = "{dateX}: [b]{valueY}[/]";
+        series.tooltipText = "{dateX}: [b]{valueY.formatNumber('#.##')}[/]";
         series.show();
       });
     }

@@ -93,7 +93,7 @@ const lt2MeterData = [
     left: 872,
   },
   {
-    link: "U23_GW01",
+    link: "U13_GW01",
     title: "Wapda 1 Incomming",
     top: 530,
     left: 1060,
@@ -366,13 +366,13 @@ const Unit4Lt2 = ({ roundedData }) => {
         {/* ///////////////////////// */}
         <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent py-[1px] z-40 top-[541px] left-[1067.5px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U23_GW01_ActivePower_Total}
+            {roundedData?.U13_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U23_GW01_Current_Avg}
+            {roundedData?.U13_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U23_GW01_Voltage_Avg}
+            {roundedData?.U13_GW01_Voltage_Avg}
           </span>
         </div>
         {/* ///////////////////////// */}
@@ -426,13 +426,13 @@ const Unit4Lt2 = ({ roundedData }) => {
         {/* ///////////////////////// */}
         <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent py-[1px] z-40 top-[658px] left-[983.5px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U22_GW01_ActivePower_Total}
+            {roundedData?.U23_GW01_ActivePower_Total}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U22_GW01_Current_Avg}
+            {roundedData?.U23_GW01_Current_Avg}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U22_GW01_Voltage_Avg}
+            {roundedData?.U23_GW01_Voltage_Avg}
           </span>
         </div>
       </div>
