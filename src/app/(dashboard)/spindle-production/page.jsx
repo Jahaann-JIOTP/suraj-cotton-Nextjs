@@ -203,38 +203,118 @@ const ProductionBlocks = () => {
   const [daysInMonth, setDaysInMonth] = useState([]);
 
   useEffect(() => {
+    generateDaysOfMonth(year, month);
+  }, [month, year]);
+
+  // Simulate API call
+  useEffect(() => {
+    // Replace this with your API fetch
     const fetchedData = [
-      { date: "1/7/2025", value: "150kg" },
-      { date: "3/7/2025", value: "200kg" },
-      { date: "5/7/2025", value: "180kg" },
-      { date: "10/7/2025", value: "210kg" },
-      { date: "15/7/2025", value: "220kg" },
+      { date: "01/01/2025", value: "150kg" },
+      { date: "03/01/2025", value: "200kg" },
+      { date: "01/07/2025", value: "150kg" },
+      { date: "03/07/2025", value: "200kg" },
+      { date: "05/07/2025", value: "180kg" },
+      { date: "10/07/2025", value: "210kg" },
+      { date: "15/07/2025", value: "220kg" },
     ];
     setProductionData(fetchedData);
   }, []);
 
   const generateDaysOfMonth = (year, month) => {
-    const days = new Date(year, month + 1).getDate();
+    const days = new Date(year, month + 1, 0).getDate();
     const datesArray = [];
     for (let i = 1; i <= days; i++) {
-      const dayStr = i.toString();
-      const monthStr = (month + 1).toString();
+      const dayStr = i.toString().padStart(2, "0");
+      const monthStr = (month + 1).toString().padStart(2, "0");
       datesArray.push(`${dayStr}/${monthStr}/${year}`);
     }
     setDaysInMonth(datesArray);
   };
-  const productionByDate = (dateStr) => {
+
+  const getProductionByDate = (dateStr) => {
     const entry = productionData.find((d) => d.date === dateStr);
     return entry ? entry.value : "-";
   };
-  // console.log(productionByDate("1/7/2025"));
 
-  useEffect(() => {
-    generateDaysOfMonth(year, month);
-  }, [month, year]);
+  const chunkArray = (arr, size) => {
+    const result = [];
+    for (let i = 0; i < arr.length; i += size) {
+      result.push(arr.slice(i, i + size));
+    }
+    return result;
+  };
+
+  const dayChunks = chunkArray(daysInMonth, 15);
   return (
-    <div>
-      <h1>production spindles</h1>
+    <div className="p-4">
+      {/* Month & Year Select */}
+      <div className="mb-4 flex flex-wrap gap-4">
+        <select
+          value={month}
+          onChange={(e) => setMonth(parseInt(e.target.value))}
+          className="border p-2 text-sm"
+        >
+          {Array.from({ length: 12 }, (_, i) => (
+            <option key={i} value={i}>
+              {new Date(0, i).toLocaleString("default", { month: "long" })}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={year}
+          onChange={(e) => setYear(parseInt(e.target.value))}
+          className="border p-2 text-sm"
+        >
+          {Array.from({ length: 5 }, (_, i) => year - 2 + i).map((y) => (
+            <option key={y} value={y}>
+              {y}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Slot Rows */}
+      {dayChunks.map((chunk, rowIndex) => {
+        const lasIndex = chunk.length - 1;
+        console.log(">>>>>>>>>>>", lasIndex);
+        return (
+          <div key={rowIndex} className="mb-6 overflow-x-auto">
+            {/* Date Row */}
+            <div className="flex min-w-[900px] md:min-w-full items-center text-center">
+              <div className="flex-shrink-0 border-1 border-[#025697] border-r-white py-1 bg-[#E5F3FD] w-[87px] text-[10px] md:text-[12px] font-medium">
+                Date
+              </div>
+              {chunk.map((dateStr) => (
+                <div
+                  key={dateStr}
+                  className={`flex-shrink-0 border-1  border-y-[#025697]  ${
+                    rowIndex.la ? "border-r-[#025697]" : "border-r-white"
+                  } py-1 bg-[#E5F3FD] w-[87px] text-[12px] font-medium`}
+                >
+                  {dateStr}
+                </div>
+              ))}
+            </div>
+
+            {/* Production Row */}
+            <div className="flex min-w-[900px] md:min-w-full items-center text-center">
+              <div className="flex-shrink-0 font-semibold py-4 w-[87px] border text-[12px]">
+                Production
+              </div>
+              {chunk.map((dateStr) => (
+                <div
+                  key={dateStr}
+                  className="flex-shrink-0 border py-4 w-[87px] text-[12px]"
+                >
+                  {getProductionByDate(dateStr)}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };

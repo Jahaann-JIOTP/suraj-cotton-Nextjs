@@ -45,11 +45,20 @@ const page = () => {
   const prefix = `${id}_`;
 
   for (const key in data) {
+    const value = data[key];
+    const isNumber = typeof value === "number";
+    const roundedValue =
+      isNumber && Math.abs(value) > 1e9
+        ? 0
+        : isNumber
+        ? Math.round(value * 100) / 100
+        : value;
+
     if (key.startsWith(prefix)) {
       const newKey = key.slice(prefix.length);
-      suffixTags[newKey] = Math.round(data[key] * 100) / 100;
+      suffixTags[newKey] = roundedValue;
     } else {
-      suffixTags[key] = Math.round(data[key] * 100) / 100;
+      suffixTags[key] = roundedValue;
     }
   }
   console.log(suffixTags);

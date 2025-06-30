@@ -75,7 +75,7 @@ const page = () => {
             <button
               className="absolute w-[57px] h-[59px]   top-[499px] cursor-pointer left-[729px]"
               onClick={() =>
-                router.push(`/log-detail?val=Harmonics&meter_id=${meterId}`)
+                router.push(`/log-detail?val=harmonics&meter_id=${meterId}`)
               }
             ></button>
           </>

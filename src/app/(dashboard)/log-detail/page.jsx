@@ -164,7 +164,9 @@ const LogDetails = () => {
                           {col === "time"
                             ? new Date(row[col]).toLocaleString()
                             : typeof row[col] === "number"
-                            ? Math.round(row[col] * 100) / 100
+                            ? Math.abs(row[col]) > 1e9
+                              ? 0
+                              : Math.round(row[col] * 100) / 100
                             : row[col] == null
                             ? 0
                             : row[col]}

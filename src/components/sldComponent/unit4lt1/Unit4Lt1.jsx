@@ -337,7 +337,7 @@ const Unit4Lt1 = ({ roundedData }) => {
         {/* {another version of the same code for each meter reading}  */}
         {/* ////////////////// ring 5 /////////////// */}
 
-        <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[667px] left-[232.3px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
+        <div className="absolute flex flex-col  items-center justify-center gap-[4px] z-20 top-[667px] left-[232.3px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
           <span className="meterReadingUnit4Lt1 pt-[1px]">
             {roundedData?.U11_PLC_ActivePower_Total || "00.00"}
           </span>
