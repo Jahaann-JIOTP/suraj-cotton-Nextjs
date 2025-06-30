@@ -22,7 +22,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning={true}>
       <body
         className={`  ${raleway.variable} ${inter.variable} antialiased bg-[#f7f7f7] dark:bg-gray-900`}
       >

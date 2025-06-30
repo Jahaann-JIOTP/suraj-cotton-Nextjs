@@ -87,49 +87,49 @@ const InitialSldUnit4 = ({ roundedData }) => {
         {/* ////////////// Diesel IC lt1 /////////////// */}
         <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[200px] left-[116px]   w-[58px] h-[59px]">
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U19_PLC_ActivePower_Total}
+            {roundedData?.U19_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U19_PLC_Current_Avg}
+            {roundedData?.U19_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U19_PLC_Voltage_Avg}
+            {roundedData?.U19_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* ////////////// wapda IC lt1 /////////////// */}
         <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[200px] left-[270px]   w-[58px] h-[59px]">
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U21_PLC_ActivePower_Total}
+            {roundedData?.U21_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U21_PLC_Current_Avg}
+            {roundedData?.U21_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U21_PLC_Voltage_Avg}
+            {roundedData?.U21_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* ////////////// power house lt2 /////////////// */}
         <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[200px] left-[857px]   w-[58px] h-[59px]">
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U7_GW01_ActivePower_Total}
+            {roundedData?.U7_GW01_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U7_GW01_Current_Avg}
+            {roundedData?.U7_GW01_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U7_GW01_Voltage_Avg}
+            {roundedData?.U7_GW01_Voltage_Avg || "00.00"}
           </span>
           {/* ////////////// wapda IC lt2 /////////////// */}
         </div>
         <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[200px] left-[1008px]  w-[58px] h-[59px]">
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U13_GW01_ActivePower_Total}
+            {roundedData?.U13_GW01_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U13_GW01_Current_Avg}
+            {roundedData?.U13_GW01_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">
-            {roundedData?.U13_GW01_Voltage_Avg}
+            {roundedData?.U13_GW01_Voltage_Avg || "00.00"}
           </span>
         </div>
       </div>

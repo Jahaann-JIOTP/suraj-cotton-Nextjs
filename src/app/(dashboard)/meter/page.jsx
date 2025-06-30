@@ -98,28 +98,28 @@ const page = () => {
         {activeTab === "voltage" ? (
           <>
             <div className="absolute meterDataText top-[261px] left-[49px]">
-              {suffixTags.Voltage_CA} V ca
+              {suffixTags.Voltage_CA || "00.00"} V ca
             </div>
             <div className="absolute meterDataText top-[204px] left-[196px]">
-              {suffixTags.Voltage_BC} V bc
+              {suffixTags.Voltage_BC || "00.00"} V bc
             </div>
             <div className="absolute meterDataText top-[306px] left-[197px]">
-              {suffixTags.Voltage_AB} V ab
+              {suffixTags.Voltage_AB || "00.00"} V ab
             </div>
             <div className="absolute meterDataText top-[134.5px] left-[353px]">
-              {suffixTags.Current_C} A c
+              {suffixTags.Current_C || "00.00"} A c
             </div>
             <div className="absolute meterDataText top-[255px] left-[353px]">
-              {suffixTags.Current_B} A b
+              {suffixTags.Current_B || "00.00"} A b
             </div>
             <div className="absolute meterDataText top-[367px] left-[353px]">
-              {suffixTags.Current_A} A a
+              {suffixTags.Current_A || "00.00"} A a
             </div>
             <div className="absolute meterDataText top-[571px] left-[195px]">
-              {suffixTags.Voltage_Avg} V
+              {suffixTags.Voltage_Avg || "00.00"} V
             </div>
             <div className="absolute meterDataText top-[509px] left-[355px]">
-              {suffixTags.Current_Avg} A
+              {suffixTags.Current_Avg || "00.00"} A
             </div>
             <div className="absolute meterDataText top-[135px] left-[562px]">
               N/A
@@ -131,28 +131,28 @@ const page = () => {
               N/A
             </div>
             <div className="absolute meterDataText top-[440px] left-[540px]">
-              {suffixTags.ActivePower_Total} kW
+              {suffixTags.ActivePower_Total || "00.00"} kW
             </div>
-            <div className="absolute meterDataText top-[510px] left-[540px]">
-              {suffixTags.ReactivePower_Total} kVAR
+            <div className="absolute meterDataText top-[510px] left-[532px]">
+              {suffixTags.ReactivePower_Total || "00.00"} kVAR
             </div>
             <div className="absolute meterDataText top-[570px] left-[540px]">
-              {suffixTags.ApparentPower_Total} kVA
+              {suffixTags.ApparentPower_Total || "00.00"} kVA
             </div>
-            <div className="absolute meterDataText top-[489px] left-[713px]">
-              {suffixTags.Voltage_AN} V an
+            <div className="absolute meterDataText top-[490px] left-[713px]">
+              {suffixTags.Voltage_AN || "00.00"} V an
             </div>
-            <div className="absolute meterDataText top-[489px] left-[855px]">
-              {suffixTags.Voltage_BN} V bn
+            <div className="absolute meterDataText top-[490px] left-[855px]">
+              {suffixTags.Voltage_BN || "00.00"} V bn
             </div>
-            <div className="absolute meterDataText top-[489px] left-[1003px]">
-              {suffixTags.Voltage_CN} V cn
+            <div className="absolute meterDataText top-[490px] left-[1003px]">
+              {suffixTags.Voltage_CN || "00.00"} V cn
             </div>
             <div className="absolute meterDataText top-[215px] left-[1195px]">
               N/A
             </div>
-            <div className="absolute meterDataText top-[280px] left-[1195px]">
-              {suffixTags.PowerFactor_Avg}
+            <div className="absolute meterDataText top-[280px] left-[1190px]">
+              {suffixTags.PowerFactor_Avg || "00.00"}
             </div>
             <div className="absolute meterDataText top-[340px] left-[1195px]">
               N/A
@@ -164,7 +164,7 @@ const page = () => {
               N/A
             </div>
             <div className="absolute meterDataText top-[526px] left-[1180px]">
-              {suffixTags.Voltage_LN_Avg} V
+              {suffixTags.Voltage_LN_Avg || "00.00"} V
             </div>
           </>
         ) : activeTab === "power" ? (
@@ -216,13 +216,13 @@ const page = () => {
             </div>
 
             <div className="absolute meterDataText top-[558px] left-[855px]">
-              {suffixTags.ApparentPower_Total}
+              {suffixTags.ActivePower_Total || "00.00"}
             </div>
             <div className="absolute meterDataText top-[558px] left-[1015px]">
-              {suffixTags.ActivePower_Total}
+              {suffixTags.ReactivePower_Total || "00.00"}
             </div>
             <div className="absolute meterDataText top-[557px] left-[1175px]">
-              {suffixTags.ReactivePower_Total}
+              {suffixTags.ApparentPower_Total || "00.00"}
             </div>
           </>
         ) : activeTab === "energy" ? (
@@ -254,14 +254,14 @@ const page = () => {
             <div className="absolute meterDataText top-[410px] left-[870px]">
               N/A
             </div>
-            <div className="absolute meterDataText top-[493px] left-[390px]">
-              {suffixTags.ApparentPower_Total}
+            <div className="absolute meterDataText top-[493px] left-[385px]">
+              {suffixTags.Del_ActiveEnergy || "00.00"}
             </div>
-            <div className="absolute meterDataText top-[493px] left-[630px]">
-              {suffixTags.ActivePower_Total}
+            <div className="absolute meterDataText top-[493px] left-[625px]">
+              {suffixTags.Rec_Active_Energy || "00.00"}
             </div>
-            <div className="absolute meterDataText top-[493px] left-[870px]">
-              {suffixTags.ReactivePower_Total}
+            <div className="absolute meterDataText top-[493px] left-[865px]">
+              N/A
             </div>
           </>
         ) : (

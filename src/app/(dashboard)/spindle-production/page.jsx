@@ -195,107 +195,47 @@
 
 import React, { useEffect, useState } from "react";
 
-// Helper function to chunk array into groups of 15
-const chunkArray = (arr, chunkSize) => {
-  const result = [];
-  for (let i = 0; i < arr.length; i += chunkSize) {
-    result.push(arr.slice(i, i + chunkSize));
-  }
-  return result;
-};
-
 const ProductionBlocks = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const today = new Date();
+  const [month, setMonth] = useState(today.getMonth());
+  const [year, setYear] = useState(today.getFullYear());
+  const [productionData, setProductionData] = useState([]);
+  const [daysInMonth, setDaysInMonth] = useState([]);
 
-  // Simulate API call (replace with your real API URL)
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Simulate fetch with local mock data
-        const apiData = [
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          { id: 0, plan: "unit4", date: "06/23/2025", production: "1200" },
-          // 👉 add more items here to test multiple blocks (e.g., 20–30)
-        ];
-        setData(apiData);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    const fetchedData = [
+      { date: "1/7/2025", value: "150kg" },
+      { date: "3/7/2025", value: "200kg" },
+      { date: "5/7/2025", value: "180kg" },
+      { date: "10/7/2025", value: "210kg" },
+      { date: "15/7/2025", value: "220kg" },
+    ];
+    setProductionData(fetchedData);
   }, []);
 
-  const blocks = chunkArray(data, 15);
+  const generateDaysOfMonth = (year, month) => {
+    const days = new Date(year, month + 1).getDate();
+    const datesArray = [];
+    for (let i = 1; i <= days; i++) {
+      const dayStr = i.toString();
+      const monthStr = (month + 1).toString();
+      datesArray.push(`${dayStr}/${monthStr}/${year}`);
+    }
+    setDaysInMonth(datesArray);
+  };
+  const productionByDate = (dateStr) => {
+    const entry = productionData.find((d) => d.date === dateStr);
+    return entry ? entry.value : "-";
+  };
+  // console.log(productionByDate("1/7/2025"));
 
+  useEffect(() => {
+    generateDaysOfMonth(year, month);
+  }, [month, year]);
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Production Report</h2>
-
-      {loading ? (
-        <p className="text-gray-500">Loading...</p>
-      ) : blocks.length === 0 ? (
-        <p className="text-gray-500">No data available.</p>
-      ) : (
-        blocks.map((block, index) => (
-          <div
-            key={index}
-            className="w-full border border-gray-400 rounded mb-6 p-4 h-[250px] overflow-y-auto"
-          >
-            <h3 className="text-lg font-semibold mb-2">Block {index + 1}</h3>
-            {/* <table className="w-full text-left border-collapse"> */}
-            <div>
-              <table>
-                <tbody>
-                  <th>Date</th>
-                  {block.map((item, index) => {
-                    return (
-                      <td key={index} className="border-r-2 border-green-300">
-                        {item.date}
-                      </td>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        ))
-      )}
+    <div>
+      <h1>production spindles</h1>
     </div>
   );
 };
-
 export default ProductionBlocks;

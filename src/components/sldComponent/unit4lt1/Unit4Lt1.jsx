@@ -162,12 +162,12 @@ const Unit4Lt1 = ({ roundedData }) => {
         {/* Meter Readings */}
         {/* //////////// transport ///////////// */}
         <div className="absolute flex flex-col items-center justify-center border-1 border-transparent py-[1px]  gap-[4px] z-20 top-[319px] left-[95.7px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U1_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U1_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
             {/* {roundedData?.U8_PLC_Current_A} */}
-            {roundedData?.U1_PLC_Current_Avg}
+            {roundedData?.U1_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U1_PLC_Voltage_Avg}
@@ -175,135 +175,135 @@ const Unit4Lt1 = ({ roundedData }) => {
         </div>
         {/* //////////// lighting outside ///////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[314px] left-[278px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U3_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U3_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U3_PLC_Current_Avg}
+            {roundedData?.U3_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U3_PLC_Voltage_Avg}
+            {roundedData?.U3_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* /////////// power house ////////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[314px] left-[462px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U5_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U5_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U5_PLC_Current_Avg}
+            {roundedData?.U5_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U5_PLC_Voltage_Avg}
+            {roundedData?.U5_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* ///////////// spare //////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[319px] left-[654px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U7_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U7_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U7_PLC_Current_Avg}
+            {roundedData?.U7_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U7_PLC_Voltage_Avg}
+            {roundedData?.U7_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* {replica by yousaf shah saying the same code for each meter reading} */}
         {/* ////////// winding 1 ///////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[319px] left-[845px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U9_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U9_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U9_PLC_Current_Avg}
+            {roundedData?.U9_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U9_PLC_Voltage_Avg}
+            {roundedData?.U9_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
 
         {/* ////////// unit 5 aux /////////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[391px] left-[187px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U2_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U2_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U2_PLC_Current_Avg}
+            {roundedData?.U2_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U2_PLC_Voltage_Avg}
+            {roundedData?.U2_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* ///////////// lighting inside //////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[391px] left-[369.5px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U4_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_Current_Avg}
+            {roundedData?.U4_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_Voltage_Avg}
+            {roundedData?.U4_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* /////////// turbine ////////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[391px] left-[567px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U6_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U6_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U6_PLC_Current_Avg}
+            {roundedData?.U6_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U6_PLC_Voltage_Avg}
+            {roundedData?.U6_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* //////////// drawing 1 ///////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[391px] left-[744.5px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U8_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U8_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U8_PLC_Current_Avg}
+            {roundedData?.U8_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U8_PLC_Voltage_Avg}
+            {roundedData?.U8_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* second replica by yousaf shah saying the same code for each meter reading */}
         {/* //////////////// ring 1 //////////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[391px] left-[972.2px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U10_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U10_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U10_PLC_Current_Avg}
+            {roundedData?.U10_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U10_PLC_Voltage_Avg}
+            {roundedData?.U10_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
 
         {/* //////////// ring 6 ///////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[594.5px] left-[324px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U12_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U12_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U12_PLC_Current_Avg}
+            {roundedData?.U12_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U12_PLC_Voltage_Avg}
+            {roundedData?.U12_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* ///////////// compressor //////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[595px] left-[506.3px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U14_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U14_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U14_PLC_Current_Avg}
+            {roundedData?.U14_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U14_PLC_Voltage_BC}
@@ -311,11 +311,11 @@ const Unit4Lt1 = ({ roundedData }) => {
         </div>
         {/* ////////////// compressor 2 /////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[595px] left-[689.5px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U16_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U16_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U16_PLC_Current_Avg}
+            {roundedData?.U16_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U16_PLC_Voltage_BC}
@@ -323,11 +323,11 @@ const Unit4Lt1 = ({ roundedData }) => {
         </div>
         {/* ////////////// rin ac bypass /////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[593px] left-[882.5px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U18_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U18_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U18_PLC_Current_Avg}
+            {roundedData?.U18_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U18_PLC_Voltage_BC}
@@ -338,11 +338,11 @@ const Unit4Lt1 = ({ roundedData }) => {
         {/* ////////////////// ring 5 /////////////// */}
 
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[667px] left-[232.3px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U11_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U11_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U11_PLC_Current_Avg}
+            {roundedData?.U11_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
             {roundedData?.U11_PLC_Voltage_BC}
@@ -351,50 +351,50 @@ const Unit4Lt1 = ({ roundedData }) => {
         {/* ////////////////// comber 1 /////////////// */}
 
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[668px] left-[415px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U13_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U13_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U13_PLC_Current_Avg}
+            {roundedData?.U13_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U13_PLC_Voltage_Avg}
+            {roundedData?.U13_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* //////////// simplex 1 ///////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[667px] left-[598px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U15_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U15_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U15_PLC_Current_Avg}
+            {roundedData?.U15_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U15_PLC_Voltage_Avg}
+            {roundedData?.U15_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* //////////// ring ac ///////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[667px] left-[780.3px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U17_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U17_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U17_PLC_Current_Avg}
+            {roundedData?.U17_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U17_PLC_Voltage_Avg}
+            {roundedData?.U17_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
         {/* //////////// compressor bypass ///////////// */}
         <div className="absolute flex flex-col items-center justify-center gap-[4px] z-20 top-[667px] left-[973.5px] border-1 border-transparent py-[1px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U20_PLC_ActivePower_Total}
+          <span className="meterReadingUnit4Lt1 pt-[1px]">
+            {roundedData?.U20_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U20_PLC_Current_Avg}
+            {roundedData?.U20_PLC_Current_Avg || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt1">
-            {roundedData?.U20_PLC_Voltage_Avg}
+            {roundedData?.U20_PLC_Voltage_Avg || "00.00"}
           </span>
         </div>
       </div>
