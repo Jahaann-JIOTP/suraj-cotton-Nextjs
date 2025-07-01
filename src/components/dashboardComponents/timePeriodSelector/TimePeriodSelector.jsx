@@ -14,9 +14,6 @@ const TimePeriodSelector = ({ getTimePeriod }) => {
   const [selected, setSelected] = useState("daily");
   const [mounted, setMounted] = useState(false);
 
-  const handleTimePeriod = () => {
-    getTimePeriod(selected);
-  };
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -56,7 +53,7 @@ const TimePeriodSelector = ({ getTimePeriod }) => {
                   onChange={() => {
                     setSelected(option.value);
                     setIsOpen(false);
-                    handleTimePeriod();
+                    getTimePeriod(option.value); // ✅ Pass correct selected value
                   }}
                   className="mr-2"
                 />

@@ -85,7 +85,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
         {/* Meter Readings */}
         {/* LT1 Power House */}
         {/* ////////////// Diesel IC lt1 /////////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[200px] left-[116px]   w-[58px] h-[59px]">
+        <div className="absolute flex flex-col items-center justify-around gap-[3px] z-40 top-[200px] left-[116px]   w-[58px] h-[59px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U19_PLC_ActivePower_Total || "00.00"}
           </span>
@@ -97,8 +97,8 @@ const InitialSldUnit4 = ({ roundedData }) => {
           </span>
         </div>
         {/* ////////////// wapda IC lt1 /////////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[200px] left-[270px]   w-[58px] h-[59px]">
-          <span className="meterReadingUnit4Lt2">
+        <div className="absolute flex flex-col items-center justify-around gap-[3px] z-40 top-[200px] left-[270px]   w-[58px] h-[59px]">
+          <span className="meterReadingUnit4Lt2 ">
             {roundedData?.U21_PLC_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">
@@ -109,8 +109,8 @@ const InitialSldUnit4 = ({ roundedData }) => {
           </span>
         </div>
         {/* ////////////// power house lt2 /////////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[200px] left-[857px]   w-[58px] h-[59px]">
-          <span className="meterReadingUnit4Lt2">
+        <div className="absolute flex flex-col items-center justify-around gap-[3px] z-40 top-[200px] left-[857px]   w-[58px] h-[59px]">
+          <span className="meterReadingUnit4Lt2 ">
             {roundedData?.U7_GW01_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">
@@ -121,8 +121,8 @@ const InitialSldUnit4 = ({ roundedData }) => {
           </span>
           {/* ////////////// wapda IC lt2 /////////////// */}
         </div>
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[200px] left-[1008px]  w-[58px] h-[59px]">
-          <span className="meterReadingUnit4Lt2">
+        <div className="absolute flex flex-col items-center justify-around gap-[3px] z-40 top-[200px] left-[1008px]  w-[58px] h-[59px]">
+          <span className="meterReadingUnit4Lt2 ">
             {roundedData?.U13_GW01_ActivePower_Total || "00.00"}
           </span>
           <span className="meterReadingUnit4Lt2">

@@ -6,6 +6,7 @@ import Unit4Lt1 from "@/components/sldComponent/unit4lt1/Unit4Lt1";
 import Unit4Lt2 from "@/components/sldComponent/unit4Lt2/Unit4Lt2";
 import React, { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const [meterData, setMeterData] = useState([]);
@@ -22,6 +23,7 @@ const Page = () => {
         setMeterData(resData);
       }
     } catch (error) {
+      console.log("link is down.");
       console.error(error.message);
     }
   };

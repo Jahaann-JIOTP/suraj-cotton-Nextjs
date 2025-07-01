@@ -182,8 +182,9 @@ const Header = ({ handleTabClick, activeTab }) => {
               </span>
             )}
           </div>
+          {/* when alarams enables make this uncomment */}
 
-          {isNotificationVisible && (
+          {/* {isNotificationVisible && (
             <div className="absolute top-full right-0 mt-2 w-80 p-6 bg-white dark:bg-gray-700 shadow-lg border border-gray-300 rounded-lg z-[9999]">
               <div className="font-semibold text-gray-700 flex justify-between items-center">
                 <span className="text-black dark:text-white">Alarms</span>
@@ -240,7 +241,7 @@ const Header = ({ handleTabClick, activeTab }) => {
                 </li>
               </ul>
             </div>
-          )}
+          )} */}
         </div>
         <div className=" flex items-center pr-4">
           <ThemeSwitcher />

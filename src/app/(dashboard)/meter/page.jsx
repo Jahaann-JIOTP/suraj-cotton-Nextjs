@@ -70,9 +70,9 @@ const page = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="w-full bg-white p-5 rounded-md border-t-3 border-[#1F5897] overflow-auto">
+    <div className="w-full bg-white p-5 rounded-md border-t-3 h-[81vh] border-[#1F5897] overflow-auto">
       <div className="relative w-[1400px] flex items-start  flex-col h-full mx-auto">
-        <h1 className="font-semibold text-2xl font-inter pb-4 text-black dark:text-white">
+        <h1 className="font-semibold text-2xl font-inter pb-4 text-black">
           {meterName}
         </h1>
         {activeTab === "voltage" ? (
@@ -164,13 +164,13 @@ const page = () => {
               {suffixTags.PowerFactor_Avg || "00.00"}
             </div>
             <div className="absolute meterDataText top-[340px] left-[1195px]">
-              N/A
+              {suffixTags.PowerFactor_A || "00.00"}
             </div>
-            <div className="absolute meterDataText top-[400px] left-[1195px]">
-              N/A
+            <div className="absolute meterDataText top-[402px] left-[1195px]">
+              {suffixTags.PowerFactor_B || "00.00"}
             </div>
             <div className="absolute meterDataText top-[464px] left-[1195px]">
-              N/A
+              {suffixTags.PowerFactor_C || "00.00"}
             </div>
             <div className="absolute meterDataText top-[526px] left-[1180px]">
               {suffixTags.Voltage_LN_Avg || "00.00"} V
@@ -187,14 +187,14 @@ const page = () => {
             <div className="absolute meterDataText top-[468px] left-[170px]">
               N/A
             </div>
-            <div className="absolute meterDataText top-[305px] left-[530px]">
-              N/A
+            <div className="absolute meterDataText top-[305px] left-[524px]">
+              {suffixTags.Harmonics_V1_THD || "00.00"}
             </div>
-            <div className="absolute meterDataText top-[388px] left-[530px]">
-              N/A
+            <div className="absolute meterDataText top-[388px] left-[524px]">
+              {suffixTags.Harmonics_V2_THD || "00.00"}
             </div>
-            <div className="absolute meterDataText top-[468px] left-[530px]">
-              N/A
+            <div className="absolute meterDataText top-[468px] left-[524px]">
+              {suffixTags.Harmonics_V3_THD || "00.00"}
             </div>
             <div className="absolute meterDataText top-[306px] left-[855px]">
               N/A

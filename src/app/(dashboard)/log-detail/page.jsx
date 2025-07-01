@@ -31,8 +31,6 @@ const LogDetails = () => {
           body: JSON.stringify({
             type,
             meters: meter_id,
-            // start_date: "2025-06-28",
-            // end_date: "2025-06-28",
             start_date: startDate,
             end_date: endDate,
           }),

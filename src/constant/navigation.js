@@ -54,6 +54,7 @@ export const privilegeConfig = {
     label: "REPORTS",
     matchPaths: [
       "/energy-usage-report",
+      "/energy-cost-report",
       "/energy_usage",
       "/energy_shift",
       "/spindle-production",

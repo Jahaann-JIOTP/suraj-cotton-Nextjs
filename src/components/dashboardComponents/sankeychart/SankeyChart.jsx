@@ -43,6 +43,8 @@ const SankeyChart = ({ data, id }) => {
       series.nodes.labels.template.setAll({
         fontSize: isSmallDevice ? 0 : 12,
         visible: !isSmallDevice,
+        oversizedBehavior: "wrap",
+        text: "{name} ({sumIncoming} kWh)",
       });
     });
     series.links.template.setAll({

@@ -172,7 +172,7 @@ const Unit4Lt2 = ({ roundedData }) => {
         {/* Buttons */}
         {/* Meter Readings */}
         {/* //////////// drying simplex ac ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent z-40 top-[230.5px] left-[69.5px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[230.5px] left-[69.5px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U1_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -184,7 +184,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* //////////// winding ac ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent z-40 top-[230.5px] left-[270.5px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[230.5px] left-[270.5px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U3_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -196,7 +196,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////// card 1 //////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent z-40 top-[231px] left-[470px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[231px] left-[470px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U5_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -208,7 +208,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* //////////// blow room ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent z-40 top-[230.5px] left-[672px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[230.5px] left-[672px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U8_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -220,7 +220,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* //////////// winding 1///////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent z-40 top-[231px] left-[872.5px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[231px] left-[872.5px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U10_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -232,7 +232,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////////////////// */}
-        {/* <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 top-[239.5px] left-[1050px] w-[51px] h-[57px]">
+        {/* <div className="absolute flex flex-col items-center justify-around z-40 top-[239.5px] left-[1050px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U2_GW01_ActivePower_Total}
           </span>
@@ -244,7 +244,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div> */}
         {/* /////////// weikel cond////////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent z-40 top-[341.5px] left-[170.5px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[341.5px] left-[170.5px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U2_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -256,7 +256,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* //////////// mills res-clny workshop///////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 border-1 border-transparent top-[340.5px] left-[372px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[340.5px] left-[372px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U4_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -268,7 +268,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* //////////// colony ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 border-1 border-transparent top-[340.5px] left-[572px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[340.5px] left-[572px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U6_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -280,7 +280,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* //////////// cart 2 ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 border-1 border-transparent top-[340.5px] left-[772px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[340.5px] left-[772px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U9_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -292,7 +292,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////// gas lt panel//////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 border-1 border-transparent top-[340.5px] left-[972px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[340.5px] left-[972px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U11_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -304,7 +304,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* //////////// card filter ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 border-1 border-transparent top-[540px] left-[71px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[540px] left-[71px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U12_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -316,7 +316,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////// ring 2 //////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 border-1 border-transparent top-[540.5px] left-[280px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[540.5px] left-[280px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U15_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -328,7 +328,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////// ring 3 //////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 border-1 border-transparent top-[540px] left-[480px] py-[1px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[540px] left-[480px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U17_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -340,7 +340,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////// AC lab//////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 border-1 border-transparent py-[1px] top-[540px] left-[681.2px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[540px] left-[681.2px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U19_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -352,7 +352,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ////////////// spare 2 /////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] z-40 border-1 border-transparent py-[1px] top-[541.5px] left-[878px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[541.5px] left-[878px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U21_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -364,7 +364,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ////////////// wapda 1 icomming /////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent py-[1px] z-40 top-[541px] left-[1067.5px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[541px] left-[1067.5px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U22_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -376,7 +376,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ////////////// d/r card filter /////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent py-[1px] z-40 top-[657.5px] left-[182px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[657.5px] left-[182px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U14_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -388,7 +388,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////// ring 4 //////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent py-[1px] z-40 top-[657.5px] left-[384px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[657.5px] left-[384px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U16_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -400,7 +400,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////// bale press //////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent py-[1px] z-40 top-[657.8px] left-[583.2px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[657.8px] left-[583.2px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U18_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -412,7 +412,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ///////////// spare //////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent py-[1px] z-40 top-[658px] left-[783.5px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[658px] left-[783.5px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U20_GW01_ActivePower_Total || "00.00"}
           </span>
@@ -424,7 +424,7 @@ const Unit4Lt2 = ({ roundedData }) => {
           </span>
         </div>
         {/* ////////////hfo incomming///////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[4px] border-1 border-transparent py-[1px] z-40 top-[658px] left-[983.5px] w-[51px] h-[57px]">
+        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[658px] left-[983.5px] w-[51px] h-[57px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U23_GW01_ActivePower_Total || "00.00"}
           </span>

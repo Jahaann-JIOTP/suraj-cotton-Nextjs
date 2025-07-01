@@ -60,7 +60,7 @@ const FilterPage = () => {
   };
 
   return (
-    <div className="relative   w-full h-full rounded-md border-t-3 pb-3 overflow-x-auto border-[#1A68B2] bg-white dark:bg-gray-800 mx-auto">
+    <div className="relative   w-full h-[81vh] rounded-md border-t-3 pb-3 overflow-x-auto border-[#1A68B2] bg-white dark:bg-gray-800 mx-auto">
       {!showResults && errorMessage.length !== 0 && (
         <div className="flex relative md:absolute top-0 right-0 bg-[#D40000] text-[14.22px] items-center gap-3 px-5 py-1.5 rounded rounded-t-md md:rounded-tr-md text-white">
           <RiErrorWarningFill size={23} />
