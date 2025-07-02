@@ -1,196 +1,3 @@
-// "use client";
-// import React, { useState } from "react";
-
-// const ProductionDatadummy = [
-//   {
-//     id: 0,
-//     plan: "unit4",
-//     date: "06/23/2025",
-//     production: "1200",
-//   },
-// ];
-
-// const chunkArray = (arr, chunkSize) => {
-//   const result = [];
-//   for (let i = 0; i < arr.length; i += chunkSize) {
-//     result.push(arr.slice(i, i + chunkSize));
-//   }
-//   return result;
-// };
-
-// const SpindleProductionPage = () => {
-//   const [prductionData, setPrductionData] = useState({
-//     id: 1,
-//     unit: "",
-//     selectDate: "",
-//     production: "",
-//   });
-
-//   // console.log("Form Data:", ProductionDatadummy);
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setPrductionData((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     ProductionDatadummy.push(prductionData);
-//     // Now formData.unit, formData.selectDate, and formData.production are available
-
-//     setPrductionData((prev) => ({
-//       id: prev.id + 1, // Auto-increment ID
-//       unit: "",
-//       selectDate: "",
-//       production: "",
-//     }));
-//   };
-//   const chunks = chunkArray(prductionData, 15);
-
-//   return (
-//     <div className="flex flex-col bg-white dark:bg-gray-800 w-full h-full rounded-md border-t-3 border-[#1F5897] px-4 py-2">
-//       <h1 className="font-raleway text-[18.22px] text-black dark:text-white font-600">
-//         Spindle Production
-//       </h1>
-//       <div className="w-full flex items-center justify-center">
-//         <div className="w-full md:w-[80%] lg:w-[50%] flex flex-col items-center justify-center">
-//           <form onSubmit={handleSubmit}>
-//             <div className="w-full flex flex-col items-center mt-10 justify-center">
-//               <h3 className="font-inter text-[16px] pt-5 text-black dark:text-white font-500">
-//                 Select Plant Units
-//               </h3>
-
-//               <div className="flex gap-15">
-//                 <label
-//                   htmlFor="unit4"
-//                   className="font-inter text-[15px] pt-5 text-black dark:text-white font-500 flex items-center justify-center gap-2"
-//                 >
-//                   <input
-//                     type="radio"
-//                     id="unit4"
-//                     onChange={handleChange}
-//                     name="unit"
-//                     value="unit 4"
-//                   />
-//                   Unit 4
-//                 </label>
-//                 <label
-//                   htmlFor="unit5"
-//                   className="font-inter text-[15px] pt-5 text-black dark:text-white font-500 flex items-center justify-center gap-2"
-//                 >
-//                   <input
-//                     type="radio"
-//                     id="unit5"
-//                     name="unit"
-//                     onChange={handleChange}
-//                     value="unit 5"
-//                   />
-//                   Unit 5
-//                 </label>
-//               </div>
-//               <div className="flex flex-col items-center justify-center">
-//                 <label
-//                   htmlFor="selectDate"
-//                   className="font-inter text-[15px] pt-5 text-black  dark:text-white font-500"
-//                 >
-//                   Select Date
-//                 </label>
-//                 <input
-//                   type="date"
-//                   id="selectDate"
-//                   name="selectDate"
-//                   className="outline-none border-1 border-gray-300 dark:border-y-gray-500 rouded px-2 py-1.5 w-[12rem] rounded-sm"
-//                   onChange={handleChange}
-//                   value={prductionData.selectDate}
-//                 />
-//               </div>
-//               <div className="flex flex-col items-center justify-center">
-//                 <label
-//                   htmlFor="production"
-//                   className="font-inter text-[15px] pt-5 text-black dark:text-white font-500"
-//                 >
-//                   Enter Production
-//                 </label>
-//                 <input
-//                   type="number"
-//                   id="production"
-//                   name="production"
-//                   onChange={handleChange}
-//                   value={prductionData.production}
-//                   className="outline-none border-1 border-gray-300 dark:border-y-gray-500 rouded px-2 py-1.5 w-[12rem] rounded-sm"
-//                 />
-//               </div>
-//               <button
-//                 type="submit"
-//                 className="bg-[#1F5897] text-white w-[6rem] py-1.5 rounded mt-4"
-//               >
-//                 Submit
-//               </button>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-//       <div className="relative border-2 rounded border-blue-900">
-//         <div className="w-full flex items-center justify-center">
-//           <h2
-//             className="text-white bg-blue-900 px-10 py-1.5 text-[17.62px] font-inter font-500"
-//             style={{
-//               clipPath: "polygon(10% 0, 90% 0, 100% 100%, 0 100%)",
-//             }}
-//           >
-//             History of daily production
-//           </h2>
-//         </div>
-//         <div className="absolute top-2 left-2">
-//           <label htmlFor="month">Month</label>
-//           <select
-//             name="month"
-//             id="month"
-//             className="dark:bg-gray-800 rounded shadow text-black dark:text-white p-1 outline-none ml-2 "
-//             style={{ appearance: "none" }}
-//           >
-//             <option value="june">June</option>
-//             <option value="may">May</option>
-//             <option value="april">April</option>
-//             <option value="march">March</option>
-//             <option value="february">February</option>
-//             <option value="january">January</option>
-//             <option value="december">December</option>
-//             <option value="november">November</option>
-//             <option value="october">October</option>
-//           </select>
-//         </div>
-//         <div>
-//           <div className="p-4">
-//             <h2 className="text-xl font-bold mb-4">Chunked API Data Display</h2>
-
-//             {chunks.map((chunk, index) => {
-//               console.log("this is api chunks", chunk);
-//               return (
-//                 <div
-//                   key={index}
-//                   className="w-full border border-gray-400 rounded mb-6 p-4 h-[250px] overflow-y-auto"
-//                 >
-//                   <h3 className="text-lg font-semibold mb-2">
-//                     Block {index + 1}
-//                   </h3>
-//                   {chunk.map((item) => (
-//                     <div key={item.id} className="text-black dark:text-white">
-//                       {item.id}. {item.name}
-//                     </div>
-//                   ))}
-//                 </div>
-//               );
-//             })}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SpindleProductionPage;
 "use client";
 
 import config from "@/constant/apiRouteList";
@@ -200,10 +7,10 @@ const ProductionBlocks = () => {
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
-  const [productionData, setProductionData] = useState([]);
+  const [GetProductionData, setGetProductionData] = useState([]);
   const [daysInMonth, setDaysInMonth] = useState([]);
   const [chunkSize, setChunkSize] = useState(15);
-  const [prductionData, setPrductionData] = useState({
+  const [productionData, setProductionData] = useState({
     unit: "",
     startDate: "",
     values: [],
@@ -216,7 +23,7 @@ const ProductionBlocks = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setPrductionData((prev) => {
+    setProductionData((prev) => {
       if (name === "values") {
         const numericValue = parseFloat(value);
         return {
@@ -241,15 +48,58 @@ const ProductionBlocks = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(prductionData),
+          body: JSON.stringify(productionData),
         }
       );
       const resResult = await response.json();
       if (response.ok) {
-        console.log(resResult);
+        await fetchSpindleProduction(); // ✅ Refresh data right after submission
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  // //////////////////////
+  const fetchSpindleProduction = async () => {
+    try {
+      const response = await fetch(
+        `${config.SURAJ_COTTON_BASE_URL}/production-monthwise?month=${year}-${
+          month + 1 < 10 ? "0" : ""
+        }${month + 1}`
+      );
+      const resResult = await response.json();
+
+      if (response.ok) {
+        const formatDate = (isoDate) => {
+          const date = new Date(isoDate);
+          const day = date.getDate();
+          const month = date.getMonth() + 1;
+          const year = date.getFullYear();
+          return `${day}/${month}/${year}`; // e.g., 30/6/2025
+        };
+
+        const grouped = {};
+
+        // Group by formatted date and unit
+        resResult.data.forEach((item) => {
+          const formattedDate = formatDate(item.date);
+          const key = `${formattedDate}-${item.unit}`;
+
+          if (!grouped[key]) {
+            grouped[key] = 0;
+          }
+
+          grouped[key] += item.value; // Sum values if duplicates
+        });
+
+        setGetProductionData(grouped); // Save in grouped format
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  // //////////////////////
 
   const generateDaysOfMonth = (year, month) => {
     const days = new Date(year, month + 1, 0).getDate();
@@ -269,11 +119,24 @@ const ProductionBlocks = () => {
     const [day, month, year] = dateStr.split("/").map(Number);
     const dateObj = new Date(year, month - 1, day);
 
-    const entry = productionData.find((d) => d.date === dateStr);
-    if (entry) return entry.value;
-
     if (dateObj > today) return " ";
-    return "-";
+
+    const unit4 = GetProductionData[`${dateStr}-U4`] || 0;
+    const unit5 = GetProductionData[`${dateStr}-U5`] || 0;
+
+    // ✅ Only show according to selected unit
+    if (productionData.unit === "U4") return unit4 !== 0 ? unit4 : "-";
+    if (productionData.unit === "U5") return unit5 !== 0 ? unit5 : "-";
+
+    // If no unit selected, show both if present
+    if (unit4 === 0 && unit5 === 0) return "-";
+
+    return (
+      <div className="flex flex-col text-[11px] leading-[13px]">
+        {unit4 !== 0 && <span>U4: {unit4}</span>}
+        {unit5 !== 0 && <span>U5: {unit5}</span>}
+      </div>
+    );
   };
 
   const chunkArray = (arr, size) => {
@@ -314,6 +177,9 @@ const ProductionBlocks = () => {
   }, []);
   const dayChunks = chunkArray(daysInMonth, chunkSize);
   const slotWidth = `${100 / (chunkSize + 1)}%`;
+  useEffect(() => {
+    fetchSpindleProduction();
+  }, [month, year]);
   return (
     <div className="flex flex-col bg-white dark:bg-gray-800 w-full h-[81vh] rounded-md border-t-3 overflow-x-auto border-[#1F5897] px-4 py-2">
       <h1 className="font-raleway text-[18.22px] text-black dark:text-white font-600">
@@ -330,20 +196,20 @@ const ProductionBlocks = () => {
               <div className="flex gap-15">
                 <label
                   htmlFor="unit4"
-                  className="font-inter text-[15px] pt-5 text-black dark:text-white font-500 flex items-center justify-center gap-2"
+                  className="font-inter text-[15px] cursor-pointer pt-5 text-black dark:text-white font-500 flex items-center justify-center gap-2"
                 >
                   <input
                     type="radio"
                     id="unit4"
                     onChange={handleChange}
                     name="unit"
-                    value="u4"
+                    value="U4"
                   />
                   Unit 4
                 </label>
                 <label
                   htmlFor="unit5"
-                  className="font-inter text-[15px] pt-5 text-black dark:text-white font-500 flex items-center justify-center gap-2"
+                  className="font-inter text-[15px] pt-5 cursor-pointer text-black dark:text-white font-500 flex items-center justify-center gap-2"
                 >
                   <input
                     type="radio"
@@ -368,7 +234,7 @@ const ProductionBlocks = () => {
                   name="startDate"
                   onChange={handleChange}
                   className="outline-none border-1 border-gray-300 dark:border-y-gray-500 rouded px-2 py-1.5 w-[12rem] rounded-sm"
-                  value={prductionData.startDate}
+                  value={productionData.startDate}
                 />
               </div>
               <div className="flex flex-col items-center justify-center">
@@ -384,12 +250,12 @@ const ProductionBlocks = () => {
                   name="values"
                   onChange={handleChange}
                   className="outline-none border-1 border-gray-300 dark:border-y-gray-500 rouded px-2 py-1.5 w-[12rem] rounded-sm"
-                  value={prductionData.values}
+                  value={productionData.values}
                 />
               </div>
               <button
                 type="submit"
-                className="bg-[#1F5897] text-white w-[6rem] py-1.5 rounded mt-4"
+                className="bg-[#1F5897] cursor-pointer text-white w-[6rem] py-1.5 rounded mt-4"
               >
                 Submit
               </button>
@@ -399,12 +265,12 @@ const ProductionBlocks = () => {
       </div>
       <div className="mb-4 flex flex-wrap gap-4">
         <select
-          value={month}
-          onChange={(e) => setMonth(parseInt(e.target.value))}
+          value={month + 1}
+          onChange={(e) => setMonth(parseInt(e.target.value) - 1)}
           className="border p-2 text-sm"
         >
           {Array.from({ length: 12 }, (_, i) => (
-            <option key={i} value={i}>
+            <option key={i} value={i + 1}>
               {new Date(0, i).toLocaleString("default", { month: "long" })}
             </option>
           ))}
@@ -436,7 +302,6 @@ const ProductionBlocks = () => {
           </h2>
         </div>
         {dayChunks.map((chunk, rowIndex) => {
-          const lasIndex = chunk.length - 1;
           return (
             <div
               key={rowIndex}
