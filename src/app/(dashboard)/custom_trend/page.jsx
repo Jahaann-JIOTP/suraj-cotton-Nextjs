@@ -4,8 +4,9 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import Swal from "sweetalert2";
 import config from "@/constant/apiRouteList";
-
+import { useTheme } from "next-themes";
 function CustomTrend() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -17,6 +18,8 @@ function CustomTrend() {
   const [showMeters, setShowMeters] = useState(false);
   const [showParameters, setShowParameters] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { theme } = useTheme();
 
   const meterDropdownRef = useRef();
   const parameterDropdownRef = useRef();
@@ -58,12 +61,12 @@ function CustomTrend() {
     Transport: "U1_PLC",
     "Unit 05 Aux": "U2_PLC",
     "Light External": "U3_PLC",
-    "Light Internal ": "U4_PLC",
+    "Light Internal": "U4_PLC",
     "Power House 2nd Source": "U5_PLC",
     Turbine: "U6_PLC",
-    Spare: "U7_PLC",
+    "Spare (PLC)": "U7_PLC",
     "Drawing 01": "U8_PLC",
-    "Winding 01 (PLC) ": "U9_PLC",
+    "Winding 01(PLC)": "U9_PLC",
     "Ring 01": "U10_PLC",
     "Ring 5": "U11_PLC",
     "Ring 6(Auto Cone 1-9)": "U12_PLC",
@@ -71,39 +74,87 @@ function CustomTrend() {
     Compressor: "U14_PLC",
     "Simplex 01": "U15_PLC",
     "Compressor 02 (90kW)": "U16_PLC",
-    "Ring AC ": "U17_PLC",
+    "Ring AC": "U17_PLC",
     "Ring AC (Bypass)": "U18_PLC",
-    "Diesel + Gas Incoming ": "U19_PLC",
+    "Diesel + Gas Incoming": "U19_PLC",
     "Compressor (Bypass)": "U20_PLC",
-    "Wapda + HFO + Gas Incoming": "U21_PLC",
+    "Wapda + HFO + Gas Incoming (PLC)": "U21_PLC",
     "Drying Simplex AC": "U1_GW01",
     "Weikel Conditioning Machine": "U2_GW01",
     "Winding AC": "U3_GW01",
-    "Mills RES-CLNY& Workshop": "U4_GW01",
+    "Mills RES-CLNY & Workshop": "U4_GW01",
     "Card 1": "U5_GW01",
     Colony: "U6_GW01",
     "Power House and Source": "U7_GW01",
     "Blow Room": "U8_GW01",
     "Card 2": "U9_GW01",
-    "Winding 01 (GW)  ": "U10_GW01",
+    "Winding 01 (GW)": "U10_GW01",
     "Gas LT Panel": "U11_GW01",
     "Card Filter (Bypass)": "U12_GW01",
-    "Wapda + HFO + Gas Incoming ": "U13_GW01",
+    "Wapda + HFO + Gas Incoming (GW01)": "U13_GW01",
     "D/R Card Filter": "U14_GW01",
     "Ring 02 (Auto Cone 10-18)": "U15_GW01",
     "Ring 04": "U16_GW01",
     "Ring 03": "U17_GW01",
     "Bale Press": "U18_GW01",
     "AC Lab": "U19_GW01",
-    "Spare 01": "U20_GW01",
-    "Spare-02": "U21_GW01",
+    "Spare 01 (GW01)": "U20_GW01",
+    "Spare 02 (GW01)": "U21_GW01",
     "HFO Incoming": "U22_GW01",
     "Wapda 1 Incoming": "U23_GW01",
+    // Meters for Unit 5 LT1
+    "PDB CD1": "U1_GW02",
+    "PDB CD2": "U2_GW02",
+    "Card PDB 01": "U3_GW02",
+    "PDB 8": "U4_GW02",
+    "PF Panel 1": "U5_GW02",
+    Solar: "U6_GW02",
+    "Ring 1-3": "U7_GW02",
+    "A/C Plant Spinning (GW02-1)": "U8_GW02",
+    "Blow Room L1": "U9_GW02",
+    "Ring Frames 4-6": "U10_GW02",
+    "A/C Plant Blowing": "U11_GW02",
+    "MLDB1 Blower Room Card": "U12_GW02",
+    "Transformer 1 LT-1 ACB": "U13_GW02",
+    "Spare (GW02)": "U14_GW02",
+    "A/C Plant Spinning (GW02-2)": "U15_GW02",
+    "Water Chiller": "U16_GW02",
+    "Card M/C 8-14": "U17_GW02",
+    "Auto Con-link Conner 1-9": "U18_GW02",
+    "Card M/C 1-7": "U19_GW02",
+    "AC Plant Winding": "U20_GW02",
+    "Simplex M/C S1-5": "U21_GW02",
+    "Spare (GW02-2)": "U22_GW02",
+    "Draw Frame Finish": "U23_GW02",
+    // Meters for Unit 5 LT2
+    "Ring Frame 7-9": "U1_GW03",
+    "Yarn Conditioning M/C": "U2_GW03",
+    "MLDB3 Single Room Quarter": "U3_GW03",
+    "Roving Transport System": "U4_GW03",
+    "Ring Frame 10-12": "U5_GW03",
+    "Comber MCS 1-14": "U6_GW03",
+    "Spare (GW03)": "U7_GW03",
+    "Spare2 (GW03)": "U8_GW03",
+    "Ring Frame 13-15": "U9_GW03",
+    "Auto Con-linker Conner M/S 10-12": "U10_GW03",
+    "Baling Press": "U11_GW03",
+    "Ring Frame 16-18": "U12_GW03",
+    "Fiber Deposit Plant": "U13_GW03",
+    "MLDB2 Ring Con": "U14_GW03",
+    "Deep Valve Turbine": "U15_GW03",
+    "Transformer 2 LT-2 ACB": "U16_GW03",
+    "Solar 2": "U17_GW03",
+    "PF Panel 2": "U18_GW03",
+    "Wapda + HFO + Gas Incoming (GW03)": "U19_GW03",
+    "WAPDA + HFO + Gas Outgoing T/F 3": "U20_GW03",
+    "WAPDA + HFO + Gas Outgoing T/F 4": "U21_GW03",
+    "PDB 07": "U22_GW03",
+    "PDB 10": "U23_GW03",
   };
 
   const parameterMapping = {
-    "Del Active Energy  ": "Del_ActiveEnergy",
-    "Active Power Total ": "ActivePower_Total",
+    "Del Active Energy": "Del_ActiveEnergy",
+    "Active Power Total": "ActivePower_Total",
     "Current A": "Current_A",
     "Current B": "Current_B",
     "Current C": "Current_C",
@@ -118,13 +169,13 @@ function CustomTrend() {
     "Voltage LN Avg": "Voltage_LN_Avg",
     "Power Factor A": "PowerFactor_A",
     "Power Factor B": "PowerFactor_B",
-    "Power Factor C ": "PowerFactor_C",
-    "Power Factor Avg ": "PowerFactor_Avg",
-    "Reactive power Total ": "ReactivePower_Total",
-    "Apparent Power Total  ": "ApparentPower_Total",
-    "Harmonics V1 ": "Harmonics_V1_THD",
-    "Harmonics V2 ": "Harmonics_V2_THD",
-    "Harmonics V3  ": "Harmonics_V3_THD",
+    "Power Factor C": "PowerFactor_C",
+    "Power Factor Avg": "PowerFactor_Avg",
+    "Reactive Power Total": "ReactivePower_Total",
+    "Apparent Power Total": "ApparentPower_Total",
+    "Harmonics V1": "Harmonics_V1_THD",
+    "Harmonics V2": "Harmonics_V2_THD",
+    "Harmonics V3": "Harmonics_V3_THD",
   };
 
   let filteredMeters = [];
@@ -144,9 +195,46 @@ function CustomTrend() {
     } else if (lt === "ALL") {
       filteredMeters = [...lt1Meters, ...lt2Meters];
     }
+  } else if (area === "Unit 5") {
+    const allMeters = Object.keys(meterMapping);
+    const lt1Meters = allMeters.filter((key) =>
+      meterMapping[key].endsWith("GW02")
+    );
+    const lt2Meters = allMeters.filter((key) =>
+      meterMapping[key].endsWith("GW03")
+    );
+
+    if (lt === "LT_3") {
+      filteredMeters = lt1Meters;
+    } else if (lt === "LT_4") {
+      filteredMeters = lt2Meters;
+    } else if (lt === "ALL") {
+      filteredMeters = [...lt1Meters, ...lt2Meters];
+    }
   }
 
   const parameters = Object.keys(parameterMapping);
+
+  const handleMeterSelection = (meter) => {
+    setSelectedMeter((prev) => {
+      if (prev.includes(meter)) {
+        return prev.filter((m) => m !== meter);
+      } else {
+        if (prev.length >= 8) {
+          Swal.fire({
+            icon: "error",
+            title: "Warning!",
+            text: "You can select a maximum of 8 meters.",
+            theme: theme,
+            width: "400px",
+            height: "auto",
+          });
+          return prev;
+        }
+        return [...prev, meter];
+      }
+    });
+  };
 
   useEffect(() => {
     if (
@@ -159,29 +247,54 @@ function CustomTrend() {
     ) {
       const meterIds = selectedMeter.map((m) => meterMapping[m]).join(",");
       const suffixes = parameterMapping[selectedParameter];
-      const LT_selections = lt === "ALL" ? "ALL" : lt;
 
-      fetch(`${config.SURAJ_COTTON_BASE_URL}/trends`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          start_date: startDate,
-          end_date: endDate,
-          meterId: meterIds,
-          suffixes: suffixes,
-          area: area,
-          LT_selections: LT_selections,
-        }),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to fetch trend data");
+      const fetchData = async (ltSelection) => {
+        setLoading(true);
+        console.log("Fetching data with:", {
+          startDate,
+          endDate,
+          meterIds,
+          suffixes,
+          area,
+          LT_selections: ltSelection,
+        });
+        const response = await fetch(`${config.SURAJ_COTTON_BASE_URL}/trends`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            start_date: startDate,
+            end_date: endDate,
+            meterId: meterIds,
+            suffixes: suffixes,
+            area: area,
+            LT_selections: ltSelection,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch trend data for ${ltSelection}: ${response.statusText}`
+          );
+        }
+        setLoading(false);
+        return response.json();
+      };
+
+      const fetchAllData = async () => {
+        try {
+          let data = [];
+          if (lt === "ALL" && area === "Unit 5") {
+            console.log("Fetching data for Unit 5 ALL (LT_1 and LT_2)");
+            const [lt1Data, lt2Data] = await Promise.all([
+              fetchData("LT_1"),
+              fetchData("LT_2"),
+            ]);
+            data = [...lt1Data, ...lt2Data];
+          } else {
+            data = await fetchData(lt);
           }
-          return res.json();
-        })
-        .then((data) => {
+          console.log("Raw API response:", data);
           const formatted = data.map((item) => {
             const point = { timestamp: new Date(item.timestamp) };
             selectedMeter.forEach((m) => {
@@ -191,30 +304,32 @@ function CustomTrend() {
             });
             return point;
           });
-          console.log("Formatted Chart Data for Transport:", formatted);
+          console.log("Formatted Chart Data:", formatted);
           if (
             formatted.length === 0 ||
-            !formatted.some((d) =>
-              Object.values(d).some((v) => v !== null && v !== 0)
-            )
+            !formatted.some((d) => Object.values(d).some((v) => v !== null))
           ) {
             console.warn("No valid data available for the selected criteria");
             setChartData([]);
           } else {
             setChartData(formatted);
           }
-        })
-        .catch((err) => {
+        } catch (err) {
           console.error("Error fetching trend data:", err);
           setChartData([]);
-        });
+        }
+      };
+
+      fetchAllData();
     } else {
       setChartData([]);
     }
   }, [startDate, endDate, area, lt, selectedMeter, selectedParameter]);
 
   useEffect(() => {
+    console.log("Chart rendering with chartData:", chartData);
     if (chartData.length === 0) {
+      console.warn("No chart data to render");
       return;
     }
 
@@ -291,47 +406,92 @@ function CustomTrend() {
       Transport: am4core.color("#FF9933"),
       "Unit 05 Aux": am4core.color("#A569BD"),
       "Light External": am4core.color("#F7DC6F"),
-      "Light Internal ": am4core.color("#F8C471"),
+      "Light Internal": am4core.color("#8BC63E"),
       "Power House 2nd Source": am4core.color("#E74C3C"),
       Turbine: am4core.color("#3498DB"),
-      Spare: am4core.color("#BDC3C7"),
-      "Drawing 01": am4core.color("#5DADE2"),
-      "Winding 01 (PLC)": am4core.color("#2874A6"),
-      "Ring 01": am4core.color("#1F618D"),
-      "Ring 5": am4core.color("#2E86C1"),
-      "Ring 6(Auto Cone 1-9)": am4core.color("#2980B9"),
-      "Comber 1": am4core.color("#1ABC9C"),
-      Compressor: am4core.color("#F1C40F"),
+      "Spare (PLC)": am4core.color("#BDC3C7"),
+      "Drawing 01": am4core.color("#000FE6"),
+      "Winding 01(PLC)": am4core.color("#680056"),
+      "Ring 01": am4core.color("#8BC63E"),
+      "Ring 5": am4core.color("#FFCEB0"),
+      "Ring 6(Auto Cone 1-9)": am4core.color("#DFB4DA"),
+      "Comber 1": am4core.color("#8DFFF0"),
+      Compressor: am4core.color("#FF8DB5"),
       "Simplex 01": am4core.color("#27AE60"),
-      "Compressor 02 (90kW)": am4core.color("#F39C12"),
-      "Ring AC ": am4core.color("#58D68D"),
+      "Compressor 02 (90kW)": am4core.color("#B2927A"),
+      "Ring AC": am4core.color("#4A7A3D"),
       "Ring AC (Bypass)": am4core.color("#2ECC71"),
-      "Diesel + Gas Incoming ": am4core.color("#C0392B"),
-      "Compressor (Bypass)": am4core.color("#F4D03F"),
-      "Wapda + HFO + Gas Incoming": am4core.color("#922B21"),
-      "Drying Simplex AC": am4core.color("#52BE80"),
-      "Weikel Conditioning Machine": am4core.color("#45B39D"),
-      "Winding AC": am4core.color("#1D8348"),
-      "Mills RES-CLNY& Workshop": am4core.color("#9B59B6"),
-      "Card 1": am4core.color("#154360"),
-      Colony: am4core.color("#A04000"),
-      "Power House and Source": am4core.color("#C0392B"),
-      "Blow Room": am4core.color("#2471A3"),
-      "Card 2": am4core.color("#1A5276"),
+      "Diesel + Gas Incoming": am4core.color("#000000"),
+      "Compressor (Bypass)": am4core.color("#415A77"),
+      "Wapda + HFO + Gas Incoming (PLC)": am4core.color("#d9cbd9"),
+      "Drying Simplex AC": am4core.color("#9A8C98"),
+      "Weikel Conditioning Machine": am4core.color("#0E9594"),
+      "Winding AC": am4core.color("#DEE2E6"),
+      "Mills RES-CLNY & Workshop": am4core.color("#640D14"),
+      "Card 1": am4core.color("#FFC4D6"),
+      Colony: am4core.color("#B15E6C"),
+      "Power House and Source": am4core.color("#C8B6FF"),
+      "Blow Room": am4core.color("#A4AC86"),
+      "Card 2": am4core.color("#9B5DE5"),
       "Winding 01 (GW)": am4core.color("#1A5276"),
       "Gas LT Panel": am4core.color("#641E16"),
       "Card Filter (Bypass)": am4core.color("#7FB3D5"),
-      "Wapda + HFO + Gas Incoming ": am4core.color("#ffc107"),
+      "Wapda + HFO + Gas Incoming (GW01)": am4core.color("#ffc107"),
       "D/R Card Filter": am4core.color("#D98880"),
-      "Ring 02 (Auto Cone 10-18)": am4core.color("#2C3E50"),
+      "Ring 02 (Auto Cone 10-18)": am4core.color("#ADE8F4"),
       "Ring 04": am4core.color("#566573"),
       "Ring 03": am4core.color("#34495E"),
       "Bale Press": am4core.color("#873600"),
       "AC Lab": am4core.color("#16A085"),
-      "Spare 01": am4core.color("#AAB7B8"),
-      "Spare-02": am4core.color("#D5DBDB"),
+      "Spare 01 (GW01)": am4core.color("#AAB7B8"),
+      "Spare 02 (GW01)": am4core.color("#D5DBDB"),
       "HFO Incoming": am4core.color("#943126"),
       "Wapda 1 Incoming": am4core.color("#B03A2E"),
+      "PDB CD1": am4core.color("#8E44AD"),
+      "PDB CD2": am4core.color("#2980B9"),
+      "Card PDB 01": am4core.color("#B03A2E"),
+      "PDB 8": am4core.color("#D35400"),
+      "PF Panel 1": am4core.color("#27AE60"),
+      Solar: am4core.color("#F1C40F"),
+      "Ring 1-3": am4core.color("#f4a5c4"),
+      "A/C Plant Spinning (GW02-1)": am4core.color("#2ECC71"),
+      "Blow Room L1": am4core.color("#E67E22"),
+      "Ring Frames 4-6": am4core.color("#3498DB"),
+      "A/C Plant Blowing": am4core.color("#9dfeab"),
+      "MLDB1 Blower Room Card": am4core.color("#F1948A"),
+      "Transformer 1 LT-1 ACB": am4core.color("#7D3C98"),
+      "Spare (GW02)": am4core.color("#D5DBDB"),
+      "A/C Plant Spinning (GW02-2)": am4core.color("#95cea7"),
+      "Water Chiller": am4core.color("#F0B27A"),
+      "Card M/C 8-14": am4core.color("#F7DC6F"),
+      "Auto Con-link Conner 1-9": am4core.color("#9e837a"),
+      "Card M/C 1-7": am4core.color("#E74C3C"),
+      "AC Plant Winding": am4core.color("#F5B041"),
+      "Simplex M/C S1-5": am4core.color("#D35400"),
+      "Spare (GW02-2)": am4core.color("#D5DBDB"),
+      "Draw Frame Finish": am4core.color("#F0B27A"),
+      "Ring Frame 7-9": am4core.color("#c8d0f0"),
+      "Yarn Conditioning M/C": am4core.color("#2980B9"),
+      "MLDB3 Single Room Quarter": am4core.color("#F39C12"),
+      "Roving Transport System": am4core.color("#D35400"),
+      "Ring Frame 10-12": am4core.color("#ffa0c5"),
+      "Comber MCS 1-14": am4core.color("#B15E6C"),
+      "Spare2 (GW03)": am4core.color("#AAB7B8"),
+      "Ring Frame 13-15": am4core.color("#8E44AD"),
+      "Auto Con-linker Conner M/S 10-12": am4core.color("#c095e4"),
+      "Baling Press": am4core.color("#ffe589"),
+      "Ring Frame 16-18": am4core.color("#3498DB"),
+      "Fiber Deposit Plant": am4core.color("#6c584c"),
+      "MLDB2 Ring Con": am4core.color("#F1948A"),
+      "Deep Valve Turbine": am4core.color("#f2e1be"),
+      "Transformer 2 LT-2 ACB": am4core.color("#ffdd00"),
+      "Solar 2": am4core.color("#d2cdc2"),
+      "Wapda + HFO + Gas Incoming (GW03)": am4core.color("#E74C3C"),
+      "WAPDA + HFO + Gas Outgoing T/F 3": am4core.color("#da44f4"),
+      "WAPDA + HFO + Gas Outgoing T/F 4": am4core.color("#5DADE2"),
+      "PDB 07": am4core.color("#c3d1e7"),
+      "PDB 10": am4core.color("#D35400"),
+      "PF Panel 2": am4core.color("#27AE60"),
     };
 
     if (selectedMeter.length > 0) {
@@ -353,14 +513,14 @@ function CustomTrend() {
     function customizeGrip(grip) {
       grip.icon.disabled = true;
       grip.background.disabled = true;
-      var img = grip.createChild(am4core.Rectangle);
+      const img = grip.createChild(am4core.Rectangle);
       img.width = 6;
       img.height = 6;
       img.fill = am4core.color("#999");
       img.rotation = 45;
       img.align = "center";
       img.valign = "middle";
-      var line = grip.createChild(am4core.Rectangle);
+      const line = grip.createChild(am4core.Rectangle);
       line.height = 15;
       line.width = 2;
       line.fill = am4core.color("#999");
@@ -382,7 +542,7 @@ function CustomTrend() {
     chart.exporting.formatOptions.getKey("csv").disabled = true;
     chart.exporting.formatOptions.getKey("pdf").disabled = true;
     chart.exporting.menu.items[0].icon =
-      "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIxNnB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJJY29ucyB3aXRoIG51bWJlcnMiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iR3JvdXAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC03MjAuMDAwMDAwLCAtNDMyLjAwMDAwMCkiPjxwYXRoIGQ9Ik03MjEsNDQ2IEw3MzMsNDQ2IEw3MzMsNDQzIEw3MzUsNDQzIEw3MzUsNDQ2IEw3MzUsNDQ4IEw3MjEsNDQ4IFogTTcyMSw0NDMgTDcyMyw0NDMgTDcyMyw0NDYgTDcyMSw0NDYgWiBNNzI2LDQzMyBMNzMwLDQzMyBMNzMwLDQ0MCBMNzMyLDQ0MCBMNzI4LDQ0NSBMNzI0LDQ0MCBMNzI2LDQ0MCBaIE07MjYsNDMzIiBpZD0iUmVjdGFuZ2xlIDIxNyIvPjwvZz48L2c+PC9zdmc+";
+      "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIxNnB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJJY29ucyB3aXRoIG51bWJlcnMiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iR3JvdXAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC03MjAuMDAwMDAwLCAtNDMyLjAwMDAwMCkiPjxwYXRoIGQ9Ik03MjEsNDQ2IEw3MzMsNDQ2IEw3MzMsNDQzIEw3MzUsNDQzIEw3MzUsNDQ2IEw3MzUsNDQ4IEw3MjEsNDQ4IFogTTcyMSw0NDMgTDcyMyw0NDMgTDcyMyw0NDYgTDcyMSw0NDYgWiBNNzI2LDQzMyBMNzMwLDQzMyBMNzMwLDQ0MCBMNzMyLDQ0MCBMNzI4LDQ0NSBMNzI0LDQ0MCBMNzI2LDQ0MCBaIE03MjYsNDMzIiBpZD0iUmVjdGFuZ2xlIDIxNyIvPjwvZz48L2c+PC9zdmc+";
 
     return () => {
       chart.dispose();
@@ -391,8 +551,7 @@ function CustomTrend() {
   }, [chartData, isDarkMode, selectedParameter]);
 
   return (
-    <div className="relative flex-shrink-0 w-full px-2 py-2 sm:px-4 sm:py-4 md:px-6 md:py-6 h-max lg:h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1F5897] rounded-[8px] shadow-md ">
-      <div className="absolute inset-0" style={{ opacity: 1 }}></div>
+    <div className="relative flex-shrink-0 w-full px-2 py-2 sm:px-4 sm:py-4 md:px-6 md:py-6 h-max lg:h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1F5897] rounded-[8px] shadow-md">
       <div className="relative z-10 h-full flex flex-col">
         <h1 className="text-lg font-bold mb-4 font-raleway text-[#1F5897] dark:text-[#D1D5DB]">
           Customized Trend
@@ -438,6 +597,7 @@ function CustomTrend() {
               onChange={(e) => {
                 setArea(e.target.value);
                 setSelectedMeter([]);
+                setLt("");
               }}
               className="w-full p-2 border rounded"
             >
@@ -477,24 +637,50 @@ function CustomTrend() {
               <option value="" className="dark:bg-gray-800 dark:text-gray-300">
                 Select LT
               </option>
-              <option
-                value="LT_1"
-                className="dark:bg-gray-800 dark:text-gray-300"
-              >
-                LT1
-              </option>
-              <option
-                value="LT_2"
-                className="dark:bg-gray-800 dark:text-gray-300"
-              >
-                LT2
-              </option>
-              <option
-                value="ALL"
-                className="dark:bg-gray-800 dark:text-gray-300"
-              >
-                Select All
-              </option>
+              {area === "Unit 4" && (
+                <>
+                  <option
+                    value="LT_1"
+                    className="dark:bg-gray-800 dark:text-gray-300"
+                  >
+                    LT1
+                  </option>
+                  <option
+                    value="LT_2"
+                    className="dark:bg-gray-800 dark:text-gray-300"
+                  >
+                    LT2
+                  </option>
+                  <option
+                    value="ALL"
+                    className="dark:bg-gray-800 dark:text-gray-300"
+                  >
+                    Select All
+                  </option>
+                </>
+              )}
+              {area === "Unit 5" && (
+                <>
+                  <option
+                    value="LT_3"
+                    className="dark:bg-gray-800 dark:text-gray-300"
+                  >
+                    LT_3
+                  </option>
+                  <option
+                    value="LT_4"
+                    className="dark:bg-gray-800 dark:text-gray-300"
+                  >
+                    LT_4
+                  </option>
+                  <option
+                    value="ALL"
+                    className="dark:bg-gray-800 dark:text-gray-300"
+                  >
+                    Select All
+                  </option>
+                </>
+              )}
             </select>
           </div>
           <div ref={meterDropdownRef} className="relative w-full">
@@ -531,13 +717,7 @@ function CustomTrend() {
                         type="checkbox"
                         value={meter}
                         checked={selectedMeter.includes(meter)}
-                        onChange={() =>
-                          setSelectedMeter((prev) =>
-                            prev.includes(meter)
-                              ? prev.filter((m) => m !== meter)
-                              : [...prev, meter]
-                          )
-                        }
+                        onChange={() => handleMeterSelection(meter)}
                         className="mr-2"
                       />
                       {meter}
@@ -587,17 +767,20 @@ function CustomTrend() {
           </div>
         </div>
         <div className="flex-1 w-full">
-          <div
-            id="chartDiv"
-            className="w-full transition-all duration-300 rounded-md bg-white dark:bg-gray-800 overflow-x-auto"
-            style={{
-              height: "60vh",
-              minHeight: "220px",
-              maxHeight: "98%",
-            }}
-          >
-            <style>
-              {`
+          {loading === true ? (
+            <span>loadign....</span>
+          ) : (
+            <div
+              id="chartDiv"
+              className="w-full transition-all duration-300 rounded-md bg-white dark:bg-gray-800 overflow-x-auto"
+              style={{
+                height: "60vh",
+                minHeight: "220px",
+                maxHeight: "98%",
+              }}
+            >
+              <style>
+                {`
                 #chartDiv::-webkit-scrollbar {
                   width: 0px;
                   height: 0px;
@@ -618,8 +801,9 @@ function CustomTrend() {
                   #chartDiv { height: 28vh !important; min-height: 100px; }
                 }
               `}
-            </style>
-          </div>
+              </style>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -71,16 +71,16 @@ const page = () => {
   }, []);
   return (
     <div className="w-full bg-white p-5 rounded-md border-t-3 h-[81vh] border-[#1F5897] overflow-auto">
-      <div className="relative w-[1400px] flex items-start  flex-col h-full mx-auto">
+      <div className="relative w-[1300px] flex items-start  flex-col h-full mx-auto">
         <h1 className="font-semibold text-2xl font-inter pb-4 text-black">
           {meterName}
         </h1>
         {activeTab === "voltage" ? (
-          <img src="../../01_volts.png" alt="" className="w-[1295px]" />
+          <img src="../../01_volts.png" alt="" className="w-[1290px]" />
         ) : activeTab === "power" ? (
-          <img src="../../Power_1.png" alt="" className="w-[1295px]" />
+          <img src="../../Power_1.png" alt="" className="w-[1290px]" />
         ) : activeTab === "energy" ? (
-          <img src="../../Energy_log1.png" alt="" className="w-[1295px]" />
+          <img src="../../Energy_log1.png" alt="" className="w-[1290px]" />
         ) : (
           ""
         )}

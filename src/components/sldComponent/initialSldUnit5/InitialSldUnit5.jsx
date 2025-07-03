@@ -7,33 +7,33 @@ const unit4MeterData = [
   {
     link: "U19_PLC",
     title: "Diesel IC",
-    top: 187,
-    left: 110,
+    top: 310,
+    left: 209,
     ltScheme: "LT_1",
   },
   {
     link: "U21_PLC",
     title: "Wapda IC",
-    top: 187,
-    left: 262,
+    top: 310,
+    left: 386,
     ltScheme: "LT_1",
   },
   {
     link: "U7_GW01",
     title: "Power House",
-    top: 187,
-    left: 848,
+    top: 310,
+    left: 657,
     ltScheme: "LT_2",
   },
   {
     link: "U13_GW01",
     title: "Wapda IC",
-    top: 187,
-    left: 1000,
+    top: 310,
+    left: 834,
     ltScheme: "LT_2",
   },
 ];
-const InitialSldUnit4 = ({ roundedData }) => {
+const InitialSldUnit5 = ({ roundedData }) => {
   const router = useRouter();
 
   return (
@@ -61,29 +61,29 @@ const InitialSldUnit4 = ({ roundedData }) => {
               height: "80px",
               // backgroundColor: "transparent",
               zIndex: 100,
-              borderRadius: "0.375rem", // rounded-md
+              borderRadius: "0.4.2rem", // rounded-md
               cursor: "pointer",
             }}
-            className={``}
+            className={`border-1 border-red-500`}
           ></button>
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../unit-4-sld.png"
+          src="./unit-5-sld.png"
           className="w-[1200px] h-full"
           alt="unit 4 sld"
         />
 
         {/* Buttons */}
         <button
-          onClick={() => router.replace("/sld?unit=unit4&area=lt1")}
-          className="absolute top-[360px] left-[208px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
+          onClick={() => router.replace("/sld?unit=unit5&area=lt1")}
+          className="absolute top-[497px] left-[319px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
         >
           <ImArrowDown size={30} className="text-white" />
         </button>
         <button
-          onClick={() => router.push("/sld?unit=unit4&area=lt2")}
-          className="absolute top-[360px] left-[949px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
+          onClick={() => router.push("/sld?unit=unit5&area=lt2")}
+          className="absolute top-[497px] left-[769px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
         >
           <ImArrowDown size={30} className="text-white" />
         </button>
@@ -91,7 +91,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
         {/* Meter Readings */}
         {/* LT1 Power House */}
         {/* ////////////// Diesel IC lt1 /////////////// */}
-        <div className="absolute flex flex-col items-center justify-around  z-40 top-[200px] left-[116px]   w-[58px] h-[59px]">
+        <div className="absolute flex flex-col items-center justify-around  border-1 border-red-500 z-40 top-[320px] left-[217.3px]   w-[58px] h-[59px]">
           <span className="meterReadingUnit4Lt2">
             {roundedData?.U19_PLC_ActivePower_Total || "00.00"}
           </span>
@@ -103,7 +103,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
           </span>
         </div>
         {/* ////////////// wapda IC lt1 /////////////// */}
-        <div className="absolute flex flex-col items-center justify-around pb-4 border-1 border-transparent z-40 top-[200px] left-[270px]   w-[58px] h-[59px]">
+        <div className="absolute flex flex-col items-center justify-around pb-4 z-40 border-1 border-red-500 top-[320px] left-[394.2px] w-[58px] h-[59px]">
           <span className="meterReadingUnit4Lt2 mt-[-2px]">
             {roundedData?.U21_PLC_ActivePower_Total || "00.00"}
           </span>
@@ -115,26 +115,26 @@ const InitialSldUnit4 = ({ roundedData }) => {
           </span>
         </div>
         {/* ////////////// power house lt2 /////////////// */}
-        <div className="absolute flex flex-col items-center justify-around gap-[3px] z-40 top-[200px] left-[857px]   w-[58px] h-[59px]">
-          <span className="meterReadingUnit4Lt2 ">
+        <div className="absolute flex flex-col items-center justify-around pb-4 z-40 border-1 border-red-500 top-[320px] left-[665.5px] w-[58px] h-[59px]">
+          <span className="meterReadingUnit4Lt2 mt-[-2px]">
             {roundedData?.U7_GW01_ActivePower_Total || "00.00"}
           </span>
-          <span className="meterReadingUnit4Lt2">
+          <span className="meterReadingUnit4Lt2 mt-[-1px]">
             {roundedData?.U7_GW01_Current_Avg || "00.00"}
           </span>
-          <span className="meterReadingUnit4Lt2">
+          <span className="meterReadingUnit4Lt2 mt-[-0.5px]">
             {roundedData?.U7_GW01_Voltage_Avg || "00.00"}
           </span>
           {/* ////////////// wapda IC lt2 /////////////// */}
         </div>
-        <div className="absolute flex flex-col items-center justify-around gap-[3px] z-40 top-[200px] left-[1008px]  w-[58px] h-[59px]">
-          <span className="meterReadingUnit4Lt2 ">
+        <div className="absolute flex flex-col items-center justify-around pb-4 z-40 border-1 border-red-500 top-[320px] left-[842.2px]  w-[58px] h-[59px]">
+          <span className="meterReadingUnit4Lt2 mt-[-2px]">
             {roundedData?.U13_GW01_ActivePower_Total || "00.00"}
           </span>
-          <span className="meterReadingUnit4Lt2">
+          <span className="meterReadingUnit4Lt2 mt-[-1px]">
             {roundedData?.U13_GW01_Current_Avg || "00.00"}
           </span>
-          <span className="meterReadingUnit4Lt2">
+          <span className="meterReadingUnit4Lt2 mt-[-0.5px]">
             {roundedData?.U13_GW01_Voltage_Avg || "00.00"}
           </span>
         </div>
@@ -143,4 +143,4 @@ const InitialSldUnit4 = ({ roundedData }) => {
   );
 };
 
-export default InitialSldUnit4;
+export default InitialSldUnit5;

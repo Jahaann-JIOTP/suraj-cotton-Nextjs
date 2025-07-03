@@ -118,13 +118,13 @@ const lt1MeterData = [
   },
 ];
 
-const Unit4Lt1 = ({ roundedData }) => {
+const Unit5Lt4 = ({ roundedData }) => {
   const router = useRouter();
 
   return (
     <div className="w-full overflow-auto">
       <button
-        onClick={() => router.push("/sld?unit=unit4")}
+        onClick={() => router.back()}
         className="absolute top-0 left-0 z-30 cursor-pointer bg-gray-300 px-5 py-1 rounded"
       >
         Back
@@ -150,12 +150,12 @@ const Unit4Lt1 = ({ roundedData }) => {
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
             }}
-            className={``}
+            className={`border-1 border-red-500`}
           ></button>
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../Unit-4-lt1-sld.png"
+          src="./unit-5-lt4-sld.png"
           className="w-full h-full"
           alt="unit 4 sld"
         />
@@ -402,4 +402,4 @@ const Unit4Lt1 = ({ roundedData }) => {
   );
 };
 
-export default Unit4Lt1;
+export default Unit5Lt4;

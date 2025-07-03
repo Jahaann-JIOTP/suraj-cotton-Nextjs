@@ -11,11 +11,11 @@ const page = () => {
 
   return (
     <div className="w-full bg-white p-5 h-[81vh] rounded-md border-t-3 border-[#1F5897] overflow-auto">
-      <div className="relative w-[1400px] flex items-start  flex-col h-full mx-auto">
+      <div className="relative w-[1300px] flex items-start  flex-col h-full mx-auto">
         <h1 className="font-semibold text-2xl font-inter pb-4">Logs</h1>
         <button
           onClick={() => router.back()}
-          className="absolute top-[90px] left-[1110px] cursor-pointer z-30 w-[135px] h-[45px]"
+          className="absolute top-[90px] left-[1110px] border-1 border-red-500 cursor-pointer z-30 w-[135px] h-[45px]"
         ></button>
         {type === "voltage" ? (
           <img src="/voltage-logs.png" alt="Voltage logs" />
@@ -30,7 +30,7 @@ const page = () => {
         {type === "voltage" ? (
           <>
             <button
-              className="absolute w-[57px] h-[59px]  top-[257px] cursor-pointer left-[727px]"
+              className="absolute w-[57px] h-[59px]   top-[257px] cursor-pointer left-[727px]"
               onClick={() =>
                 router.push(`/log-detail?val=voltage&meter_id=${meterId}`)
               }

@@ -177,7 +177,13 @@ const MultipleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
         <h2 className="text-[18.62px] pb-4 font-inter font-500">
           {unit === "unit4" ? "Unit 4" : unit === "unit5" ? "Unit 5" : ""}
         </h2>
-        {/* <div className="overflow-x-scroll  flex gap-4 md:w-full md:overflow-x-hidden max-h-[29vh] overflow-y-auto"> */}
+        <div className="w-full h-[10px] flex items-center justify-between">
+          <div className="bg-red-500 w-[200px] h-[1px]"></div>
+          <div className="bg-blue-500 w-[39.5%] h-[1px]"></div>
+          <div className="bg-orange-500 w-[45%] h-[1px]"></div>
+          <div className="bg-purple-500 w-[20%] h-[1px]"></div>
+        </div>
+
         <div className="w-full overflow-x-auto ">
           <div className="flex min-w-[900px] md:min-w-full gap-4 border-1 border-gray-300 dark:border-gray-500">
             <div className="w-[50%]">

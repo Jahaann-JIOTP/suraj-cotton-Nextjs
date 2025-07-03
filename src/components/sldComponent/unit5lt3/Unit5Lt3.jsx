@@ -3,128 +3,128 @@ import React from "react";
 import { useRouter } from "next/navigation";
 const lt1MeterData = [
   {
-    link: "U1_PLC",
+    link: "U1_GW02",
     title: "Transport",
     top: 308,
     left: 89,
   },
   {
-    link: "U3_PLC",
+    link: "U3_GW02",
     title: "Lighting Outside",
     top: 303,
     left: 272,
   },
   {
-    link: "U5_PLC",
+    link: "U5_GW02",
     title: "Power House",
     top: 303,
     left: 455.5,
   },
   {
-    link: "U7_PLC",
+    link: "U7_GW02",
     title: "Spare",
     top: 307,
     left: 648,
   },
   {
-    link: "U9_PLC",
+    link: "U9_GW02",
     title: "Winding 1",
     top: 307,
     left: 838,
   },
   {
-    link: "U2_PLC",
+    link: "U2_GW02",
     title: "Unit 5 aux",
     top: 380,
     left: 180,
   },
   {
-    link: "U4_PLC",
+    link: "U4_GW02",
     title: "Lighting Inside",
     top: 380,
     left: 363,
   },
   {
-    link: "U6_PLC",
+    link: "U6_GW02",
     title: "Turbine",
     top: 380,
     left: 560,
   },
   {
-    link: "U8_PLC",
+    link: "U8_GW02",
     title: "Drawing 1",
     top: 380,
     left: 738,
   },
   {
-    link: "U10_PLC",
+    link: "U10_GW02",
     title: "Ring 1",
     top: 380,
     left: 966,
   },
   {
-    link: "U12_PLC",
+    link: "U12_GW02",
     title: "Ring 6",
     top: 583,
     left: 317,
   },
   {
-    link: "U14_PLC",
+    link: "U14_GW02",
     title: "Compressor",
     top: 583,
     left: 500,
   },
   {
-    link: "U16_PLC",
+    link: "U16_GW02",
     title: "Compressor 2",
     top: 583,
     left: 683,
   },
   {
-    link: "U18_PLC",
+    link: "U18_GW02",
     title: "Ring AC (Byparss)",
     top: 583,
     left: 876,
   },
   {
-    link: "U11_PLC",
+    link: "U11_GW02",
     title: "Ring 5",
     top: 657,
     left: 225,
   },
   {
-    link: "U13_PLC",
+    link: "U13_GW02",
     title: "Comber 1",
     top: 656,
     left: 409,
   },
   {
-    link: "U15_PLC",
+    link: "U15_GW02",
     title: "Simplex 1",
     top: 656,
     left: 591,
   },
   {
-    link: "U17_PLC",
+    link: "U17_GW02",
     title: "Ring AC",
     top: 657,
     left: 774,
   },
   {
-    link: "U20_PLC",
+    link: "U20_GW02",
     title: "Compressor (Bypass)",
     top: 657,
     left: 967,
   },
 ];
 
-const Unit4Lt1 = ({ roundedData }) => {
+const Unit5Lt3 = ({ roundedData }) => {
   const router = useRouter();
 
   return (
     <div className="w-full overflow-auto">
       <button
-        onClick={() => router.push("/sld?unit=unit4")}
+        onClick={() => router.push("/sld?unit=unit5")}
         className="absolute top-0 left-0 z-30 cursor-pointer bg-gray-300 px-5 py-1 rounded"
       >
         Back
@@ -136,7 +136,7 @@ const Unit4Lt1 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_4&lt_scheme=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_5&lt_scheme=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -150,12 +150,12 @@ const Unit4Lt1 = ({ roundedData }) => {
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
             }}
-            className={``}
+            className={`border-1 border-red-400`}
           ></button>
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../Unit-4-lt1-sld.png"
+          src="./unit-5-lt3-sld.png"
           className="w-full h-full"
           alt="unit 4 sld"
         />
@@ -402,4 +402,4 @@ const Unit4Lt1 = ({ roundedData }) => {
   );
 };
 
-export default Unit4Lt1;
+export default Unit5Lt3;

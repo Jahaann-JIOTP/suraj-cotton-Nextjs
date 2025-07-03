@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Raleway, Inter } from "next/font/google";
+import { Fira_Mono, Raleway, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import ReduxProvider from "@/components/reduxWrapper/ReduxWrapper";
@@ -14,6 +14,11 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
 });
+export const firaMono = Fira_Mono({
+  variable: "--font-fira-mono",
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title: "SURAJ COTTON MILLS",
@@ -24,7 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body
-        className={`  ${raleway.variable} ${inter.variable} antialiased bg-[#f7f7f7] dark:bg-gray-900`}
+        className={`  ${raleway.variable} ${inter.variable} ${firaMono.variable} antialiased bg-[#f7f7f7] dark:bg-gray-900`}
       >
         <ReduxProvider>
           <ThemeProvider

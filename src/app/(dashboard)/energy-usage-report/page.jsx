@@ -13,8 +13,8 @@ const FilterPage = () => {
   const [unit, setUnit] = useState("");
   const [startDate, setStartDate] = useState("2025-06-11");
   const [endDate, setEndDate] = useState("2025-06-18");
-  const [unit4Spindle, setUnit4Spindle] = useState("");
-  const [unit5Spindle, setUnit5Spindle] = useState("");
+  const [unit4Spindle, setUnit4Spindle] = useState("12");
+  const [unit5Spindle, setUnit5Spindle] = useState("12");
   const [errorMessage, setErrorMessage] = useState("");
   const [showResults, setShowResults] = useState(false); // ← controls form vs results
   const [loading, setLoading] = useState(false);
@@ -31,9 +31,9 @@ const FilterPage = () => {
   }, []);
 
   const handleUnitChange = (unitClicked) => {
-    if (unitClicked === "All") {
-      setUnit("All");
-    } else if (unit === "All") {
+    if (unitClicked === "ALL") {
+      setUnit("ALL");
+    } else if (unit === "ALL") {
       // If "All" is currently selected, toggle off and set clicked unit
       setUnit(unitClicked);
     } else if (unit === unitClicked) {
@@ -44,7 +44,7 @@ const FilterPage = () => {
       (unit === "Unit_5" && unitClicked === "Unit_4")
     ) {
       // If user selects both manually → treat as "All"
-      setUnit("All");
+      setUnit("ALL");
     } else {
       setUnit(unitClicked);
     }
@@ -55,7 +55,7 @@ const FilterPage = () => {
       setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
     } else if (unit === "Unit_5" && unit5Spindle.length === 0) {
       setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
-    } else if (unit === "All") {
+    } else if (unit === "ALL") {
       if (unit4Spindle.length === 0 && unit5Spindle.length === 0) {
         setErrorMessage(
           "Add Unit 4 and Unit 5 spindles first in Spindle Production Tab"
@@ -88,7 +88,7 @@ const FilterPage = () => {
       return;
     }
 
-    if (unit === "All") {
+    if (unit === "ALL") {
       if (unit4Spindle.length === 0 && unit5Spindle.length === 0) {
         toast.warning("Please enter spindles for both Unit 4 and Unit 5.");
         return;
@@ -150,8 +150,8 @@ const FilterPage = () => {
                     onClick={toggleDropdown}
                     className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
                   >
-                    {unit === "All"
-                      ? "All Units"
+                    {unit === "ALL"
+                      ? "ALL Units"
                       : unit === "Unit_4"
                       ? "Unit 4"
                       : unit === "Unit_5"
@@ -164,7 +164,7 @@ const FilterPage = () => {
                       <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
                         <input
                           type="checkbox"
-                          checked={unit === "Unit_4" || unit === "All"}
+                          checked={unit === "Unit_4" || unit === "ALL"}
                           onChange={() => handleUnitChange("Unit_4")}
                         />
                         Unit 4
@@ -172,7 +172,7 @@ const FilterPage = () => {
                       <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
                         <input
                           type="checkbox"
-                          checked={unit === "Unit_5" || unit === "All"}
+                          checked={unit === "Unit_5" || unit === "ALL"}
                           onChange={() => handleUnitChange("Unit_5")}
                         />
                         Unit 5
@@ -180,8 +180,8 @@ const FilterPage = () => {
                       <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
                         <input
                           type="checkbox"
-                          checked={unit === "All"}
-                          onChange={() => handleUnitChange("All")}
+                          checked={unit === "ALL"}
+                          onChange={() => handleUnitChange("ALL")}
                         />
                         All
                       </label>
@@ -269,7 +269,7 @@ const FilterPage = () => {
                       className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                     />
                   </div>
-                ) : unit === "All" ? (
+                ) : unit === "ALL" ? (
                   <>
                     <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                       <label
@@ -343,7 +343,7 @@ const FilterPage = () => {
           endDate={endDate}
           spindles={spindles}
         />
-      ) : showResults && unit === "All" ? (
+      ) : showResults && unit === "ALL" ? (
         <MultipleUnitComponent
           unit={unit}
           startDate={startDate}

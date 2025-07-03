@@ -30,9 +30,9 @@ const EnergyCostReportPage = () => {
   }, []);
 
   const handleUnitChange = (unitClicked) => {
-    if (unitClicked === "All") {
-      setUnit("All");
-    } else if (unit === "All") {
+    if (unitClicked === "ALL") {
+      setUnit("ALL");
+    } else if (unit === "ALL") {
       // If "All" is currently selected, toggle off and set clicked unit
       setUnit(unitClicked);
     } else if (unit === unitClicked) {
@@ -43,7 +43,7 @@ const EnergyCostReportPage = () => {
       (unit === "Unit_5" && unitClicked === "Unit_4")
     ) {
       // If user selects both manually → treat as "All"
-      setUnit("All");
+      setUnit("ALL");
     } else {
       setUnit(unitClicked);
     }
@@ -124,7 +124,7 @@ const EnergyCostReportPage = () => {
                       onClick={toggleDropdown}
                       className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
                     >
-                      {unit === "All"
+                      {unit === "ALL"
                         ? "All Units"
                         : unit === "Unit_4"
                         ? "Unit 4"
@@ -138,7 +138,7 @@ const EnergyCostReportPage = () => {
                         <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
                           <input
                             type="checkbox"
-                            checked={unit === "Unit_4" || unit === "All"}
+                            checked={unit === "Unit_4" || unit === "ALL"}
                             onChange={() => handleUnitChange("Unit_4")}
                           />
                           Unit 4
@@ -146,7 +146,7 @@ const EnergyCostReportPage = () => {
                         <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
                           <input
                             type="checkbox"
-                            checked={unit === "Unit_5" || unit === "All"}
+                            checked={unit === "Unit_5" || unit === "ALL"}
                             onChange={() => handleUnitChange("Unit_5")}
                           />
                           Unit 5
@@ -154,8 +154,8 @@ const EnergyCostReportPage = () => {
                         <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
                           <input
                             type="checkbox"
-                            checked={unit === "All"}
-                            onChange={() => handleUnitChange("All")}
+                            checked={unit === "ALL"}
+                            onChange={() => handleUnitChange("ALL")}
                           />
                           All
                         </label>
