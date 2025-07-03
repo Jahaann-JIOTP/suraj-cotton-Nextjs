@@ -6,11 +6,11 @@ const MainSldOverview = () => {
 
   return (
     <div className="w-full">
-      <div className="min-w-[1280px] h-[600px] relative mx-auto">
+      <div className="min-w-[1280px] relative mx-auto">
         <img
           src="./main-overview.png"
           alt="Main Overview"
-          className="w-[1150px] mx-auto"
+          className="w-[1200px] mx-auto"
         />
 
         <button
