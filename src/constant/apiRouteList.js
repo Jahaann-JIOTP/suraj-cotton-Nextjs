@@ -1,6 +1,6 @@
 const config = {
-  SURAJ_COTTON_BASE_URL: "http://localhost:5015",
-  // SURAJ_COTTON_BASE_URL: "https://surajapi.jiotp.com",
+  // SURAJ_COTTON_BASE_URL: "http://localhost:5015",
+  SURAJ_COTTON_BASE_URL: "https://surajapi.jiotp.com",
 
   // BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
 

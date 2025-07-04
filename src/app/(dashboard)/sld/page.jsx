@@ -72,7 +72,7 @@ import config from "@/constant/apiRouteList";
 // Unit 4 Components
 import InitialSldUnit4 from "@/components/sldComponent/initialSldUnit4/InitialSldUnit4";
 import Unit4Lt1 from "@/components/sldComponent/unit4lt1/Unit4Lt1";
-import Unit4Lt2 from "@/components/sldComponent/unit4lt2/Unit4Lt2";
+// import Unit4Lt2 from "@/components/sldComponent/unit4lt2/Unit4Lt2";
 
 // Unit 5 Components
 import InitialSldUnit5 from "@/components/sldComponent/initialSldUnit5/InitialSldUnit5";
@@ -83,6 +83,7 @@ import InitialSldUnit5 from "@/components/sldComponent/initialSldUnit5/InitialSl
 import MainSldOverview from "@/components/sldComponent/mainSldSelector/MainSldOverview";
 import Unit5Lt3 from "@/components/sldComponent/unit5lt3/Unit5Lt3";
 import Unit5Lt4 from "@/components/sldComponent/unit5lt4/Unit5Lt4";
+import Unit4Lt2 from "@/components/sldComponent/unit4Lt2/Unit4Lt2";
 
 const Page = () => {
   const [meterData, setMeterData] = useState([]);

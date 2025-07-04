@@ -1,144 +1,292 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
+import { ImArrowLeft2 } from "react-icons/im";
 const lt2MeterData = [
   {
     link: "U1_GW01",
     title: "Drying Simplex AC",
     top: 220,
-    left: 63,
+    left: 86.5,
   },
   {
     link: "U3_GW01",
     title: "Winding AC",
     top: 220,
-    left: 264,
+    left: 288,
   },
   {
     link: "U5_GW01",
     title: "Card 1",
     top: 220,
-    left: 463,
+    left: 490,
   },
   {
     link: "U8_GW01",
     title: "Blow Room",
     top: 220,
-    left: 666,
+    left: 693,
   },
   {
     link: "U10_GW01",
     title: "Winding 1",
     top: 220,
-    left: 867,
+    left: 895,
   },
   {
     link: "U2_GW01",
     title: "Weikel cond",
-    top: 330,
-    left: 165,
+    top: 333,
+    left: 189,
   },
   {
     link: "U4_GW01",
     title: "Mills RES-CLNY & Workshop",
-    top: 330,
-    left: 365,
+    top: 333,
+    left: 390,
   },
   {
     link: "U6_GW01",
     title: "Colony",
-    top: 330,
-    left: 565,
+    top: 333,
+    left: 591,
   },
   {
     link: "U9_GW01",
     title: "Cart 2",
-    top: 330,
-    left: 766,
+    top: 333,
+    left: 794,
   },
   {
     link: "U11_GW01",
     title: "Gas LT Pannel",
-    top: 330,
-    left: 966,
+    top: 333,
+    left: 995,
   },
   {
     link: "U12_GW01",
     title: "Card Filter",
-    top: 530,
-    left: 65,
+    top: 533,
+    left: 89,
   },
   {
     link: "U15_GW01",
     title: "Ring 2",
-    top: 530,
-    left: 274,
+    top: 533,
+    left: 299,
   },
   {
     link: "U17_GW01",
     title: "Ring 3",
-    top: 530,
-    left: 475,
+    top: 533,
+    left: 500,
   },
   {
     link: "U19_GW01",
     title: "AC Lab",
-    top: 530,
-    left: 675,
+    top: 533,
+    left: 700,
   },
   {
     link: "U21_GW01",
     title: "Spare 2",
-    top: 530,
-    left: 872,
-  },
-  {
-    link: "U22_GW01",
-    title: "Wapda 1 Incomming",
-    top: 530,
-    left: 1060,
+    top: 533,
+    left: 899,
   },
   {
     link: "U14_GW01",
     title: "D/R card Filter",
-    top: 647,
-    left: 176,
+    top: 651,
+    left: 200,
   },
   {
     link: "U16_GW01",
     title: "Ring 4",
-    top: 647,
-    left: 377,
+    top: 651,
+    left: 402,
   },
   {
     link: "U18_GW01",
     title: "Bale Press",
-    top: 647,
-    left: 577,
+    top: 651,
+    left: 603,
   },
   {
     link: "U20_GW01",
     title: "Spare",
-    top: 647,
-    left: 777,
-  },
-  {
-    link: "U23_GW01",
-    title: "HFO Incomming",
-    top: 647,
-    left: 977,
+    top: 651,
+    left: 804,
   },
 ];
 
 const Unit4Lt2 = ({ roundedData }) => {
+  const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
+  const unit4Lt2MeterTags = [
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 228,
+      left: 93,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 228,
+      left: 294,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 228,
+      left: 496,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 228,
+      left: 699,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 228,
+      left: 900,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 340,
+      left: 195,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 340,
+      left: 398,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 340,
+      left: 597,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 341,
+      left: 800,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 340,
+      left: 1001,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 542,
+      left: 95,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 542,
+      left: 305,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 542,
+      left: 507,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 542,
+      left: 707.5,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 542,
+      left: 906,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 660,
+      left: 206,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 660,
+      left: 408,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 660,
+      left: 609.5,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
+      top: 660,
+      left: 810.5,
+    },
+  ];
   return (
     <div className="w-full overflow-auto">
       <button
         onClick={() => router.back()}
-        className="absolute top-0 left-0 z-30 cursor-pointer bg-gray-300 px-5 py-1 rounded"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`absolute top-0 right-0 z-30 flex items-center ${
+          isHovered ? "justify-center" : "justify-start"
+        } gap-2 h-[40px] cursor-pointer bg-[#1F5897] transition-all duration-300 ease-in-out overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white px-2 ${
+          isHovered ? "w-[90px]" : "w-[40px]"
+        }`}
+        style={{
+          borderRadius: isHovered ? "8px" : "50%",
+        }}
       >
-        Back
+        <ImArrowLeft2 className="text-white shrink-0" />
+        <span
+          className={`whitespace-nowrap transition-opacity duration-300 ${
+            isHovered ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          Back
+        </span>
       </button>
       <div className="relative w-[1200px] h-full mx-auto">
         {lt2MeterData.map((meter) => (
@@ -157,10 +305,10 @@ const Unit4Lt2 = ({ roundedData }) => {
               height: "72px",
               backgroundColor: "transparent",
               zIndex: 60,
-              borderRadius: "0.375rem", // rounded-md
+              borderRadius: "0.375rem",
               cursor: "pointer",
             }}
-            className={``}
+            className={`border-1 border-red-500`}
           ></button>
         ))}
         {/* Diagram Image */}
@@ -169,272 +317,27 @@ const Unit4Lt2 = ({ roundedData }) => {
           className="w-[1200px] h-full"
           alt="unit 4 sld"
         />
-        {/* Buttons */}
+
         {/* Meter Readings */}
-        {/* //////////// drying simplex ac ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[230.5px] left-[69.5px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U1_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U1_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U1_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// winding ac ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[230.5px] left-[270.5px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U3_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U3_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U3_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// card 1 //////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[231px] left-[470px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U5_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U5_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U5_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// blow room ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[230.5px] left-[672px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U8_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U8_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U8_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// winding 1///////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[231px] left-[872.5px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U10_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U10_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U10_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////////////////// */}
-        {/* <div className="absolute flex flex-col items-center justify-around z-40 top-[239.5px] left-[1050px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_ActivePower_Total}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div> */}
-        {/* /////////// weikel cond////////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[341.5px] left-[170.5px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U2_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// mills res-clny workshop///////////// */}
-        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[340.5px] left-[372px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U4_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U4_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U4_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// colony ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[340.5px] left-[572px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U6_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U6_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U6_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// cart 2 ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[340.5px] left-[772px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U9_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U9_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U9_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// gas lt panel//////////// */}
-        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[340.5px] left-[972px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U11_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U11_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U11_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// card filter ///////////// */}
-        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[540px] left-[71px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U12_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U12_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U12_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// ring 2 //////////// */}
-        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[540.5px] left-[280px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U15_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// ring 3 //////////// */}
-        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[540px] left-[480px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U17_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U17_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U17_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// AC lab//////////// */}
-        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[540px] left-[681.2px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U19_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U19_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U19_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ////////////// spare 2 /////////// */}
-        <div className="absolute flex flex-col items-center justify-around z-40 border-1 border-transparent top-[541.5px] left-[878px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U21_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U21_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U21_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ////////////// wapda 1 icomming /////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[541px] left-[1067.5px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U22_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U22_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U22_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ////////////// d/r card filter /////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[657.5px] left-[182px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U14_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U14_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U14_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// ring 4 //////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[657.5px] left-[384px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U16_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U16_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U16_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// bale press //////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[657.8px] left-[583.2px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U18_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U18_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U18_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// spare //////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[658px] left-[783.5px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U20_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U20_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U20_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ////////////hfo incomming///////////// */}
-        <div className="absolute flex flex-col items-center justify-around border-1 border-transparent z-40 top-[658px] left-[983.5px] w-[51px] h-[57px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U23_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U23_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U23_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
+        {unit4Lt2MeterTags.map((meter, index) => (
+          <div
+            style={{
+              top: `${meter.top}px`,
+              left: `${meter.left}px`,
+            }}
+            className={`absolute border-1 border-red-500  z-20  w-[51px] h-[57px] flex flex-col items-center`}
+          >
+            <span className="meterReadingUnit4Lt1 mt-[-2.4px]">
+              {roundedData?.U1_GW01_ActivePower_Total || "000"}
+            </span>
+            <span className="meterReadingUnit4Lt1 mt-[-1.2px]">
+              {roundedData?.U1_GW01_Current_Avg || "000"}
+            </span>
+            <span className="meterReadingUnit4Lt1 mt-[-1px]">
+              {roundedData?.U1_GW01_Voltage_Avg || "000"}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );

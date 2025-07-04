@@ -195,3 +195,17 @@
   color: black;
   font-family: var(--font-fira-mono), sans-serif;
 }
+@keyframes fadePulse {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.25;
+  }
+}
+
+@layer utilities {
+  .animate-fadePulse {
+    animation: fadePulse 1s linear infinite;
+  }
+}

@@ -1,133 +1,271 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ImArrowLeft2 } from "react-icons/im";
 const lt1MeterData = [
   {
     link: "U1_PLC",
     title: "Transport",
-    top: 308,
-    left: 89,
+    top: 213,
+    left: 167,
   },
   {
     link: "U3_PLC",
     title: "Lighting Outside",
-    top: 303,
-    left: 272,
+    top: 213,
+    left: 358,
   },
   {
     link: "U5_PLC",
     title: "Power House",
-    top: 303,
-    left: 455.5,
+    top: 211,
+    left: 548,
   },
   {
     link: "U7_PLC",
     title: "Spare",
-    top: 307,
-    left: 648,
+    top: 211,
+    left: 738,
   },
   {
     link: "U9_PLC",
     title: "Winding 1",
-    top: 307,
-    left: 838,
+    top: 211,
+    left: 928,
   },
   {
     link: "U2_PLC",
     title: "Unit 5 aux",
-    top: 380,
-    left: 180,
+    top: 320,
+    left: 260,
   },
   {
     link: "U4_PLC",
     title: "Lighting Inside",
-    top: 380,
-    left: 363,
+    top: 320,
+    left: 449,
   },
   {
     link: "U6_PLC",
     title: "Turbine",
-    top: 380,
-    left: 560,
+    top: 320,
+    left: 643,
   },
   {
     link: "U8_PLC",
     title: "Drawing 1",
-    top: 380,
-    left: 738,
+    top: 320,
+    left: 833,
   },
   {
     link: "U10_PLC",
     title: "Ring 1",
-    top: 380,
-    left: 966,
+    top: 552,
+    left: 172,
   },
   {
     link: "U12_PLC",
     title: "Ring 6",
-    top: 583,
-    left: 317,
+    top: 552,
+    left: 360,
   },
   {
     link: "U14_PLC",
     title: "Compressor",
-    top: 583,
-    left: 500,
+    top: 552,
+    left: 551,
   },
   {
     link: "U16_PLC",
     title: "Compressor 2",
-    top: 583,
-    left: 683,
-  },
-  {
-    link: "U18_PLC",
-    title: "Ring AC (Byparss)",
-    top: 583,
-    left: 876,
+    top: 552,
+    left: 740,
   },
   {
     link: "U11_PLC",
     title: "Ring 5",
     top: 657,
-    left: 225,
+    left: 260,
   },
   {
     link: "U13_PLC",
     title: "Comber 1",
-    top: 656,
-    left: 409,
+    top: 657,
+    left: 450,
   },
   {
     link: "U15_PLC",
     title: "Simplex 1",
-    top: 656,
-    left: 591,
+    top: 657,
+    left: 640,
   },
   {
     link: "U17_PLC",
     title: "Ring AC",
     top: 657,
-    left: 774,
-  },
-  {
-    link: "U20_PLC",
-    title: "Compressor (Bypass)",
-    top: 657,
-    left: 967,
+    left: 829,
   },
 ];
 
 const Unit5Lt4 = ({ roundedData }) => {
+  const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
+  const unit5Lt4MeterTags = [
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 218,
+      left: 172,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 218,
+      left: 362,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 217,
+      left: 552.5,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 217,
+      left: 743,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 218,
+      left: 932,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 326,
+      left: 265,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 326,
+      left: 455,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 326,
+      left: 648,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 326,
+      left: 838,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 558,
+      left: 176.5,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 558,
+      left: 365,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 558,
+      left: 555.5,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 558,
+      left: 745,
+    },
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 663.5,
+      left: 265.5,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 663.5,
+      left: 454.5,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 663.5,
+      left: 644,
+    },
+
+    {
+      activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
+      top: 664,
+      left: 834,
+    },
+  ];
 
   return (
     <div className="w-full overflow-auto">
       <button
         onClick={() => router.back()}
-        className="absolute top-0 left-0 z-30 cursor-pointer bg-gray-300 px-5 py-1 rounded"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`absolute top-0 right-0 z-30 flex items-center ${
+          isHovered ? "justify-center" : "justify-start"
+        } gap-2 h-[40px] cursor-pointer bg-[#1F5897] transition-all duration-300 ease-in-out overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white px-2 ${
+          isHovered ? "w-[90px]" : "w-[40px]"
+        }`}
+        style={{
+          borderRadius: isHovered ? "8px" : "50%",
+        }}
       >
-        Back
+        <ImArrowLeft2 className="text-white shrink-0" />
+        <span
+          className={`whitespace-nowrap transition-opacity duration-300 ${
+            isHovered ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          Back
+        </span>
       </button>
 
       <div className="relative w-[1200px] h-full mx-auto">
@@ -160,243 +298,25 @@ const Unit5Lt4 = ({ roundedData }) => {
           alt="unit 4 sld"
         />
         {/* Meter Readings */}
-        {/* //////////// transport ///////////// */}
-        <div className="absolute flex flex-col items-center justify-center border-1 border-transparent  z-20 top-[319px] left-[95.7px] w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U1_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1 pb-[1px]">
-            {/* {roundedData?.U8_PLC_Current_A} */}
-            {roundedData?.U1_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U1_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// lighting outside ///////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[314px] left-[278px] border-1 border-transparent  w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U3_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U3_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U3_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* /////////// power house ////////////// */}
-        <div className="absolute flex flex-col items-center justify-center  z-20 top-[314px] left-[462px] border-1 border-transparent  w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U5_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U5_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U5_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// spare //////////// */}
-        <div className="absolute flex flex-col items-center justify-center  z-20 top-[319px] left-[654px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U7_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U7_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U7_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* {replica by yousaf shah saying the same code for each meter reading} */}
-        {/* ////////// winding 1 ///////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[319px] left-[845px] border-1 border-transparent  w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U9_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U9_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U9_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-
-        {/* ////////// unit 5 aux /////////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[391px] left-[187px] border-1 border-transparent  w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U2_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U2_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U2_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// lighting inside //////////// */}
-        <div className="absolute flex flex-col items-center justify-center  z-20 top-[391px] left-[369.5px] border-1 border-transparent  w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U4_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U4_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* /////////// turbine ////////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[391px] left-[567px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U6_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U6_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U6_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// drawing 1 ///////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[391px] left-[744.5px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U8_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U8_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U8_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* second replica by yousaf shah saying the same code for each meter reading */}
-        {/* //////////////// ring 1 //////////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[391px] left-[972.2px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U10_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U10_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U10_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-
-        {/* //////////// ring 6 ///////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[594.5px] left-[324px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U12_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U12_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U12_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ///////////// compressor //////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[595px] left-[506.3px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U14_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U14_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U14_PLC_Voltage_BC || "00.00"}
-          </span>
-        </div>
-        {/* ////////////// compressor 2 /////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[595px] left-[689.5px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U16_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U16_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U16_PLC_Voltage_BC || "00.00"}
-          </span>
-        </div>
-        {/* ////////////// rin ac bypass /////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[593px] left-[882.5px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U18_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U18_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U18_PLC_Voltage_BC || "00.00"}
-          </span>
-        </div>
-
-        {/* {another version of the same code for each meter reading}  */}
-        {/* ////////////////// ring 5 /////////////// */}
-
-        <div className="absolute flex flex-col  items-center justify-center z-20 top-[667px] left-[232.3px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U11_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U11_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U11_PLC_Voltage_BC || "00.00"}
-          </span>
-        </div>
-        {/* ////////////////// comber 1 /////////////// */}
-
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[668px] left-[415px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U13_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U13_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U13_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// simplex 1 ///////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[667px] left-[598px] border-1 border-transparent w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U15_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U15_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U15_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// ring ac ///////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[667px] left-[780.3px] border-1 border-transparent  w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U17_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U17_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U17_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* //////////// compressor bypass ///////////// */}
-        <div className="absolute flex flex-col items-center justify-center z-20 top-[667px] left-[973.5px] border-1 border-transparent  w-[46px] h-[50px]">
-          <span className="meterReadingUnit4Lt1 pt-[1px]">
-            {roundedData?.U20_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U20_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt1">
-            {roundedData?.U20_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
+        {unit5Lt4MeterTags.map((meter, index) => (
+          <div
+            style={{
+              top: `${meter.top}px`,
+              left: `${meter.left}px`,
+            }}
+            className={`absolute border-1 border-red-500 z-20 w-[48px] h-[56px] flex flex-col items-center`}
+          >
+            <span className="meterReadingUnit4Lt1 mt-[-2.4px]">
+              {roundedData?.U1_GW01_ActivePower_Total || "000"}
+            </span>
+            <span className="meterReadingUnit4Lt1 mt-[-1.2px]">
+              {roundedData?.U1_GW01_Current_Avg || "000"}
+            </span>
+            <span className="meterReadingUnit4Lt1 mt-[-2.5px]">
+              {roundedData?.U1_GW01_Voltage_Avg || "000"}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ export default function ViewUsers() {
   const { theme } = useTheme();
   const [editUserPopup, setEditUserPopup] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     key: "name",
     direction: "asc",
@@ -44,6 +45,7 @@ export default function ViewUsers() {
     handleSearch(searchTerm);
   }, [users]);
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(
         // `${config.BASE_URL}${config.ADMIN.GET_USERS}`,
@@ -53,6 +55,7 @@ export default function ViewUsers() {
         }
       );
       setUsers(res.data);
+      setLoading(false);
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -64,6 +67,7 @@ export default function ViewUsers() {
   };
 
   const fetchRoles = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(
         `${config.SURAJ_COTTON_BASE_URL}/roles/allrole`,
@@ -72,6 +76,7 @@ export default function ViewUsers() {
         }
       );
       setRoles(res.data.data || []);
+      setLoading(false);
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -235,94 +240,114 @@ export default function ViewUsers() {
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map((user, i) => {
-              return (
-                <tr
-                  key={user._id}
-                  className="hover:bg-blue-50 dark:hover:bg-gray-600 transition duration-150 ease-in-out h-[45px]"
-                >
-                  <td className="px-4 py-2 border border-gray-300 dark:border-gray-500 font-bold">
-                    {i + 1}
-                  </td>
-                  <td className="px-4 py-2 border border-gray-300 dark:border-gray-500">
-                    {user.name}
-                  </td>
-                  <td className="px-4 py-2 border border-gray-300 dark:border-gray-500">
-                    {user.email}
-                  </td>
-                  <td className="px-4 py-2 border border-gray-300 dark:border-gray-500">
-                    {roles.find((r) => r._id === user.role)?.name ||
-                      user?.role?.name ||
-                      "N/A"}
-                  </td>
+            {loading
+              ? [1, 2].map((_, index) => (
+                  <tr key={index} className="animate-pulse h-[45px]">
+                    <td className="px-4 py-2">
+                      <div className="h-[40px] w-full bg-gray-300 dark:bg-gray-500 rounded"></div>
+                    </td>
+                    <td className="px-4 py-2 ">
+                      <div className="h-[40px] w-full bg-gray-300 dark:bg-gray-500 rounded"></div>
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="h-[40px] w-full bg-gray-300 dark:bg-gray-500 rounded"></div>
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="h-[40px] w-full bg-gray-300 dark:bg-gray-500 rounded"></div>
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="h-[40px] w-full bg-gray-300 dark:bg-gray-500 rounded"></div>
+                    </td>
+                  </tr>
+                ))
+              : filteredUsers.map((user, i) => {
+                  return (
+                    <tr
+                      key={user._id}
+                      className="hover:bg-blue-50 dark:hover:bg-gray-600 transition duration-150 ease-in-out h-[45px]"
+                    >
+                      <td className="px-4 py-2 border border-gray-300 dark:border-gray-500 font-bold">
+                        {i + 1}
+                      </td>
+                      <td className="px-4 py-2 border border-gray-300 dark:border-gray-500">
+                        {user.name}
+                      </td>
+                      <td className="px-4 py-2 border border-gray-300 dark:border-gray-500">
+                        {user.email}
+                      </td>
+                      <td className="px-4 py-2 border border-gray-300 dark:border-gray-500">
+                        {roles.find((r) => r._id === user.role)?.name ||
+                          user?.role?.name ||
+                          "N/A"}
+                      </td>
 
-                  <td className="px-4 py-2 border border-gray-300 dark:border-gray-500 text-center">
-                    <div className="flex justify-center gap-3">
-                      {/* Edit */}
-                      <button
-                        className="w-6 h-6"
-                        onClick={() => {
-                          setEditUserData({
-                            _id: user._id,
-                            name: user.name,
-                            email: user.email,
-                            role:
-                              roles.find((r) => r.name === user?.role?.name)
-                                ?._id || "", // 🔥 Match name → _id
-                          });
+                      <td className="px-4 py-2 border border-gray-300 dark:border-gray-500 text-center">
+                        <div className="flex justify-center gap-3">
+                          {/* Edit */}
+                          <button
+                            className="w-6 h-6"
+                            onClick={() => {
+                              setEditUserData({
+                                _id: user._id,
+                                name: user.name,
+                                email: user.email,
+                                role:
+                                  roles.find((r) => r.name === user?.role?.name)
+                                    ?._id || "", // 🔥 Match name → _id
+                              });
 
-                          setEditUserPopup(true);
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-6 h-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            d="M5 16.0002L4 20.0002L8 19.0002L19.586 7.41419C19.9609 7.03913 20.1716 6.53051 20.1716 6.00019C20.1716 5.46986 19.9609 4.96124 19.586 4.58619L19.414 4.41419C19.0389 4.03924 18.5303 3.82861 18 3.82861C17.4697 3.82861 16.9611 4.03924 16.586 4.41419L5 16.0002Z"
-                            stroke="#1A68B2"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M5 16L4 20L8 19L18 9L15 6L5 16Z"
-                            fill="#1A68B2"
-                          />
-                          <path
-                            d="M15 6L18 9M13 20H21"
-                            stroke="#1A68B2"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
+                              setEditUserPopup(true);
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-6 h-6"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M5 16.0002L4 20.0002L8 19.0002L19.586 7.41419C19.9609 7.03913 20.1716 6.53051 20.1716 6.00019C20.1716 5.46986 19.9609 4.96124 19.586 4.58619L19.414 4.41419C19.0389 4.03924 18.5303 3.82861 18 3.82861C17.4697 3.82861 16.9611 4.03924 16.586 4.41419L5 16.0002Z"
+                                stroke="#1A68B2"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                              <path
+                                d="M5 16L4 20L8 19L18 9L15 6L5 16Z"
+                                fill="#1A68B2"
+                              />
+                              <path
+                                d="M15 6L18 9M13 20H21"
+                                stroke="#1A68B2"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </button>
 
-                      {/* Delete */}
-                      <button
-                        className="w-6 h-6"
-                        onClick={() => handleDeleteUser(user)}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-6 h-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            d="M19 4H15.5L14.5 3H9.5L8.5 4H5V6H19M6 19C6 19.5304 6.21071 20.0391 6.58579 20.4142C6.96086 20.7893 7.46957 21 8 21H16C16.5304 21 17.0391 20.7893 17.4142 20.4142C17.7893 20.0391 18 19.5304 18 19V7H6V19Z"
-                            fill="#D90505"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                          {/* Delete */}
+                          <button
+                            className="w-6 h-6"
+                            onClick={() => handleDeleteUser(user)}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-6 h-6"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M19 4H15.5L14.5 3H9.5L8.5 4H5V6H19M6 19C6 19.5304 6.21071 20.0391 6.58579 20.4142C6.96086 20.7893 7.46957 21 8 21H16C16.5304 21 17.0391 20.7893 17.4142 20.4142C17.7893 20.0391 18 19.5304 18 19V7H6V19Z"
+                                fill="#D90505"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
           </tbody>
         </table>
       </div>

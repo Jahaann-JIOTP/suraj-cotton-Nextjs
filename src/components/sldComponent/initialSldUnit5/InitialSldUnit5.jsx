@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
-import { ImArrowDown } from "react-icons/im";
+import { ImArrowDown, ImArrowLeft2 } from "react-icons/im";
 import { useRouter } from "next/navigation";
 const unit4MeterData = [
   {
@@ -34,15 +34,66 @@ const unit4MeterData = [
   },
 ];
 const InitialSldUnit5 = ({ roundedData }) => {
+  const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
+  const unit5InitialSldMeterTAgs = [
+    // LT1 Power House
+    {
+      activePowerTotalTag: roundedData?.U19_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U19_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U19_PLC_Voltage_Avg,
+      top: 320,
+      left: 217.3,
+    },
+    // wapda IC lt1
+    {
+      activePowerTotalTag: roundedData?.U21_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U21_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U21_PLC_Voltage_Avg,
+      top: 320,
+      left: 394.4,
+    },
+    // power house lt2
+    {
+      activePowerTotalTag: roundedData?.U7_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U7_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U7_PLC_Voltage_Avg,
+      top: 320,
+      left: 665.5,
+    },
+    // wapda IC lt2
+    {
+      activePowerTotalTag: roundedData?.U13_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U13_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U13_PLC_Voltage_Avg,
+      top: 320,
+      left: 842.2,
+    },
+  ];
 
   return (
     <div className="w-full overflow-auto">
       <button
         onClick={() => router.push("/sld")}
-        className="absolute top-0 left-0 z-30 cursor-pointer bg-gray-300 px-5 py-1 rounded"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`absolute top-0 right-0 z-30 flex items-center ${
+          isHovered ? "justify-center" : "justify-start"
+        } gap-2 h-[40px] cursor-pointer bg-[#1F5897] transition-all duration-300 ease-in-out overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white px-2 ${
+          isHovered ? "w-[90px]" : "w-[40px]"
+        }`}
+        style={{
+          borderRadius: isHovered ? "8px" : "50%",
+        }}
       >
-        Back
+        <ImArrowLeft2 className="text-white shrink-0" />
+        <span
+          className={`whitespace-nowrap transition-opacity duration-300 ${
+            isHovered ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          Back
+        </span>
       </button>
       <div className="relative w-[1200px] h-[600px] mx-auto">
         {unit4MeterData.map((meter) => (
@@ -89,55 +140,27 @@ const InitialSldUnit5 = ({ roundedData }) => {
         </button>
 
         {/* Meter Readings */}
+        {unit5InitialSldMeterTAgs.map((meter, index) => (
+          <div
+            key={index}
+            className="absolute flex flex-col items-center border-1 border-red-500 z-40 w-[58px] h-[59px]"
+            style={{
+              top: `${meter.top}px`,
+              left: `${meter.left}px`,
+            }}
+          >
+            <span className="meterReadingUnit4Lt2 mt-[-2px]">
+              {roundedData?.U19_PLC_ActivePower_Total || "00.00"}
+            </span>
+            <span className="meterReadingUnit4Lt2 mt-[-1.5px]">
+              {roundedData?.U19_PLC_Current_Avg || "00.00"}
+            </span>
+            <span className="meterReadingUnit4Lt2 mt-[-1px]">
+              {roundedData?.U19_PLC_Voltage_Avg || "00.00"}
+            </span>
+          </div>
+        ))}
         {/* LT1 Power House */}
-        {/* ////////////// Diesel IC lt1 /////////////// */}
-        <div className="absolute flex flex-col items-center justify-around  border-1 border-red-500 z-40 top-[320px] left-[217.3px]   w-[58px] h-[59px]">
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U19_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U19_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2">
-            {roundedData?.U19_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ////////////// wapda IC lt1 /////////////// */}
-        <div className="absolute flex flex-col items-center justify-around pb-4 z-40 border-1 border-red-500 top-[320px] left-[394.2px] w-[58px] h-[59px]">
-          <span className="meterReadingUnit4Lt2 mt-[-2px]">
-            {roundedData?.U21_PLC_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2 mt-[-1px]">
-            {roundedData?.U21_PLC_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2 mt-[-0.5px]">
-            {roundedData?.U21_PLC_Voltage_Avg || "00.00"}
-          </span>
-        </div>
-        {/* ////////////// power house lt2 /////////////// */}
-        <div className="absolute flex flex-col items-center justify-around pb-4 z-40 border-1 border-red-500 top-[320px] left-[665.5px] w-[58px] h-[59px]">
-          <span className="meterReadingUnit4Lt2 mt-[-2px]">
-            {roundedData?.U7_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2 mt-[-1px]">
-            {roundedData?.U7_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2 mt-[-0.5px]">
-            {roundedData?.U7_GW01_Voltage_Avg || "00.00"}
-          </span>
-          {/* ////////////// wapda IC lt2 /////////////// */}
-        </div>
-        <div className="absolute flex flex-col items-center justify-around pb-4 z-40 border-1 border-red-500 top-[320px] left-[842.2px]  w-[58px] h-[59px]">
-          <span className="meterReadingUnit4Lt2 mt-[-2px]">
-            {roundedData?.U13_GW01_ActivePower_Total || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2 mt-[-1px]">
-            {roundedData?.U13_GW01_Current_Avg || "00.00"}
-          </span>
-          <span className="meterReadingUnit4Lt2 mt-[-0.5px]">
-            {roundedData?.U13_GW01_Voltage_Avg || "00.00"}
-          </span>
-        </div>
       </div>
     </div>
   );

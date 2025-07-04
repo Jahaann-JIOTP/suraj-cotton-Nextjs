@@ -7,6 +7,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Swal from "sweetalert2";
 import config from "@/constant/apiRouteList";
 import { useTheme } from "next-themes";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 function CustomTrend() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -692,7 +693,7 @@ function CustomTrend() {
             </label>
             <button
               onClick={() => setShowMeters(!showMeters)}
-              className="w-full p-2 border rounded text-left bg-white dark:bg-gray-800"
+              className="w-full p-2 border rounded text-left cursor-pointer bg-white dark:bg-gray-800"
             >
               {selectedMeter.length > 0
                 ? `${selectedMeter[0]}${
@@ -736,7 +737,7 @@ function CustomTrend() {
             </label>
             <button
               onClick={() => setShowParameters(!showParameters)}
-              className="w-full p-2 border rounded text-left bg-white dark:bg-gray-800"
+              className="w-full p-2 border rounded text-left cursor-pointer bg-white dark:bg-gray-800"
             >
               {selectedParameter || "Select Parameter"}
               <span className="float-right">{showParameters ? "▲" : "▼"}</span>
@@ -768,7 +769,7 @@ function CustomTrend() {
         </div>
         <div className="flex-1 w-full">
           {loading === true ? (
-            <span>loadign....</span>
+            <CustomLoader />
           ) : (
             <div
               id="chartDiv"

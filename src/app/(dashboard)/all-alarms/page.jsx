@@ -5,9 +5,9 @@ import axios from "axios";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import config from "@/constant/apiRouteList";
-import Loader from "@/components/loader/Loader";
 import { FaCircle } from "react-icons/fa";
 import { AlarmTable } from "@/components/alarmsComponents/AlarmsTable";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 const AllAlarmPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -55,7 +55,7 @@ const AllAlarmPage = () => {
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
-  if (loading) return <Loader />;
+  if (loading) return <CustomLoader />;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   const getStatusDetails = (status) => {
@@ -111,7 +111,7 @@ const AllAlarmPage = () => {
         </h2>
         <button
           onClick={exportToExcel}
-          className="px-4 py-2 text-sm bg-[#0561a7] text-white rounded-md shadow hover:bg-[#025697a9] transition"
+          className="px-4 py-2 text-sm bg-[#0561a7] cursor-pointer text-white rounded-md shadow hover:bg-[#025697a9] transition"
         >
           Export to Excel
         </button>
