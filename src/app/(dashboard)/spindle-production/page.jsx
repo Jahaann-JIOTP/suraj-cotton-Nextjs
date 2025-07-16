@@ -32,7 +32,7 @@ const ProductionBlocks = () => {
     try {
       const monthStr = `${year}-${month + 1 < 10 ? "0" : ""}${month + 1}`;
       const response = await fetch(
-        `${config.SURAJ_COTTON_BASE_URL}/production-monthwise?month=${monthStr}`
+        `${config.BASE_URL}${config.REPORTS.GET_SPINDLES}${monthStr}`
       );
       const resResult = await response.json();
 
@@ -74,7 +74,7 @@ const ProductionBlocks = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${config.SURAJ_COTTON_BASE_URL}/production`,
+        `${config.BASE_URL}${config.REPORTS.ADD_SPINDLES}`,
         {
           method: "POST",
           headers: {

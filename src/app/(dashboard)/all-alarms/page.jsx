@@ -50,9 +50,9 @@ const AllAlarmPage = () => {
     };
 
     fetchData();
-    const intervalId = setInterval(fetchData, 10000); // Fetch data every 10 seconds
+    const intervalId = setInterval(fetchData, 10000);
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   if (loading) return <CustomLoader />;

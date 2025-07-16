@@ -1,18 +1,18 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-// import { generationConsumption } from "@/data/generationConsumption";
 import { generationConsumption } from "@/data/generationEnergy";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { useTheme } from "next-themes";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
+import config from "@/constant/apiRouteList";
 
 am4core.useTheme(am4themes_animated);
 
 const GenerationEnergy = () => {
   const [selectedCategory, setSelectedCategory] = useState("WAPDA 1");
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState("today");
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("week");
   const [isGenerationEnergyFullView, setGenerationEnergyFullView] =
     useState(false);
   const { theme } = useTheme(); // Light or dark
@@ -21,21 +21,47 @@ const GenerationEnergy = () => {
     setGenerationEnergyFullView((prev) => !prev);
   };
 
-  useEffect(() => {
-    const categoryData = generationConsumption[selectedCategory];
-    if (categoryData) {
-      updateChart(categoryData[selectedTimePeriod], selectedTimePeriod);
+  const fetchGenerationEnergyData = async () => {
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.DASHBOARD.GET_GENERATION_ENERGY}${selectedTimePeriod}`,
+        {
+          method: "GET",
+        }
+      );
+      if (response.ok) {
+        const resResult = await response.json();
+        if (Array.isArray(resResult) && resResult.length > 0) {
+          updateChart(resResult, selectedTimePeriod);
+        } else {
+          console.warn("No chart data received.");
+        }
+      }
+    } catch (error) {
+      console.error(error.message);
     }
-  }, [selectedCategory, selectedTimePeriod, theme]);
+  };
+  useEffect(() => {
+    fetchGenerationEnergyData();
+  }, [selectedTimePeriod, theme]);
+  // useEffect(() => {
+  //   fetchGenerationEnergyData();
+  //   const categoryData = generationConsumption[selectedCategory];
+  //   if (categoryData) {
+  //     updateChart(categoryData[selectedTimePeriod], selectedTimePeriod);
+  //   }
+  // }, [selectedCategory, selectedTimePeriod, theme]);
 
   const updateChart = (data, value) => {
     const isDark = theme === "dark";
-    // am4core.disposeAllCharts(); // destroy previous chart
+
     if (chartRef.current) {
       chartRef.current.dispose();
     }
 
     const chart = am4core.create("generationEnergy", am4charts.XYChart);
+    chartRef.current = chart;
+
     if (chart.logo) chart.logo.disabled = true;
 
     chart.legend = new am4charts.Legend();
@@ -50,30 +76,44 @@ const GenerationEnergy = () => {
 
     let xField, series1Field, series2Field, series1Name, series2Name;
 
-    if (value === "today") {
-      xField = "Time";
-      series1Field = "Yesterday";
-      series2Field = "Today";
-      series1Name = "Yesterday(kWh)";
-      series2Name = "Today(kWh)";
-    } else if (value === "week") {
-      xField = "Day";
-      series1Field = "Last Week";
-      series2Field = "This Week";
-      series1Name = "Last Week(kWh)";
-      series2Name = "This Week(kWh)";
-    } else if (value === "month") {
-      xField = "Weeks";
-      series1Field = "Last Month";
-      series2Field = "This Month";
-      series1Name = "Last Month(kWh)";
-      series2Name = "This Month(kWh)";
-    } else if (value === "year") {
-      xField = "Month";
-      series1Field = "Previous Year";
-      series2Field = "Current Year";
-      series1Name = "Previous Year(kWh)";
-      series2Name = "Current Year(kWh)";
+    switch (value) {
+      case "today":
+        xField = "Time";
+        series1Field = "Yesterday";
+        series2Field = "Today";
+        series1Name = "Yesterday (kWh)";
+        series2Name = "Today (kWh)";
+        break;
+      case "week":
+        xField = "Day";
+        series1Field = "Last Week";
+        series2Field = "This Week";
+        series1Name = "Last Week (kWh)";
+        series2Name = "This Week (kWh)";
+        break;
+      case "month":
+        xField = "Weeks";
+        series1Field = "Last Month";
+        series2Field = "This Month";
+        series1Name = "Last Month (kWh)";
+        series2Name = "This Month (kWh)";
+        break;
+      case "year":
+        xField = "Month";
+        series1Field = "Previous Year";
+        series2Field = "Current Year";
+        series1Name = "Previous Year (kWh)";
+        series2Name = "Current Year (kWh)";
+        break;
+      default:
+        console.warn("Invalid time period selected:", value);
+        return;
+    }
+
+    // ⚠️ Check for empty or invalid data
+    if (!Array.isArray(data) || data.length === 0) {
+      console.warn("No data provided for chart");
+      return;
     }
 
     chart.data = data;
@@ -95,6 +135,7 @@ const GenerationEnergy = () => {
       series.dataFields.categoryX = xField;
       series.name = name;
       series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
+      series.tooltip.pointerOrientation = "horizontal";
       series.columns.template.width = am4core.percent(40);
       series.columns.template.fill = am4core.color(color);
       series.columns.template.stroke = am4core.color(color);
@@ -105,16 +146,15 @@ const GenerationEnergy = () => {
 
     chart.cursor = new am4charts.XYCursor();
   };
-
   return (
     <div
       className={`${
         isGenerationEnergyFullView
-          ? "fixed inset-0 z-50  p-5 overflow-auto w-[96%] m-auto h-[96vh]"
-          : "relative  px-1 py-2 md:p-3 h-[14.8rem]"
+          ? "fixed inset-0 z-50  p-5 overflow-auto w-[100%] m-auto h-[100vh]"
+          : "relative  px-1 py-2 md:p-3 h-[15rem] md:h-[13.5rem] lg:h-[12rem]"
       } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
     >
-      <div className="flex items-center flex-col md:flex-row gap-3 md:gap-[0.7vw] justify-between">
+      <div className="relative flex items-center flex-col md:flex-row gap-3 md:gap-[0.7vw] justify-between">
         <span className="text-[15px] text-[#1A68B2] .font-raleway font-600">
           Generation Energy
         </span>
@@ -134,13 +174,13 @@ const GenerationEnergy = () => {
             onChange={(e) => setSelectedTimePeriod(e.target.value)}
             className="outline-none border-1 text-[12px] font-raleway rounded p-1 dark:bg-gray-600"
           >
-            <option value="today">Today</option>
+            {/* <option value="today">Today</option> */}
             <option value="week">This Week</option>
             <option value="month">This Month</option>
             <option value="year">This Year</option>
           </select>
           <button
-            className="cursor-pointer"
+            className="cursor-pointer absolute md:relative top-[0px] right-[0px]"
             onClick={handleGenerationEnergyFullView}
           >
             {isGenerationEnergyFullView ? (

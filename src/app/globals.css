@@ -190,7 +190,7 @@
   font-size: 14px;
 }
 .meterDataText {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 600;
   color: black;
   font-family: var(--font-fira-mono), sans-serif;
@@ -208,4 +208,38 @@
   .animate-fadePulse {
     animation: fadePulse 1s linear infinite;
   }
+}
+
+.custom-scrollbar-report:hover {
+  overflow-y: auto;
+}
+
+/* WebKit scrollbar styles */
+.custom-scrollbar-report::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  background-color: transparent;
+}
+
+.custom-scrollbar-report:hover::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar-report:hover::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.custom-scrollbar-report:hover::-webkit-scrollbar-thumb {
+  background: #1f5897;
+  border-radius: 2px;
+}
+
+.custom-scrollbar-report:hover::-webkit-scrollbar-thumb:hover {
+  background: #e6e6e6;
+}
+
+.custom-scrollbar-report::-webkit-scrollbar-button {
+  display: none;
 }

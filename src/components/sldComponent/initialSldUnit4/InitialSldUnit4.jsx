@@ -37,7 +37,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
   const unit4InitialSldMeterTAgs = [
-    // LT1 Power House
+    // diesel IC
     {
       activePowerTotalTag: roundedData?.U19_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_PLC_Current_Avg,
@@ -45,7 +45,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       top: 200,
       left: 116,
     },
-    // wapda IC lt1
+    // wapda IC
     {
       activePowerTotalTag: roundedData?.U21_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U21_PLC_Current_Avg,
@@ -53,7 +53,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       top: 200,
       left: 270,
     },
-    // power house lt2
+    // power house
     {
       activePowerTotalTag: roundedData?.U7_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U7_PLC_Current_Avg,
@@ -61,7 +61,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       top: 200,
       left: 857,
     },
-    // wapda IC lt2
+    // wapda IC
     {
       activePowerTotalTag: roundedData?.U13_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_PLC_Current_Avg,
@@ -115,7 +115,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
             }}
-            className={`border-1 border-red-500`}
+            className={``}
           ></button>
         ))}
         {/* Diagram Image */}
@@ -124,39 +124,37 @@ const InitialSldUnit4 = ({ roundedData }) => {
           className="w-[1200px] h-full"
           alt="unit 4 sld"
         />
-
+        {/* lines */}
+        <div className="absolute w-[2.2px] h-[138px] bg-black left-[230.4px] top-[277px]"></div>
+        <div className="absolute w-[2.2px] h-[138px] bg-black left-[970.3px] top-[277px]"></div>
         {/* Buttons */}
         <button
           onClick={() => router.replace("/sld?unit=unit4&area=lt1")}
-          className="absolute top-[360px] left-[208px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
-        >
-          <ImArrowDown size={30} className="text-white" />
-        </button>
+          className="absolute top-[414px] left-[76px] w-[311px] h-[45px] cursor-pointer"
+        ></button>
         <button
           onClick={() => router.push("/sld?unit=unit4&area=lt2")}
-          className="absolute top-[360px] left-[949px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
-        >
-          <ImArrowDown size={30} className="text-white" />
-        </button>
+          className="absolute top-[414px] left-[818px] w-[310px] h-[45px] cursor-pointer"
+        ></button>
 
         {/* Meter Readings */}
         {unit4InitialSldMeterTAgs.map((meter, index) => (
           <div
             key={index}
-            className="absolute flex flex-col items-center border-1 border-red-500 z-40 w-[58px] h-[59px]"
+            className="absolute flex flex-col items-center z-40 w-[58px] h-[59px]"
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
             }}
           >
             <span className="meterReadingUnit4Lt2 mt-[-2px]">
-              {roundedData?.U19_PLC_ActivePower_Total || "00.00"}
+              {meter.activePowerTotalTag || "00.00"}
             </span>
             <span className="meterReadingUnit4Lt2 mt-[-1.5px]">
-              {roundedData?.U19_PLC_Current_Avg || "00.00"}
+              {meter.activeCurrentAvgTag || "00.00"}
             </span>
             <span className="meterReadingUnit4Lt2 mt-[-1px]">
-              {roundedData?.U19_PLC_Voltage_Avg || "00.00"}
+              {meter.activeVoltageAvgTag || "00.00"}
             </span>
           </div>
         ))}

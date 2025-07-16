@@ -40,8 +40,7 @@ export default function Roles() {
     setLoading(true);
     try {
       const rolesRes = await axios.get(
-        // `${config.BASE_URL}${config.ADMIN.FETCH_ROLES}`,
-        `${config.SURAJ_COTTON_BASE_URL}/roles/allrole`,
+        `${config.BASE_URL}${config.ROLES.GET_ALL_ROLLS}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -65,8 +64,7 @@ export default function Roles() {
     setLoading(true);
     try {
       const res = await axios.get(
-        // `${config.BASE_URL}${config.ADMIN.GET_PRIVILEGES}`,
-        `${config.SURAJ_COTTON_BASE_URL}/privelleges/allprivelleges`,
+        `${config.BASE_URL}${config.PRIVILEGES.GET_ALL_PRIVILEGES}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -98,7 +96,7 @@ export default function Roles() {
 
     try {
       await axios.post(
-        `${config.SURAJ_COTTON_BASE_URL}/roles/addrole`,
+        `${config.BASE_URL}${config.ROLES.ADD_ROLE}`,
         {
           name: newRole,
           privelleges: selectedPrivileges,
@@ -138,7 +136,10 @@ export default function Roles() {
     }
     try {
       await axios.put(
-        `${config.SURAJ_COTTON_BASE_URL}/roles/updaterole/${editRole._id}`,
+        `${config.BASE_URL}${config.ROLES.UPDATE_ROLE.replace(
+          ":id",
+          editRole._id
+        )}`,
         {
           name: editRole?.name,
           privelleges: editPrivileges,
@@ -178,7 +179,7 @@ export default function Roles() {
       if (result.isConfirmed) {
         try {
           await axios.delete(
-            `${config.SURAJ_COTTON_BASE_URL}/roles/deleterole/${id}`,
+            `${config.BASE_URL}${config.ROLES.DELETE_ROLE.replace(":id", id)}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -221,7 +222,7 @@ export default function Roles() {
       <div className="flex justify-end items-center mb-4">
         <button
           onClick={() => setShowRolePopup(true)}
-          className="bg-[#1F5897] text-white px-4 py-2 rounded-md hover:bg-[#17406c]"
+          className="bg-[#1F5897] text-white px-4 py-2 cursor-pointer rounded-md hover:bg-[#17406c]"
         >
           + Add Role
         </button>
@@ -291,7 +292,7 @@ export default function Roles() {
                       <td className="px-4 py-2 border border-gray-300 dark:border-gray-500 text-center">
                         <div className="flex justify-center gap-3">
                           <button
-                            className="w-6 h-6"
+                            className="w-6 h-6 cursor-pointer"
                             onClick={() => {
                               setEditRole(role);
                               setEditPrivileges(
@@ -329,7 +330,7 @@ export default function Roles() {
                             </svg>
                           </button>
                           <button
-                            className="w-6 h-6"
+                            className="w-6 h-6 cursor-pointer"
                             onClick={() => handleDeleteRole(role._id)}
                           >
                             <svg
@@ -396,13 +397,13 @@ export default function Roles() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={handleAddRole}
-                className="bg-[#1d5998] hover:bg-[#1d589898] text-white font-medium px-4 py-2 rounded-md"
+                className="bg-[#1d5998] hover:bg-[#1d589898] cursor-pointer text-white font-medium px-4 py-2 rounded-md"
               >
                 Save
               </button>
               <button
                 onClick={() => setShowRolePopup(false)}
-                className="bg-gray-500 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded-md"
+                className="bg-gray-500 hover:bg-gray-600 cursor-pointer text-white font-medium px-4 py-2 rounded-md"
               >
                 Cancel
               </button>
@@ -449,13 +450,13 @@ export default function Roles() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={handleUpdateRole}
-                className="bg-[#1d5998] hover:bg-[#1d589898] text-white px-4 py-2 rounded-md"
+                className="bg-[#1d5998] hover:bg-[#1d589898] cursor-pointer text-white px-4 py-2 rounded-md"
               >
                 Save
               </button>
               <button
                 onClick={() => setEditRolePopup(false)}
-                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
+                className="bg-gray-500 hover:bg-gray-600 cursor-pointer text-white px-4 py-2 rounded-md"
               >
                 Cancel
               </button>

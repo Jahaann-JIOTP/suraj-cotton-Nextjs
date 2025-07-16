@@ -3,23 +3,33 @@ import React, { useState, useEffect, useRef } from "react";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
+import ExcelJS from "exceljs";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
+import { saveAs } from "file-saver";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Swal from "sweetalert2";
 import config from "@/constant/apiRouteList";
 import { useTheme } from "next-themes";
 import CustomLoader from "@/components/customLoader/CustomLoader";
+import { LuFileUp } from "react-icons/lu";
+import { loadImageAsBase64 } from "@/utils/imageToBase64";
 function CustomTrend() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [area, setArea] = useState("");
   const [lt, setLt] = useState("");
-  const [selectedMeter, setSelectedMeter] = useState([]);
+  const [selectedMeter, setSelectedMeter] = useState([""]);
   const [selectedParameter, setSelectedParameter] = useState("");
   const [chartData, setChartData] = useState([]);
   const [showMeters, setShowMeters] = useState(false);
   const [showParameters, setShowParameters] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [unitForExportFile, setUnitForExportFile] = useState("");
+  const [showPdfBtn, setShowPdfBtn] = useState(false);
+
   const { theme } = useTheme();
 
   const meterDropdownRef = useRef();
@@ -251,15 +261,8 @@ function CustomTrend() {
 
       const fetchData = async (ltSelection) => {
         setLoading(true);
-        console.log("Fetching data with:", {
-          startDate,
-          endDate,
-          meterIds,
-          suffixes,
-          area,
-          LT_selections: ltSelection,
-        });
-        const response = await fetch(`${config.SURAJ_COTTON_BASE_URL}/trends`, {
+
+        const response = await fetch(`${config.BASE_URL}${config.TRENDS}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -279,6 +282,7 @@ function CustomTrend() {
           );
         }
         setLoading(false);
+        setShowPdfBtn(true);
         return response.json();
       };
 
@@ -286,7 +290,6 @@ function CustomTrend() {
         try {
           let data = [];
           if (lt === "ALL" && area === "Unit 5") {
-            console.log("Fetching data for Unit 5 ALL (LT_1 and LT_2)");
             const [lt1Data, lt2Data] = await Promise.all([
               fetchData("LT_1"),
               fetchData("LT_2"),
@@ -295,17 +298,23 @@ function CustomTrend() {
           } else {
             data = await fetchData(lt);
           }
-          console.log("Raw API response:", data);
           const formatted = data.map((item) => {
-            const point = { timestamp: new Date(item.timestamp) };
+            // const point = { timestamp: new Date(item.timestamp) };
+            const point = {
+              Date: new Date(item.timestamp),
+              Time: new Date(item.timestamp).toLocaleTimeString(),
+            };
             selectedMeter.forEach((m) => {
               const key = `${meterMapping[m]}_${suffixes}`;
+
               point[m] =
-                item[key] !== undefined ? parseFloat(item[key]) || null : null;
+                item[key] !== undefined
+                  ? parseFloat(item[key]).toFixed(2) || null
+                  : null;
             });
+
             return point;
           });
-          console.log("Formatted Chart Data:", formatted);
           if (
             formatted.length === 0 ||
             !formatted.some((d) => Object.values(d).some((v) => v !== null))
@@ -328,7 +337,6 @@ function CustomTrend() {
   }, [startDate, endDate, area, lt, selectedMeter, selectedParameter]);
 
   useEffect(() => {
-    console.log("Chart rendering with chartData:", chartData);
     if (chartData.length === 0) {
       console.warn("No chart data to render");
       return;
@@ -398,11 +406,10 @@ function CustomTrend() {
     } else if (param.includes("harmonics v3")) {
       valueAxis.title.text = "Harmonics V3 THD (%)";
     }
-
+    setUnitForExportFile(valueAxis.title.text);
     valueAxis.title.fill = am4core.color(textColor);
     valueAxis.renderer.grid.template.stroke = am4core.color(gridColor);
     valueAxis.renderer.labels.template.fill = am4core.color(textColor);
-
     const colorMap = {
       Transport: am4core.color("#FF9933"),
       "Unit 05 Aux": am4core.color("#A569BD"),
@@ -498,7 +505,7 @@ function CustomTrend() {
     if (selectedMeter.length > 0) {
       selectedMeter.forEach((meter) => {
         const series = chart.series.push(new am4charts.LineSeries());
-        series.dataFields.dateX = "timestamp";
+        series.dataFields.dateX = "Date";
         series.dataFields.valueY = meter;
         series.name = `${meter}`;
         series.stroke = colorMap[meter] || am4core.color("#00eaff");
@@ -534,7 +541,34 @@ function CustomTrend() {
     chart.legend = new am4charts.Legend();
     chart.legend.position = "bottom";
     chart.legend.labels.template.fill = am4core.color(textColor);
+
     chart.exporting.menu = new am4core.ExportMenu();
+    chart.exporting.menu.items = [
+      {
+        menu: [
+          {
+            label: "PNG",
+            type: "png",
+          },
+          {
+            label: "JPG",
+            type: "jpg",
+          },
+          {
+            label: "SVG",
+            type: "svg",
+          },
+        ],
+        icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNy4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjUgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZD0iTTY0IDQ2NGMtOC44IDAtMTYtNy4yLTE2LTE2TDQ4IDY0YzAtOC44IDcuMi0xNiAxNi0xNmwxNjAgMCAwIDgwYzAgMTcuNyAxNC4zIDMyIDMyIDMybDgwIDAgMCAyODhjMCA4LjgtNy4yIDE2LTE2IDE2TDY0IDQ2NHpNNjQgMEMyOC43IDAgMCAyOC43IDAgNjRMMCA0NDhjMCAzNS4zIDI4LjcgNjQgNjQgNjRsMjU2IDBjMzUuMyAwIDY0LTI4LjcgNjQtNjRsMC0yOTMuNWMwLTE3LTYuNy0zMy4zLTE4LjctNDUuM0wyNzQuNyAxOC43QzI2Mi43IDYuNyAyNDYuNSAwIDIyOS41IDBMNjQgMHptOTYgMjU2YTMyIDMyIDAgMSAwIC02NCAwIDMyIDMyIDAgMSAwIDY0IDB6bTY5LjIgNDYuOWMtMy00LjMtNy45LTYuOS0xMy4yLTYuOXMtMTAuMiAyLjYtMTMuMiA2LjlsLTQxLjMgNTkuNy0xMS45LTE5LjFjLTIuOS00LjctOC4xLTcuNS0xMy42LTcuNXMtMTAuNiAyLjgtMTMuNiA3LjVsLTQwIDY0Yy0zLjEgNC45LTMuMiAxMS4xLS40IDE2LjJzOC4yIDguMiAxNCA4LjJsNDggMCAzMiAwIDQwIDAgNzIgMGM2IDAgMTEuNC0zLjMgMTQuMi04LjZzMi40LTExLjYtMS0xNi41bC03Mi0xMDR6Ii8+PC9zdmc+",
+      },
+    ];
+
+    // Position and other settings
+    chart.exporting.filePrefix = "Customized_Trends";
+    chart.exporting.menu.align = "left";
+    chart.exporting.menu.verticalAlign = "top";
+    chart.exporting.menu.marginRight = 10;
+
     chart.exporting.filePrefix = "Customized_Trends";
     chart.exporting.menu.align = "left";
     chart.exporting.menu.verticalAlign = "top";
@@ -542,14 +576,261 @@ function CustomTrend() {
     chart.exporting.formatOptions.getKey("html").disabled = true;
     chart.exporting.formatOptions.getKey("csv").disabled = true;
     chart.exporting.formatOptions.getKey("pdf").disabled = true;
+    chart.exporting.formatOptions.getKey("xlsx").disabled = true;
+    chart.exporting.formatOptions.getKey("print").disabled = true;
+    chart.exporting.formatOptions.getKey("pdfdata").disabled = true;
+
+    // chart.exporting.menu.items[0].icon =
+    //   "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIxNnB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJJY29ucyB3aXRoIG51bWJlcnMiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iR3JvdXAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC03MjAuMDAwMDAwLCAtNDMyLjAwMDAwMCkiPjxwYXRoIGQ9Ik03MjEsNDQ2IEw3MzMsNDQ2IEw3MzMsNDQzIEw3MzUsNDQzIEw3MzUsNDQ2IEw3MzUsNDQ4IEw3MjEsNDQ4IFogTTcyMSw0NDMgTDcyMyw0NDMgTDcyMyw0NDYgTDcyMSw0NDYgWiBNNzI2LDQzMyBMNzMwLDQzMyBMNzMwLDQ0MCBMNzMyLDQ0MCBMNzI4LDQ0NSBMNzI0LDQ0MCBMNzI2LDQ0MCBaIE03MjYsNDMzIiBpZD0iUmVjdGFuZ2xlIDIxNyIvPjwvZz48L2c+PC9zdmc+";
     chart.exporting.menu.items[0].icon =
-      "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIxNnB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJJY29ucyB3aXRoIG51bWJlcnMiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iR3JvdXAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC03MjAuMDAwMDAwLCAtNDMyLjAwMDAwMCkiPjxwYXRoIGQ9Ik03MjEsNDQ2IEw3MzMsNDQ2IEw3MzMsNDQzIEw3MzUsNDQzIEw3MzUsNDQ2IEw3MzUsNDQ4IEw3MjEsNDQ4IFogTTcyMSw0NDMgTDcyMyw0NDMgTDcyMyw0NDYgTDcyMSw0NDYgWiBNNzI2LDQzMyBMNzMwLDQzMyBMNzMwLDQ0MCBMNzMyLDQ0MCBMNzI4LDQ0NSBMNzI0LDQ0MCBMNzI2LDQ0MCBaIE03MjYsNDMzIiBpZD0iUmVjdGFuZ2xlIDIxNyIvPjwvZz48L2c+PC9zdmc+";
+      "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNy4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjUgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZD0iTTY0IDQ2NGMtOC44IDAtMTYtNy4yLTE2LTE2TDQ4IDY0YzAtOC44IDcuMi0xNiAxNi0xNmwxNjAgMCAwIDgwYzAgMTcuNyAxNC4zIDMyIDMyIDMybDgwIDAgMCAyODhjMCA4LjgtNy4yIDE2LTE2IDE2TDY0IDQ2NHpNNjQgMEMyOC43IDAgMCAyOC43IDAgNjRMMCA0NDhjMCAzNS4zIDI4LjcgNjQgNjQgNjRsMjU2IDBjMzUuMyAwIDY0LTI4LjcgNjQtNjRsMC0yOTMuNWMwLTE3LTYuNy0zMy4zLTE4LjctNDUuM0wyNzQuNyAxOC43QzI2Mi43IDYuNyAyNDYuNSAwIDIyOS41IDBMNjQgMHptOTYgMjU2YTMyIDMyIDAgMSAwIC02NCAwIDMyIDMyIDAgMSAwIDY0IDB6bTY5LjIgNDYuOWMtMy00LjMtNy45LTYuOS0xMy4yLTYuOXMtMTAuMiAyLjYtMTMuMiA2LjlsLTQxLjMgNTkuNy0xMS45LTE5LjFjLTIuOS00LjctOC4xLTcuNS0xMy42LTcuNXMtMTAuNiAyLjgtMTMuNiA3LjVsLTQwIDY0Yy0zLjEgNC45LTMuMiAxMS4xLS40IDE2LjJzOC4yIDguMiAxNCA4LjJsNDggMCAzMiAwIDQwIDAgNzIgMGM2IDAgMTEuNC0zLjMgMTQuMi04LjZzMi40LTExLjYtMS0xNi41bC03Mi0xMDR6Ii8+PC9zdmc+";
 
     return () => {
       chart.dispose();
       am4core.unuseAllThemes();
     };
   }, [chartData, isDarkMode, selectedParameter]);
+  //------------------excel export--------------------------
+  // Add this function inside your CustomTrend component
+  const exportToExcel = async () => {
+    if (chartData.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No data to export!",
+        theme: theme,
+      });
+      return;
+    }
+
+    try {
+      // Create a new workbook and worksheet
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Trend Data");
+
+      // Prepare export data
+      const exportData = chartData.map((row) => {
+        const newRow = {
+          Date: new Date(row.Date).toLocaleDateString(),
+          Time: row.Time,
+        };
+
+        selectedMeter.forEach((meter) => {
+          newRow[meter] = row[meter] || 0;
+        });
+
+        return newRow;
+      });
+
+      const columnNames = Object.keys(exportData[0]);
+      const columnCount = columnNames.length;
+
+      // Set row heights
+      worksheet.getRow(1).height = 30;
+      worksheet.getRow(2).height = 30;
+      worksheet.getRow(3).height = 30;
+
+      // Add title rows
+      worksheet.mergeCells(1, 1, 1, columnCount);
+      const title1 = worksheet.getCell(1, 1);
+      title1.value = `Trend Data: ${selectedParameter}`;
+      title1.font = { bold: true, size: 16, color: { argb: "FF1D5999" } };
+      title1.alignment = { horizontal: "center", vertical: "middle" };
+      title1.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "cedef0" },
+      };
+
+      worksheet.mergeCells(2, 1, 2, columnCount);
+      const title2 = worksheet.getCell(2, 1);
+      title2.value = `Period: ${startDate} to ${endDate}`;
+      title2.font = { bold: true, size: 16, color: { argb: "FF1D5999" } };
+      title2.alignment = { horizontal: "center", vertical: "middle" };
+      title2.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "cedef0" },
+      };
+      title2.border = {
+        top: { style: "thin", color: { argb: "3A83C6" } },
+      };
+
+      // Add headers
+      const headerRow = worksheet.getRow(3);
+      headerRow.values = columnNames;
+
+      // Style header row
+      headerRow.eachCell((cell, colNumber) => {
+        cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
+        cell.alignment = { horizontal: "center", vertical: "middle" };
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FF1D5999" },
+        };
+        cell.border = {
+          top: { style: "thin", color: { argb: "cedef0" } },
+          bottom: { style: "thin", color: { argb: "cedef0" } },
+          left: { style: "thin", color: { argb: "cedef0" } },
+          right: { style: "thin", color: { argb: "cedef0" } },
+        };
+      });
+
+      // Add data rows
+      exportData.forEach((row) => {
+        const dataRow = worksheet.addRow(Object.values(row));
+        dataRow.eachCell((cell) => {
+          cell.alignment = { horizontal: "center", vertical: "middle" };
+        });
+      });
+
+      // Set column widths
+      worksheet.columns = columnNames.map(() => ({ width: 20 }));
+
+      // Generate and download the file
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      saveAs(
+        blob,
+        `trend_data_${selectedParameter}_${startDate}_to_${endDate}.xlsx`
+      );
+    } catch (error) {
+      console.error("Error exporting to Excel:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Export Failed",
+        text: "An error occurred while exporting to Excel",
+        theme: theme,
+      });
+    }
+  };
+  //------------------export to  PDF--------------------------
+  if (pdfFonts?.pdfMake?.vfs) {
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  } else {
+    console.warn("pdfMake vfs fonts not found.");
+  }
+  const exportToPDF = async () => {
+    if (chartData.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No data to export!",
+        theme: theme,
+      });
+      return;
+    }
+
+    const exportData = chartData.map((row) => {
+      const newRow = [
+        new Date(row.Date).toLocaleDateString(),
+        row.Time,
+        ...selectedMeter.map((meter) => row[meter] || 0),
+      ];
+      return newRow;
+    });
+
+    const headers = ["Date", "Time", ...selectedMeter];
+    const surajCottonBase64Logo = await loadImageAsBase64(
+      "/suraj-cotton-logo-reports.png"
+    );
+    const jahaannBase64Logo = await loadImageAsBase64("/jahaann-light.png");
+
+    const docDefinition = {
+      pageOrientation: "landscape",
+      content: [
+        {
+          columns: [
+            {
+              image: "surajcottonLogo",
+              width: 100,
+              alignment: "left",
+            },
+            {
+              text: "", // spacer
+              width: "*",
+            },
+            {
+              image: "jahaannLogo",
+              width: 100,
+              alignment: "right",
+            },
+          ],
+          columnGap: 10,
+          margin: [0, 0, 0, 10],
+        },
+        {
+          columns: [
+            {
+              text: `Trend Data: ${unitForExportFile}`,
+              style: "header",
+              alignment: "left",
+            },
+            {
+              text: `Time-Period: ${startDate} to ${endDate}`,
+              style: "subheader",
+              alignment: "right",
+            },
+          ],
+          margin: [0, 0, 0, 20],
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: Array(headers.length).fill("*"),
+            body: [
+              headers.map((h) => ({ text: h, style: "tableHeader" })),
+              ...exportData,
+            ],
+          },
+          layout: {
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#1D5999" : null),
+            hLineColor: () => "#cedef0",
+            vLineColor: () => "#cedef0",
+            paddingLeft: () => 5,
+            paddingRight: () => 5,
+            paddingTop: () => 3,
+            paddingBottom: () => 3,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 16,
+          bold: true,
+          color: "#1D5999",
+        },
+        subheader: {
+          fontSize: 12,
+          bold: true,
+          color: "#1D5999",
+        },
+        tableHeader: {
+          bold: true,
+          color: "white",
+          fillColor: "#1D5999",
+          alignment: "center",
+        },
+      },
+      defaultStyle: {
+        fontSize: 10,
+        alignment: "center",
+      },
+      images: {
+        surajcottonLogo: surajCottonBase64Logo,
+        jahaannLogo: jahaannBase64Logo,
+      },
+    };
+
+    pdfMake
+      .createPdf(docDefinition)
+      .download(
+        `trend_data_${selectedParameter}_${startDate}_to_${endDate}.pdf`
+      );
+  };
 
   return (
     <div className="relative flex-shrink-0 w-full px-2 py-2 sm:px-4 sm:py-4 md:px-6 md:py-6 h-max lg:h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1F5897] rounded-[8px] shadow-md">
@@ -583,6 +864,7 @@ function CustomTrend() {
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
+              min={startDate}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -771,17 +1053,46 @@ function CustomTrend() {
           {loading === true ? (
             <CustomLoader />
           ) : (
-            <div
-              id="chartDiv"
-              className="w-full transition-all duration-300 rounded-md bg-white dark:bg-gray-800 overflow-x-auto"
-              style={{
-                height: "60vh",
-                minHeight: "220px",
-                maxHeight: "98%",
-              }}
-            >
-              <style>
-                {`
+            <div className="relative">
+              <div
+                className="absolute z-20 top-[40px] left-[5.5px] items-center group"
+                style={{
+                  display: !showPdfBtn ? "none" : "flex",
+                }}
+              >
+                {/* Main button */}
+                <button className="bg-[#f3f0f0] hover:bg-[#afafaf] dark:bg-gray-600 text-[#969393] hover:text-black rounded transition-colors duration-200">
+                  <LuFileUp className="w-[28.5px] h-[37px]" />
+                </button>
+
+                {/* Vertical buttons - shown on hover only */}
+                {/* <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible flex flex-col ml-1 space-y-1 transition-all duration-200"> */}
+                <div className="absolute top-[0px] left-[25px] hidden group-hover:flex flex-col ml-1 gap-[1px]  transition-all duration-200">
+                  <button
+                    onClick={exportToPDF}
+                    className="cursor-pointer bg-[#e2e2e2] hover:bg-[#ACACAC] text-black rounded p-3 transition-colors duration-200"
+                  >
+                    PDF
+                  </button>
+                  <button
+                    onClick={exportToExcel}
+                    className="cursor-pointer bg-[#e2e2e2] hover:bg-[#ACACAC] text-black rounded p-3 transition-colors duration-200"
+                  >
+                    XLSX
+                  </button>
+                </div>
+              </div>
+              <div
+                id="chartDiv"
+                className="w-full transition-all duration-300 rounded-md bg-white dark:bg-gray-800 overflow-x-auto"
+                style={{
+                  height: "60vh",
+                  minHeight: "220px",
+                  maxHeight: "98%",
+                }}
+              >
+                <style>
+                  {`
                 #chartDiv::-webkit-scrollbar {
                   width: 0px;
                   height: 0px;
@@ -802,7 +1113,8 @@ function CustomTrend() {
                   #chartDiv { height: 28vh !important; min-height: 100px; }
                 }
               `}
-              </style>
+                </style>
+              </div>
             </div>
           )}
         </div>

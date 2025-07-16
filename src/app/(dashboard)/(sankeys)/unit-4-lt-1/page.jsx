@@ -3,55 +3,38 @@ import TimePeriodSelector from "@/components/dashboardComponents/timePeriodSelec
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
 import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
-const sankeyData = [
-  { from: "TF1 1000kWh", to: "LT1 1800kWh", value: 500 },
-  { from: "LT Gen. 800kWh", to: "LT1 1800kWh", value: 800 },
-  { from: "LT1 1800kWh", to: "Drawing 1(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "Winding 2(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "Simplex 1(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "Ring 5(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "Ring 6(100Kwh)", value: 50 },
-  { from: "LT1 1800kWh", to: "Comber 1(100Kwh)", value: 50 },
-  { from: "LT1 1800kWh", to: "Compressor(100Kwh)", value: 50 },
-  { from: "LT1 1800kWh", to: "Compressor 2(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "Ring AC(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "Lightning Outside(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "Lightning Inside(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "WAPDA Gen.(100Kwh)", value: 50 },
-  { from: "LT1 1800kWh", to: "Unit 5 Aux(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "Transport(100Kwh)", value: 0 },
-  { from: "LT1 1800kWh", to: "Unit 5 Gen.(100Kwh)", value: 0 },
-  { from: "LT1 1800kWh", to: "Spare(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "PF Panel(100Kwh)", value: 100 },
-  { from: "LT1 1800kWh", to: "Draw Frame Finish(100Kwh)", value: 100 },
-];
+import CustomLoader from "@/components/customLoader/CustomLoader";
+import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
+
 const UnitLt41Page = () => {
-  const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("daily");
+  const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const handleTimePeriodForUnit4Lt1 = (period) => {
     setUnit4Lt1TimePeriod(period);
   };
-  const today = new Date();
-  console.log(today);
-
+  // time period selector
+  const { startDate, endDate } = getDateRangeFromString(unit4Lt1TimePeriod);
   const fetchLt1SankyData = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
-        `${config.SURAJ_COTTON_BASE_URL}/unit4-lt1`,
+        `${config.BASE_URL}${config.SANKEY.UNIT4_LT1}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            startDate: "2025-07-01",
-            endDate: "2025-07-01",
+            startDate,
+            endDate,
           }),
         }
       );
       const resResult = await response.json();
       if (response.ok) {
         setData(resResult);
+        setLoading(false);
       }
     } catch (error) {
       console.error(error.message);
@@ -59,7 +42,7 @@ const UnitLt41Page = () => {
   };
   useEffect(() => {
     fetchLt1SankyData();
-  }, []);
+  }, [unit4Lt1TimePeriod]);
 
   return (
     <div className="w-full bg-white dark:bg-gray-800 flex flex-col h-full p-4 rounded-md border-t-3 border-[#025697] ">
@@ -69,7 +52,11 @@ const UnitLt41Page = () => {
       </div>
       <div className=" w-full  flex items-center justify-center">
         <div className="w-full md:px-20 flex items-center justify-center mt-6">
-          <SankeyChart data={data} id="unit4Lt1Chart" />
+          {loading ? (
+            <CustomLoader />
+          ) : (
+            <SankeyChart data={data} id="unit4Lt1Chart" />
+          )}
         </div>
       </div>
     </div>

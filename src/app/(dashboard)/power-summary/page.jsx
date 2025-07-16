@@ -11,7 +11,7 @@ const PowerSummaryPage = () => {
   };
 
   return (
-    <>
+    <div className="h-full lg:h-[81vh] overflow-y-auto lg:overflow-hidden ">
       {/* time period selector */}
       <div className="w-full z-100 flex items-center justify-center md:justify-start">
         <TimePeriodSelector getTimePeriod={handleTimePeriodForPlantSummary} />
@@ -175,7 +175,7 @@ const PowerSummaryPage = () => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body
-        className={`  ${raleway.variable} ${inter.variable} ${firaMono.variable} antialiased bg-[#f7f7f7] dark:bg-gray-900`}
+        className={`  ${raleway.variable} ${inter.variable} ${firaMono.variable} antialiased bg-[#f7f7f7]  dark:bg-gray-900`}
       >
         <ReduxProvider>
           <ThemeProvider

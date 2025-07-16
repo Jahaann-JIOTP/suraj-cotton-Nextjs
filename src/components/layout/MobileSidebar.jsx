@@ -45,7 +45,7 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
             return (
               <div key={privilegeKey} className="">
                 <button
-                  className="w-full flex justify-between items-center font-bold py-2 px-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                  className="w-full flex cursor-pointer justify-between items-center font-bold py-2 px-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                   onClick={() => toggleTab(config.tab)}
                 >
                   <div
@@ -73,7 +73,7 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
                           <div>
                             <button
                               onClick={() => toggleDropdown(idx)}
-                              className="w-full flex justify-between items-center py-2 px-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                              className="w-full flex cursor-pointer justify-between items-center py-2 px-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                             >
                               <div className="flex items-center gap-2">
                                 <item.icon className="w-5" />

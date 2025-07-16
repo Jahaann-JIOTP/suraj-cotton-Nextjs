@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import config from "@/constant/apiRouteList";
 
 const page = () => {
-  // const [activeTab, setActiveTab] = useState("voltage");
   const [activeTab, setActiveTab] = useState("voltage");
   const [data, setData] = useState([]);
 
@@ -18,7 +17,7 @@ const page = () => {
   const getSingleMeterData = async () => {
     try {
       const response = await fetch(
-        `${config.SURAJ_COTTON_BASE_URL}/meter-data`,
+        `${config.BASE_URL}${config.DIAGRAM.METER_DATA}`,
         {
           method: "POST",
           headers: {
@@ -61,7 +60,6 @@ const page = () => {
       suffixTags[key] = roundedValue;
     }
   }
-  console.log(suffixTags);
   useEffect(() => {
     getSingleMeterData();
     const interval = setInterval(() => {
@@ -106,171 +104,173 @@ const page = () => {
         {/* values */}
         {activeTab === "voltage" ? (
           <>
-            <div className="absolute meterDataText top-[261px] left-[49px]">
-              {suffixTags.Voltage_CA || "00.00"} V ca
+            <div className="absolute meterDataText top-[258px] left-[37px] w-[110px] h-[31px] flex items-center justify-center">
+              <span>{suffixTags.Voltage_CA || "00.00"}Vca</span>
             </div>
-            <div className="absolute meterDataText top-[204px] left-[196px]">
-              {suffixTags.Voltage_BC || "00.00"} V bc
+            <div className="absolute meterDataText top-[200px] left-[184.5px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Voltage_BC || "00.00"} V bc</span>
             </div>
-            <div className="absolute meterDataText top-[306px] left-[197px]">
-              {suffixTags.Voltage_AB || "00.00"} V ab
+            <div className="absolute meterDataText top-[302px] left-[184.5px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Voltage_AB || "00.00"} V ab</span>
             </div>
-            <div className="absolute meterDataText top-[134.5px] left-[353px]">
-              {suffixTags.Current_C || "00.00"} A c
+            <div className="absolute meterDataText top-[131px] left-[338px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Current_C || "00.00"} A c</span>
             </div>
-            <div className="absolute meterDataText top-[255px] left-[353px]">
-              {suffixTags.Current_B || "00.00"} A b
+            <div className="absolute meterDataText top-[251px] left-[338px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Current_B || "00.00"} A b</span>
             </div>
-            <div className="absolute meterDataText top-[367px] left-[353px]">
-              {suffixTags.Current_A || "00.00"} A a
+            <div className="absolute meterDataText top-[363px] left-[338px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Current_A || "00.00"} A a</span>
             </div>
-            <div className="absolute meterDataText top-[571px] left-[195px]">
-              {suffixTags.Voltage_Avg || "00.00"} V
+            <div className="absolute meterDataText top-[566px] left-[183.5px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Voltage_Avg || "00.00"} V</span>
             </div>
-            <div className="absolute meterDataText top-[509px] left-[355px]">
-              {suffixTags.Current_Avg || "00.00"} A
+            <div className="absolute meterDataText top-[505px] left-[338px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Current_Avg || "00.00"} A</span>
             </div>
-            <div className="absolute meterDataText top-[135px] left-[562px]">
-              N/A
+            <div className="absolute meterDataText top-[132px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[255px] left-[562px]">
-              N/A
+            <div className="absolute meterDataText top-[252px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[368px] left-[562px]">
-              N/A
+            <div className="absolute meterDataText top-[364px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[440px] left-[540px]">
-              {suffixTags.ActivePower_Total || "00.00"} kW
+            <div className="absolute meterDataText top-[435px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.ActivePower_Total || "00.00"} kW</span>
             </div>
-            <div className="absolute meterDataText top-[510px] left-[532px]">
-              {suffixTags.ReactivePower_Total || "00.00"} kVAR
+            <div className="absolute meterDataText top-[505px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.ReactivePower_Total || "00.00"} kVAR</span>
             </div>
-            <div className="absolute meterDataText top-[570px] left-[540px]">
-              {suffixTags.ApparentPower_Total || "00.00"} kVA
+            <div className="absolute meterDataText top-[566px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.ApparentPower_Total || "00.00"} kVA</span>
             </div>
-            <div className="absolute meterDataText top-[490px] left-[713px]">
-              {suffixTags.Voltage_AN || "00.00"} V an
+            {/*  */}
+            <div className="absolute meterDataText top-[485.5px] left-[699px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Voltage_AN || "00.00"} Van</span>
             </div>
-            <div className="absolute meterDataText top-[490px] left-[855px]">
-              {suffixTags.Voltage_BN || "00.00"} V bn
+            <div className="absolute meterDataText top-[485.5px] left-[840px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Voltage_BN || "00.00"} Vbn</span>
             </div>
-            <div className="absolute meterDataText top-[490px] left-[1003px]">
-              {suffixTags.Voltage_CN || "00.00"} V cn
+            <div className="absolute meterDataText top-[485.5px] left-[989px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Voltage_CN || "00.00"} Vcn</span>
             </div>
-            <div className="absolute meterDataText top-[215px] left-[1195px]">
-              N/A
+            {/*  */}
+            <div className="absolute meterDataText top-[212px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[280px] left-[1190px]">
-              {suffixTags.PowerFactor_Avg || "00.00"}
+            <div className="absolute meterDataText top-[275px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.PowerFactor_Avg || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[340px] left-[1195px]">
-              {suffixTags.PowerFactor_A || "00.00"}
+            <div className="absolute meterDataText top-[336px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.PowerFactor_A || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[402px] left-[1195px]">
-              {suffixTags.PowerFactor_B || "00.00"}
+            <div className="absolute meterDataText top-[396px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.PowerFactor_B || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[464px] left-[1195px]">
-              {suffixTags.PowerFactor_C || "00.00"}
+            <div className="absolute meterDataText top-[460px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.PowerFactor_C || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[526px] left-[1180px]">
-              {suffixTags.Voltage_LN_Avg || "00.00"} V
+            <div className="absolute meterDataText top-[521px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>{suffixTags.Voltage_LN_Avg || "00.00"}</span>
             </div>
           </>
         ) : activeTab === "power" ? (
           <>
-            <div className="absolute meterDataText top-[305px] left-[170px]">
-              N/A
+            <div className="absolute meterDataText top-[302px] left-[138px] w-[96px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[388px] left-[170px]">
-              N/A
+            <div className="absolute meterDataText top-[384px] left-[138px] w-[96px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[468px] left-[170px]">
-              N/A
+            <div className="absolute meterDataText top-[464px] left-[138px] w-[96px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[305px] left-[524px]">
-              {suffixTags.Harmonics_V1_THD || "00.00"}
+            <div className="absolute meterDataText top-[303px] left-[492px] w-[96px] h-[29px] flex items-center justify-center">
+              <span>{suffixTags.Harmonics_V1_THD || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[388px] left-[524px]">
-              {suffixTags.Harmonics_V2_THD || "00.00"}
+            <div className="absolute meterDataText top-[385px] left-[492px] w-[96px] h-[29px] flex items-center justify-center">
+              <span>{suffixTags.Harmonics_V2_THD || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[468px] left-[524px]">
-              {suffixTags.Harmonics_V3_THD || "00.00"}
+            <div className="absolute meterDataText top-[464px] left-[492px] w-[96px] h-[29px] flex items-center justify-center">
+              <span>{suffixTags.Harmonics_V3_THD || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[306px] left-[855px]">
-              N/A
+            <div className="absolute meterDataText top-[302px] left-[815px] w-[110px] h-[32px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[389px] left-[855px]">
-              N/A
+            <div className="absolute meterDataText top-[386px] left-[815px] w-[110px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[471px] left-[855px]">
-              N/A
+            <div className="absolute meterDataText top-[467px] left-[815px] w-[110px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[305px] left-[1015px]">
-              N/A
+            <div className="absolute meterDataText top-[303px] left-[978px] w-[98px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[390px] left-[1015px]">
-              N/A
+            <div className="absolute meterDataText top-[386px] left-[978px] w-[98px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[470px] left-[1015px]">
-              N/A
+            <div className="absolute meterDataText top-[467px] left-[978px] w-[98px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[305px] left-[1175px]">
-              N/A
+            <div className="absolute meterDataText top-[304px] left-[1134px] w-[110px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[390px] left-[1175px]">
-              N/A
+            <div className="absolute meterDataText top-[386px] left-[1134px] w-[110px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[470px] left-[1175px]">
-              N/A
+            <div className="absolute meterDataText top-[467px] left-[1134px] w-[110px] h-[30px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
 
-            <div className="absolute meterDataText top-[558px] left-[855px]">
-              {suffixTags.ActivePower_Total || "00.00"}
+            <div className="absolute meterDataText top-[553px] left-[815px] w-[110px] h-[30px] flex items-center justify-center">
+              <span>{suffixTags.ActivePower_Total || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[558px] left-[1015px]">
-              {suffixTags.ReactivePower_Total || "00.00"}
+            <div className="absolute meterDataText top-[553px] left-[978px] w-[99px] h-[30px] flex items-center justify-center">
+              <span>{suffixTags.ReactivePower_Total || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[557px] left-[1175px]">
-              {suffixTags.ApparentPower_Total || "00.00"}
+            <div className="absolute meterDataText top-[553px] left-[1134px] w-[110px] h-[30px] flex items-center justify-center">
+              <span>{suffixTags.ApparentPower_Total || "00.00"}</span>
             </div>
           </>
         ) : activeTab === "energy" ? (
           <>
-            <div className="absolute meterDataText top-[232px] left-[390px]">
-              N/A
+            <div className="absolute meterDataText top-[224px] left-[325px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[320px] left-[390px]">
-              N/A
+            <div className="absolute meterDataText top-[312px] left-[325px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[408px] left-[390px]">
-              N/A
+            <div className="absolute meterDataText top-[400px] left-[325px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[230px] left-[630px]">
-              N/A
+            <div className="absolute meterDataText top-[224px] left-[566px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[320px] left-[630px]">
-              N/A
+            <div className="absolute meterDataText top-[312px] left-[566px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[410px] left-[630px]">
-              N/A
+            <div className="absolute meterDataText top-[400px] left-[566px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[230px] left-[870px]">
-              N/A
+            <div className="absolute meterDataText top-[224px] left-[801px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[320px] left-[870px]">
-              N/A
+            <div className="absolute meterDataText top-[312px] left-[801px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[410px] left-[870px]">
-              N/A
+            <div className="absolute meterDataText top-[400px] left-[801px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
-            <div className="absolute meterDataText top-[493px] left-[385px]">
-              {suffixTags.Del_ActiveEnergy || "00.00"}
+            <div className="absolute meterDataText top-[485px] left-[325px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>{suffixTags.Del_ActiveEnergy || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[493px] left-[625px]">
-              {suffixTags.Rec_Active_Energy || "00.00"}
+            <div className="absolute meterDataText top-[485px] left-[566px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>{suffixTags.Rec_Active_Energy || "00.00"}</span>
             </div>
-            <div className="absolute meterDataText top-[493px] left-[865px]">
-              N/A
+            <div className="absolute meterDataText top-[485px] left-[801px] w-[154px] h-[40px] flex items-center justify-center">
+              <span>N/A</span>
             </div>
           </>
         ) : (
@@ -282,7 +282,7 @@ const page = () => {
         <button
           onClick={() =>
             router.push(
-              `/logs?type=${activeTab}&lt_scheme=${ltScheme}&val=${activeTab}&meter_id=${id}`
+              `/logs?type=${activeTab}&lt_scheme=${ltScheme}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
             )
           }
           className={`bg-transparent w-[57px] h-[53px] absolute z-30 cursor-pointer`}

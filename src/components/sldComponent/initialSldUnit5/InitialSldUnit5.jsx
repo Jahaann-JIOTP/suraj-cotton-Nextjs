@@ -5,67 +5,67 @@ import { ImArrowDown, ImArrowLeft2 } from "react-icons/im";
 import { useRouter } from "next/navigation";
 const unit4MeterData = [
   {
-    link: "U19_PLC",
-    title: "Diesel IC",
+    link: "U6_GW02",
+    title: "Solar",
     top: 310,
     left: 209,
-    ltScheme: "LT_1",
+    ltScheme: "LT_3",
   },
   {
-    link: "U21_PLC",
-    title: "Wapda IC",
+    link: "U20_GW03",
+    title: "TF #3",
     top: 310,
     left: 386,
-    ltScheme: "LT_1",
+    ltScheme: "LT_3",
   },
   {
-    link: "U7_GW01",
-    title: "Power House",
+    link: "U19_GW03",
+    title: "TF #4",
     top: 310,
     left: 657,
-    ltScheme: "LT_2",
+    ltScheme: "LT_4",
   },
   {
-    link: "U13_GW01",
-    title: "Wapda IC",
+    link: "U17_GW03",
+    title: "Solar 2",
     top: 310,
     left: 834,
-    ltScheme: "LT_2",
+    ltScheme: "LT_4",
   },
 ];
 const InitialSldUnit5 = ({ roundedData }) => {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
   const unit5InitialSldMeterTAgs = [
-    // LT1 Power House
+    // Solar
     {
-      activePowerTotalTag: roundedData?.U19_PLC_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U19_PLC_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U19_PLC_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U6_GW02_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U6_GW02_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U6_GW02_Voltage_Avg,
       top: 320,
       left: 217.3,
     },
-    // wapda IC lt1
+    // TF #3
     {
-      activePowerTotalTag: roundedData?.U21_PLC_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U21_PLC_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U21_PLC_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U20_GW03_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U20_GW03_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U20_GW03_Voltage_Avg,
       top: 320,
       left: 394.4,
     },
-    // power house lt2
+    // TF #4
     {
-      activePowerTotalTag: roundedData?.U7_PLC_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U7_PLC_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U7_PLC_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U19_GW03_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U19_GW03_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U19_GW03_Voltage_Avg,
       top: 320,
       left: 665.5,
     },
-    // wapda IC lt2
+    // Solar 2
     {
-      activePowerTotalTag: roundedData?.U13_PLC_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U13_PLC_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U13_PLC_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U17_GW03_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U17_GW03_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U17_GW03_Voltage_Avg,
       top: 320,
       left: 842.2,
     },
@@ -101,7 +101,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_4&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_5&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -115,7 +115,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
               borderRadius: "0.4.2rem", // rounded-md
               cursor: "pointer",
             }}
-            className={`border-1 border-red-500`}
+            className={``}
           ></button>
         ))}
         {/* Diagram Image */}
@@ -125,38 +125,37 @@ const InitialSldUnit5 = ({ roundedData }) => {
           alt="unit 4 sld"
         />
 
+        {/* lines */}
+        <div className="absolute w-[2px] h-[125px] bg-black left-[790px] top-[420px]"></div>
+        <div className="absolute w-[2px] h-[125px] bg-[#181818] left-[340.2px] top-[420px]"></div>
         {/* Buttons */}
         <button
           onClick={() => router.replace("/sld?unit=unit5&area=lt1")}
-          className="absolute top-[497px] left-[319px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
-        >
-          <ImArrowDown size={30} className="text-white" />
-        </button>
+          className="absolute top-[545px] left-[193px] w-[301px] h-[45px] cursor-pointer"
+        ></button>
         <button
           onClick={() => router.push("/sld?unit=unit5&area=lt2")}
-          className="absolute top-[497px] left-[769px] bg-gradient-to-tr from-[#426DD6]  to-[#74CCFE] p-2 rounded cursor-pointer"
-        >
-          <ImArrowDown size={30} className="text-white" />
-        </button>
+          className="absolute top-[545px] left-[642px] w-[300px] h-[45px] cursor-pointer"
+        ></button>
 
         {/* Meter Readings */}
         {unit5InitialSldMeterTAgs.map((meter, index) => (
           <div
             key={index}
-            className="absolute flex flex-col items-center border-1 border-red-500 z-40 w-[58px] h-[59px]"
+            className="absolute flex flex-col items-center z-40 w-[58px] h-[59px]"
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
             }}
           >
             <span className="meterReadingUnit4Lt2 mt-[-2px]">
-              {roundedData?.U19_PLC_ActivePower_Total || "00.00"}
+              {meter.activePowerTotalTag || "00.00"}
             </span>
             <span className="meterReadingUnit4Lt2 mt-[-1.5px]">
-              {roundedData?.U19_PLC_Current_Avg || "00.00"}
+              {meter.activeCurrentAvgTag || "00.00"}
             </span>
             <span className="meterReadingUnit4Lt2 mt-[-1px]">
-              {roundedData?.U19_PLC_Voltage_Avg || "00.00"}
+              {meter.activeVoltageAvgTag || "00.00"}
             </span>
           </div>
         ))}

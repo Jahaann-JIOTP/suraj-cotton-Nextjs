@@ -157,7 +157,7 @@ const MultipleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
       <div className="w-full h-[2px] mt-5 bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
       <div className="flex flex-col gap-2 md:flex-row px-3 md:px-6 items-start justify-between pt-5">
         <div>
-          <button className="bg-[#1A68B2] text-white py-1 px-5 rounded text-[14.22px] font-500 font-inter">
+          <button className="bg-[#1A68B2] cursor-pointer text-white py-1 px-5 rounded text-[14.22px] font-500 font-inter">
             Export
           </button>
         </div>
@@ -177,16 +177,11 @@ const MultipleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
         <h2 className="text-[18.62px] pb-4 font-inter font-500">
           {unit === "unit4" ? "Unit 4" : unit === "unit5" ? "Unit 5" : ""}
         </h2>
-        <div className="w-full h-[10px] flex items-center justify-between">
-          <div className="bg-red-500 w-[200px] h-[1px]"></div>
-          <div className="bg-blue-500 w-[39.5%] h-[1px]"></div>
-          <div className="bg-orange-500 w-[45%] h-[1px]"></div>
-          <div className="bg-purple-500 w-[20%] h-[1px]"></div>
-        </div>
 
-        <div className="w-full overflow-x-auto ">
-          <div className="flex min-w-[900px] md:min-w-full gap-4 border-1 border-gray-300 dark:border-gray-500">
-            <div className="w-[50%]">
+        <div className="w-full overflow-x-auto">
+          <div className="flex gap-4 border-1 border-gray-300 dark:border-gray-500 h-[25rem]">
+            <div className="w-[50%] relative">
+              <div className="w-[66%] h-[2px] absolute right-0 bg-black"></div>
               <table className="table w-full border-collapse border border-gray-300 dark:border-gray-500">
                 <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f] w-full  z-10">
                   <tr className="border border-gray-300 dark:border-gray-500">

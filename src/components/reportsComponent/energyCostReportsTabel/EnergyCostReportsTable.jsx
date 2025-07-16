@@ -146,7 +146,7 @@ const EnergyCostReportsTable = ({
           </span>
         </div>
       </div>
-      <div className="overflow-x-scroll mt-5 md:w-full md:overflow-x-hidden h-full md:max-h-[47vh] overflow-y-auto">
+      <div className="overflow-x-scroll mt-5 md:w-full md:overflow-x-hidden h-full md:max-h-[47vh] overflow-y-auto custom-scrollbar-report">
         <div className="w-full">
           <table className="table w-full border-collapse border ">
             <thead className="sticky top-0 bg-[#E5F3FD] dark:bg-gray-600 z-10">

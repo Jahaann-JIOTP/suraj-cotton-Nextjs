@@ -27,6 +27,7 @@ const PowerComparison = () => {
         wheelX: "panX",
         wheelY: "zoomX",
         paddingLeft: 0,
+
         paddingBottom: isPowerComparisonFullView ? 0 : 300,
         layout: root.verticalLayout,
       })
@@ -267,8 +268,8 @@ const PowerComparison = () => {
     <div
       className={`${
         isPowerComparisonFullView
-          ? "fixed inset-0 z-50  p-5 overflow-auto w-[96%] m-auto h-[96vh]"
-          : "relative  px-1 py-2 md:p-3 h-[14.8rem]"
+          ? "fixed inset-0 z-50  p-5 overflow-auto w-[100%] m-auto h-[100vh]"
+          : "relative  px-1 py-2 md:p-3 h-[17rem] md:h-[15rem] lg:h-[14.3rem]"
       } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
     >
       {/* Header */}
@@ -288,40 +289,48 @@ const PowerComparison = () => {
             )}
           </button>
         </div>
-        <div className="flex items-center justify-end w-full gap-2">
-          <span className="text-[12px] font-raleway font-semibold text-black dark:text-white">
-            Start Date
-          </span>
-          <input
-            type="date"
-            className="text-[12px] font-raleway px-1 py-0.5 border rounded"
-          />
-          <span className="text-[12px] font-raleway font-semibold text-black dark:text-white">
-            End Date
-          </span>
-          <input
-            type="date"
-            className="text-[12px] font-raleway px-1 py-0.5 border rounded"
-          />
-          <button className="bg-[#55B87A] text-white rounded w-[4rem] text-[12px] py-1 ">
-            Daily
-          </button>
-          <button className="bg-[#6FA1F3] text-white rounded w-[4rem] text-[12px] py-1 ">
-            Weekly
-          </button>
-          <button className="bg-[#F57F62] text-white rounded w-[4rem] text-[12px] py-1 ">
-            Monthly
-          </button>
+        <div className="flex items-center justify-end w-full gap-3  ">
+          <div className="flex items-center justify-center gap-2">
+            <span className="hidden xl:flex text-[12px] font-raleway font-semibold text-black dark:text-white">
+              Start Date
+            </span>
+            <input
+              type="date"
+              className="text-[12px] font-raleway px-1 py-0.5 border rounded"
+            />
+            <span className="hidden xl:flex text-[12px] font-raleway font-semibold text-black dark:text-white">
+              End Date
+            </span>
+            <input
+              type="date"
+              className="text-[12px] font-raleway px-1 py-0.5 border rounded"
+            />
+          </div>
+          <div className="flex items-center justify-center gap-2">
+            <button className="bg-[#55B87A] cursor-pointer text-white rounded w-[4rem] text-[12px] py-1 ">
+              Daily
+            </button>
+            <button className="bg-[#6FA1F3] cursor-pointer text-white rounded w-[4rem] text-[12px] py-1 ">
+              Weekly
+            </button>
+            <button className="bg-[#F57F62] cursor-pointer text-white rounded w-[4rem] text-[12px] py-1 ">
+              Monthly
+            </button>
+          </div>
         </div>
       </div>
-      <div className="w-full">
+      <div
+        className={`w-full ${
+          isPowerComparisonFullView ? "h-[80vh]" : "h-[9rem]"
+        }  overflow-hidden`}
+      >
         <div
           ref={chartRef}
           className={`${
             isPowerComparisonFullView === true
               ? "w-full h-[80vh]"
-              : "w-full h-[490px]"
-          }`}
+              : "w-full h-[440px]"
+          } `}
         />
       </div>
     </div>

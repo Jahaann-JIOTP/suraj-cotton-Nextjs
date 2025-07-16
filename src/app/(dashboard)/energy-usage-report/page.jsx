@@ -6,18 +6,23 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { FaChevronLeft } from "react-icons/fa";
+import config from "@/constant/apiRouteList";
+import { CircularProgress } from "@mui/material";
+import { ImArrowLeft2 } from "react-icons/im";
 
 const FilterPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [unit, setUnit] = useState("");
-  const [startDate, setStartDate] = useState("2025-06-11");
-  const [endDate, setEndDate] = useState("2025-06-18");
-  const [unit4Spindle, setUnit4Spindle] = useState("12");
-  const [unit5Spindle, setUnit5Spindle] = useState("12");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [unit4Spindle, setUnit4Spindle] = useState("");
+  const [unit5Spindle, setUnit5Spindle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [showResults, setShowResults] = useState(false); // ← controls form vs results
+  const [isHovered, setIsHovered] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [resData, setResData] = useState([]);
   const spindles = Number(unit4Spindle) + Number(unit5Spindle);
   const toggleDropdown = () => setIsOpen(!isOpen);
   useEffect(() => {
@@ -71,7 +76,8 @@ const FilterPage = () => {
       setErrorMessage(""); // Clear if no condition matches
     }
   }, [unit, unit4Spindle, unit5Spindle]);
-  const handleSubmit = (e) => {
+  // getting energy usage reports
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!unit || startDate.length === 0 || endDate.length === 0) {
       toast.warning("Please fill in all required fields.");
@@ -101,8 +107,31 @@ const FilterPage = () => {
       }
     }
     setLoading(true);
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.REPORTS.ENERGY_USAGE_REPORTS}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            start_date: startDate,
+            end_date: endDate,
+            suffixes: ["Del_ActiveEnergy"],
+            area: unit,
+          }),
+        }
+      );
+      if (response.ok) {
+        const resResult = await response.json();
+        setResData(resResult);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
 
-    setShowResults(true); // Switch to result view
+    setShowResults(true);
     setLoading(false);
   };
 
@@ -116,7 +145,7 @@ const FilterPage = () => {
       )}
       <div className="flex pb-3 items-center justify-between">
         <h1 className="text-[18.22px] text-raleway font-600">
-          Energy Cost Report
+          Energy Usage Report
         </h1>
         {showResults && (
           <button
@@ -128,9 +157,25 @@ const FilterPage = () => {
               setUnit4Spindle("");
               setUnit5Spindle("");
             }}
-            className="bg-gray-800 dark:bg-gray-500 cursor-pointer text-white flex items-center justify-center text-center  w-[30px] h-[30px] rounded-full text-[14.22px] font-500 font-inter"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className={`flex items-center ${
+              isHovered ? "justify-center" : "justify-start"
+            } gap-2 h-[40px] cursor-pointer bg-[#1F5897] transition-all duration-300 ease-in-out overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white px-2 ${
+              isHovered ? "w-[90px]" : "w-[40px]"
+            }`}
+            style={{
+              borderRadius: isHovered ? "8px" : "50%",
+            }}
           >
-            <FaChevronLeft />
+            <ImArrowLeft2 className="text-white shrink-0" />
+            <span
+              className={`whitespace-nowrap transition-opacity duration-300 ${
+                isHovered ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              Back
+            </span>
           </button>
         )}
       </div>
@@ -148,7 +193,7 @@ const FilterPage = () => {
                   <button
                     type="button"
                     onClick={toggleDropdown}
-                    className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
+                    className="w-full bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
                   >
                     {unit === "ALL"
                       ? "ALL Units"

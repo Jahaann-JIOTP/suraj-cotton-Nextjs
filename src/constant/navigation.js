@@ -12,16 +12,24 @@ import TransformerIcon from "../../public/sidebarIcons/Transformer";
 import EnergySankey from "../../public/sidebarIcons/energySankey";
 import Unit4Lt1 from "../../public/sidebarIcons/Unit4Lt1";
 import PlantOverview from "../../public/sidebarIcons/PlantOverview";
-import { GoDotFill } from "react-icons/go";
+import { FaUserCog } from "react-icons/fa";
+import { MdElectricMeter } from "react-icons/md";
 import { BsFillDiagram3Fill } from "react-icons/bs";
 
 export const privilegeConfig = {
   Dashboard: {
-    // href: "/dashboard",
-    href: "#",
+    href: "/dashboard",
     icon: faDashboard,
     label: "DASHBOARD",
-    matchPaths: ["/dashboard", "/status_table", "/Sanky"],
+    matchPaths: [
+      "/dashboard",
+      "/status_table",
+      "/transformers",
+      "/unit-4-lt-1",
+      "/unit-4-lt-2",
+      "/unit-5-lt-3",
+      "/unit-5-lt-4",
+    ],
     tab: "Home",
   },
   Diagram: {
@@ -39,35 +47,32 @@ export const privilegeConfig = {
     tab: "Trends",
   },
   Alarms: {
-    //href: "/all-alarms",
-    href: "#",
+    href: "/all-alarms",
     icon: faBell,
     label: "ALARMS",
     matchPaths: ["/all-alarms", "/Recent_Alarms"],
     tab: "Alarms",
   },
   Reports: {
-    //href: "/energy-usage-report",
-    href: "#",
-
+    href: "/energy-usage-report",
     icon: faBookOpen,
     label: "REPORTS",
     matchPaths: [
       "/energy-usage-report",
       "/energy-cost-report",
       "/energy_usage",
-      "/energy_shift",
+      "/power-summary-report",
       "/spindle-production",
     ],
     tab: "Reports",
   },
   // "User Management": {
-  Setting: {
+  Configuration: {
     href: "/add_roles",
     icon: faGear,
-    label: "USER MANAGEMENT",
-    matchPaths: ["/add_roles"],
-    tab: "Setting",
+    label: "Configuration",
+    matchPaths: ["/add_roles", "/meter-configuration"],
+    tab: "Configuration",
   },
 };
 
@@ -77,7 +82,7 @@ export const privilegeOrder = [
   "Trends",
   "Alarms",
   "Reports",
-  "Setting",
+  "Configuration",
 ];
 
 export const sidebarLinksMap = {
@@ -90,19 +95,19 @@ export const sidebarLinksMap = {
         {
           id: 0,
           title: "Plant Overview",
-          href: "#",
+          href: "/dashboard",
           icon: PlantOverview,
         },
         {
           id: 1,
           title: "Power Summary",
-          href: "#",
+          href: "/power-summary",
           icon: PlantOverview,
         },
         {
           id: 2,
           title: "Transformers",
-          href: "#",
+          href: "/transformers",
           icon: TransformerIcon,
         },
       ],
@@ -115,25 +120,25 @@ export const sidebarLinksMap = {
         {
           id: 3,
           title: "Unit 4 LT-1 (Sankey)",
-          href: "#",
+          href: "/unit-4-lt-1",
           icon: Unit4Lt1,
         },
         {
           id: 4,
           title: "Unit 4 LT-2 (Sankey)",
-          href: "#",
+          href: "/unit-4-lt-2",
           icon: Unit4Lt1,
         },
         {
           id: 5,
           title: "Unit 5 LT-3 (Sankey)",
-          href: "#",
+          href: "/unit-5-lt-3",
           icon: Unit4Lt1,
         },
         {
           id: 6,
           title: "Unit 5 LT-4 (Sankey)",
-          href: "#",
+          href: "/unit-5-lt-4",
           icon: Unit4Lt1,
         },
       ],
@@ -172,47 +177,46 @@ export const sidebarLinksMap = {
         {
           id: 0,
           title: "All Alarms",
-          // href: "/all-alarms",
-          href: "#",
+          href: "/all-alarms",
           icon: TransformerIcon,
         },
       ],
     },
   ],
 
-  // Reports: [
-  //   {
-  //     title: "energy-usage-report",
-  //     icon: PlantOverview,
-  //     // href: "/energy-usage-report",
-  //     href: "#",
-  //   },
-  //   {
-  //     title: "Spindle Production",
-  //     icon: PlantOverview,
-  //     // href: "/spindle-production",
-  //     href: "#",
-  //   },
-  // ],
-
-  // Reportss: [
-  //   {
-  //     title: "energy-usage-report",
-  //     icon: PlantOverview,
-  //     href: "/energy-usage-report",
-  //   },
-  //   {
-  //     title: "Spindle Production",
-  //     icon: PlantOverview,
-  //     href: "/spindle-production",
-  //   },
-  // ],
-
-  Setting: [
+  Reports: [
     {
-      title: "User Management",
-      icon: GoDotFill,
+      title: "energy-usage-report",
+      icon: PlantOverview,
+      href: "/energy-usage-report",
+    },
+    {
+      title: "Energy Cost Report",
+      icon: PlantOverview,
+      href: "/energy-cost-report",
+    },
+    {
+      title: "Power Summary Report",
+      icon: PlantOverview,
+      href: "/power-summary-report",
+    },
+    {
+      title: "Spindle Production",
+      icon: PlantOverview,
+      href: "/spindle-production",
+    },
+  ],
+
+  Configuration: [
+    {
+      title: "User Configuration",
+      icon: FaUserCog,
       href: "/add_roles",
+    },
+    {
+      title: "Meter Configuration",
+      icon: MdElectricMeter,
+      href: "/meter-configuration",
     },
   ],
 };

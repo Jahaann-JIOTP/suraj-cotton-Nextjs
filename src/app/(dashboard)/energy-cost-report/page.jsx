@@ -5,6 +5,7 @@ import { CircularProgress } from "@mui/material";
 
 import React, { useEffect, useRef, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
+import { ImArrowLeft2 } from "react-icons/im";
 
 const EnergyCostReportPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +18,7 @@ const EnergyCostReportPage = () => {
   const [loading, setLoading] = useState(false);
   const [energycostReportData, SetEnergyCostReportData] = useState([]);
   const [shoResult, setShowResult] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   useEffect(() => {
@@ -58,7 +60,7 @@ const EnergyCostReportPage = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.SURAJ_COTTON_BASE_URL}/energy-cost`,
+        `${config.BASE_URL}${config.REPORTS.ENERGY_COST_REPORTS}`,
         {
           method: "POST",
           headers: {
@@ -98,9 +100,25 @@ const EnergyCostReportPage = () => {
               setEndDate("");
               setRates("");
             }}
-            className="bg-gray-800 dark:bg-gray-500 cursor-pointer text-white flex items-center justify-center text-center  w-[30px] h-[30px] rounded-full text-[14.22px] font-500 font-inter"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className={`flex items-center ${
+              isHovered ? "justify-center" : "justify-start"
+            } gap-2 h-[40px] cursor-pointer bg-[#1F5897] transition-all duration-300 ease-in-out overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white px-2 ${
+              isHovered ? "w-[90px]" : "w-[40px]"
+            }`}
+            style={{
+              borderRadius: isHovered ? "8px" : "50%",
+            }}
           >
-            <FaChevronLeft />
+            <ImArrowLeft2 className="text-white shrink-0" />
+            <span
+              className={`whitespace-nowrap transition-opacity duration-300 ${
+                isHovered ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              Back
+            </span>
           </button>
         )}
       </div>

@@ -10,6 +10,7 @@ import { initializeAuth } from "@/redux/slices/authSlice";
 
 import Sidebar from "@/components/layout/Sidebar";
 import { getActiveTabFromPathname } from "@/utils/navigation-utils";
+import config from "@/constant/apiRouteList";
 
 export default function DashboardLayout({ children }) {
   const [activeTab, setActiveTab] = useState("Home");
@@ -21,10 +22,10 @@ export default function DashboardLayout({ children }) {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const token = useSelector((state) => state.auth.token);
 
-  useEffect(() => {
-    const currentTab = getActiveTabFromPathname(pathname);
-    setActiveTab(currentTab);
-  }, []);
+  // useEffect(() => {
+  //   const currentTab = getActiveTabFromPathname(pathname);
+  //   setActiveTab(currentTab);
+  // }, []);
   useEffect(() => {
     const currentTab = getActiveTabFromPathname(pathname);
     setActiveTab(currentTab);
@@ -66,33 +67,33 @@ export default function DashboardLayout({ children }) {
     setActiveTab(tab);
   };
   // 🧠 Update active tab based on route
-  useEffect(() => {
-    setActiveTab((prevTab) => {
-      if (
-        pathname === "/sld" ||
-        pathname === "/sld_meters1" ||
-        pathname === "/Logs1" ||
-        pathname === "/log_detail1"
-      )
-        return "Diagram";
-      else if (
-        pathname === "/custom_trend" ||
-        pathname === "/comparison_trends"
-      )
-        return "Trends";
-      else if (
-        pathname === "/add_roles" ||
-        pathname === "/add_user" ||
-        pathname === "/view_users"
-      )
-        return "Setting";
-      else if (pathname === "/Recent_Alarms" || pathname === "/All_Alarms")
-        return "Alarms";
-      else if (pathname === "/energy_cost" || pathname === "/energy_usage")
-        return "Reports";
-      return prevTab;
-    });
-  }, [pathname]);
+  // useEffect(() => {
+  //   setActiveTab((prevTab) => {
+  //     if (
+  //       pathname === "/sld" ||
+  //       pathname === "/sld_meters1" ||
+  //       pathname === "/Logs1" ||
+  //       pathname === "/log_detail1"
+  //     )
+  //       return "Diagram";
+  //     else if (
+  //       pathname === "/custom_trend" ||
+  //       pathname === "/comparison_trends"
+  //     )
+  //       return "Trends";
+  //     else if (
+  //       pathname === "/add_roles" ||
+  //       pathname === "/add_user" ||
+  //       pathname === "/view_users"
+  //     )
+  //       return "Setting";
+  //     else if (pathname === "/Recent_Alarms" || pathname === "/All_Alarms")
+  //       return "Alarms";
+  //     else if (pathname === "/energy_cost" || pathname === "/energy_usage")
+  //       return "Reports";
+  //     return prevTab;
+  //   });
+  // }, [pathname]);
 
   if (!isAuthenticated) return null;
 
@@ -106,7 +107,8 @@ export default function DashboardLayout({ children }) {
       <div className="flex px-4 gap-[0.7vw]">
         <Sidebar activeTab={activeTab} handleTabClick={handleTabClick} />
         <main
-          className="w-full h-full pb-5 md:p-auto md:h-[85vh] overflow-x-hidden overflow-y-auto bg-center bg-contain bg-no-repeat"
+          // className="w-full h-full pb-5 md:p-auto md:h-[81vh] overflow-x-hidden overflow-y-auto bg-center bg-contain bg-no-repeat"
+          className="w-full h-full pb-5 md:p-auto md:h-[81vh] overflow-hidden bg-center bg-contain bg-no-repeat"
           style={{ backgroundImage: 'url("./bglogo.png")' }}
         >
           {children}

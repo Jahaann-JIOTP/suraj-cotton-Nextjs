@@ -19,7 +19,7 @@ export default function SidebarDropdown({
     <div className="w-full flex items-center flex-col">
       <button
         onClick={onClick}
-        className="group w-full flex  text-[13.216px] justify-between items-center p-2 hover:text-[#1A68B2] rounded-md"
+        className="group w-full flex cursor-pointer text-[13.216px] justify-between items-center p-2 hover:text-[#1A68B2] rounded-md"
         style={{ fontWeight: 500 }}
       >
         {iscollapese ? (

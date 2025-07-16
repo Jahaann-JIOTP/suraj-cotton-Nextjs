@@ -11,6 +11,7 @@ import { privilegeOrder } from "@/constant/navigation";
 import MobileSidebar from "./MobileSidebar";
 import ThemeSwitcher from "@/themeSwitcher/ThemeSwitcher";
 import { getActiveTabFromPathname } from "@/utils/navigation-utils";
+import MeterToggleBetweenUnits from "../meterToggleBetweenUnits/MeterToggleBetweenUnits";
 
 const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
@@ -35,15 +36,11 @@ const Header = ({ handleTabClick, activeTab }) => {
     if (!token) return;
 
     try {
-      // const res = await fetch(`${config.BASE_URL}${config.USER.PROFILE}`, {
-      const res = await fetch(
-        `${config.SURAJ_COTTON_BASE_URL}/users/myprofile`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${config.BASE_URL}${config.USER.PROFILE}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (res.ok) {
         const data = await res.json();
@@ -139,7 +136,7 @@ const Header = ({ handleTabClick, activeTab }) => {
     <header className="bg-[#1F5897] text-white mx-0 my-2 mt-0 h-[44px] flex text-sm items-center justify-between w-full">
       {/* Dropdown menu for small screens */}
       <div className="lg:hidden flex justify-between items-center px-4 py-2">
-        <button onClick={toggleDropdown}>
+        <button onClick={toggleDropdown} className="cursor-pointer">
           <FontAwesomeIcon
             icon={isDropdownOpen ? faXmark : faBars}
             style={{ fontSize: "1.5em" }}
@@ -168,12 +165,14 @@ const Header = ({ handleTabClick, activeTab }) => {
       </div>
       {/* Bell Icon */}
       <div className="flex items-center justify-center">
+        {/* link status */}
+        {/* alarms */}
         <div className="relative mr-4 mt-1">
           <div className="relative inline-block">
             <img
               src={`./${bellIcon}`}
               alt="Bell Icon"
-              className="ml-2 cursor-pointer w-8 h-8"
+              className="ml-2 cursor-pointer w-[50px]"
               onClick={toggleNotificationVisibility}
             />
             {bellIcon === "alert.gif" && newAlarmCount > 0 && (
@@ -189,7 +188,7 @@ const Header = ({ handleTabClick, activeTab }) => {
               <div className="font-semibold text-gray-700 flex justify-between items-center">
                 <span className="text-black dark:text-white">Alarms</span>
                 <button
-                  className="text-xs text-white bg-[#c1121f] px-2 py-1 rounded hover:bg-[#e9a781]"
+                  className="text-xs text-white bg-[#c1121f] cursor-pointer px-2 py-1 rounded hover:bg-[#e9a781]"
                   onClick={() => setNotificationVisible(false)}
                 >
                   Close
@@ -197,7 +196,7 @@ const Header = ({ handleTabClick, activeTab }) => {
               </div>
               <div className="mt-4 flex justify-center">
                 <button
-                  className="px-3 py-3 bg-gradient-to-r from-blue-400 to-[#1F5897] text-white text-sm font-semibold uppercase tracking-wide rounded-md shadow-md hover:from-blue-500 hover:to-blue-700 hover:shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95"
+                  className="px-3 py-3 bg-gradient-to-r cursor-pointer from-blue-400 to-[#1F5897] text-white text-sm font-semibold uppercase tracking-wide rounded-md shadow-md hover:from-blue-500 hover:to-blue-700 hover:shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95"
                   onClick={acknowledgeAlarms}
                 >
                   Acknowledge

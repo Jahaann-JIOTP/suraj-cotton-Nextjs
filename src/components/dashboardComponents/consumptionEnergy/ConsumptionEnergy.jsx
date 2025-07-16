@@ -6,12 +6,13 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { useTheme } from "next-themes";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
+import config from "@/constant/apiRouteList";
 
 am4core.useTheme(am4themes_animated);
 
 const ConsumptionEnergy = () => {
   const [selectedCategory, setSelectedCategory] = useState("Solar Generation");
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState("today");
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("week");
   const [isConsumptionEnergyFullView, setConsumptionEnergyFullView] =
     useState(false);
   const { theme } = useTheme(); // Light or dark
@@ -20,9 +21,33 @@ const ConsumptionEnergy = () => {
     setConsumptionEnergyFullView((prev) => !prev);
   };
 
+  const fetchConsumptionEnergyData = async () => {
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.DASHBOARD.GET_CONSUMPTION_ENERGY}${selectedTimePeriod}`,
+        {
+          method: "GET",
+        }
+      );
+      if (response.ok) {
+        const resResult = await response.json();
+        if (Array.isArray(resResult) && resResult.length > 0) {
+          updateChart(resResult, selectedTimePeriod);
+        } else {
+          console.warn("No chart data received.");
+        }
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   useEffect(() => {
-    updateChart(energyConsumption[selectedTimePeriod], selectedTimePeriod);
-  }, [selectedCategory, selectedTimePeriod, theme]);
+    fetchConsumptionEnergyData();
+  }, [selectedTimePeriod, theme]);
+
+  // useEffect(() => {
+  //   updateChart(energyConsumption[selectedTimePeriod], selectedTimePeriod);
+  // }, [selectedCategory, selectedTimePeriod, theme]);
 
   const updateChart = (data, value) => {
     const isDark = theme === "dark";
@@ -109,10 +134,10 @@ const ConsumptionEnergy = () => {
       className={`${
         isConsumptionEnergyFullView
           ? "fixed inset-0 z-50  p-5 overflow-auto w-[100%] m-auto h-[100vh]"
-          : "relative  px-1 py-2 md:p-3 h-[14.8rem]"
+          : "relative  px-1 py-2 md:p-3 h-[15rem] md:h-[13.5rem] lg:h-[12rem]"
       } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
     >
-      <div className="flex items-center flex-col md:flex-row gap-3 md:gap-[0.7vw] justify-between">
+      <div className="relative flex items-center flex-col md:flex-row gap-3 md:gap-[0.7vw] justify-between">
         <span className="text-[15px] text-[#1A68B2] .font-raleway font-600">
           Consumption Energy
         </span>
@@ -131,13 +156,13 @@ const ConsumptionEnergy = () => {
             onChange={(e) => setSelectedTimePeriod(e.target.value)}
             className="outline-none border-1 text-[12px] font-raleway rounded p-1 dark:bg-gray-600"
           >
-            <option value="today">Today</option>
+            {/* <option value="today">Today</option> */}
             <option value="week">This Week</option>
             <option value="month">This Month</option>
             <option value="year">This Year</option>
           </select>
           <button
-            className="cursor-pointer"
+            className="cursor-pointer absolute md:relative top-[0px] right-[0px]"
             onClick={handleConsumptionEnergyFullView}
           >
             {isConsumptionEnergyFullView ? (

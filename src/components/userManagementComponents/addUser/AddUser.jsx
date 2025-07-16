@@ -32,14 +32,13 @@ export default function AddUser() {
   const fetchRoles = async () => {
     try {
       const res = await axios.get(
-        // `${config.BASE_URL}${config.ADMIN.FETCH_SELECTED_ROLES}`,
-        `${config.SURAJ_COTTON_BASE_URL}/roles/allrole`,
+        `${config.BASE_URL}${config.ROLES.GET_ALL_ROLLS}`,
         {
           headers: { Authorization: `Bearer ${AuthToken}` },
         }
       );
 
-      setRoles(res?.data?.data || []); // ✅ Corrected
+      setRoles(res?.data?.data || []);
     } catch (err) {
       Swal.fire(
         "Error",
@@ -72,8 +71,7 @@ export default function AddUser() {
 
     try {
       await axios.post(
-        // `${config.BASE_URL}${config.ADMIN.ADD_USER}`,
-        `${config.SURAJ_COTTON_BASE_URL}/users/addUser`,
+        `${config.BASE_URL}${config.USER.ADD_USER}`,
         {
           name: newUser.name,
           email: newUser.email,
@@ -182,7 +180,7 @@ export default function AddUser() {
       <div className="flex items-center justify-center">
         <button
           onClick={handleAddUser}
-          className="flex w-[454px] h-[41px] px-[176px] py-[9px] justify-center items-center gap-[10px] shrink-0 rounded-[6px] font-[Raleway] bg-[#1A68B2] text-white"
+          className="flex cursor-pointer w-[454px] h-[41px] px-[176px] py-[9px] justify-center items-center gap-[10px] shrink-0 rounded-[6px] font-[Raleway] bg-[#1A68B2] text-white"
         >
           Add User
         </button>

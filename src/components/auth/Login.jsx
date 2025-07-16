@@ -27,17 +27,13 @@ const Login = () => {
     }
     setLoading(true);
     try {
-      // const response = await fetch(`${config.BASE_URL}${config.AUTH.LOGIN}`, {
-      const response = await fetch(
-        `${config.SURAJ_COTTON_BASE_URL}/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await fetch(`${config.BASE_URL}${config.AUTH.LOGIN}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
       const data = await response.json();
       if (response.ok && data.token) {
         setSuccess("Login successful.");
@@ -45,7 +41,7 @@ const Login = () => {
         setError(null);
         dispatch(login(data.token));
         setLoading(false);
-        router.push("/sld");
+        router.push("/dashboard");
       } else {
         setError(data.message || "Invalid email or password.");
         setSuccess(null);
@@ -68,7 +64,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/sld");
+      router.push("/dashboard");
     }
   }, [isAuthenticated, router]);
   if (isAuthenticated) return null;

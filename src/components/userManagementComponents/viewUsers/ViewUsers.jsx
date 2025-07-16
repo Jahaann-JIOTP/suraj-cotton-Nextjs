@@ -31,7 +31,6 @@ export default function ViewUsers() {
   });
 
   useEffect(() => {
-    // setToken(localStorage.getItem("token"));
     setAuthToken(token);
   }, []);
   useEffect(() => {
@@ -48,8 +47,7 @@ export default function ViewUsers() {
     setLoading(true);
     try {
       const res = await axios.get(
-        // `${config.BASE_URL}${config.ADMIN.GET_USERS}`,
-        `${config.SURAJ_COTTON_BASE_URL}/users/allUsers`,
+        `${config.BASE_URL}${config.USER.ALL_USERS}`,
         {
           headers: { Authorization: `Bearer ${authToken}` },
         }
@@ -70,7 +68,7 @@ export default function ViewUsers() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `${config.SURAJ_COTTON_BASE_URL}/roles/allrole`,
+        `${config.BASE_URL}${config.ROLES.GET_ALL_ROLLS}`,
         {
           headers: { Authorization: `Bearer ${authToken}` },
         }
@@ -101,7 +99,10 @@ export default function ViewUsers() {
       if (result.isConfirmed) {
         try {
           await axios.delete(
-            `${config.SURAJ_COTTON_BASE_URL}/users/delete/${user._id}`,
+            `${config.BASE_URL}${config.USER.DELETE_USER.replace(
+              ":id",
+              user._id
+            )}`,
             {
               headers: { Authorization: `Bearer ${authToken}` },
               data: {
@@ -134,7 +135,10 @@ export default function ViewUsers() {
   const handleUpdateUser = async () => {
     try {
       await axios.patch(
-        `${config.SURAJ_COTTON_BASE_URL}/users/update/${editUserData._id}`,
+        `${config.BASE_URL}${config.USER.UPDATE_USER.replace(
+          ":id",
+          editUserData._id
+        )}`,
         {
           name: editUserData.name,
           email: editUserData.email,
@@ -285,7 +289,7 @@ export default function ViewUsers() {
                         <div className="flex justify-center gap-3">
                           {/* Edit */}
                           <button
-                            className="w-6 h-6"
+                            className="w-6 h-6 cursor-pointer"
                             onClick={() => {
                               setEditUserData({
                                 _id: user._id,
@@ -328,7 +332,7 @@ export default function ViewUsers() {
 
                           {/* Delete */}
                           <button
-                            className="w-6 h-6"
+                            className="w-6 h-6 cursor-pointer"
                             onClick={() => handleDeleteUser(user)}
                           >
                             <svg
@@ -435,13 +439,13 @@ export default function ViewUsers() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={handleUpdateUser}
-                className="bg-[#1F5897] hover:bg-[#1F5897] text-white font-medium px-4 py-2 rounded-md transition-all"
+                className="bg-[#1F5897] hover:bg-[#1F5897] cursor-pointer text-white font-medium px-4 py-2 rounded-md transition-all"
               >
                 Save
               </button>
               <button
                 onClick={() => setEditUserPopup(false)}
-                className="bg-gray-500 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded-md transition-all"
+                className="bg-gray-500 hover:bg-gray-600 cursor-pointer text-white font-medium px-4 py-2 rounded-md transition-all"
               >
                 Cancel
               </button>

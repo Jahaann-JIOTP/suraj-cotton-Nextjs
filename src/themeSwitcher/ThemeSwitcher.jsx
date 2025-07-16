@@ -6,10 +6,9 @@ import { LuSun } from "react-icons/lu";
 
 const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted, resolvedTheme] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Ensure component is mounted before rendering to avoid hydration issues
   const isLight = theme === "light";
   const toggleTheme = () => {
     setIsAnimating(true);
@@ -21,7 +20,7 @@ const ThemeSwitcher = () => {
   return (
     <button
       onClick={toggleTheme}
-      className={`w-[4rem] h-8 bg-white dark:bg-gray-800 rounded-full px-1 flex items-center shadow-inner transition-colors duration-500`}
+      className={`w-[4rem] h-8 bg-white cursor-pointer dark:bg-gray-800 rounded-full px-1 flex items-center justify-between shadow-inner transition-colors duration-500`}
     >
       <span
         className={`
@@ -40,10 +39,33 @@ const ThemeSwitcher = () => {
           />
         ) : (
           <LuMoon
-            className={`text-white transition-transform duration-500 ease-in-out ${
+            className={`text-indigo-500 transition-transform duration-500 ease-in-out ${
               isAnimating ? " rotate-[-360deg]" : "rotate-0"
             }`}
             size={20}
+          />
+        )}
+      </span>
+      <span
+        className={`
+          flex items-center justify-center
+          transform transition-transform duration-500 ease-in-out
+          ${isLight ? "translate-x-0" : "translate-x-[-2.2rem]"}
+        `}
+      >
+        {isLight ? (
+          <LuMoon
+            className={`text-black transition-transform duration-500 ease-in-out ${
+              isAnimating ? " rotate-[-360deg]" : "rotate-0"
+            }`}
+            size={18}
+          />
+        ) : (
+          <LuSun
+            className={`text-white transition-transform duration-500 ease-in-out ${
+              isAnimating ? "rotate-[360deg]" : "rotate-0"
+            }`}
+            size={18}
           />
         )}
       </span>

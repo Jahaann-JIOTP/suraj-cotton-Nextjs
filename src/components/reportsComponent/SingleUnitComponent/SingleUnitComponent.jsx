@@ -122,7 +122,6 @@ const tableData = [
 ];
 
 const SingleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
-  console.log("----------------", unit);
   const totalInstalledLoad = tableData.reduce((sum, row) => {
     const value = parseFloat(row.installedLoadKw);
     return sum + (isNaN(value) ? 0 : value);
@@ -155,7 +154,7 @@ const SingleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
       <div className="w-full h-[2px] mt-5 bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
       <div className="flex flex-col gap-2 md:flex-row px-3 md:px-6 items-start justify-between pt-5">
         <div>
-          <button className="bg-[#1A68B2] text-white py-1 px-5 rounded text-[14.22px] font-500 font-inter">
+          <button className="bg-[#1A68B2] cursor-pointer text-white py-1 px-5 rounded text-[14.22px] font-500 font-inter">
             Export
           </button>
         </div>
@@ -175,7 +174,7 @@ const SingleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
         <h2 className="text-[18.62px] pb-2 font-inter font-500">
           {unit === "Unit_4" ? "Unit 4" : unit === "Unit_5" ? "Unit 5" : ""}
         </h2>
-        <div className="bg-green-400 w-full h-[10px]"></div>
+        <div className="w-full h-[10px]"></div>
         <div className="overflow-x-scroll md:w-full md:overflow-x-hidden h-full md:max-h-[47vh] overflow-y-auto">
           <table className="table w-full border-collapse border ">
             <thead className="sticky top-0 bg-[#E5F3FD] dark:bg-gray-600 z-10">
