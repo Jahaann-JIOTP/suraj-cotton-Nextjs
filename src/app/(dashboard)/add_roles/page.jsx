@@ -7,7 +7,7 @@ import Roles from "@/components/userManagementComponents/manageRoles/ManageRoles
 const UserMangementPage = () => {
   const [activeTab, setActiveTab] = useState("view");
   return (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow-lg border-t-[4px] border-t-[#1d5998] md:h-[87vh]  overflow-auto">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow-lg border-t-[4px] border-t-[#1d5998] md:h-[81vh]  overflow-auto">
       <div className="text-[#4F5562] dark:text-white font-[Raleway] text-[22.34px] font-semibold leading-[125%] mb-5">
         User Configuration
       </div>

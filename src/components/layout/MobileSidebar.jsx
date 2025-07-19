@@ -1,24 +1,38 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/slices/authSlice";
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
+import { IoLogOut } from "react-icons/io5";
 
 import {
   privilegeConfig,
   sidebarLinksMap,
   privilegeOrder,
 } from "@/constant/navigation";
-import { useRouter } from "next/navigation";
-import { IoLogOut } from "react-icons/io5";
 
 export default function MobileSidebar({ userPrivileges, closeSidebar }) {
   const [openTab, setOpenTab] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
   const dispatch = useDispatch();
   const router = useRouter();
+
+  // ref for detecting outside click
+  const sidebarRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        closeSidebar();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [closeSidebar]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -35,7 +49,10 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
   };
 
   return (
-    <div className="fixed top-[92px] left-0 h-[86.6vh] md:h-[92.5vh] bg-white dark:bg-gray-800 text-black dark:text-white shadow-lg z-50 w-full md:w-1/2 flex flex-col">
+    <div
+      ref={sidebarRef}
+      className="fixed top-[92px] left-0 h-[86.6vh] md:h-[92.5vh] bg-white dark:bg-gray-800 text-black dark:text-white shadow-lg z-50 w-full md:w-1/2 flex flex-col"
+    >
       <div className="flex-1 overflow-y-auto scrollbar-hide p-4">
         {privilegeOrder
           .filter((key) => userPrivileges.includes(key))
@@ -43,7 +60,7 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
             const config = privilegeConfig[privilegeKey];
             if (!config) return null;
             return (
-              <div key={privilegeKey} className="">
+              <div key={privilegeKey}>
                 <button
                   className="w-full flex cursor-pointer justify-between items-center font-bold py-2 px-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                   onClick={() => toggleTab(config.tab)}
@@ -65,6 +82,7 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
                     )}
                   </span>
                 </button>
+
                 {openTab === config.tab && sidebarLinksMap[config.tab] && (
                   <div className="pl-4 pr-1">
                     {sidebarLinksMap[config.tab].map((item, idx) => (
@@ -114,7 +132,8 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
                           </div>
                         ) : (
                           <Link href={item.href} onClick={closeSidebar}>
-                            <div className="py-1 px-2 text-sm hover:bg-gray-100 rounded-md">
+                            <div className="flex items-center gap-2 py-1 px-2 text-sm hover:bg-gray-100 rounded-md">
+                              <item.icon />
                               {item.label || item.title}
                             </div>
                           </Link>
@@ -130,8 +149,8 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
 
       <div className="w-full px-4 py-4">
         <button
-          onClick={() => handleLogout()}
-          className="w-full py-4 bg-[#1A68B2] text-[16.004px] flex items-center justify-center gap-2 cursor-pointer  rounded-md"
+          onClick={handleLogout}
+          className="w-full py-4 bg-[#1A68B2] text-[16.004px] flex items-center justify-center gap-2 cursor-pointer rounded-md"
           style={{ fontWeight: 600 }}
         >
           <IoLogOut size={28} className="text-white" />

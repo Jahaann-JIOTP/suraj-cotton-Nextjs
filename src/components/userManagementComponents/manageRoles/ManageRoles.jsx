@@ -5,6 +5,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import config from "@/constant/apiRouteList";
 import { useTheme } from "next-themes";
+import MultiSelectDropdown from "@/components/multiSelectDropdown/MultiSelectDropdown";
 
 export default function Roles() {
   const [roles, setRoles] = useState([]);
@@ -20,6 +21,10 @@ export default function Roles() {
   const [editRole, setEditRole] = useState(null);
   const [editPrivileges, setEditPrivileges] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const getPrivilegesId = (id) => {
+    setSelectedPrivileges(id);
+  };
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
@@ -357,56 +362,41 @@ export default function Roles() {
       {/* Modals */}
       {showRolePopup && (
         <div className="fixed inset-0 bg-[rgba(87,87,87,0.78)] bg-opacity-40 flex items-center justify-center z-50 ">
-          <div className="bg-white dark:bg-gray-800 rounded-[8px] shadow-lg border-2 border-gray-300 dark:border-gray-500 border-t-[4px] border-t-[#1d5998] dark:border-t-[#1d5998] p-6 animate-fadeIn w-[500px]">
+          <div className="bg-white dark:bg-gray-800 rounded-[8px] shadow-lg border-2 border-gray-300 dark:border-gray-500 border-t-[4px] border-t-[#1d5998] dark:border-t-[#1d5998] p-6 animate-fadeIn w-[500px] h-[60vh]">
             <p className="text-black dark:text-white font-[Raleway] text-[27.44px] font-semibold leading-none !mb-[35px]">
               Add New Role
             </p>
-            <div className="space-y-3 mb-6">
-              <input
-                type="text"
-                placeholder="Role Name"
-                value={newRole}
-                onChange={(e) => setNewRole(e.target.value)}
-                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-500 text-sm text-gray-700 dark:text-gray-300  focus:outline-none focus:ring-2 focus:outline-[#1F5897]"
-              />
-              <div className="text-gray-700 dark:text-gray-200 font-semibold mt-4">
-                Select Privileges:
+            <div className="flex flex-col justify-between h-[86%]">
+              <div className="space-y-3 mb-6">
+                <input
+                  type="text"
+                  placeholder="Role Name"
+                  value={newRole}
+                  onChange={(e) => setNewRole(e.target.value)}
+                  className="w-full px-4 py-3 rounded border border-gray-300 dark:border-gray-500 text-sm text-gray-700 dark:text-gray-300  focus:outline-none focus:ring-2 focus:outline-[#1F5897]"
+                />
+
+                <div>
+                  <MultiSelectDropdown
+                    privileges={privileges}
+                    privilegePostProp={getPrivilegesId}
+                  />
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                {privileges.map((p) => (
-                  <label
-                    key={p._id}
-                    className="flex items-center gap-2 text-gray-700 dark:text-gray-200"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedPrivileges.includes(p._id)}
-                      onChange={() =>
-                        setSelectedPrivileges((prev) => {
-                          return prev.includes(p._id)
-                            ? prev.filter((id) => id !== p._id)
-                            : [...prev, p._id];
-                        })
-                      }
-                    />
-                    {p.name}
-                  </label>
-                ))}
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={handleAddRole}
+                  className="bg-[#1d5998] hover:bg-[#1d589898] cursor-pointer text-white font-medium px-4 py-2 rounded-md"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => setShowRolePopup(false)}
+                  className="bg-gray-500 hover:bg-gray-600 cursor-pointer text-white font-medium px-4 py-2 rounded-md"
+                >
+                  Cancel
+                </button>
               </div>
-            </div>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={handleAddRole}
-                className="bg-[#1d5998] hover:bg-[#1d589898] cursor-pointer text-white font-medium px-4 py-2 rounded-md"
-              >
-                Save
-              </button>
-              <button
-                onClick={() => setShowRolePopup(false)}
-                className="bg-gray-500 hover:bg-gray-600 cursor-pointer text-white font-medium px-4 py-2 rounded-md"
-              >
-                Cancel
-              </button>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-const formatUpdateTime = (updatedAt) => {
+export const relativeDateTimeCalculator = (updatedAt) => {
   const now = new Date();
   const updated = new Date(updatedAt);
   const diffMs = now.getTime() - updated.getTime();
@@ -12,7 +12,11 @@ const formatUpdateTime = (updatedAt) => {
     now.getDate() === updated.getDate();
 
   if (diffMinutes < 60) {
-    return `${diffMinutes} minute${diffMinutes !== 1 ? "s" : ""} ago`;
+    if (diffMinutes < 1) {
+      return "Just Now";
+    } else {
+      return `${diffMinutes} minute${diffMinutes < 2 ? "" : "s"} ago`;
+    }
   } else if (sameDay && diffMinutes >= 60) {
     return updated.toLocaleTimeString([], {
       hour: "2-digit",

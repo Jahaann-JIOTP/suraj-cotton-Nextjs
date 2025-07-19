@@ -109,7 +109,7 @@ const Header = ({ handleTabClick, activeTab }) => {
     const config = privilegeConfig[key];
     if (!config) return null;
 
-    const isActive = config.matchPaths.includes(pathname);
+    const isActive = config.matchPaths.some((p) => pathname.startsWith(p));
 
     return (
       <Link

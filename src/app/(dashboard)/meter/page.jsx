@@ -105,13 +105,13 @@ const page = () => {
         {activeTab === "voltage" ? (
           <>
             <div className="absolute meterDataText top-[258px] left-[37px] w-[110px] h-[31px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_CA || "00.00"}Vca</span>
+              <span>{suffixTags.Voltage_CA || "00.00"} Vca</span>
             </div>
             <div className="absolute meterDataText top-[200px] left-[184.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_BC || "00.00"} V bc</span>
+              <span>{suffixTags.Voltage_BC || "00.00"} Vbc</span>
             </div>
             <div className="absolute meterDataText top-[302px] left-[184.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_AB || "00.00"} V ab</span>
+              <span>{suffixTags.Voltage_AB || "00.00"} Vab</span>
             </div>
             <div className="absolute meterDataText top-[131px] left-[338px] w-[110px] h-[32px] flex items-center justify-center">
               <span>{suffixTags.Current_C || "00.00"} A c</span>
@@ -158,7 +158,7 @@ const page = () => {
             </div>
             {/*  */}
             <div className="absolute meterDataText top-[212px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>N/A</span>
+              <span>{suffixTags.Frequency_Hz || "N/A"}</span>
             </div>
             <div className="absolute meterDataText top-[275px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
               <span>{suffixTags.PowerFactor_Avg || "00.00"}</span>
@@ -179,13 +179,13 @@ const page = () => {
         ) : activeTab === "power" ? (
           <>
             <div className="absolute meterDataText top-[302px] left-[138px] w-[96px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
+              <span>{suffixTags.Harmonics_I1_THD || "00.00"}</span>
             </div>
             <div className="absolute meterDataText top-[384px] left-[138px] w-[96px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
+              <span>{suffixTags.Harmonics_I2_THD || "00.00"}</span>
             </div>
             <div className="absolute meterDataText top-[464px] left-[138px] w-[96px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
+              <span>{suffixTags.Harmonics_I3_THD || "00.00"}</span>
             </div>
             <div className="absolute meterDataText top-[303px] left-[492px] w-[96px] h-[29px] flex items-center justify-center">
               <span>{suffixTags.Harmonics_V1_THD || "00.00"}</span>

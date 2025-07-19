@@ -156,9 +156,9 @@ function CustomTrend() {
     "Transformer 2 LT-2 ACB": "U16_GW03",
     "Solar 2": "U17_GW03",
     "PF Panel 2": "U18_GW03",
-    "Wapda + HFO + Gas Incoming (GW03)": "U19_GW03",
+    "Wapda + HFO + Gas Incoming (GW03)": "U21_GW03",
     "WAPDA + HFO + Gas Outgoing T/F 3": "U20_GW03",
-    "WAPDA + HFO + Gas Outgoing T/F 4": "U21_GW03",
+    "WAPDA + HFO + Gas Outgoing T/F 4": "U19_GW03",
     "PDB 07": "U22_GW03",
     "PDB 10": "U23_GW03",
   };

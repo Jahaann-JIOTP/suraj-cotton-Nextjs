@@ -43,9 +43,12 @@ const Settings = () => {
   // fetch current status of meters
   const fetchMeterToggleStatus = async () => {
     try {
-      const response = await fetch(`${config.BASE_URL}/meter/toggles`, {
-        method: "GET",
-      });
+      const response = await fetch(
+        `${config.BASE_URL}${config.METER_CONFIG.GET_METER_TOGGLE_STATUS}`,
+        {
+          method: "GET",
+        }
+      );
       const resResult = await response.json();
 
       if (response.ok) {
@@ -73,23 +76,27 @@ const Settings = () => {
     }));
 
     try {
-      const response = await fetch(`${config.BASE_URL}/meter/toggle`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          area: areaName,
-          meterId: meterId,
-          email: userData.email,
-          username: userData.name,
-        }),
-      });
+      const response = await fetch(
+        `${config.BASE_URL}${config.METER_CONFIG.ADD_METER_TOGGLE}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            area: areaName,
+            meterId: meterId,
+            email: userData.email,
+            username: userData.name,
+          }),
+        }
+      );
 
       const resResult = await response.json();
       if (response.ok) {
         toast.success(resResult.message);
+        fetchMeterToggleStatus();
       } else {
         toast.error(resResult.message);
       }
@@ -104,18 +111,18 @@ const Settings = () => {
   }, []);
 
   return (
-    <div className="px-4 md:px-20">
+    <div className="px-4 md:px-20 rounded-md">
       <h1 className="text-3xl font-bold mb-8 text-center text-[#1A68B2]">
         Meter Control Panel
       </h1>
 
-      <div className="bg-white shadow-xl rounded-2xl p-6 space-y-4">
+      <div className="bg-white dark:bg-gray-800  shadow-xl rounded-2xl p-6 space-y-4">
         {meters.map((meter, index) => (
           <div
             key={index}
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4 last:border-b-0"
           >
-            <span className="text-lg font-semibold text-gray-700">
+            <span className="text-lg font-semibold text-gray-700 dark:text-gray-200">
               {meter.name}
             </span>
 

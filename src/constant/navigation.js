@@ -23,7 +23,7 @@ export const privilegeConfig = {
     label: "DASHBOARD",
     matchPaths: [
       "/dashboard",
-      "/status_table",
+      "/power-summary",
       "/transformers",
       "/unit-4-lt-1",
       "/unit-4-lt-2",

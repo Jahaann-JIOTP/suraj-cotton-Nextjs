@@ -15,3 +15,20 @@ export const getActiveTabFromPathname = (pathname) => {
 export const isPathActive = (pathname, matchPaths) => {
   return matchPaths.includes(pathname);
 };
+
+// import { privilegeConfig } from "@/constant/navigation";
+
+// export function getActiveTabFromPathname(pathname) {
+//   for (const key in privilegeConfig) {
+//     const { matchPaths, tab } = privilegeConfig[key];
+
+//     if (
+//       matchPaths &&
+//       matchPaths.some((matchPath) => pathname.startsWith(matchPath))
+//     ) {
+//       return tab;
+//     }
+//   }
+
+//   return "";
+// }

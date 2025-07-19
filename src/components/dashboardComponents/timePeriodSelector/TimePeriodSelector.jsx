@@ -12,9 +12,8 @@ const options = [
   { label: "This Year", value: "thisyear" },
 ];
 
-const TimePeriodSelector = ({ getTimePeriod }) => {
+const TimePeriodSelector = ({ selected, setSelected }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState("today");
   const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -36,11 +35,11 @@ const TimePeriodSelector = ({ getTimePeriod }) => {
   return (
     <div
       ref={dropdownRef}
-      className="relative  inline-block text-left md:w-auto"
+      className="relative inline-block text-left md:w-auto"
     >
       <div className="flex items-center justify-center md:justify-start gap-2">
         <span className="text-[15.49px] font-raleway font-600">
-          Select Date Range:{" "}
+          Select Date Range:
         </span>
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -69,7 +68,6 @@ const TimePeriodSelector = ({ getTimePeriod }) => {
                   onChange={() => {
                     setSelected(option.value);
                     setIsOpen(false);
-                    getTimePeriod(option.value);
                   }}
                   className="mr-2"
                 />

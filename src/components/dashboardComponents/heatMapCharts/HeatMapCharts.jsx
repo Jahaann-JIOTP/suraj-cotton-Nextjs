@@ -1,36 +1,58 @@
 "use client";
-import React, { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useEffect } from "react";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 
-am4core.useTheme(am4themes_animated);
-
-const HeatmapChart = ({ TransformerData }) => {
+const HeatmapChart = ({ TransformerData, id, dataKey, loading }) => {
   const chartRef = useRef(null);
+  const chartInstanceRef = useRef(null);
+
+  // Initialize theme only once
+  const initializeTheme = () => {
+    let themeInitialized = false;
+    if (!themeInitialized) {
+      am4core.useTheme(am4themes_animated);
+      themeInitialized = true;
+    }
+  };
 
   useLayoutEffect(() => {
-    let chart = am4core.create(chartRef.current, am4charts.XYChart);
+    initializeTheme();
+
+    if (!chartRef.current || !TransformerData || TransformerData.length === 0)
+      return;
+
+    // Dispose existing chart if it exists
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.dispose();
+      chartInstanceRef.current = null;
+    }
+
+    const chart = am4core.create(id, am4charts.XYChart);
+    chartInstanceRef.current = chart;
+
     chart.maskBullets = false;
     chart.logo.disabled = true;
 
     const xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     const yAxis = chart.yAxes.push(new am4charts.CategoryAxis());
 
-    xAxis.dataFields.category = "weekday";
+    xAxis.dataFields.category = "xCategory";
     yAxis.dataFields.category = "hour";
 
     xAxis.renderer.grid.template.disabled = true;
     yAxis.renderer.grid.template.disabled = true;
-
     yAxis.renderer.inversed = true;
 
     const series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.categoryX = "weekday";
+    series.dataFields.categoryX = "xCategory";
     series.dataFields.categoryY = "hour";
     series.dataFields.value = "value";
     series.sequencedInterpolation = true;
     series.defaultState.transitionDuration = 3000;
+
     series.columns.template.width = am4core.percent(100);
     series.columns.template.height = am4core.percent(100);
 
@@ -38,205 +60,275 @@ const HeatmapChart = ({ TransformerData }) => {
     columnTemplate.strokeWidth = 0;
     columnTemplate.strokeOpacity = 1;
     columnTemplate.stroke = am4core.color("#ffffff");
-    columnTemplate.tooltipText =
-      "{weekday}, {hour}: {value.workingValue.formatNumber('#.')}";
+
+    // Enhanced tooltip to show date, time, and original value
+    columnTemplate.tooltipText = "{fullDate} at {hour}: {originalValue}";
 
     columnTemplate.column.adapter.add("fill", (fill, target) => {
       if (target.dataItem) {
         const val = target.dataItem.value;
+        const originalVal = target.dataItem.dataContext.originalValue;
 
-        if (val >= 2500) return am4core.color("#fe0c00");
-        else if (val >= 2490) return am4core.color("#fe1200");
-        else if (val >= 2480) return am4core.color("#fe1700");
-        else if (val >= 2470) return am4core.color("#fe1d00");
-        else if (val >= 2460) return am4core.color("#fe2200");
-        else if (val >= 2450) return am4core.color("#fe2800");
-        else if (val >= 2440) return am4core.color("#fd2d00");
-        else if (val >= 2430) return am4core.color("#fd3300");
-        else if (val >= 2420) return am4core.color("#fd3800");
-        else if (val >= 2410) return am4core.color("#fd3e00");
-        else if (val >= 2390) return am4core.color("#fd4400");
-        else if (val >= 2380) return am4core.color("#fd4901");
-        else if (val >= 2370) return am4core.color("#fd4f01");
-        else if (val >= 2360) return am4core.color("#fd5401");
-        else if (val >= 2350) return am4core.color("#fd5a01");
-        else if (val >= 2340) return am4core.color("#fd5f01");
-        else if (val >= 2330) return am4core.color("#fd6501");
-        else if (val >= 2320) return am4core.color("#fc6a01");
-        else if (val >= 2310) return am4core.color("#fc7001");
-        else if (val >= 2300) return am4core.color("#fc7601");
-        else if (val >= 2290) return am4core.color("#fc7b01");
-        else if (val >= 2280) return am4core.color("#fc8101");
-        else if (val >= 2270) return am4core.color("#fc8601");
-        else if (val >= 2260) return am4core.color("#fc8c01");
-        else if (val >= 2250) return am4core.color("#fc9101");
-        else if (val >= 2240) return am4core.color("#fc9701");
-        else if (val >= 2230) return am4core.color("#fc9d01");
-        else if (val >= 2220) return am4core.color("#fba201");
-        else if (val >= 2210) return am4core.color("#fba801");
-        else if (val >= 2200) return am4core.color("#fbad01");
-        else if (val >= 2190) return am4core.color("#fbb301");
-        else if (val >= 2180) return am4core.color("#fbb801");
-        else if (val >= 2170) return am4core.color("#fbbe01");
-        else if (val >= 2160) return am4core.color("#fbc302");
-        else if (val >= 2150) return am4core.color("#fbc902");
-        else if (val >= 2140) return am4core.color("#fbcf02");
-        else if (val >= 2130) return am4core.color("#fbd402");
-        else if (val >= 2120) return am4core.color("#fbda02");
-        else if (val >= 2110) return am4core.color("#fadf02");
-        else if (val >= 2100) return am4core.color("#fae502");
-        else if (val >= 2090) return am4core.color("#faea02");
-        else if (val >= 2080) return am4core.color("#faf002");
-        else if (val >= 2070) return am4core.color("#faf502");
-        else if (val >= 2060) return am4core.color("#fafb02");
-        else if (val >= 2050) return am4core.color("#f4fb02");
-        else if (val >= 2040) return am4core.color("#eefb02");
-        else if (val >= 2030) return am4core.color("#e9fb02");
-        else if (val >= 2020) return am4core.color("#e3fb02");
-        else if (val >= 2010) return am4core.color("#ddfb03");
-        else if (val >= 2000) return am4core.color("#d7fb03");
-        else if (val >= 1990) return am4core.color("#d1fb03");
-        else if (val >= 1980) return am4core.color("#ccfc03");
-        else if (val >= 1970) return am4core.color("#c6fc03");
-        else if (val >= 1960) return am4core.color("#c0fc03");
-        else if (val >= 1950) return am4core.color("#bafc03");
-        else if (val >= 1940) return am4core.color("#b5fc03");
-        else if (val >= 1930) return am4core.color("#affc04");
-        else if (val >= 1920) return am4core.color("#a9fc04");
-        else if (val >= 1910) return am4core.color("#a3fc04");
-        else if (val >= 1900) return am4core.color("#9dfc04");
-        else if (val >= 1890) return am4core.color("#98fc04");
-        else if (val >= 1880) return am4core.color("#92fc04");
-        else if (val >= 1870) return am4core.color("#8cfc04");
-        else if (val >= 1860) return am4core.color("#86fc04");
-        else if (val >= 1850) return am4core.color("#80fc04");
-        else if (val >= 1840) return am4core.color("#7bfd05");
-        else if (val >= 1830) return am4core.color("#75fd05");
-        else if (val >= 1820) return am4core.color("#6ffd05");
-        else if (val >= 1810) return am4core.color("#69fd05");
-        else if (val >= 1800) return am4core.color("#63fd05");
-        else if (val >= 1790) return am4core.color("#5efd05");
-        else if (val >= 1780) return am4core.color("#58fd05");
-        else if (val >= 1770) return am4core.color("#52fd05");
-        else if (val >= 1760) return am4core.color("#4cfd05");
-        else if (val >= 1750) return am4core.color("#46fd06");
-        else if (val >= 1740) return am4core.color("#41fd06");
-        else if (val >= 1730) return am4core.color("#3bfd06");
-        else if (val >= 1720) return am4core.color("#35fd06");
-        else if (val >= 1710) return am4core.color("#2ffd06");
-        else if (val >= 1700) return am4core.color("#2afe06");
-        else if (val >= 1690) return am4core.color("#24fe06");
-        else if (val >= 1680) return am4core.color("#1efe06");
-        else if (val >= 1670) return am4core.color("#18fe07");
-        else if (val >= 1660) return am4core.color("#12fe07");
-        else if (val >= 1650) return am4core.color("#0dfe07");
-        else if (val >= 1640) return am4core.color("#07fe07");
-        else if (val >= 1630) return am4core.color("#01fe07");
-        else if (val >= 1620) return am4core.color("#01fe0d");
-        else if (val >= 1610) return am4core.color("#01fe12");
-        else if (val >= 1600) return am4core.color("#01fe18");
-        else if (val >= 1590) return am4core.color("#01fe1e");
-        else if (val >= 1580) return am4core.color("#01fe24");
-        else if (val >= 1570) return am4core.color("#01fe29");
-        else if (val >= 1560) return am4core.color("#01fe2f");
-        else if (val >= 1550) return am4core.color("#01fe35");
-        else if (val >= 1540) return am4core.color("#01fe3b");
-        else if (val >= 1530) return am4core.color("#01fe40");
-        else if (val >= 1520) return am4core.color("#01fd46");
-        else if (val >= 1510) return am4core.color("#01fd4c");
-        else if (val >= 1500) return am4core.color("#01fd52");
-        else if (val >= 1490) return am4core.color("#01fd57");
-        else if (val >= 1480) return am4core.color("#01fd5d");
-        else if (val >= 1470) return am4core.color("#01fd63");
-        else if (val >= 1460) return am4core.color("#01fd69");
-        else if (val >= 1450) return am4core.color("#01fd6e");
-        else if (val >= 1440) return am4core.color("#01fd74");
-        else if (val >= 1430) return am4core.color("#01fd7a");
-        else if (val >= 1420) return am4core.color("#01fd80");
-        else if (val >= 1410) return am4core.color("#00fd85");
-        else if (val >= 1400) return am4core.color("#00fd8b");
-        else if (val >= 1390) return am4core.color("#00fd91");
-        else if (val >= 1380) return am4core.color("#00fd97");
-        else if (val >= 1370) return am4core.color("#00fd9c");
-        else if (val >= 1360) return am4core.color("#00fda2");
-        else if (val >= 1350) return am4core.color("#00fda8");
-        else if (val >= 1340) return am4core.color("#00fdae");
-        else if (val >= 1330) return am4core.color("#00fdb3");
-        else if (val >= 1320) return am4core.color("#00fdb9");
-        else if (val >= 1310) return am4core.color("#00fdbf");
-        else if (val >= 1300) return am4core.color("#00fcc5");
-        else if (val >= 1290) return am4core.color("#00fcca");
-        else if (val >= 1280) return am4core.color("#00fcd0");
-        else if (val >= 1270) return am4core.color("#00fcd6");
-        else if (val >= 1260) return am4core.color("#00fcdc");
-        else if (val >= 1250) return am4core.color("#00fce1");
-        else if (val >= 1240) return am4core.color("#00fce7");
-        else if (val >= 1230) return am4core.color("#00fced");
-        else if (val >= 1220) return am4core.color("#00fcf3");
-        else if (val >= 1210) return am4core.color("#00fcf8");
-        else if (val >= 1200) return am4core.color("#00fcfe");
-        else if (val >= 1190) return am4core.color("#00f7fe");
-        else if (val >= 1180) return am4core.color("#00f2fe");
-        else if (val >= 1170) return am4core.color("#00edfe");
-        else if (val >= 1160) return am4core.color("#00e8fe");
-        else if (val >= 1150) return am4core.color("#00e3fe");
-        else if (val >= 1140) return am4core.color("#00dffe");
-        else if (val >= 1130) return am4core.color("#00dafe");
-        else if (val >= 1120) return am4core.color("#00d5fe");
-        else if (val >= 1110) return am4core.color("#00d0fe");
-        else if (val >= 1100) return am4core.color("#00cbfe");
-        else if (val >= 1090) return am4core.color("#01c6fe");
-        else if (val >= 1080) return am4core.color("#01c1fe");
-        else if (val >= 1070) return am4core.color("#01bcfe");
-        else if (val >= 1060) return am4core.color("#01b7fe");
-        else if (val >= 1050) return am4core.color("#01b2fe");
-        else if (val >= 1040) return am4core.color("#01adfe");
-        else if (val >= 1030) return am4core.color("#01a9fe");
-        else if (val >= 1020) return am4core.color("#01a4fe");
-        else if (val >= 1010) return am4core.color("#019ffe");
-        else if (val >= 1000) return am4core.color("#019afe");
-        else if (val >= 990) return am4core.color("#0195fe");
-        else if (val >= 980) return am4core.color("#0190ff");
-        else if (val >= 970) return am4core.color("#018bff");
-        else if (val >= 960) return am4core.color("#0186ff");
-        else if (val >= 950) return am4core.color("#0181ff");
-        else if (val >= 940) return am4core.color("#017cff");
-        else if (val >= 930) return am4core.color("#0178ff");
-        else if (val >= 920) return am4core.color("#0173ff");
-        else if (val >= 910) return am4core.color("#016eff");
-        else if (val >= 900) return am4core.color("#0169ff");
-        else if (val >= 890) return am4core.color("#0164ff");
-        else if (val >= 880) return am4core.color("#015fff");
-        else if (val >= 870) return am4core.color("#025aff");
-        else if (val >= 860) return am4core.color("#0255ff");
-        else if (val >= 850) return am4core.color("#0250ff");
-        else if (val >= 840) return am4core.color("#024bff");
-        else if (val >= 830) return am4core.color("#0246ff");
-        else if (val >= 820) return am4core.color("#0242ff");
-        else if (val >= 810) return am4core.color("#023dff");
-        else if (val >= 800) return am4core.color("#0238ff");
-        else return am4core.color("#FE0C00");
+        // Check for invalid or zero values - show gray
+        if (!originalVal || originalVal === 0 || isNaN(originalVal)) {
+          return am4core.color("#9CA3AF"); // Gray color for invalid/zero values
+        }
+
+        // Your existing color mapping logic
+        if (originalVal >= 396) return am4core.color("#fe0803");
+        else if (originalVal >= 392) return am4core.color("#fe1203");
+        else if (originalVal >= 388) return am4core.color("#fe1d03");
+        else if (originalVal >= 384) return am4core.color("#fe2703");
+        else if (originalVal >= 380) return am4core.color("#fe3103");
+        else if (originalVal >= 376) return am4core.color("#fe3b02");
+        else if (originalVal >= 372) return am4core.color("#fe4602");
+        else if (originalVal >= 368) return am4core.color("#fe5002");
+        else if (originalVal >= 364) return am4core.color("#fe5a02");
+        else if (originalVal >= 360) return am4core.color("#fe6502");
+        else if (originalVal >= 356) return am4core.color("#fe6f02");
+        else if (originalVal >= 352) return am4core.color("#fe7902");
+        else if (originalVal >= 348) return am4core.color("#fe8402");
+        else if (originalVal >= 344) return am4core.color("#fd8e01");
+        else if (originalVal >= 340) return am4core.color("#fd9801");
+        else if (originalVal >= 336) return am4core.color("#fdad01");
+        else if (originalVal >= 332) return am4core.color("#fdb701");
+        else if (originalVal >= 328) return am4core.color("#fdc101");
+        else if (originalVal >= 324) return am4core.color("#fdcc01");
+        else if (originalVal >= 320) return am4core.color("#fdd601");
+        else if (originalVal >= 316) return am4core.color("#fde000");
+        else if (originalVal >= 312) return am4core.color("#fdea00");
+        else if (originalVal >= 308) return am4core.color("#fdea00");
+        else if (originalVal >= 304) return am4core.color("#fdf500");
+        else if (originalVal >= 300) return am4core.color("#fdff00");
+        else if (originalVal >= 296) return am4core.color("#fdff00");
+        else if (originalVal >= 292) return am4core.color("#f3ff00");
+        else if (originalVal >= 288) return am4core.color("#e9ff00");
+        else if (originalVal >= 284) return am4core.color("#dfff00");
+        else if (originalVal >= 280) return am4core.color("#d5ff00");
+        else if (originalVal >= 276) return am4core.color("#cbff00");
+        else if (originalVal >= 272) return am4core.color("#c1ff00");
+        else if (originalVal >= 268) return am4core.color("#b6ff00");
+        else if (originalVal >= 264) return am4core.color("#a2ff00");
+        else if (originalVal >= 260) return am4core.color("#98ff00");
+        else if (originalVal >= 256) return am4core.color("#8eff00");
+        else if (originalVal >= 252) return am4core.color("#84ff01");
+        else if (originalVal >= 248) return am4core.color("#7aff01");
+        else if (originalVal >= 244) return am4core.color("#70ff01");
+        else if (originalVal >= 240) return am4core.color("#66ff01");
+        else if (originalVal >= 236) return am4core.color("#5cff01");
+        else if (originalVal >= 232) return am4core.color("#52ff01");
+        else if (originalVal >= 228) return am4core.color("#48ff01");
+        else if (originalVal >= 224) return am4core.color("#3dff01");
+        else if (originalVal >= 220) return am4core.color("#33ff01");
+        else if (originalVal >= 216) return am4core.color("#29ff01");
+        else if (originalVal >= 212) return am4core.color("#1fff01");
+        else if (originalVal >= 208) return am4core.color("#15ff01");
+        else if (originalVal >= 204) return am4core.color("#0bff01");
+        else if (originalVal >= 200) return am4core.color("#0bff01");
+        else if (originalVal >= 196) return am4core.color("#0bfe0c");
+        else if (originalVal >= 192) return am4core.color("#0bfe16");
+        else if (originalVal >= 188) return am4core.color("#0afd21");
+        else if (originalVal >= 184) return am4core.color("#0afc2b");
+        else if (originalVal >= 180) return am4core.color("#0afc36");
+        else if (originalVal >= 176) return am4core.color("#0afb40");
+        else if (originalVal >= 172) return am4core.color("#09fa4b");
+        else if (originalVal >= 168) return am4core.color("#09fa55");
+        else if (originalVal >= 164) return am4core.color("#09f960");
+        else if (originalVal >= 160) return am4core.color("#09f86a");
+        else if (originalVal >= 156) return am4core.color("#08f875");
+        else if (originalVal >= 152) return am4core.color("#08f77f");
+        else if (originalVal >= 148) return am4core.color("#08f68a");
+        else if (originalVal >= 144) return am4core.color("#08f694");
+        else if (originalVal >= 140) return am4core.color("#07f59f");
+        else if (originalVal >= 136) return am4core.color("#07f4a9");
+        else if (originalVal >= 132) return am4core.color("#07f4b4");
+        else if (originalVal >= 128) return am4core.color("#07f3be");
+        else if (originalVal >= 124) return am4core.color("#06f2c9");
+        else if (originalVal >= 120) return am4core.color("#06f2d3");
+        else if (originalVal >= 116) return am4core.color("#06f1de");
+        else if (originalVal >= 112) return am4core.color("#06f0e8");
+        else if (originalVal >= 108) return am4core.color("#05f0f3");
+        else if (originalVal >= 104) return am4core.color("#05effd");
+        else if (originalVal >= 100) return am4core.color("#05effd");
+        else if (originalVal >= 96) return am4core.color("#05e7fd");
+        else if (originalVal >= 92) return am4core.color("#05dffd");
+        else if (originalVal >= 88) return am4core.color("#05d6fd");
+        else if (originalVal >= 84) return am4core.color("#04cefd");
+        else if (originalVal >= 80) return am4core.color("#04c6fd");
+        else if (originalVal >= 76) return am4core.color("#04befe");
+        else if (originalVal >= 72) return am4core.color("#04b6fe");
+        else if (originalVal >= 68) return am4core.color("#04adfe");
+        else if (originalVal >= 64) return am4core.color("#04a5fe");
+        else if (originalVal >= 60) return am4core.color("#039dfe");
+        else if (originalVal >= 56) return am4core.color("#0395fe");
+        else if (originalVal >= 52) return am4core.color("#038dfe");
+        else if (originalVal >= 48) return am4core.color("#0384fe");
+        else if (originalVal >= 44) return am4core.color("#037cfe");
+        else if (originalVal >= 40) return am4core.color("#0374fe");
+        else if (originalVal >= 36) return am4core.color("#026cfe");
+        else if (originalVal >= 32) return am4core.color("#0263fe");
+        else if (originalVal >= 28) return am4core.color("#025bff");
+        else if (originalVal >= 24) return am4core.color("#0253ff");
+        else if (originalVal >= 20) return am4core.color("#024bff");
+        else if (originalVal >= 16) return am4core.color("#0243ff");
+        else if (originalVal >= 12) return am4core.color("#013aff");
+        else if (originalVal >= 4) return am4core.color("#0132ff");
+        else if (originalVal >= 0) return am4core.color("#012aff");
+        else return am4core.color("#012aff");
       }
       return fill;
     });
 
-    chart.data = TransformerData;
-    xAxis.renderer.minGridDistance = 1; // Force closest spacing
+    // Utility functions
+    const getUniqueDates = (apiData) => {
+      const uniqueDates = [
+        ...new Set(apiData.map((item) => item.date.split(" ")[0])),
+      ];
+      return uniqueDates.sort();
+    };
 
+    const formatDateForDisplay = (dateStr) => {
+      const date = new Date(dateStr);
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+      return `${month}/${day}`;
+    };
+
+    const formatFullDate = (dateStr) => {
+      const date = new Date(dateStr);
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        weekday: "short",
+      };
+      return date.toLocaleDateString("en-US", options);
+    };
+
+    const getDayName = (dateStr) => {
+      const date = new Date(dateStr);
+      const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      return dayNames[date.getDay()];
+    };
+
+    // Fixed data transformation function
+    const transformApiDataToHeatmap = (apiData) => {
+      const uniqueDates = getUniqueDates(apiData);
+      const shouldShowDayNames = uniqueDates.length <= 7;
+      let datesToShow = [];
+
+      if (shouldShowDayNames) {
+        datesToShow = uniqueDates;
+      } else {
+        datesToShow = uniqueDates.filter((_, index) => index % 3 === 0);
+      }
+
+      return apiData.map((item) => {
+        const date = new Date(item.date);
+        const dateOnly = item.date.split(" ")[0];
+
+        const hour = date.getHours();
+        const hourFormatted =
+          hour === 0
+            ? "12am"
+            : hour < 12
+            ? `${hour}am`
+            : hour === 12
+            ? "12pm"
+            : `${hour - 12}pm`;
+
+        let xCategory;
+        if (shouldShowDayNames) {
+          xCategory = getDayName(dateOnly);
+        } else {
+          if (datesToShow.includes(dateOnly)) {
+            xCategory = formatDateForDisplay(dateOnly);
+          } else {
+            xCategory = formatDateForDisplay(dateOnly);
+          }
+        }
+
+        // Get the correct value based on the dataKey passed to component
+        const originalValue = item[dataKey] || 0;
+        let scaledValue = 0;
+
+        if (originalValue && !isNaN(originalValue) && originalValue !== 0) {
+          scaledValue = originalValue * 100;
+        }
+
+        return {
+          hour: hourFormatted,
+          xCategory: xCategory,
+          value: scaledValue,
+          originalValue: originalValue,
+          fullDate: formatFullDate(dateOnly),
+          originalDate: dateOnly,
+        };
+      });
+    };
+
+    const transformedData = transformApiDataToHeatmap(TransformerData);
+    chart.data = transformedData;
+
+    // Configure x-axis
+    const uniqueDates = getUniqueDates(TransformerData);
+    const shouldShowDayNames = uniqueDates.length <= 7;
+
+    xAxis.renderer.minGridDistance = 1;
     xAxis.renderer.labels.template.truncate = false;
     xAxis.renderer.labels.template.wrap = true;
-    xAxis.renderer.labels.template.maxWidth = 70; // or smaller if needed
-    xAxis.renderer.labels.template.rotation = -90; // 45 for diagonal if preferred
+    xAxis.renderer.labels.template.maxWidth = 70;
+
+    if (shouldShowDayNames) {
+      xAxis.renderer.labels.template.rotation = 0;
+      xAxis.renderer.labels.template.fontSize = 12;
+    } else {
+      xAxis.renderer.labels.template.rotation = -45;
+      xAxis.renderer.labels.template.fontSize = 10;
+
+      xAxis.renderer.labels.template.adapter.add("text", (text, target) => {
+        if (target.dataItem) {
+          const category = target.dataItem.category;
+          const dateOnly = transformedData.find(
+            (d) => d.xCategory === category
+          )?.originalDate;
+          if (dateOnly) {
+            const dateIndex = uniqueDates.indexOf(dateOnly);
+            if (dateIndex % 3 !== 0) {
+              return "";
+            }
+          }
+        }
+        return text;
+      });
+    }
+
     xAxis.renderer.autoScale = false;
-    xAxis.renderer.labels.template.fontSize = 10;
     yAxis.renderer.labels.template.fontSize = 10;
 
     return () => {
-      chart.dispose();
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.dispose();
+        chartInstanceRef.current = null;
+      }
+    };
+  }, [loading]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.dispose();
+        chartInstanceRef.current = null;
+      }
     };
   }, []);
 
-  return <div ref={chartRef} className="w-full h-[270px]" />;
+  return loading ? (
+    <CustomLoader size="50px" />
+  ) : (
+    <div ref={chartRef} id={id} className="w-full h-[270px]" />
+  );
 };
 
 export default HeatmapChart;

@@ -66,79 +66,12 @@ export default function SidebarDropdown({
               : "pr-2 pl-4"
           } gap-2`}
         >
-          {/* {item.submenu.map((sub) => {
-            const activePath = path === sub.href;
-            return (
-              <Link
-                key={sub.id}
-                href={sub.href}
-                className={`group flex hover:text-[#1A68B2] w-full py-[7px] text-[13.216px] rounded-md ${
-                  iscollapese ? "items-center justify-center" : ""
-                }`}
-                style={{ fontWeight: 500 }}
-              >
-                {iscollapese ? (
-                  <div className=" relative flex items-center justify-center">
-                    {isClient && (
-                      <Tooltip
-                        title={sub.title}
-                        arrow
-                        placement="left"
-                        slotProps={{
-                          tooltip: {
-                            sx: {
-                              bgcolor: "#025697",
-                              color: "#ffffff",
-                              fontSize: "12px",
-                              fontWeight: 500,
-                            },
-                          },
-                          arrow: {
-                            sx: {
-                              color: "#025697",
-                            },
-                          },
-                        }}
-                      >
-                        <span>
-                          <sub.icon
-                            className={`w-5 h-5   ${
-                              activePath
-                                ? "text-[#1A68B2]"
-                                : "text-black dark:text-white"
-                            } group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
-                          />
-                        </span>
-                      </Tooltip>
-                    )}
-                  </div>
-                ) : (
-                  <div
-                    className={`text-[13px] ${
-                      activePath
-                        ? "text-[#1A68B2]"
-                        : "text-black dark:text-white"
-                    } w-full flex items-center justify-start pl-4 gap-2 group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
-                  >
-                    <sub.icon
-                      className={`w-5 h-5 ${
-                        activePath
-                          ? "text-[#1A68B2]"
-                          : "text-black dark:text-white"
-                      }  group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
-                    />
-                    {sub.title}
-                  </div>
-                )}
-              </Link>
-            );
-          })} */}
           {item.submenu.map((sub) => {
             const isSldActive =
               sub.href === "/sld" &&
-              ["/sld", "/meter", "/logs", "/log-detail"].some((p) =>
-                path.startsWith(p)
-              );
+              ["/sld", "/meter", "/logs", "/log-detail"].some((p) => {
+                path.startsWith(p);
+              });
 
             const activePath = isSldActive || path === sub.href;
 

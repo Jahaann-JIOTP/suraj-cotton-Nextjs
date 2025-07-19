@@ -13,14 +13,14 @@ const unit4MeterData = [
   },
   {
     link: "U20_GW03",
-    title: "TF #3",
+    title: "T/F 3",
     top: 310,
     left: 386,
-    ltScheme: "LT_3",
+    ltScheme: "LT_4",
   },
   {
     link: "U19_GW03",
-    title: "TF #4",
+    title: "T/F 4",
     top: 310,
     left: 657,
     ltScheme: "LT_4",

@@ -13,9 +13,7 @@ const Dashboard = () => {
   const [dashboardTimePeriod, setDashboardTimePeriod] = useState("today");
   const [singleDivData, setSingleDivData] = useState({});
   const [loading, setLoading] = useState(false);
-  const handleTimePeriodForDashboard = (period) => {
-    setDashboardTimePeriod(period);
-  };
+
   const { startDate, endDate } = getDateRangeFromString(dashboardTimePeriod);
   const fetchSingleValueData = async () => {
     setLoading(true);
@@ -32,6 +30,7 @@ const Dashboard = () => {
       }
       setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error(error.message);
     }
   };
@@ -43,7 +42,11 @@ const Dashboard = () => {
     <div className="h-[81vh] overflow-y-auto relative">
       {/* first section */}
       <div className="w-full z-100 flex items-center justify-center md:justify-start">
-        <TimePeriodSelector getTimePeriod={handleTimePeriodForDashboard} />
+        {/* <TimePeriodSelector getTimePeriod={handleTimePeriodForDashboard} /> */}
+        <TimePeriodSelector
+          selected={dashboardTimePeriod}
+          setSelected={setDashboardTimePeriod}
+        />
       </div>
       {/* second section first of small divs */}
       <div className="mt-3 md:mt-[0.7vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
@@ -119,14 +122,14 @@ const Dashboard = () => {
           <div className="flex flex-wrap gap-3 md:gap-[0.7vw] items-center  justify-between">
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
-                title="Total Generation"
+                title="Energy/Spindle(U4)"
                 value="7373.98"
                 unit="kWh"
               />
             </div>
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
-                title="Total Energy Input"
+                title="Energy/Spindle(U5)"
                 value="7373.98"
                 unit="kWh"
               />
@@ -153,10 +156,14 @@ const Dashboard = () => {
           />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="Solar Generation" value="8883.98" unit="kWh" />
+          <SingleValueDiv title="Aux. Consumption" value="8883.98" unit="kWh" />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="WAPDA Import" value="7083.98" unit="kWh" />
+          <SingleValueDiv
+            title="Total Energy Output"
+            value="7083.98"
+            unit="kWh"
+          />
         </div>
       </div>
       {/* comparison graphs */}

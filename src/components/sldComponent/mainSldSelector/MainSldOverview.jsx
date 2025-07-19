@@ -42,24 +42,32 @@ const mainOverviewMeterData = [
     title: "T/F 3",
     top: 599,
     left: 106,
+    area: "Unit_5",
+    lt_scheme: "LT_4",
   },
   {
     link: "U19_GW03",
     title: "T/F 4",
     top: 599,
     left: 296,
+    area: "Unit_5",
+    lt_scheme: "LT_4",
   },
   {
     link: "U23_GW01",
     title: "Power House IC",
     top: 595,
     left: 788,
+    area: "Unit_4",
+    lt_scheme: "LT_2",
   },
   {
     link: "U22_GW01",
     title: "Wapda IC",
     top: 597,
     left: 975,
+    area: "Unit_4",
+    lt_scheme: "LT_2",
   },
 ];
 
@@ -174,7 +182,7 @@ const MainSldOverview = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_4&lt_scheme=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=${meter.area}&lt_scheme=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -188,7 +196,7 @@ const MainSldOverview = ({ roundedData }) => {
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
             }}
-            className={`border-1 border-red-500`}
+            className={``}
           ></button>
         ))}
         <img
@@ -205,10 +213,10 @@ const MainSldOverview = ({ roundedData }) => {
             key={index}
             className={`absolute z-20  w-[44.5px] h-[50px] flex flex-col items-center`}
           >
-            <span className="meterReadingUnit4Lt1 mt-[-3px]">
+            <span className="meterReadingUnit4Lt1 mt-[-2.5px]">
               {meter.activePowerTotalTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-3.9px]">
+            <span className="meterReadingUnit4Lt1 mt-[-3.5px]">
               {meter.activeCurrentAvgTag || "000"}
             </span>
             <span className="meterReadingUnit4Lt1 mt-[-4.5px]">

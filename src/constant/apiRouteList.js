@@ -30,6 +30,7 @@ const config = {
     GET_GENERATION_ENERGY: "/generation-energy?value=", // pass query parameter
     GET_CONSUMPTION_ENERGY: "/consumption-energy?value=",
     GET_ENERGY_COMPARISON: "/pie-chart/chart-data",
+    GET_HEAT_MAP_DATA: "/heat-map",
   },
   SANKEY: {
     UNIT4_LT1: "/unit4-lt1",
@@ -50,6 +51,11 @@ const config = {
     ENERGY_USAGE_REPORTS: "/energy-usage-report",
     ADD_SPINDLES: "/production",
     GET_SPINDLES: "/production-monthwise?month=",
+  },
+  METER_CONFIG: {
+    ADD_METER_TOGGLE: "/meter/toggle",
+    GET_METER_LOGS: "/meter/config/latest",
+    GET_METER_TOGGLE_STATUS: "/meter/toggles",
   },
 };
 

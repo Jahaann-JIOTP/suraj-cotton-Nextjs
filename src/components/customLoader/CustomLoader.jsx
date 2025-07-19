@@ -4,7 +4,12 @@ const bars = Array.from({ length: 12 });
 
 export default function CustomLoader({ size = "" }) {
   return (
-    <div className="w-full h-[60vh] flex items-center justify-center">
+    <div
+      className="w-full  flex items-center justify-center"
+      style={{
+        height: size.length > 0 ? "30px" : "60vh",
+      }}
+    >
       <div
         className="relative rounded-[10px]"
         style={{

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5flow from "@amcharts/amcharts5/flow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
@@ -9,7 +9,6 @@ import { useTheme } from "next-themes";
 const SankeyChart = ({ data, id }) => {
   const chartRef = useRef(null);
   const { resolvedTheme } = useTheme();
-
   useEffect(() => {
     const container = document.getElementById(id);
     if (!container || !(container instanceof HTMLElement)) return;

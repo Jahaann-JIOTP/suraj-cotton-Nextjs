@@ -2,26 +2,61 @@
 import SingleValueDiv from "@/components/dashboardComponents/singleValueDiv/SingleValueDiv";
 import TimePeriodSelector from "@/components/dashboardComponents/timePeriodSelector/TimePeriodSelector";
 import TrafoCard from "@/components/dashboardComponents/trafoCard/TrafoCard";
-import React, { useState } from "react";
+import config from "@/constant/apiRouteList";
+import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
+import React, { useEffect, useState } from "react";
 
 const PowerSummaryPage = () => {
-  const [PlantSummaryTimePeriod, setPlantSummaryTimePeriod] = useState("");
-  const handleTimePeriodForPlantSummary = (period) => {
-    setPlantSummaryTimePeriod(period);
+  const [powerSummaryData, setPowerSummaryData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [powerSummaryTimePeriod, setPowerSummaryTimePeriod] = useState("today");
+  const { startDate, endDate } = getDateRangeFromString(powerSummaryTimePeriod);
+
+  const handleTimePeriodForPowerSummary = (period) => {
+    setPowerSummaryTimePeriod(period);
   };
 
+  const fetchPowerSummaryData = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${startDate}&end_date=${endDate}`,
+        {
+          method: "GET",
+        }
+      );
+      const resResult = await response.json();
+      if (response.ok) {
+        setPowerSummaryData(resResult.total_consumption);
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error.message);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchPowerSummaryData();
+  }, [powerSummaryTimePeriod]);
+
   return (
-    <div className="h-full lg:h-[81vh] overflow-y-auto lg:overflow-hidden ">
+    <div className="h-full lg:h-[81vh] overflow-y-auto lg:overflow-hidden">
       {/* time period selector */}
       <div className="w-full z-100 flex items-center justify-center md:justify-start">
-        <TimePeriodSelector getTimePeriod={handleTimePeriodForPlantSummary} />
+        <TimePeriodSelector
+          selected={powerSummaryTimePeriod}
+          setSelected={setPowerSummaryTimePeriod}
+        />
       </div>
       {/* first section first of small divs */}
       <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="WAPDA 1"
-            value="7373.98"
+            value={powerSummaryData.Wapda1 || "00.00"}
+            loading={loading}
             unit="kWh"
             height="6rem"
           />
@@ -29,7 +64,7 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="WAPDA 2"
-            value="8883.98"
+            value="00.00"
             unit="kWh"
             height="6rem"
           />
@@ -37,18 +72,13 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Nilgata HFO"
-            value="8883.98"
+            value="00.00"
             unit="kWh"
             height="6rem"
           />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
-          <SingleValueDiv
-            title="JMS"
-            value="7083.98"
-            unit="kWh"
-            height="6rem"
-          />
+          <SingleValueDiv title="JMS" value="00.00" unit="kWh" height="6rem" />
         </div>
       </div>
       {/* second section */}
@@ -56,22 +86,24 @@ const PowerSummaryPage = () => {
         <div className="w-full lg:w-[49.3%]">
           <TrafoCard
             mainTitle="Trafo 1"
-            icomingValue="7373.98"
+            icomingValue={powerSummaryData.Trafo1Incoming || "00.00"}
+            loading={loading}
             iconmingUnit="kWh"
-            outgoingValue="7373.98"
+            outgoingValue="00.00"
             outgoingUnit="kWh"
-            lossesValue="7373.98"
+            lossesValue="00.00"
             lossesUnit="kWh"
           />
         </div>
         <div className="w-full lg:w-[49.3%]">
           <TrafoCard
             mainTitle="Trafo 2"
-            icomingValue="7373.98"
+            icomingValue={powerSummaryData.Trafo2Incoming || "00.00"}
+            loading={loading}
             iconmingUnit="kWh"
-            outgoingValue="7373.98"
+            outgoingValue="00.00"
             outgoingUnit="kWh"
-            lossesValue="7373.98"
+            lossesValue="00.00"
             lossesUnit="kWh"
           />
         </div>
@@ -81,22 +113,24 @@ const PowerSummaryPage = () => {
         <div className="w-full lg:w-[49.3%]">
           <TrafoCard
             mainTitle="Trafo 1"
-            icomingValue="7373.98"
+            icomingValue={powerSummaryData.Trafo3Incoming || "00.00"}
+            loading={loading}
             iconmingUnit="kWh"
-            outgoingValue="7373.98"
+            outgoingValue="00.00"
             outgoingUnit="kWh"
-            lossesValue="7373.98"
+            lossesValue="00.00"
             lossesUnit="kWh"
           />
         </div>
         <div className="w-full lg:w-[49.3%]">
           <TrafoCard
             mainTitle="Trafo 2"
-            icomingValue="7373.98"
+            icomingValue={powerSummaryData.Trafo4Incoming || "00.00"}
+            loading={loading}
             iconmingUnit="kWh"
-            outgoingValue="7373.98"
+            outgoingValue="00.00"
             outgoingUnit="kWh"
-            lossesValue="7373.98"
+            lossesValue="00.00"
             lossesUnit="kWh"
           />
         </div>
@@ -105,32 +139,36 @@ const PowerSummaryPage = () => {
       <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="HT Generation"
-            value="7373.98"
+            title="Solar 1"
+            loading={loading}
+            value={powerSummaryData.Solar1 || "00.00"}
             unit="kWh"
             height="6rem"
           />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="LT Generation"
-            value="8883.98"
+            title="Solar 2"
+            value={powerSummaryData.Solar2 || "00.00"}
+            loading={loading}
             unit="kWh"
             height="6rem"
           />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="Solar Generation"
-            value="8883.98"
+            title="Diesel Genset"
+            value={powerSummaryData.DieselGenset || "00.00"}
+            loading={loading}
             unit="kWh"
             height="6rem"
           />
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="WAPDA Import"
-            value="7083.98"
+            title="Gas Genset"
+            value={powerSummaryData.GasGenset || "00.00"}
+            loading={loading}
             unit="kWh"
             height="6rem"
           />
@@ -140,8 +178,8 @@ const PowerSummaryPage = () => {
       <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="HT Generation"
-            value="7373.98"
+            title="WAPDA Energy Export"
+            value="00.00"
             unit="kWh"
             height="6rem"
             valueColor="#019726"
@@ -149,8 +187,9 @@ const PowerSummaryPage = () => {
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="LT Generation"
-            value="8883.98"
+            title="Unaccountable Energy"
+            value={powerSummaryData.unaccoutable_energy || "00.00"}
+            loading={loading}
             unit="kWh"
             height="6rem"
             valueColor="#E40101"
@@ -158,8 +197,8 @@ const PowerSummaryPage = () => {
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="Solar Generation"
-            value="8883.98"
+            title="Transformer losses"
+            value="00.00"
             unit="kWh"
             height="6rem"
             valueColor="#E40101"
@@ -167,8 +206,8 @@ const PowerSummaryPage = () => {
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="WAPDA Import"
-            value="7083.98"
+            title="HT Transmission Losses"
+            value="00.00"
             unit="kWh"
             height="6rem"
             valueColor="#E40101"

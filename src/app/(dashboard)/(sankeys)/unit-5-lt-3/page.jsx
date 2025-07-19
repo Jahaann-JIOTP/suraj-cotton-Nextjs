@@ -25,16 +25,16 @@ const sankeyData = [
   { from: "LT1 1800kWh", to: "Draw Frame Finish(100Kwh)", value: 100 },
 ];
 const Unit5Lt3Page = () => {
-  const [Unit4lt3TimePeriod, setUnit4lt3TimePeriod] = useState("");
-  const handleTimePeriodForUnit4lt3 = (period) => {
-    setUnit4lt3TimePeriod(period);
-  };
+  const [Unit5lt3TimePeriod, setUnit5lt3TimePeriod] = useState("today");
 
   return (
-    <div className="w-full bg-white dark:bg-gray-800 flex flex-col h-full p-4 rounded-md border-t-3 border-[#025697] ">
+    <div className="w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-center flex justify-between">
         <h2 className="text-[20px] font-600 font-inter">Unit 5 LT 3</h2>
-        <TimePeriodSelector getTimePeriod={handleTimePeriodForUnit4lt3} />
+        <TimePeriodSelector
+          selected={Unit5lt3TimePeriod}
+          setSelected={setUnit5lt3TimePeriod}
+        />
       </div>
       <div className=" w-full  flex items-center justify-center">
         <div className="w-full md:px-20 flex items-center justify-center mt-6">

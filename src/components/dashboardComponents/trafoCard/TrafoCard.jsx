@@ -2,6 +2,7 @@
 import { Divider, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 
 const TrafoCard = ({
   mainTitle,
@@ -11,6 +12,7 @@ const TrafoCard = ({
   outgoingUnit,
   lossesValue,
   lossesUnit,
+  loading,
 }) => {
   const [mounted, setMounted] = useState(false);
   const theme = useTheme();
@@ -31,14 +33,19 @@ const TrafoCard = ({
             Incoming
           </span>
           <div>
-            <div>
-              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
-                {icomingValue}
-              </span>
-              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
-                {iconmingUnit}
-              </span>
-            </div>
+            {loading ? (
+              // <span>Loading...</span>
+              <CustomLoader size="32px" />
+            ) : (
+              <div className="flex items-center gap-1">
+                <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+                  {icomingValue}
+                </span>
+                <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+                  {iconmingUnit}
+                </span>
+              </div>
+            )}
           </div>
         </div>
         <Divider
@@ -51,14 +58,18 @@ const TrafoCard = ({
           <span className="text-[16.34px] text-[#1A68B2] font-500 font-inter">
             Outgoing
           </span>
-          <div>
-            <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
-              {outgoingValue}
-            </span>
-            <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
-              {outgoingUnit}
-            </span>
-          </div>
+          {loading ? (
+            <CustomLoader size="32px" />
+          ) : (
+            <div className="flex items-center gap-1">
+              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+                {outgoingValue}
+              </span>
+              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+                {outgoingUnit}
+              </span>
+            </div>
+          )}
         </div>
         <Divider
           orientation={isSmallScreen ? "horizontal" : "vertical"}
@@ -70,14 +81,18 @@ const TrafoCard = ({
           <span className="text-[16.34px] text-[#1A68B2] font-500 font-inter">
             Net Losses
           </span>
-          <div>
-            <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
-              {lossesValue}
-            </span>
-            <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
-              {lossesUnit}
-            </span>
-          </div>
+          {loading ? (
+            <CustomLoader size="32px" />
+          ) : (
+            <div className="flex items-center gap-1">
+              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+                {lossesValue}
+              </span>
+              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+                {lossesUnit}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
