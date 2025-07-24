@@ -79,7 +79,6 @@ const UnitLt41Page = () => {
             <CustomLoader />
           ) : (
             <SankeyChart data={data} id="unit4Lt1Chart" />
-            // <SankeyChart data={sankeyData} id="unit4Lt1Chart" />
           )}
         </div>
       </div>

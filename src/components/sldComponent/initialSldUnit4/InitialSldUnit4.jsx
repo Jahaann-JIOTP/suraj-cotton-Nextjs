@@ -42,7 +42,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U19_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_PLC_Voltage_Avg,
-      top: 200,
+      top: 196,
       left: 116,
     },
     // wapda IC
@@ -50,7 +50,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U21_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U21_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U21_PLC_Voltage_Avg,
-      top: 200,
+      top: 196,
       left: 270,
     },
     // power house
@@ -58,7 +58,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U7_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U7_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_PLC_Voltage_Avg,
-      top: 200,
+      top: 198,
       left: 857,
     },
     // wapda IC
@@ -66,7 +66,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U13_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_PLC_Voltage_Avg,
-      top: 200,
+      top: 198,
       left: 1008,
     },
   ];
@@ -141,19 +141,19 @@ const InitialSldUnit4 = ({ roundedData }) => {
         {unit4InitialSldMeterTAgs.map((meter, index) => (
           <div
             key={index}
-            className="absolute flex flex-col items-center z-40 w-[58px] h-[59px]"
+            className="absolute flex flex-col items-center z-40 w-[58px] h-[61px]"
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
             }}
           >
-            <span className="meterReadingUnit4Lt2 mt-[-2px]">
+            <span className="meterReadingUnit4Lt2 mt-[-1px]">
               {meter.activePowerTotalTag || "00.00"}
             </span>
-            <span className="meterReadingUnit4Lt2 mt-[-1.5px]">
+            <span className="meterReadingUnit4Lt2">
               {meter.activeCurrentAvgTag || "00.00"}
             </span>
-            <span className="meterReadingUnit4Lt2 mt-[-1px]">
+            <span className="meterReadingUnit4Lt2">
               {meter.activeVoltageAvgTag || "00.00"}
             </span>
           </div>

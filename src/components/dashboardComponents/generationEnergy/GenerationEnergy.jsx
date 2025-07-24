@@ -7,12 +7,14 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { useTheme } from "next-themes";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 
 am4core.useTheme(am4themes_animated);
 
 const GenerationEnergy = () => {
   const [selectedCategory, setSelectedCategory] = useState("WAPDA 1");
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("week");
+  const [loading, setLoading] = useState(false);
   const [isGenerationEnergyFullView, setGenerationEnergyFullView] =
     useState(false);
   const { theme } = useTheme(); // Light or dark
@@ -22,6 +24,7 @@ const GenerationEnergy = () => {
   };
 
   const fetchGenerationEnergyData = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_GENERATION_ENERGY}${selectedTimePeriod}`,
@@ -37,8 +40,10 @@ const GenerationEnergy = () => {
           console.warn("No chart data received.");
         }
       }
+      setLoading(false);
     } catch (error) {
       console.error(error.message);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -66,7 +71,7 @@ const GenerationEnergy = () => {
 
     chart.legend = new am4charts.Legend();
     chart.legend.position = "bottom";
-    chart.legend.labels.template.fontSize = 14;
+    chart.legend.labels.template.fontSize = 10;
     chart.legend.labels.template.fontWeight = "500";
     chart.legend.labels.template.fill = am4core.color(
       isDark ? "#ffffff" : "#000000"
@@ -123,11 +128,13 @@ const GenerationEnergy = () => {
     xAxis.renderer.labels.template.fill = am4core.color(
       isDark ? "#ffffff" : "#000000"
     );
+    xAxis.renderer.labels.template.fontSize = 10;
 
     const yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.renderer.labels.template.fill = am4core.color(
       isDark ? "#ffffff" : "#000000"
     );
+    yAxis.renderer.labels.template.fontSize = 10;
 
     function createSeries(field, name, color) {
       const series = chart.series.push(new am4charts.ColumnSeries());
@@ -191,12 +198,16 @@ const GenerationEnergy = () => {
           </button>
         </div>
       </div>
+      {/* {loading ? (
+        <CustomLoader size="50px" containerHeight="15vh" />
+      ) : ( */}
       <div
         id="generationEnergy"
         className={`w-full ${
           isGenerationEnergyFullView ? "h-[90%]" : "h-[12rem] pb-2 lg:h-full"
         }`}
       ></div>
+      {/* )} */}
     </div>
   );
 };

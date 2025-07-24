@@ -31,9 +31,13 @@ const config = {
     GET_CONSUMPTION_ENERGY: "/consumption-energy?value=",
     GET_ENERGY_COMPARISON: "/pie-chart/chart-data",
     GET_HEAT_MAP_DATA: "/heat-map",
+    GET_SPINDLES: "/energy-spindle",
   },
   SANKEY: {
     UNIT4_LT1: "/unit4-lt1",
+    UNIT4_LT2: "/unit4-lt2",
+    UNIT5_LT3: "/unit5-lt3",
+    UNIT5_LT4: "/unit5-lt4",
   },
   DIAGRAM: {
     MAIN_METER_TAGS_LINK: "/node-red-link",

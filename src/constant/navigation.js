@@ -61,7 +61,7 @@ export const privilegeConfig = {
       "/energy-usage-report",
       "/energy-cost-report",
       "/energy_usage",
-      "/power-summary-report",
+      "/energy-summary-report",
       "/spindle-production",
     ],
     tab: "Reports",
@@ -119,25 +119,25 @@ export const sidebarLinksMap = {
       submenu: [
         {
           id: 3,
-          title: "Unit 4 LT-1 (Sankey)",
+          title: "Unit 4 LT-1",
           href: "/unit-4-lt-1",
           icon: Unit4Lt1,
         },
         {
           id: 4,
-          title: "Unit 4 LT-2 (Sankey)",
+          title: "Unit 4 LT-2",
           href: "/unit-4-lt-2",
           icon: Unit4Lt1,
         },
         {
           id: 5,
-          title: "Unit 5 LT-3 (Sankey)",
+          title: "Unit 5 LT-3",
           href: "/unit-5-lt-3",
           icon: Unit4Lt1,
         },
         {
           id: 6,
-          title: "Unit 5 LT-4 (Sankey)",
+          title: "Unit 5 LT-4",
           href: "/unit-5-lt-4",
           icon: Unit4Lt1,
         },
@@ -198,7 +198,7 @@ export const sidebarLinksMap = {
     {
       title: "Power Summary Report",
       icon: PlantOverview,
-      href: "/power-summary-report",
+      href: "/energy-summary-report",
     },
     {
       title: "Spindle Production",

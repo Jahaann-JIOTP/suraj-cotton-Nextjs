@@ -340,13 +340,13 @@ const Unit4Lt2 = ({ roundedData }) => {
             }}
             className={`absolute z-20  w-[51px] h-[57px] flex flex-col items-center`}
           >
-            <span className="meterReadingUnit4Lt1 mt-[-2.4px]">
+            <span className="meterReadingUnit4Lt1">
               {meter.activePowerTotalTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-1.2px]">
+            <span className="meterReadingUnit4Lt1">
               {meter.activeCurrentAvgTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-1px]">
+            <span className="meterReadingUnit4Lt1">
               {meter.activeVoltageAvgTag || "000"}
             </span>
           </div>

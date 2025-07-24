@@ -7,12 +7,14 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { useTheme } from "next-themes";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 
 am4core.useTheme(am4themes_animated);
 
 const ConsumptionEnergy = () => {
   const [selectedCategory, setSelectedCategory] = useState("Solar Generation");
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("week");
+  const [loading, setLoading] = useState(false);
   const [isConsumptionEnergyFullView, setConsumptionEnergyFullView] =
     useState(false);
   const { theme } = useTheme(); // Light or dark
@@ -23,6 +25,7 @@ const ConsumptionEnergy = () => {
 
   const fetchConsumptionEnergyData = async () => {
     try {
+      setLoading(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_CONSUMPTION_ENERGY}${selectedTimePeriod}`,
         {
@@ -32,13 +35,18 @@ const ConsumptionEnergy = () => {
       if (response.ok) {
         const resResult = await response.json();
         if (Array.isArray(resResult) && resResult.length > 0) {
-          updateChart(resResult, selectedTimePeriod);
+          requestAnimationFrame(() => {
+            updateChart(resResult, selectedTimePeriod);
+            setLoading(false);
+          });
         } else {
           console.warn("No chart data received.");
+          setLoading(false);
         }
       }
     } catch (error) {
       console.error(error.message);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -62,7 +70,7 @@ const ConsumptionEnergy = () => {
 
     chart.legend = new am4charts.Legend();
     chart.legend.position = "bottom";
-    chart.legend.labels.template.fontSize = 14;
+    chart.legend.labels.template.fontSize = 10;
     chart.legend.labels.template.fontWeight = "500";
     chart.legend.labels.template.fill = am4core.color(
       isDark ? "#ffffff" : "#000000"
@@ -105,11 +113,13 @@ const ConsumptionEnergy = () => {
     xAxis.renderer.labels.template.fill = am4core.color(
       isDark ? "#ffffff" : "#000000"
     );
+    xAxis.renderer.labels.template.fontSize = 10;
 
     const yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.renderer.labels.template.fill = am4core.color(
       isDark ? "#ffffff" : "#000000"
     );
+    yAxis.renderer.labels.template.fontSize = 10;
 
     function createSeries(field, name, color) {
       const series = chart.series.push(new am4charts.ColumnSeries());
@@ -173,7 +183,11 @@ const ConsumptionEnergy = () => {
           </button>
         </div>
       </div>
-
+      {/* {loading === true ? (
+        !isConsumptionEnergyFullView && (
+          <CustomLoader size="50px" containerHeight="15vh" />
+        )
+      ) : ( */}
       <div
         id="consumptionEnergyChart"
         className={`w-full ${
@@ -182,6 +196,7 @@ const ConsumptionEnergy = () => {
             : "h-[12rem] pb-2 lg:h-full"
         }`}
       ></div>
+      {/* )} */}
     </div>
   );
 };

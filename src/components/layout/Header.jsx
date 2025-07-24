@@ -8,13 +8,17 @@ import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 import config from "@/constant/apiRouteList";
 import { privilegeConfig } from "@/constant/navigation";
 import { privilegeOrder } from "@/constant/navigation";
+import { AiFillBell } from "react-icons/ai";
 import MobileSidebar from "./MobileSidebar";
 import ThemeSwitcher from "@/themeSwitcher/ThemeSwitcher";
 import { getActiveTabFromPathname } from "@/utils/navigation-utils";
-import MeterToggleBetweenUnits from "../meterToggleBetweenUnits/MeterToggleBetweenUnits";
+import { RxCross1 } from "react-icons/rx";
+import { Badge } from "../ui/badge";
+import { useTheme } from "next-themes";
 
 const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
+  const notificationDropdownRef = useRef(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userPrivileges, setUserPrivileges] = useState([]);
   const [alarms, setAlarms] = useState([]);
@@ -23,6 +27,7 @@ const Header = ({ handleTabClick, activeTab }) => {
   const [newAlarmCount, setNewAlarmCount] = useState(0);
   const [error, setError] = useState(null);
   const acknowledgedAlarms = useRef([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const currentTab = getActiveTabFromPathname(pathname);
@@ -94,15 +99,28 @@ const Header = ({ handleTabClick, activeTab }) => {
       console.error("Acknowledge error:", err);
     }
   };
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
   const toggleNotificationVisibility = () =>
     setNotificationVisible(!isNotificationVisible);
 
   useEffect(() => {
     fetchUserDetails();
+    const handleClickOutside = (event) => {
+      if (
+        notificationDropdownRef.current &&
+        !notificationDropdownRef.current.contains(event.target)
+      ) {
+        setNotificationVisible(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+
     // fetchAlarms();
+
     // const interval = setInterval(fetchAlarms, 5000);
-    // return () => clearInterval(interval);
+    // return () =>clearInterval(interval);
   }, []);
 
   const renderLink = (key) => {
@@ -136,7 +154,15 @@ const Header = ({ handleTabClick, activeTab }) => {
     <header className="bg-[#1F5897] text-white mx-0 my-2 mt-0 h-[44px] flex text-sm items-center justify-between w-full">
       {/* Dropdown menu for small screens */}
       <div className="lg:hidden flex justify-between items-center px-4 py-2">
-        <button onClick={toggleDropdown} className="cursor-pointer">
+        <button
+          // onClick={toggleDropdown}
+          onClick={() => {
+            isDropdownOpen === true
+              ? setIsDropdownOpen(false)
+              : setIsDropdownOpen(true);
+          }}
+          className="cursor-pointer"
+        >
           <FontAwesomeIcon
             icon={isDropdownOpen ? faXmark : faBars}
             style={{ fontSize: "1.5em" }}
@@ -152,9 +178,7 @@ const Header = ({ handleTabClick, activeTab }) => {
       <div className="flex lg:hidden">
         <div
           className={`fixed top-[44px] left-0 w-full z-[999] transition-all duration-500 ${
-            isDropdownOpen
-              ? "flex max-h-[1000px]"
-              : "hidden max-h-0 overflow-hidden"
+            isDropdownOpen ? "flex max-h-[1000px]" : "hidden"
           }`}
         >
           <MobileSidebar
@@ -167,80 +191,119 @@ const Header = ({ handleTabClick, activeTab }) => {
       <div className="flex items-center justify-center">
         {/* link status */}
         {/* alarms */}
-        <div className="relative mr-4 mt-1">
-          <div className="relative inline-block">
-            <img
-              src={`./${bellIcon}`}
-              alt="Bell Icon"
-              className="ml-2 cursor-pointer w-[50px]"
+        <div className="relative mr-4">
+          <div className="relative">
+            <AiFillBell
+              size={30}
+              className="cursor-pointer"
               onClick={toggleNotificationVisibility}
             />
-            {bellIcon === "alert.gif" && newAlarmCount > 0 && (
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1 transform translate-x-1/2 -translate-y-1/2">
-                {/* {newAlarmCount} */}
-              </span>
+            {/* <span className="absolute top-0 right-1 px-[1px] pb-[1px] bg-red-500 text-white text-[9px] rounded-full ">
+              {newAlarmCount}10
+              </span> */}
+            {newAlarmCount > 0 && (
+              <Badge className="px-1 w-[18px] h-[18px] rounded-full absolute top-[-2px] right-[-5px] bg-red-500 text-[11px]">
+                {newAlarmCount}
+              </Badge>
             )}
           </div>
           {/* when alarams enables make this uncomment */}
 
-          {/* {isNotificationVisible && (
-            <div className="absolute top-full right-0 mt-2 w-80 p-6 bg-white dark:bg-gray-700 shadow-lg border border-gray-300 rounded-lg z-[9999]">
-              <div className="font-semibold text-gray-700 flex justify-between items-center">
-                <span className="text-black dark:text-white">Alarms</span>
-                <button
-                  className="text-xs text-white bg-[#c1121f] cursor-pointer px-2 py-1 rounded hover:bg-[#e9a781]"
-                  onClick={() => setNotificationVisible(false)}
-                >
-                  Close
-                </button>
+          {isNotificationVisible && (
+            <div
+              ref={notificationDropdownRef}
+              className="absolute top-full right-[-60px] md:right-0 mt-2 w-80 p-4 bg-white dark:bg-gray-700 shadow-lg border border-gray-300 rounded-lg z-[9999]"
+            >
+              <div className=" w-full flex justify-between items-center">
+                <div className="w-[60%] flex items-center  justify-end">
+                  <span className=" font-500 text-gray-800 darktext-white text-[20.22px] dark:text-white">
+                    Alarms
+                  </span>
+                </div>
+                <div className="w-[40%] flex items-center  justify-end">
+                  <button
+                    className="  text-gray-800 dark:text-white cursor-pointer"
+                    onClick={() => setNotificationVisible(false)}
+                  >
+                    <RxCross1 size={23} />
+                  </button>
+                </div>
               </div>
-              <div className="mt-4 flex justify-center">
-                <button
-                  className="px-3 py-3 bg-gradient-to-r cursor-pointer from-blue-400 to-[#1F5897] text-white text-sm font-semibold uppercase tracking-wide rounded-md shadow-md hover:from-blue-500 hover:to-blue-700 hover:shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95"
-                  onClick={acknowledgeAlarms}
-                >
-                  Acknowledge
-                </button>
-              </div>
-              <ul className="mt-4 text-sm text-gray-600">
-                {error && <p>{error}</p>}
-                {alarms.length > 0 ? (
-                  alarms.map((alarm, idx) => (
-                    <li key={idx} className="py-2 border-b flex items-center">
-                      <img
-                        src="./yellowbell.gif"
-                        alt="Alarm"
-                        className="w-6 h-6 mr-2"
-                      />
-                      <div className="flex flex-col text-[12px]">
-                        <div className="text-black dark:text-white ">
-                          {alarm.Source}
+
+              {alarms.length > 0 ? (
+                <div className="">
+                  <div className="flex flex-col h-[10rem] overflow-x-hidden overflow-y-auto custom-scrollbar-report items-center justify-center w-full mt-5">
+                    {alarms.map((alarm, index) => {
+                      const lastIntex = alarms.length - 1;
+
+                      return (
+                        <div
+                          key={index}
+                          className={`text-black dark:text-white flex items-center py-3 justify-between ${
+                            lastIntex !== index
+                              ? "border-b-1 border-gray-300"
+                              : ""
+                          } w-full`}
+                        >
+                          <div className="flex items-center gap-1">
+                            <AiFillBell size={28} className="text-[#1F5897]" />
+                            <div className="flex flex-col gap-1">
+                              <span className="font-inter font-500 text-[12.04px]">
+                                {alarm.Source}
+                              </span>
+                              <span className="font-inter font-400 text-[11.04px] text-gray-500 dark:text-gray-200">
+                                {alarm.Status}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <span className="font-inter font-400 text-[11.04px] text-gray-500 dark:text-gray-200">
+                              {alarm.current_date}
+                            </span>
+                            <span className="font-inter font-400 text-[11.04px] text-gray-500 dark:text-gray-200">
+                              {alarm.current_time}
+                            </span>
+                          </div>
+                          <div>
+                            <Link
+                              href={"/recent-alarms"}
+                              className="font-inter font-400 pr-2 text-[12.04px] text-[#025697] hover:underline transition-all duration-300"
+                            >
+                              Details
+                            </Link>
+                          </div>
                         </div>
-                        <div className="text-black dark:text-white ">
-                          {alarm.Status}
-                        </div>
-                      </div>
-                      <div className="text-right text-[12px] ml-auto">
-                        <div className="text-black dark:text-white">
-                          {alarm.current_time}
-                        </div>
-                      </div>
-                    </li>
-                  ))
-                ) : (
-                  <li className="text-center py-4 text-gray-500">
-                    No alarms available.
-                  </li>
-                )}
-                <li
-                  className="text-center py-2 mt-2 text-blue-500 cursor-pointer rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-100"
-                  onClick={() => (window.location.href = "/Recent_Alarms")}
-                >
-                  Details
-                </li>
-              </ul>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-4 flex justify-center">
+                    <button
+                      className="px-3 py-2  cursor-pointer bg-[#1F5897] text-white text-sm font-500 font-inter text-[
+12.04px] rounded-sm shadow-md hover:scale-103 transition-all duration-300"
+                      onClick={acknowledgeAlarms}
+                    >
+                      Acknowledge
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-7 p-7 items-center justify-center">
+                  <img
+                    src={
+                      theme === "light"
+                        ? "../../../noAlarmImage.png"
+                        : "../../../noAlarm-dark.png"
+                    }
+                    alt=""
+                    className="w-[170px]"
+                  />
+                  <span className="text-black dark:text-white font-inter font-400 text-[15.04px]">
+                    No Alarms available yet!
+                  </span>
+                </div>
+              )}
             </div>
-          )} */}
+          )}
         </div>
         <div className=" flex items-center pr-4">
           <ThemeSwitcher />

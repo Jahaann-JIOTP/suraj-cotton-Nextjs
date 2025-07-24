@@ -12,8 +12,9 @@ import config from "@/constant/apiRouteList";
 const Dashboard = () => {
   const [dashboardTimePeriod, setDashboardTimePeriod] = useState("today");
   const [singleDivData, setSingleDivData] = useState({});
+  const [u4Spindle, setU4Spindle] = useState(0);
+  const [u5Spindle, setU5Spindle] = useState(0);
   const [loading, setLoading] = useState(false);
-
   const { startDate, endDate } = getDateRangeFromString(dashboardTimePeriod);
   const fetchSingleValueData = async () => {
     setLoading(true);
@@ -34,7 +35,52 @@ const Dashboard = () => {
       console.error(error.message);
     }
   };
+  const fetchU4Spindles = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U4`,
+        {
+          method: "GET",
+        }
+      );
+      const resResult = await response.json();
+      if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
+        setU4Spindle(resResult[0].totalProduction);
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchU5Spindles = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U5`,
+        {
+          method: "GET",
+        }
+      );
+      const resResult = await response.json();
+      if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
+        setU5Spindle(resResult[0].totalProduction);
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+    console.log("Inner width of the screen", window.innerWidth);
+  }, [window.innerWidth]);
+
+  useEffect(() => {
+    fetchU4Spindles();
+    fetchU5Spindles();
     fetchSingleValueData();
   }, [dashboardTimePeriod]);
 
@@ -53,7 +99,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="HT Generation"
-            value={singleDivData.HT_Generation}
+            value={singleDivData.HT_Generation || "000"}
             loading={loading}
             unit="kWh"
           />
@@ -123,14 +169,16 @@ const Dashboard = () => {
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
                 title="Energy/Spindle(U4)"
-                value="7373.98"
+                value={u4Spindle || "000"}
+                loading={loading}
                 unit="kWh"
               />
             </div>
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
                 title="Energy/Spindle(U5)"
-                value="7373.98"
+                value={u5Spindle || "000"}
+                loading={loading}
                 unit="kWh"
               />
             </div>
@@ -156,14 +204,10 @@ const Dashboard = () => {
           />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="Aux. Consumption" value="8883.98" unit="kWh" />
+          <SingleValueDiv title="Aux. Consumption" value="000" unit="kWh" />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv
-            title="Total Energy Output"
-            value="7083.98"
-            unit="kWh"
-          />
+          <SingleValueDiv title="Total Energy Output" value="000" unit="kWh" />
         </div>
       </div>
       {/* comparison graphs */}

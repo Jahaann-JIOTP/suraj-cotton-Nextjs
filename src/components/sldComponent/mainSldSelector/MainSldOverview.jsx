@@ -213,13 +213,13 @@ const MainSldOverview = ({ roundedData }) => {
             key={index}
             className={`absolute z-20  w-[44.5px] h-[50px] flex flex-col items-center`}
           >
-            <span className="meterReadingUnit4Lt1 mt-[-2.5px]">
+            <span className="meterReadingUnit4Lt1 mt-[-2px]">
               {meter.activePowerTotalTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-3.5px]">
+            <span className="meterReadingUnit4Lt1 mt-[-2px]">
               {meter.activeCurrentAvgTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-4.5px]">
+            <span className="meterReadingUnit4Lt1 mt-[-3px]">
               {meter.activeVoltageAvgTag || "000"}
             </span>
           </div>

@@ -2,12 +2,16 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import config from "@/constant/apiRouteList";
+import { ImArrowLeft2 } from "react-icons/im";
+import { useTheme } from "next-themes";
+import { FaRegFileAlt } from "react-icons/fa";
 
 const page = () => {
   const [activeTab, setActiveTab] = useState("voltage");
   const [data, setData] = useState([]);
-
+  const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
+  const { theme } = useTheme();
   const searchParams = useSearchParams();
   const area = searchParams.get("area");
   const ltScheme = searchParams.get("lt_scheme");
@@ -60,6 +64,439 @@ const page = () => {
       suffixTags[key] = roundedValue;
     }
   }
+  const voltageData = [
+    {
+      tag: suffixTags.Voltage_CA,
+      unit: "Vca",
+      top: "144.5px",
+      left: "29px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Voltage_BC,
+      unit: "Vbc",
+      top: "69px",
+      left: "187px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Voltage_AB,
+      unit: "Vab",
+      top: "167px",
+      left: "187px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Voltage_Avg,
+      unit: "V",
+      top: "392px",
+      left: "184px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Current_C,
+      unit: "A c",
+      top: "28px",
+      left: "328px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Current_B,
+      unit: "A b",
+      top: "122px",
+      left: "328px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Current_A,
+      unit: "A b",
+      top: "215px",
+      left: "328px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Current_Avg,
+      unit: "A",
+      top: "337px",
+      left: "328px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "28px",
+      left: "468px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "122px",
+      left: "468px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "215px",
+      left: "468px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.ActivePower_Total,
+      unit: "KW",
+      top: "290px",
+      left: "468px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.ReactivePower_Total,
+      unit: "KVAR",
+      top: "373px",
+      left: "468px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.ApparentPower_Total,
+      unit: "KVA",
+      top: "458px",
+      left: "468px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Voltage_AN,
+      unit: "Van",
+      top: "328px",
+      left: "595px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Voltage_BN,
+      unit: "Vbn",
+      top: "390px",
+      left: "667px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Voltage_CN,
+      unit: "Vcn",
+      top: "328px",
+      left: "747px",
+      width: "113px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Frequency_Hz,
+      unit: "",
+      top: "73px",
+      left: "872px",
+      width: "138px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.PowerFactor_Avg,
+      unit: "",
+      top: "148px",
+      left: "872px",
+      width: "138px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.PowerFactor_A,
+      unit: "",
+      top: "220px",
+      left: "872px",
+      width: "138px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.PowerFactor_B,
+      unit: "",
+      top: "293px",
+      left: "872px",
+      width: "138px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.PowerFactor_C,
+      unit: "",
+      top: "367px",
+      left: "872px",
+      width: "138px",
+      height: "37px",
+    },
+    {
+      tag: suffixTags.Voltage_LN_Avg,
+      unit: "",
+      top: "439px",
+      left: "872px",
+      width: "138px",
+      height: "37px",
+    },
+  ];
+  const powerData = [
+    {
+      tag: suffixTags.Harmonics_I1_THD,
+      unit: "",
+      top: "178px",
+      left: "40px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: suffixTags.Harmonics_I2_THD,
+      unit: "",
+      top: "257px",
+      left: "41px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: suffixTags.Harmonics_I3_THD,
+      unit: "",
+      top: "335px",
+      left: "41px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: suffixTags.Harmonics_V1_THD,
+      unit: "",
+      top: "179px",
+      left: "359px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: suffixTags.Harmonics_V2_THD,
+      unit: "",
+      top: "257px",
+      left: "359px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: suffixTags.Harmonics_V3_THD,
+      unit: "",
+      top: "336px",
+      left: "359px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "179px",
+      left: "564px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "258px",
+      left: "564px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "336px",
+      left: "564px",
+      width: "106px",
+      height: "39px",
+    },
+    //todo
+    {
+      tag: suffixTags.ActivePower_Total,
+      unit: "",
+      top: "415px",
+      left: "564px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "179px",
+      left: "728px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "258px",
+      left: "728px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "336px",
+      left: "728px",
+      width: "106px",
+      height: "39px",
+    },
+    // todo
+    {
+      tag: suffixTags.ReactivePower_Total,
+      unit: "",
+      top: "415px",
+      left: "725px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "179px",
+      left: "897px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "258px",
+      left: "897px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "336px",
+      left: "897px",
+      width: "106px",
+      height: "39px",
+    },
+    {
+      tag: suffixTags.ApparentPower_Total,
+      unit: "",
+      top: "415px",
+      left: "896px",
+      width: "106px",
+      height: "39px",
+    },
+  ];
+  const energyData = [
+    {
+      tag: "N/A",
+      unit: "",
+      top: "210px",
+      left: "140px",
+      width: "161px",
+      height: "46px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "301px",
+      left: "140px",
+      width: "161px",
+      height: "46px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "393px",
+      left: "140px",
+      width: "161px",
+      height: "46px",
+    },
+
+    {
+      tag: suffixTags.Del_ActiveEnergy,
+      unit: "",
+      top: "485px",
+      left: "140px",
+      width: "161px",
+      height: "46px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "210px",
+      left: "485px",
+      width: "161px",
+      height: "46px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "301px",
+      left: "485px",
+      width: "161px",
+      height: "46px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "393px",
+      left: "485px",
+      width: "161px",
+      height: "46px",
+    },
+    {
+      tag: suffixTags.Rec_Active_Energy,
+      unit: "",
+      top: "485px",
+      left: "485px",
+      width: "161px",
+      height: "46px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "210px",
+      left: "830px",
+      width: "161px",
+      height: "46px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "301px",
+      left: "830px",
+      width: "161px",
+      height: "46px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "393px",
+      left: "830px",
+      width: "161px",
+      height: "46px",
+    },
+    {
+      tag: "N/A",
+      unit: "",
+      top: "485px",
+      left: "830px",
+      width: "161px",
+      height: "46px",
+    },
+  ];
   useEffect(() => {
     getSingleMeterData();
     const interval = setInterval(() => {
@@ -68,243 +505,203 @@ const page = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="w-full bg-white p-5 rounded-md border-t-3 h-[81vh] border-[#1F5897] overflow-auto">
-      <div className="relative w-[1300px] flex items-start  flex-col h-full mx-auto">
-        <h1 className="font-semibold text-2xl font-inter pb-4 text-black">
-          {meterName}
-        </h1>
-        {activeTab === "voltage" ? (
-          <img src="../../01_volts.png" alt="" className="w-[1290px]" />
-        ) : activeTab === "power" ? (
-          <img src="../../Power_1.png" alt="" className="w-[1290px]" />
-        ) : activeTab === "energy" ? (
-          <img src="../../Energy_log1.png" alt="" className="w-[1290px]" />
-        ) : (
-          ""
-        )}
+    <div className="relative w-full flex flex-col items-center bg-white dark:bg-gray-800 p-5 rounded-sm border-t-3 h-[81vh] border-[#1F5897]">
+      <div className="flex items-center justify-between w-full overflow-hidden">
+        <h1 className="font-semibold text-2xl font-inter pb-4">{meterName}</h1>
         <button
-          onClick={() => setActiveTab("voltage")}
-          className="w-[230px] h-[34px] bg-transparent absolute z-30 top-[49px] left-[3px] cursor-pointer"
-        ></button>
-        <button
-          onClick={() => setActiveTab("power")}
-          className="w-[230px] h-[34px] bg-transparent absolute z-30 top-[49px] left-[249px] cursor-pointer"
-        ></button>
-        <button
-          onClick={() => setActiveTab("energy")}
-          className="w-[230px] h-[34px] bg-transparent absolute z-30 top-[49px] left-[487px] cursor-pointer"
-        ></button>
-        {activeTab === "voltage" && (
-          <button
-            onClick={() => router.back()}
-            className="absolute cursor-pointer h-[44px] w-[140px] z-30 top-[98px] left-[1150px] bg-transparent"
-          ></button>
-        )}
-
-        {/* values */}
-        {activeTab === "voltage" ? (
-          <>
-            <div className="absolute meterDataText top-[258px] left-[37px] w-[110px] h-[31px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_CA || "00.00"} Vca</span>
-            </div>
-            <div className="absolute meterDataText top-[200px] left-[184.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_BC || "00.00"} Vbc</span>
-            </div>
-            <div className="absolute meterDataText top-[302px] left-[184.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_AB || "00.00"} Vab</span>
-            </div>
-            <div className="absolute meterDataText top-[131px] left-[338px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Current_C || "00.00"} A c</span>
-            </div>
-            <div className="absolute meterDataText top-[251px] left-[338px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Current_B || "00.00"} A b</span>
-            </div>
-            <div className="absolute meterDataText top-[363px] left-[338px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Current_A || "00.00"} A a</span>
-            </div>
-            <div className="absolute meterDataText top-[566px] left-[183.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_Avg || "00.00"} V</span>
-            </div>
-            <div className="absolute meterDataText top-[505px] left-[338px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Current_Avg || "00.00"} A</span>
-            </div>
-            <div className="absolute meterDataText top-[132px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[252px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[364px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[435px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.ActivePower_Total || "00.00"} kW</span>
-            </div>
-            <div className="absolute meterDataText top-[505px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.ReactivePower_Total || "00.00"} kVAR</span>
-            </div>
-            <div className="absolute meterDataText top-[566px] left-[522px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.ApparentPower_Total || "00.00"} kVA</span>
-            </div>
-            {/*  */}
-            <div className="absolute meterDataText top-[485.5px] left-[699px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_AN || "00.00"} Van</span>
-            </div>
-            <div className="absolute meterDataText top-[485.5px] left-[840px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_BN || "00.00"} Vbn</span>
-            </div>
-            <div className="absolute meterDataText top-[485.5px] left-[989px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_CN || "00.00"} Vcn</span>
-            </div>
-            {/*  */}
-            <div className="absolute meterDataText top-[212px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Frequency_Hz || "N/A"}</span>
-            </div>
-            <div className="absolute meterDataText top-[275px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.PowerFactor_Avg || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[336px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.PowerFactor_A || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[396px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.PowerFactor_B || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[460px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.PowerFactor_C || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[521px] left-[1151.5px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>{suffixTags.Voltage_LN_Avg || "00.00"}</span>
-            </div>
-          </>
-        ) : activeTab === "power" ? (
-          <>
-            <div className="absolute meterDataText top-[302px] left-[138px] w-[96px] h-[30px] flex items-center justify-center">
-              <span>{suffixTags.Harmonics_I1_THD || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[384px] left-[138px] w-[96px] h-[30px] flex items-center justify-center">
-              <span>{suffixTags.Harmonics_I2_THD || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[464px] left-[138px] w-[96px] h-[30px] flex items-center justify-center">
-              <span>{suffixTags.Harmonics_I3_THD || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[303px] left-[492px] w-[96px] h-[29px] flex items-center justify-center">
-              <span>{suffixTags.Harmonics_V1_THD || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[385px] left-[492px] w-[96px] h-[29px] flex items-center justify-center">
-              <span>{suffixTags.Harmonics_V2_THD || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[464px] left-[492px] w-[96px] h-[29px] flex items-center justify-center">
-              <span>{suffixTags.Harmonics_V3_THD || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[302px] left-[815px] w-[110px] h-[32px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[386px] left-[815px] w-[110px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[467px] left-[815px] w-[110px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[303px] left-[978px] w-[98px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[386px] left-[978px] w-[98px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[467px] left-[978px] w-[98px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[304px] left-[1134px] w-[110px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[386px] left-[1134px] w-[110px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[467px] left-[1134px] w-[110px] h-[30px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-
-            <div className="absolute meterDataText top-[553px] left-[815px] w-[110px] h-[30px] flex items-center justify-center">
-              <span>{suffixTags.ActivePower_Total || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[553px] left-[978px] w-[99px] h-[30px] flex items-center justify-center">
-              <span>{suffixTags.ReactivePower_Total || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[553px] left-[1134px] w-[110px] h-[30px] flex items-center justify-center">
-              <span>{suffixTags.ApparentPower_Total || "00.00"}</span>
-            </div>
-          </>
-        ) : activeTab === "energy" ? (
-          <>
-            <div className="absolute meterDataText top-[224px] left-[325px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[312px] left-[325px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[400px] left-[325px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[224px] left-[566px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[312px] left-[566px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[400px] left-[566px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[224px] left-[801px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[312px] left-[801px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[400px] left-[801px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-            <div className="absolute meterDataText top-[485px] left-[325px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>{suffixTags.Del_ActiveEnergy || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[485px] left-[566px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>{suffixTags.Rec_Active_Energy || "00.00"}</span>
-            </div>
-            <div className="absolute meterDataText top-[485px] left-[801px] w-[154px] h-[40px] flex items-center justify-center">
-              <span>N/A</span>
-            </div>
-          </>
-        ) : (
-          ""
-        )}
-        {/* values */}
-
-        {/* logs opener */}
-        <button
-          onClick={() =>
-            router.push(
-              `/logs?type=${activeTab}&lt_scheme=${ltScheme}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
-            )
-          }
-          className={`bg-transparent w-[57px] h-[53px] absolute z-30 cursor-pointer`}
+          onClick={() => router.back()}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className={` flex items-center ${
+            isHovered ? "justify-center" : "justify-start"
+          } gap-2 h-[40px] cursor-pointer bg-[#1F5897] transition-all duration-300 ease-in-out overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white px-2 ${
+            isHovered ? "w-[90px]" : "w-[40px]"
+          }`}
           style={{
-            top:
-              activeTab === "voltage"
-                ? "516px"
-                : activeTab === "power"
-                ? "577px"
-                : activeTab === "energy"
-                ? "572px"
-                : "",
-            left:
-              activeTab === "voltage"
-                ? "36px"
-                : activeTab === "power"
-                ? "42px"
-                : activeTab === "energy"
-                ? "37.5px"
-                : "",
+            borderRadius: isHovered ? "8px" : "50%",
           }}
-        ></button>
+        >
+          <ImArrowLeft2 className="text-white shrink-0" />
+          <span
+            className={`whitespace-nowrap transition-opacity duration-300 ${
+              isHovered ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            Back
+          </span>
+        </button>
+      </div>
+      <div className="flex w-[1030px] mb-5 md:mb-auto items-center justify-center">
+        <div
+          className="flex flex-col md:flex-row items-center justify-center gap-1 rounded-sm bg-[#F9FAFB] dark:bg-[#f9fafb6c] p-1"
+          style={{
+            boxShadow:
+              "0 -4px 30px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          <button
+            onClick={() => setActiveTab("voltage")}
+            className={`${
+              activeTab === "voltage"
+                ? "bg-[#1f5897] text-white"
+                : "bg-[#EFF3F5] dark:bg-[#eff3f58a] text-black"
+            } cursor-pointer px-3 w-[12rem] rounded py-1`}
+          >
+            Volts / Amps
+          </button>
+          <button
+            onClick={() => setActiveTab("power")}
+            className={`${
+              activeTab === "power"
+                ? "bg-[#1f5897] text-white"
+                : "bg-[#EFF3F5] dark:bg-[#eff3f58a] text-black"
+            } cursor-pointer px-3 w-[12rem] rounded py-1`}
+          >
+            Power & Power Quality
+          </button>
+          <button
+            onClick={() => setActiveTab("energy")}
+            className={`${
+              activeTab === "energy"
+                ? "bg-[#1f5897] text-white"
+                : "bg-[#EFF3F5] dark:bg-[#eff3f58a] text-black"
+            } cursor-pointer px-3 w-[12rem] rounded py-1`}
+          >
+            Energy
+          </button>
+        </div>
+      </div>
+      <div className="w-full overflow-auto">
+        <div className="relative w-[1030px] mt-7 flex items-start flex-col mx-auto">
+          {activeTab === "voltage" ? (
+            theme === "light" ? (
+              <img
+                src="../../volt-meter-light.png"
+                alt=""
+                className="w-[1030px]"
+              />
+            ) : (
+              <img
+                src="../../volt-meter-dark.png"
+                alt=""
+                className="w-[1030px]"
+              />
+            )
+          ) : activeTab === "power" ? (
+            theme === "light" ? (
+              <img
+                src="../../power-meter-ligth.png"
+                alt=""
+                className="w-[1030px]"
+              />
+            ) : (
+              <img
+                src="../../power-meter-dark.png"
+                alt=""
+                className="w-[1030px]"
+              />
+            )
+          ) : activeTab === "energy" ? (
+            theme === "light" ? (
+              <img
+                src="../../energy-meter-light.png"
+                alt=""
+                className="w-[1030px]"
+              />
+            ) : (
+              <img
+                src="../../energy-meter-dark.png"
+                alt=""
+                className="w-[1030px]"
+              />
+            )
+          ) : (
+            ""
+          )}
+
+          {/* values */}
+          {activeTab === "voltage" ? (
+            <>
+              {voltageData.map((tag, index) => (
+                <div
+                  key={index}
+                  className="absolute meterDataText  rounded-md flex items-center justify-center"
+                  style={{
+                    top: tag.top,
+                    left: tag.left,
+                    width: tag.width,
+                    height: tag.height,
+                  }}
+                >
+                  <span>
+                    {tag.tag || "00.00"} {tag.unit}
+                  </span>
+                </div>
+              ))}
+            </>
+          ) : activeTab === "power" ? (
+            <>
+              {powerData.map((tag, index) => (
+                <div
+                  key={index}
+                  className="absolute meterDataText rounded-md flex items-center justify-center"
+                  style={{
+                    top: tag.top,
+                    left: tag.left,
+                    width: tag.width,
+                    height: tag.height,
+                  }}
+                >
+                  <span>
+                    {tag.tag || "00.00"} {tag.unit}
+                  </span>
+                </div>
+              ))}
+            </>
+          ) : activeTab === "energy" ? (
+            <>
+              {energyData.map((tag, index) => (
+                <div
+                  key={index}
+                  className="absolute meterDataText rounded-md flex items-center justify-center"
+                  style={{
+                    top: tag.top,
+                    left: tag.left,
+                    width: tag.width,
+                    height: tag.height,
+                  }}
+                >
+                  <span>
+                    {tag.tag || "00.00"} {tag.unit}
+                  </span>
+                </div>
+              ))}
+            </>
+          ) : (
+            ""
+          )}
+          {/* values */}
+          {/* logs opener */}
+          <button
+            onClick={() =>
+              router.push(
+                `/logs?type=${activeTab}&lt_scheme=${ltScheme}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
+              )
+            }
+            className={`absolute ${
+              activeTab === "energy"
+                ? "left-[-40px] bottom-[10px]"
+                : activeTab === "power"
+                ? "left-[5px] bottom-0"
+                : "left-[22px] bottom-[50px]"
+            } border-1 border-[#1F5897] text-[#1F5897] dark:bg-gray-500 font-400 rounded text-[12px] flex flex-col items-center justify-center p-[7px] z-30  cursor-pointer`}
+            style={{
+              boxShadow: "2px 2px 15px 2px #1f579775",
+            }}
+          >
+            <FaRegFileAlt size={20} />
+          </button>
+        </div>
       </div>
     </div>
   );

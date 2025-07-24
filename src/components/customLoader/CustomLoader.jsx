@@ -11,7 +11,7 @@ export default function CustomLoader({ size = "" }) {
       }}
     >
       <div
-        className="relative rounded-[10px]"
+        className="relative"
         style={{
           width: size.length > 0 ? size : "54px",
           height: size.length > 0 ? size : "54px",

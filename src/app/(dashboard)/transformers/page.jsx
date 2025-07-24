@@ -80,6 +80,14 @@ const TranformersPage = () => {
       setLoading(false);
     }
   };
+  const trafo1and2 = [
+    600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800,
+    1900, 2000,
+  ];
+  const trafo3and4 = [
+    800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000,
+    2100, 2200, 2300, 2400, 2500,
+  ];
 
   useEffect(() => {
     fetchTransformerTotalTag();
@@ -97,7 +105,6 @@ const TranformersPage = () => {
           <h1 className="font-raleway font-600 text-[17px] md:text-[20px]">
             Transformer Energy Usage Heat Map
           </h1>
-          {/* <TimePeriodSelector getTimePeriod={handleTimePeriodForTransformer} /> */}
           <TimePeriodSelector
             selected={transformerTimePeriod}
             setSelected={setTransformerTimePeriod}
@@ -110,7 +117,7 @@ const TranformersPage = () => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 1 (kWh) Total:{" "}
-                {transformerTotalValTag.Trafo1Incoming || "00.00"}
+                {transformerTotalValTag.Trafo1activepowertotal || "00.00"}
               </h2>
             </div>
             <div>
@@ -137,10 +144,7 @@ const TranformersPage = () => {
               {!loading && (
                 <div className="w-full px-5 mt-[-10px] md:mt-[-17px]">
                   <div className="flex w-[93%] items-center justify-between flex-wrap">
-                    {[
-                      800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700,
-                      1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500,
-                    ].map((item, index, array) => {
+                    {trafo1and2.map((item, index, array) => {
                       const isFirst = index === 0;
                       const isLast = index === array.length - 1;
                       const isHiddenOnSmall =
@@ -174,7 +178,7 @@ const TranformersPage = () => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 2 (kWh) Total:
-                {transformerTotalValTag.Trafo2Incoming || "00.00"}
+                {transformerTotalValTag.Trafo2activepowertotal || "00.00"}
               </h2>
             </div>
             <div>
@@ -201,10 +205,7 @@ const TranformersPage = () => {
               {!loading && (
                 <div className="w-full px-5 mt-[-10px] md:mt-[-17px]">
                   <div className="flex w-[93%] items-center justify-between flex-wrap">
-                    {[
-                      800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700,
-                      1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500,
-                    ].map((item, index, array) => {
+                    {trafo1and2.map((item, index, array) => {
                       const isFirst = index === 0;
                       const isLast = index === array.length - 1;
                       const isHiddenOnSmall =
@@ -241,7 +242,7 @@ const TranformersPage = () => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 3 (kWh) Total:{" "}
-                {transformerTotalValTag.Trafo3Incoming || "00.00"}
+                {transformerTotalValTag.Trafo3activepowertotal || "00.00"}
               </h2>
             </div>
             <div>
@@ -268,10 +269,7 @@ const TranformersPage = () => {
               {!loading && (
                 <div className="w-full px-5 mt-[-10px] md:mt-[-17px]">
                   <div className="flex w-[93%] items-center justify-between flex-wrap">
-                    {[
-                      800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700,
-                      1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500,
-                    ].map((item, index, array) => {
+                    {trafo3and4.map((item, index, array) => {
                       const isFirst = index === 0;
                       const isLast = index === array.length - 1;
                       const isHiddenOnSmall =
@@ -305,7 +303,7 @@ const TranformersPage = () => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 4 (kWh) Total:{" "}
-                {transformerTotalValTag.Trafo4Incoming || "00.00"}
+                {transformerTotalValTag.Trafo4activepowertotal || "00.00"}
               </h2>
             </div>
             <div>
@@ -332,10 +330,7 @@ const TranformersPage = () => {
               {!loading && (
                 <div className="w-full px-5 mt-[-10px] md:mt-[-17px]">
                   <div className="flex w-[93%] items-center justify-between flex-wrap">
-                    {[
-                      800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700,
-                      1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500,
-                    ].map((item, index, array) => {
+                    {trafo3and4.map((item, index, array) => {
                       const isFirst = index === 0;
                       const isLast = index === array.length - 1;
                       const isHiddenOnSmall =

@@ -72,8 +72,14 @@ export default function SidebarDropdown({
               ["/sld", "/meter", "/logs", "/log-detail"].some((p) => {
                 path.startsWith(p);
               });
-
-            const activePath = isSldActive || path === sub.href;
+            const nestedArr = ["/sld", "/meter", "/logs", "/log-detail"].some(
+              (p) => {
+                // path.startsWith(p);
+                return path.startsWith(p);
+              }
+            );
+            console.log("-------------------------->", nestedArr);
+            const activePath = nestedArr || path === sub.href;
 
             return (
               <Link

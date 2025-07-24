@@ -89,9 +89,9 @@ const PowerSummaryPage = () => {
             icomingValue={powerSummaryData.Trafo1Incoming || "00.00"}
             loading={loading}
             iconmingUnit="kWh"
-            outgoingValue="00.00"
+            outgoingValue={powerSummaryData.Trafo1outgoing || "00.00"}
             outgoingUnit="kWh"
-            lossesValue="00.00"
+            lossesValue={powerSummaryData.Trafo1losses || "00.00"}
             lossesUnit="kWh"
           />
         </div>
@@ -101,9 +101,9 @@ const PowerSummaryPage = () => {
             icomingValue={powerSummaryData.Trafo2Incoming || "00.00"}
             loading={loading}
             iconmingUnit="kWh"
-            outgoingValue="00.00"
+            outgoingValue={powerSummaryData.Trafo2outgoing || "00.00"}
             outgoingUnit="kWh"
-            lossesValue="00.00"
+            lossesValue={powerSummaryData.Trafo2losses || "00.00"}
             lossesUnit="kWh"
           />
         </div>
@@ -116,9 +116,9 @@ const PowerSummaryPage = () => {
             icomingValue={powerSummaryData.Trafo3Incoming || "00.00"}
             loading={loading}
             iconmingUnit="kWh"
-            outgoingValue="00.00"
+            outgoingValue={powerSummaryData.Trafo3outgoing || "00.00"}
             outgoingUnit="kWh"
-            lossesValue="00.00"
+            lossesValue={powerSummaryData.Trafo3losses || "00.00"}
             lossesUnit="kWh"
           />
         </div>
@@ -128,9 +128,9 @@ const PowerSummaryPage = () => {
             icomingValue={powerSummaryData.Trafo4Incoming || "00.00"}
             loading={loading}
             iconmingUnit="kWh"
-            outgoingValue="00.00"
+            outgoingValue={powerSummaryData.Trafo4outgoing || "00.00"}
             outgoingUnit="kWh"
-            lossesValue="00.00"
+            lossesValue={powerSummaryData.Trafo4losses || "00.00"}
             lossesUnit="kWh"
           />
         </div>
@@ -198,9 +198,10 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Transformer losses"
-            value="00.00"
+            value={powerSummaryData.TrasformerLosses || "00.00"}
             unit="kWh"
             height="6rem"
+            loading={loading}
             valueColor="#E40101"
           />
         </div>

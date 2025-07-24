@@ -328,13 +328,13 @@ const Unit5Lt3 = ({ roundedData }) => {
               top: meter.top,
             }}
           >
-            <span className="meterReadingUnit4Lt1 mt-[-3px]">
+            <span className="meterReadingUnit4Lt1 mt-[-1.5px]">
               {meter.activeVoltageAvgTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-2px]">
+            <span className="meterReadingUnit4Lt1 mt-[-1px]">
               {meter.activeCurrentAvgTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-3px]">
+            <span className="meterReadingUnit4Lt1 mt-[-1px]">
               {meter.activeVoltageAvgTag || "000"}
             </span>
           </div>

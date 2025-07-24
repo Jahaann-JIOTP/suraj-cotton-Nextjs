@@ -148,13 +148,13 @@ const InitialSldUnit5 = ({ roundedData }) => {
               left: `${meter.left}px`,
             }}
           >
-            <span className="meterReadingUnit4Lt2 mt-[-2px]">
+            <span className="meterReadingUnit4Lt2 mt-[-1px]">
               {meter.activePowerTotalTag || "00.00"}
             </span>
-            <span className="meterReadingUnit4Lt2 mt-[-1.5px]">
+            <span className="meterReadingUnit4Lt2 mt-[-1px]">
               {meter.activeCurrentAvgTag || "00.00"}
             </span>
-            <span className="meterReadingUnit4Lt2 mt-[-1px]">
+            <span className="meterReadingUnit4Lt2">
               {meter.activeVoltageAvgTag || "00.00"}
             </span>
           </div>

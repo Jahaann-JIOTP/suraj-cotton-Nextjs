@@ -1,37 +1,61 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { use } from "react";
+import React, { useState } from "react";
+import { ImArrowLeft2 } from "react-icons/im";
 
 const page = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const ltScheme = searchParams.get("lt-scheme");
+  const [isHovered, setIsHovered] = useState(false);
   const meterId = searchParams.get("meter_id");
   const type = searchParams.get("type");
   const meterName = searchParams.get("meter-name");
 
   return (
     <div className="w-full bg-white p-5 h-[81vh] rounded-md border-t-3 border-[#1F5897] overflow-auto">
-      <div className="relative w-[1300px] flex items-start  flex-col h-full mx-auto">
+      <div className="w-full flex items-center justify-between">
         <h1 className="font-semibold text-2xl font-inter pb-4">Logs</h1>
         <button
           onClick={() => router.back()}
-          className="absolute top-[85px] left-[1035px] cursor-pointer z-30 w-[135px] h-[45px]"
-        ></button>
-        {type === "voltage" ? (
-          <img src="/voltage-logs.png" alt="Voltage logs" />
-        ) : type === "energy" ? (
-          <img src="/energy-logs.png" alt="energy logs" />
-        ) : type === "power" ? (
-          <img src="power-logs.png" alt="energy logs" />
-        ) : (
-          ""
-        )}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className={` flex items-center ${
+            isHovered ? "justify-center" : "justify-start"
+          } gap-2 h-[40px] cursor-pointer bg-[#1F5897] transition-all duration-300 ease-in-out overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white px-2 ${
+            isHovered ? "w-[90px]" : "w-[40px]"
+          }`}
+          style={{
+            borderRadius: isHovered ? "8px" : "50%",
+          }}
+        >
+          <ImArrowLeft2 className="text-white shrink-0" />
+          <span
+            className={`whitespace-nowrap transition-opacity duration-300 ${
+              isHovered ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            Back
+          </span>
+        </button>
+      </div>
+      <div className="relative w-[1200px] flex items-start justify-center flex-col mx-auto">
+        <div className="w-full flex items-center justify-center">
+          {type === "voltage" ? (
+            <img src="../../../voltage-logs.png" alt="Voltage logs" />
+          ) : type === "energy" ? (
+            <img src="/energy-logs.png" alt="energy logs" />
+          ) : type === "power" ? (
+            <img src="power-logs.png" alt="energy logs" />
+          ) : (
+            ""
+          )}
+        </div>
         {/* voltage logs buttons */}
         {type === "voltage" ? (
           <>
             <button
-              className="absolute w-[57px] h-[59px]  top-[242px] cursor-pointer left-[676px]"
+              className="absolute w-[57px] h-[59px]  top-[105px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
                   `/log-detail?val=voltage&meter_id=${meterId}&meter-name=${meterName}`
@@ -39,7 +63,7 @@ const page = () => {
               }
             ></button>
             <button
-              className="absolute w-[57px] h-[59px] top-[350px] cursor-pointer left-[676px]"
+              className="absolute w-[57px] h-[59px] top-[197px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
                   `/log-detail?val=current&meter_id=${meterId}&meter-name=${meterName}`
@@ -47,7 +71,7 @@ const page = () => {
               }
             ></button>
             <button
-              className="absolute w-[57px] h-[59px] top-[463px] cursor-pointer left-[676px]"
+              className="absolute w-[57px] h-[59px] top-[290px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
                   `/log-detail?val=power_factor&meter_id=${meterId}&meter-name=${meterName}`
@@ -58,7 +82,7 @@ const page = () => {
         ) : type === "power" ? (
           <>
             <button
-              className="absolute w-[57px] h-[59px]  top-[190px] cursor-pointer left-[676px]"
+              className="absolute w-[57px] h-[59px]  top-[104px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
                   `/log-detail?val=active_power&meter_id=${meterId}&meter-name=${meterName}`
@@ -66,7 +90,7 @@ const page = () => {
               }
             ></button>
             <button
-              className="absolute w-[57px] h-[59px]  top-[275px] cursor-pointer left-[678px]"
+              className="absolute w-[57px] h-[59px]  top-[197px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
                   `/log-detail?val=reactive_power&meter_id=${meterId}&meter-name=${meterName}`
@@ -74,7 +98,7 @@ const page = () => {
               }
             ></button>
             <button
-              className="absolute w-[57px] h-[59px]  top-[375px] cursor-pointer left-[678px]"
+              className="absolute w-[57px] h-[59px]  top-[290px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
                   `/log-detail?val=apparent_power&meter_id=${meterId}&meter-name=${meterName}`
@@ -82,7 +106,7 @@ const page = () => {
               }
             ></button>
             <button
-              className="absolute w-[57px] h-[59px]  top-[468px] cursor-pointer left-[678px]"
+              className="absolute w-[57px] h-[59px]  top-[382px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
                   `/log-detail?val=harmonics&meter_id=${meterId}&meter-name=${meterName}`
@@ -93,29 +117,13 @@ const page = () => {
         ) : type === "energy" ? (
           <>
             <button
-              className="absolute w-[57px] h-[59px] top-[242px] cursor-pointer left-[676px]"
+              className="absolute w-[57px] h-[59px] top-[122px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
                   `/log-detail?val=active_energy&meter_id=${meterId}&meter-name=${meterName}`
                 )
               }
             ></button>
-            {/* <button
-              className="absolute w-[57px] h-[59px] border-1 border-red-500 top-[375px] cursor-pointer left-[727px]"
-              onClick={() =>
-                router.push(
-                  `/log-detail?val=reactive_energy&meter_id=${meterId}&meter-name=${meterName}`
-                )
-              }
-            ></button> */}
-            {/* <button
-              className="absolute w-[57px] h-[59px] border-1 border-red-500 top-[495px] cursor-pointer left-[727px]"
-              onClick={() =>
-                router.push(`/log-detail?val=power&meter_id=${meterId}&meter-name=${meterName}`)
-              }
-            ></button> */}
-            <div className="w-[400px] h-[70px] bg-[#D8D8D8] z-30 absolute top-[350px] left-[380px]"></div>
-            <div className="w-[400px] h-[70px] bg-[#D8D8D8] z-30 absolute top-[460px] left-[380px]"></div>
           </>
         ) : (
           ""

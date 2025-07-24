@@ -5,12 +5,16 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 
 const PowerComparison = () => {
+  const date = new Date();
+  const today = date.toISOString().split("T")[0];
   const [stackChartData, setStackchartData] = useState([]);
-  const [startDate, setStartDate] = useState("2025-07-16");
-  const [endDate, setEndDate] = useState("2025-07-16");
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(today);
   const [timeRange, setTimeRange] = useState("hourly");
+  const [loading, setLoading] = useState(false);
 
   const [isPowerComparisonFullView, setIsPowerComparisonFullView] =
     useState(false);
@@ -21,6 +25,7 @@ const PowerComparison = () => {
   };
 
   const fetchPowerComparisonData = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}/power_comparison?start_date=${startDate}&end_date=${endDate}&label=${timeRange}`,
@@ -45,8 +50,10 @@ const PowerComparison = () => {
         }));
         setStackchartData(transformedData);
       }
+      setLoading(false);
     } catch (error) {
       console.error(error.message);
+      setLoading(false);
     }
   };
 
@@ -288,7 +295,7 @@ const PowerComparison = () => {
       className={`${
         isPowerComparisonFullView
           ? "fixed inset-0 z-50  p-5 overflow-auto w-[100%] m-auto h-[100vh]"
-          : "relative  px-1 py-2 md:p-3 h-[17rem] md:h-[15rem] lg:h-[14.3rem]"
+          : "relative  px-1 py-2 md:p-3 h-[17rem] md:h-[15rem] lg:h-[16.5rem] xl:h-[14.3rem]"
       } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
     >
       {/* Header */}
@@ -308,7 +315,7 @@ const PowerComparison = () => {
             )}
           </button>
         </div>
-        <div className="flex items-center justify-end w-full gap-3  ">
+        <div className="flex items-center justify-end w-full gap-3 flex-col xl:flex-row ">
           <div className="flex items-center justify-center gap-2">
             <span className="hidden xl:flex text-[12px] font-raleway font-semibold text-black dark:text-white">
               Start Date
@@ -356,6 +363,9 @@ const PowerComparison = () => {
           isPowerComparisonFullView ? "h-[80vh]" : "h-[9rem]"
         }  overflow-hidden`}
       >
+        {/* {loading === true ? (
+          <CustomLoader size="40px" />
+        ) : ( */}
         <div
           ref={chartRef}
           className={`${
@@ -364,6 +374,7 @@ const PowerComparison = () => {
               : "w-full h-[440px]"
           } `}
         />
+        {/* )} */}
       </div>
     </div>
   );

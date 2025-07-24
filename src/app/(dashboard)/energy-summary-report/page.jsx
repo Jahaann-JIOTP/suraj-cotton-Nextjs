@@ -1,7 +1,5 @@
 "use client";
 
-import MultipleUnitComponent from "@/components/reportsComponent/MultipleUnitComponent/MultipleUnitComponent";
-import SingleUnitComponent from "@/components/reportsComponent/SingleUnitComponent/SingleUnitComponent";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { RiErrorWarningFill } from "react-icons/ri";
@@ -10,7 +8,7 @@ import config from "@/constant/apiRouteList";
 import { CircularProgress } from "@mui/material";
 import PowerSummaryTable from "@/components/reportsComponent/powerSummaryTable/PowerSummaryTable";
 
-const PowerSummaryPage = () => {
+const energySummaryPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [unit, setUnit] = useState("");
@@ -224,4 +222,4 @@ const PowerSummaryPage = () => {
   );
 };
 
-export default PowerSummaryPage;
+export default energySummaryPage;

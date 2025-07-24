@@ -5,7 +5,6 @@ import { IoLogOut } from "react-icons/io5";
 import { logout } from "@/redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import theme from "@amcharts/amcharts4/themes/kelly";
 const Sidebar = ({ activeTab, handleTabClick }) => {
   const [iscollapese, setIsCollapse] = useState(false);
   const [tabWidth, setTabWidth] = useState(false);

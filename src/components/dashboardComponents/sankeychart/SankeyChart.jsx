@@ -5,7 +5,10 @@ import * as am5 from "@amcharts/amcharts5";
 import * as am5flow from "@amcharts/amcharts5/flow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { useTheme } from "next-themes";
-
+const capitalizeWords = (str) => {
+  if (!str) return "";
+  return str.replace(/\b\w/g, (char) => char.toUpperCase());
+};
 const SankeyChart = ({ data, id }) => {
   const chartRef = useRef(null);
   const { resolvedTheme } = useTheme();
@@ -23,7 +26,7 @@ const SankeyChart = ({ data, id }) => {
     const isDark = resolvedTheme === "dark";
     root.interfaceColors.set("text", am5.color(isDark ? 0xffffff : 0x000000));
     root.interfaceColors.set("grid", am5.color(isDark ? 0x444444 : 0xcccccc));
-    const isSmallDevice = window.innerWidth < 768;
+    const isSmallDevice = window.innerWidth <= 768;
 
     root.container.setAll(
       "background",
@@ -34,17 +37,31 @@ const SankeyChart = ({ data, id }) => {
         sourceIdField: "from",
         targetIdField: "to",
         valueField: "value",
-        paddingRight: isSmallDevice ? 0 : 150,
+        paddingRight: isSmallDevice ? 0 : 220,
         paddingLeft: isSmallDevice ? 0 : 30,
       })
     );
+
     series.events.once("datavalidated", () => {
       series.nodes.labels.template.setAll({
-        fontSize: isSmallDevice ? 0 : 12,
+        fontSize: isSmallDevice ? 0 : 10,
         visible: !isSmallDevice,
         oversizedBehavior: "wrap",
-        text: "{name} ({sumIncoming} kWh)",
       });
+    });
+    series.nodes.labels.template.adapters.add("text", (text, target) => {
+      const dataItem = target.dataItem;
+      if (!dataItem) return "";
+      const name = capitalizeWords(dataItem.get("name"));
+
+      const incoming = dataItem.get("sumIncoming");
+      const outgoing = dataItem.get("sumOutgoing");
+
+      if (incoming > 0) {
+        return `${name} (${incoming.toLocaleString()} kWh)`;
+      } else {
+        return `${name} (${outgoing.toLocaleString()} kWh)`;
+      }
     });
     series.links.template.setAll({
       fillOpacity: 0.4,

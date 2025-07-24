@@ -921,7 +921,7 @@ const EnergyComparison = () => {
     );
 
     legend.labels.template.setAll({
-      fontSize: 12,
+      fontSize: 10,
       fontWeight: "500",
     });
 
@@ -1067,7 +1067,7 @@ const EnergyComparison = () => {
       className={`${
         isEnergyComparisonFullView
           ? "fixed inset-0 z-50  p-5 overflow-auto w-[100%] m-auto h-[100vh]"
-          : "relative  px-1 py-2 md:p-3 h-[17rem] md:h-[15rem] lg:h-[14.3rem]"
+          : "relative  px-1 py-2 md:p-3 h-[17rem] md:h-[15rem] lg:h-[16.5rem] xl:h-[14.3rem]"
       } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
     >
       {/* Header */}
