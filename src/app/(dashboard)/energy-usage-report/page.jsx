@@ -5,7 +5,6 @@ import SingleUnitComponent from "@/components/reportsComponent/SingleUnitCompone
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { RiErrorWarningFill } from "react-icons/ri";
-import { FaChevronLeft } from "react-icons/fa";
 import config from "@/constant/apiRouteList";
 import { CircularProgress } from "@mui/material";
 import { ImArrowLeft2 } from "react-icons/im";
@@ -23,7 +22,9 @@ const FilterPage = () => {
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
   const [resData, setResData] = useState([]);
-  const spindles = Number(unit4Spindle) + Number(unit5Spindle);
+  const unit4 = unit === "Unit_4" || unit === "ALL" ? "U4" : "";
+  const unit5 = unit === "Unit_5" || unit === "ALL" ? "U5" : "";
+
   const toggleDropdown = () => setIsOpen(!isOpen);
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -34,27 +35,67 @@ const FilterPage = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
   const handleUnitChange = (unitClicked) => {
     if (unitClicked === "ALL") {
       setUnit("ALL");
     } else if (unit === "ALL") {
-      // If "All" is currently selected, toggle off and set clicked unit
       setUnit(unitClicked);
     } else if (unit === unitClicked) {
-      // Toggle off
       setUnit("");
     } else if (
       (unit === "Unit_4" && unitClicked === "Unit_5") ||
       (unit === "Unit_5" && unitClicked === "Unit_4")
     ) {
-      // If user selects both manually → treat as "All"
       setUnit("ALL");
     } else {
       setUnit(unitClicked);
     }
   };
-
+  // fetch unit 4 spindles
+  const fetchU4Spindles = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U4`,
+        {
+          method: "GET",
+        }
+      );
+      const resResult = await response.json();
+      if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
+        setUnit4Spindle(resResult[0].totalProduction);
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchU5Spindles = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U5`,
+        {
+          method: "GET",
+        }
+      );
+      const resResult = await response.json();
+      if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
+        setUnit5Spindle(resResult[0].totalProduction);
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (unit !== "" && startDate !== "" && endDate !== "") {
+      fetchU4Spindles();
+      fetchU5Spindles();
+    }
+  }, [unit4, unit5, startDate, endDate]);
   useEffect(() => {
     if (unit === "Unit_4" && unit4Spindle.length === 0) {
       setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
@@ -288,6 +329,7 @@ const FilterPage = () => {
                       type="number"
                       value={unit4Spindle}
                       id="rates"
+                      readOnly
                       name="rates"
                       required={true}
                       onChange={(e) => setUnit4Spindle(e.target.value)}
@@ -307,6 +349,7 @@ const FilterPage = () => {
                       type="number"
                       value={unit5Spindle}
                       id="rates"
+                      readOnly
                       name="rates"
                       required={true}
                       onChange={(e) => setUnit5Spindle(e.target.value)}
@@ -328,6 +371,7 @@ const FilterPage = () => {
                         value={unit4Spindle}
                         id="rates"
                         name="rates"
+                        readOnly
                         required={true}
                         onChange={(e) => setUnit4Spindle(e.target.value)}
                         placeholder="05"
@@ -346,6 +390,7 @@ const FilterPage = () => {
                         value={unit5Spindle}
                         id="rates"
                         name="rates"
+                        readOnly
                         required={true}
                         onChange={(e) => setUnit5Spindle(e.target.value)}
                         placeholder="05"
@@ -386,14 +431,18 @@ const FilterPage = () => {
           unit={unit}
           startDate={startDate}
           endDate={endDate}
-          spindles={spindles}
+          unit4Spindle={unit4Spindle}
+          unit5Spindle={unit5Spindle}
+          resData={resData}
         />
       ) : showResults && unit === "ALL" ? (
         <MultipleUnitComponent
           unit={unit}
+          unit4Spindle={unit4Spindle}
+          unit5Spindle={unit5Spindle}
           startDate={startDate}
           endDate={endDate}
-          spindles={spindles}
+          resData={resData}
         />
       ) : null}
     </div>

@@ -121,11 +121,22 @@ const tableData = [
   },
 ];
 
-const MultipleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
+const MultipleUnitComponent = ({
+  unit,
+  startDate,
+  endDate,
+  unit4Spindle,
+  unit5Spindle,
+  resData,
+}) => {
   const totalInstalledLoad = tableData.reduce((sum, row) => {
     const value = parseFloat(row.installedLoadKw);
     return sum + (isNaN(value) ? 0 : value);
   }, 0);
+  console.log(unit4Spindle);
+  console.log(unit5Spindle);
+  console.log(resData);
+  console.log(resData);
   return (
     <>
       <div className="flex px-3 md:px-6 pt-2 flex-col gap-3 overflow-hidden">
@@ -310,7 +321,7 @@ const MultipleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
                         <td></td>
                         <td></td>
                         <td className="text-center px-2 py-1 text-[12px] font-inter font-500">
-                          {spindles}
+                          00000
                         </td>
                       </tr>
                     </tbody>
@@ -365,7 +376,7 @@ const MultipleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
                         </td>
                         <td></td>
                         <td className="text-center px-2 py-1 text-[12px] font-inter font-500">
-                          {spindles}
+                          000
                         </td>
                       </tr>
                     </tbody>
@@ -400,7 +411,7 @@ const MultipleUnitComponent = ({ unit, startDate, endDate, spindles }) => {
                       </tr>
                       <tr className="border border-gray-300 dark:border-gray-500">
                         <td className="text-center px-2 py-1 text-[12px] font-inter font-500">
-                          {spindles}
+                          000
                         </td>
                       </tr>
                     </tbody>

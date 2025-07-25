@@ -153,7 +153,7 @@ export const sidebarLinksMap = {
       submenu: [
         {
           id: 0,
-          title: "oneline",
+          title: "Oneline",
           href: "/sld",
           icon: BsFillDiagram3Fill,
         },
@@ -162,7 +162,7 @@ export const sidebarLinksMap = {
   ],
   Trends: [
     {
-      title: "1- Customized Trend",
+      title: "Customized Trend",
       icon: TransformerIcon,
       href: "/custom_trend",
     },
@@ -186,7 +186,7 @@ export const sidebarLinksMap = {
 
   Reports: [
     {
-      title: "energy-usage-report",
+      title: "Energy-usage-report",
       icon: PlantOverview,
       href: "/energy-usage-report",
     },

@@ -11,9 +11,10 @@ const PowerComparison = () => {
   const date = new Date();
   const today = date.toISOString().split("T")[0];
   const [stackChartData, setStackchartData] = useState([]);
+
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
-  const [timeRange, setTimeRange] = useState("hourly");
+  const [timeRange, setTimeRange] = useState("daily");
   const [loading, setLoading] = useState(false);
 
   const [isPowerComparisonFullView, setIsPowerComparisonFullView] =

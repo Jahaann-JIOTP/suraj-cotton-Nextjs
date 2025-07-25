@@ -6,7 +6,8 @@ import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
 import ExcelJS from "exceljs";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-
+import { HiMiniChevronDown } from "react-icons/hi2";
+import { IoChevronUp } from "react-icons/io5";
 import { saveAs } from "file-saver";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Swal from "sweetalert2";
@@ -982,7 +983,13 @@ function CustomTrend() {
                     selectedMeter.length > 1 ? ", ..." : ""
                   }`
                 : "Select Meters"}
-              <span className="float-right">{showMeters ? "▲" : "▼"}</span>
+              <span className="float-right">
+                {showMeters ? (
+                  <IoChevronUp size={20} className="font-bold" />
+                ) : (
+                  <HiMiniChevronDown size={25} className="font-bold" />
+                )}
+              </span>
             </button>
             {showMeters && (
               <div className="absolute bg-white dark:bg-gray-800 border shadow z-10 w-full max-h-48 overflow-y-auto dark:text-gray-300">
@@ -1022,7 +1029,13 @@ function CustomTrend() {
               className="w-full p-2 border rounded text-left cursor-pointer bg-white dark:bg-gray-800"
             >
               {selectedParameter || "Select Parameter"}
-              <span className="float-right">{showParameters ? "▲" : "▼"}</span>
+              <span className="float-right">
+                {showParameters ? (
+                  <IoChevronUp size={20} className="font-bold" />
+                ) : (
+                  <HiMiniChevronDown size={25} className="font-bold" />
+                )}
+              </span>
             </button>
             {showParameters && (
               <div className="absolute bg-white dark:bg-gray-800 border shadow z-10 w-full max-h-48 overflow-y-auto">

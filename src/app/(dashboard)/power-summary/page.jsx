@@ -112,7 +112,7 @@ const PowerSummaryPage = () => {
       <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full lg:w-[49.3%]">
           <TrafoCard
-            mainTitle="Trafo 1"
+            mainTitle="Trafo 3"
             icomingValue={powerSummaryData.Trafo3Incoming || "00.00"}
             loading={loading}
             iconmingUnit="kWh"
@@ -124,7 +124,7 @@ const PowerSummaryPage = () => {
         </div>
         <div className="w-full lg:w-[49.3%]">
           <TrafoCard
-            mainTitle="Trafo 2"
+            mainTitle="Trafo 4"
             icomingValue={powerSummaryData.Trafo4Incoming || "00.00"}
             loading={loading}
             iconmingUnit="kWh"

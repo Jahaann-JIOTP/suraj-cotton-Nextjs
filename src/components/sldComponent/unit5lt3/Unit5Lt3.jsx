@@ -329,7 +329,7 @@ const Unit5Lt3 = ({ roundedData }) => {
             }}
           >
             <span className="meterReadingUnit4Lt1 mt-[-1.5px]">
-              {meter.activeVoltageAvgTag || "000"}
+              {meter.activePowerTotalTag || "000"}
             </span>
             <span className="meterReadingUnit4Lt1 mt-[-1px]">
               {meter.activeCurrentAvgTag || "000"}

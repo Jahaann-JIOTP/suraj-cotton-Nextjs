@@ -10,7 +10,7 @@ const intervalPeriod = 60 * 60 * 1000;
 const TranformersPage = () => {
   const initialHrs = 200;
   const [transformerTimePeriod, setTransformerTimePeriod] =
-    useState("thismonth");
+    useState("thisweek");
   const [loading, setLoading] = useState(false);
   const [transformerTotalValTag, setTransformerTotalValTag] = useState({});
   const [remaininghrs, setRemainingHrs] = useState(initialHrs);
@@ -117,7 +117,7 @@ const TranformersPage = () => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 1 (kWh) Total:{" "}
-                {transformerTotalValTag.Trafo1activepowertotal || "00.00"}
+                {transformerTotalValTag.Trafo1outgoing || "00.00"}
               </h2>
             </div>
             <div>
@@ -178,7 +178,7 @@ const TranformersPage = () => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 2 (kWh) Total:
-                {transformerTotalValTag.Trafo2activepowertotal || "00.00"}
+                {transformerTotalValTag.Trafo2outgoing || "00.00"}
               </h2>
             </div>
             <div>
@@ -242,7 +242,7 @@ const TranformersPage = () => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 3 (kWh) Total:{" "}
-                {transformerTotalValTag.Trafo3activepowertotal || "00.00"}
+                {transformerTotalValTag.Trafo3outgoing || "00.00"}
               </h2>
             </div>
             <div>
@@ -303,7 +303,7 @@ const TranformersPage = () => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 4 (kWh) Total:{" "}
-                {transformerTotalValTag.Trafo4activepowertotal || "00.00"}
+                {transformerTotalValTag.Trafo4outgoing || "00.00"}
               </h2>
             </div>
             <div>

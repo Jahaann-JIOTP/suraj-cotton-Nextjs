@@ -505,7 +505,7 @@ const page = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="relative w-full flex flex-col items-center bg-white dark:bg-gray-800 p-5 rounded-sm border-t-3 h-[81vh] border-[#1F5897]">
+    <div className="relative w-full flex flex-col items-center dark:bg-gray-800 p-5 rounded-sm border-t-3 h-[81vh] border-[#1F5897]">
       <div className="flex items-center justify-between w-full overflow-hidden">
         <h1 className="font-semibold text-2xl font-inter pb-4">{meterName}</h1>
         <button
@@ -571,8 +571,8 @@ const page = () => {
           </button>
         </div>
       </div>
-      <div className="w-full overflow-auto">
-        <div className="relative w-[1030px] mt-7 flex items-start flex-col mx-auto">
+      <div className="w-full overflow-auto  h-[600px]">
+        <div className="relative w-[1030px] flex items-start flex-col mx-auto">
           {activeTab === "voltage" ? (
             theme === "light" ? (
               <img

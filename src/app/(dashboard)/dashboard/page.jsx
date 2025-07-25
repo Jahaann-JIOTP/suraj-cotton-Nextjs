@@ -74,9 +74,7 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("Inner width of the screen", window.innerWidth);
-  }, [window.innerWidth]);
+  useEffect(() => {}, [window.innerWidth]);
 
   useEffect(() => {
     fetchU4Spindles();
@@ -207,7 +205,12 @@ const Dashboard = () => {
           <SingleValueDiv title="Aux. Consumption" value="000" unit="kWh" />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="Total Energy Output" value="000" unit="kWh" />
+          <SingleValueDiv
+            title="Total Energy Output"
+            value={singleDivData.totalenergyoutput || "000"}
+            loading={loading}
+            unit="kWh"
+          />
         </div>
       </div>
       {/* comparison graphs */}

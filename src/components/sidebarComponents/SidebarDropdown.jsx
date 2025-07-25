@@ -78,7 +78,7 @@ export default function SidebarDropdown({
                 return path.startsWith(p);
               }
             );
-            console.log("-------------------------->", nestedArr);
+
             const activePath = nestedArr || path === sub.href;
 
             return (
