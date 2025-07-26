@@ -5,6 +5,7 @@ import {
   faArrowTrendUp,
   faBell,
   faBookOpen,
+  faRotate,
 } from "@fortawesome/free-solid-svg-icons";
 
 import PowerIcon from "../../public/sidebarIcons/PowerIcon";
@@ -15,6 +16,7 @@ import PlantOverview from "../../public/sidebarIcons/PlantOverview";
 import { FaUserCog } from "react-icons/fa";
 import { MdElectricMeter } from "react-icons/md";
 import { BsFillDiagram3Fill } from "react-icons/bs";
+import { MdOutlineSettingsBackupRestore } from "react-icons/md";
 
 export const privilegeConfig = {
   Dashboard: {
@@ -62,7 +64,6 @@ export const privilegeConfig = {
       "/energy-cost-report",
       "/energy_usage",
       "/energy-summary-report",
-      "/spindle-production",
     ],
     tab: "Reports",
   },
@@ -71,8 +72,15 @@ export const privilegeConfig = {
     href: "/add_roles",
     icon: faGear,
     label: "Configuration",
-    matchPaths: ["/add_roles", "/meter-configuration"],
+    matchPaths: ["/add_roles", "/configuration-meter"],
     tab: "Configuration",
+  },
+  Production: {
+    href: "/unit-4-production",
+    icon: faRotate,
+    label: "Production",
+    matchPaths: ["/unit-4-production", "/unit-5-production"],
+    tab: "Production",
   },
 };
 
@@ -83,6 +91,7 @@ export const privilegeOrder = [
   "Alarms",
   "Reports",
   "Configuration",
+  "Production",
 ];
 
 export const sidebarLinksMap = {
@@ -200,11 +209,6 @@ export const sidebarLinksMap = {
       icon: PlantOverview,
       href: "/energy-summary-report",
     },
-    {
-      title: "Spindle Production",
-      icon: PlantOverview,
-      href: "/spindle-production",
-    },
   ],
 
   Configuration: [
@@ -216,7 +220,19 @@ export const sidebarLinksMap = {
     {
       title: "Meter Configuration",
       icon: MdElectricMeter,
-      href: "/meter-configuration",
+      href: "/configuration-meter",
+    },
+  ],
+  Production: [
+    {
+      title: "Unit 4",
+      icon: MdOutlineSettingsBackupRestore,
+      href: "/unit-4-production",
+    },
+    {
+      title: "Unit 5",
+      icon: MdOutlineSettingsBackupRestore,
+      href: "/unit-5-production",
     },
   ],
 };

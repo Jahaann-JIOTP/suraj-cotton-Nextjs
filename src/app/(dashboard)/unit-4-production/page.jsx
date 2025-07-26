@@ -2,16 +2,18 @@
 
 import config from "@/constant/apiRouteList";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-const ProductionBlocks = () => {
+const Unit4Spindle = () => {
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
-  const year = today.getFullYear(); // Fixed year
+  const year = today.getFullYear();
   const [getProductionData, setGetProductionData] = useState({});
   const [daysInMonth, setDaysInMonth] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [chunkSize, setChunkSize] = useState(15);
   const [productionData, setProductionData] = useState({
-    unit: "U4", // Default to Unit 4
+    unit: "U4",
     startDate: "",
     values: [],
   });
@@ -72,6 +74,7 @@ const ProductionBlocks = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.REPORTS.ADD_SPINDLES}`,
@@ -83,9 +86,15 @@ const ProductionBlocks = () => {
           body: JSON.stringify(productionData),
         }
       );
-      if (response.ok) await fetchSpindleProduction();
+      if (response.ok) {
+        toast.success("Unit 4 Spindle Added");
+        await fetchSpindleProduction();
+        setLoading(false);
+      }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -121,14 +130,12 @@ const ProductionBlocks = () => {
     const dateObj = new Date(year, month - 1, day);
 
     const unit4 = getProductionData[`${dateStr}-U4`] || 0;
-    const unit5 = getProductionData[`${dateStr}-U5`] || 0;
 
-    if (dateObj > today && unit4 === 0 && unit5 === 0) return " ";
+    if (dateObj > today && unit4 === 0) return " ";
 
     if (productionData.unit === "U4") return unit4 !== 0 ? unit4 : "-";
-    if (productionData.unit === "U5") return unit5 !== 0 ? unit5 : "-";
 
-    return unit4 === 0 && unit5 === 0 ? "-" : unit4 || unit5;
+    return unit4 === 0 ? "-" : unit4;
   };
 
   const dayChunks = chunkArray(daysInMonth, chunkSize);
@@ -137,7 +144,7 @@ const ProductionBlocks = () => {
   return (
     <div className="flex flex-col bg-white dark:bg-gray-800 w-full h-full md:h-[81vh] rounded-md border-t-3 overflow-x-auto border-[#1F5897] px-4 py-2">
       <h1 className="font-raleway text-[18.22px] text-black dark:text-white font-600">
-        Spindle Production
+        Spindle Production Unit 4
       </h1>
 
       {/* Form */}
@@ -147,28 +154,6 @@ const ProductionBlocks = () => {
             onSubmit={handleSubmit}
             className="w-full flex flex-col items-center mt-10"
           >
-            <h3 className="font-inter text-[16px] pt-2 text-black dark:text-white font-500">
-              Select Plant Units
-            </h3>
-            <div className="flex gap-15">
-              {["U4", "U5"].map((unit) => (
-                <label
-                  key={unit}
-                  htmlFor={`unit${unit}`}
-                  className="font-inter text-[15px] cursor-pointer pt-5 text-black dark:text-white font-500 flex items-center gap-2"
-                >
-                  <input
-                    type="radio"
-                    id={`unit${unit}`}
-                    name="unit"
-                    value={unit}
-                    checked={productionData.unit === unit}
-                    onChange={handleChange}
-                  />
-                  Unit {unit[1]}
-                </label>
-              ))}
-            </div>
             <div className="flex flex-col items-center justify-center">
               <label className="font-inter text-[15px] pt-5 text-black  dark:text-white font-500">
                 Select Date
@@ -196,9 +181,9 @@ const ProductionBlocks = () => {
 
             <button
               type="submit"
-              className="bg-[#1F5897] cursor-pointer text-white w-[6rem] py-1.5 rounded mt-4"
+              className="bg-[#1F5897] cursor-pointer text-white px-5 py-1.5 rounded mt-4"
             >
-              Submit
+              {loading === true ? "Submitting..." : "Submit"}
             </button>
           </form>
         </div>
@@ -282,5 +267,4 @@ const ProductionBlocks = () => {
     </div>
   );
 };
-
-export default ProductionBlocks;
+export default Unit4Spindle;

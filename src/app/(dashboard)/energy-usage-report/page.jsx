@@ -96,28 +96,7 @@ const FilterPage = () => {
       fetchU5Spindles();
     }
   }, [unit4, unit5, startDate, endDate]);
-  useEffect(() => {
-    if (unit === "Unit_4" && unit4Spindle.length === 0) {
-      setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
-    } else if (unit === "Unit_5" && unit5Spindle.length === 0) {
-      setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
-    } else if (unit === "ALL") {
-      if (unit4Spindle.length === 0 && unit5Spindle.length === 0) {
-        setErrorMessage(
-          "Add Unit 4 and Unit 5 spindles first in Spindle Production Tab"
-        );
-      } else if (unit4Spindle.length === 0) {
-        setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
-      } else if (unit5Spindle.length === 0) {
-        setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
-      } else {
-        setErrorMessage("");
-      }
-    } else {
-      setErrorMessage(""); // Clear if no condition matches
-    }
-  }, [unit, unit4Spindle, unit5Spindle]);
-  // getting energy usage reports
+  // getting energy usage report
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!unit || startDate.length === 0 || endDate.length === 0) {
@@ -125,25 +104,26 @@ const FilterPage = () => {
       return;
     }
 
-    if (unit === "Unit_4" && unit4Spindle.length === 0) {
-      toast.warning("Please enter spindles for Unit 4.");
+    if (unit === "Unit_4" && unit4Spindle === 0) {
+      setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
       return;
     }
-
-    if (unit === "Unit_5" && unit5Spindle.length === 0) {
-      toast.warning("Please enter spindles for Unit 5.");
+    if (unit === "Unit_5" && unit5Spindle === 0) {
+      setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
       return;
     }
 
     if (unit === "ALL") {
-      if (unit4Spindle.length === 0 && unit5Spindle.length === 0) {
-        toast.warning("Please enter spindles for both Unit 4 and Unit 5.");
+      if (unit4Spindle === 0 && unit5Spindle === 0) {
+        setErrorMessage(
+          "Add Unit 4 and Unit 5 spindles first in Spindle Production Tab"
+        );
         return;
-      } else if (unit4Spindle.length === 0) {
-        toast.warning("Please enter spindles for Unit 4.");
+      } else if (unit4Spindle === 0) {
+        setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
         return;
-      } else if (unit5Spindle.length === 0) {
-        toast.warning("Please enter spindles for Unit 5.");
+      } else if (unit5Spindle === 0) {
+        setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
         return;
       }
     }
@@ -329,11 +309,10 @@ const FilterPage = () => {
                       type="number"
                       value={unit4Spindle}
                       id="rates"
-                      readOnly
                       name="rates"
-                      required={true}
+                      readOnly
                       onChange={(e) => setUnit4Spindle(e.target.value)}
-                      placeholder="05"
+                      placeholder="00"
                       className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                     />
                   </div>
@@ -349,11 +328,10 @@ const FilterPage = () => {
                       type="number"
                       value={unit5Spindle}
                       id="rates"
-                      readOnly
                       name="rates"
-                      required={true}
+                      readOnly
                       onChange={(e) => setUnit5Spindle(e.target.value)}
-                      placeholder="05"
+                      placeholder="00"
                       className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                     />
                   </div>
@@ -372,9 +350,8 @@ const FilterPage = () => {
                         id="rates"
                         name="rates"
                         readOnly
-                        required={true}
                         onChange={(e) => setUnit4Spindle(e.target.value)}
-                        placeholder="05"
+                        placeholder="00"
                         className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                       />
                     </div>
@@ -391,9 +368,8 @@ const FilterPage = () => {
                         id="rates"
                         name="rates"
                         readOnly
-                        required={true}
                         onChange={(e) => setUnit5Spindle(e.target.value)}
-                        placeholder="05"
+                        placeholder="00"
                         className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                       />
                     </div>

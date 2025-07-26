@@ -1,0 +1,270 @@
+"use client";
+
+import config from "@/constant/apiRouteList";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
+const Unit5Spindle = () => {
+  const today = new Date();
+  const [month, setMonth] = useState(today.getMonth());
+  const year = today.getFullYear();
+  const [getProductionData, setGetProductionData] = useState({});
+  const [daysInMonth, setDaysInMonth] = useState([]);
+  const [chunkSize, setChunkSize] = useState(15);
+  const [loading, setLoading] = useState(false);
+  const [productionData, setProductionData] = useState({
+    unit: "U5",
+    startDate: "",
+    values: [],
+  });
+
+  // Generate days for current month
+  useEffect(() => {
+    const days = new Date(year, month + 1, 0).getDate();
+    const datesArray = Array.from({ length: days }, (_, i) => {
+      const day = i + 1;
+      const monthStr = month + 1;
+      return `${day}/${monthStr}/${year}`;
+    });
+    setDaysInMonth(datesArray);
+  }, [month, year]);
+
+  // Fetch production data
+  const fetchSpindleProduction = async () => {
+    try {
+      const monthStr = `${year}-${month + 1 < 10 ? "0" : ""}${month + 1}`;
+      const response = await fetch(
+        `${config.BASE_URL}${config.REPORTS.GET_SPINDLES}${monthStr}`
+      );
+      const resResult = await response.json();
+
+      if (response.ok) {
+        const grouped = {};
+        resResult.data.forEach(({ date, unit, value }) => {
+          const d = new Date(date);
+          const key = `${d.getDate()}/${
+            d.getMonth() + 1
+          }/${d.getFullYear()}-${unit}`;
+          grouped[key] = (grouped[key] || 0) + value;
+        });
+        setGetProductionData(grouped);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchSpindleProduction();
+  }, [month]);
+
+  // Form Handling
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProductionData((prev) => ({
+      ...prev,
+      [name]:
+        name === "values"
+          ? !isNaN(parseFloat(value))
+            ? [parseFloat(value)]
+            : []
+          : value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.REPORTS.ADD_SPINDLES}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(productionData),
+        }
+      );
+      if (response.ok) {
+        await fetchSpindleProduction();
+        setLoading(false);
+        toast.success("Unit 5 Spindle Added");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Responsive chunk size
+  const getChunkSize = (width) => {
+    if (width >= 1400) return 15;
+    if (width >= 1200) return 12;
+    if (width >= 992) return 10;
+    if (width >= 768) return 8;
+    if (width >= 576) return 6;
+    if (width >= 400) return 3;
+    if (width >= 340) return 2;
+    return 4;
+  };
+
+  useEffect(() => {
+    const handleResize = () => setChunkSize(getChunkSize(window.innerWidth));
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const chunkArray = (arr, size) => {
+    const result = [];
+    for (let i = 0; i < arr.length; i += size)
+      result.push(arr.slice(i, i + size));
+    return result;
+  };
+
+  const getProductionByDate = (dateStr) => {
+    const today = new Date();
+    const [day, month, year] = dateStr.split("/").map(Number);
+    const dateObj = new Date(year, month - 1, day);
+
+    const unit5 = getProductionData[`${dateStr}-U5`] || 0;
+
+    if (dateObj > today && unit5 === 0) return " ";
+
+    if (productionData.unit === "U5") return unit5 !== 0 ? unit5 : "-";
+
+    return unit5 === 0 ? "-" : unit5;
+  };
+
+  const dayChunks = chunkArray(daysInMonth, chunkSize);
+  const slotWidth = `${100 / (chunkSize + 1)}%`;
+
+  return (
+    <div className="flex flex-col bg-white dark:bg-gray-800 w-full h-full md:h-[81vh] rounded-md border-t-3 overflow-x-auto border-[#1F5897] px-4 py-2">
+      <h1 className="font-raleway text-[18.22px] text-black dark:text-white font-600">
+        Spindle Production Unit 5
+      </h1>
+
+      {/* Form */}
+      <div className="w-full flex items-center justify-center">
+        <div className="w-full md:w-[80%] lg:w-[50%] flex flex-col items-center">
+          <form
+            onSubmit={handleSubmit}
+            className="w-full flex flex-col items-center mt-10"
+          >
+            <div className="flex flex-col items-center justify-center">
+              <label className="font-inter text-[15px] pt-5 text-black  dark:text-white font-500">
+                Select Date
+              </label>
+              <input
+                type="date"
+                name="startDate"
+                onChange={handleChange}
+                className="outline-none border-1 border-gray-300 dark:border-y-gray-500 rouded px-2 py-1.5 w-[12rem] rounded-sm"
+                value={productionData.startDate}
+              />
+            </div>
+            <div className="flex flex-col items-center justify-center">
+              <label className="font-inter text-[15px] pt-5 text-black dark:text-white font-500">
+                Enter Production
+              </label>
+              <input
+                type="number"
+                name="values"
+                onChange={handleChange}
+                className="outline-none border-1 border-gray-300 dark:border-y-gray-500 rouded px-2 py-1.5 w-[12rem] rounded-sm"
+                value={productionData.values}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="bg-[#1F5897] cursor-pointer text-white px-5 py-1.5 rounded mt-4"
+            >
+              {loading === true ? "Submitting..." : "Submit"}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Slot Rows */}
+      <div className="relative border-1 border-[#025697] px-3 mt-10">
+        <div className="absolute mb-4 top-1 flex items-center gap-2">
+          <label className="text-[12px]">Month:</label>
+          <select
+            value={month + 1}
+            onChange={(e) => setMonth(parseInt(e.target.value) - 1)}
+            className="border p-1 rounded-sm shadow text-[12px] w-[90px] outline-none font-400"
+          >
+            {Array.from({ length: 12 }, (_, i) => (
+              <option key={i} value={i + 1}>
+                {new Date(0, i).toLocaleString("default", { month: "long" })}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="w-full flex items-center justify-center">
+          <h2
+            className="text-white bg-[#025697] px-10 py-1.5 text-[17.62px] font-inter font-500"
+            style={{ clipPath: "polygon(10% 0, 90% 0, 100% 100%, 0 100%)" }}
+          >
+            History of daily production
+          </h2>
+        </div>
+
+        {dayChunks.map((chunk, rowIndex) => (
+          <div
+            key={rowIndex}
+            className="mb-6 w-full flex flex-col overflow-hidden"
+          >
+            {/* Date Row */}
+            <div className="flex w-full items-center text-center">
+              <div
+                style={{ width: slotWidth }}
+                className="flex-shrink-0 border-1 h-[28px] border-[#025697] border-r-white py-1 bg-[#E5F3FD] text-[10px] md:text-[12px] font-medium"
+              >
+                Date
+              </div>
+              {chunk.map((dateStr, index) => (
+                <div
+                  key={dateStr}
+                  className={`flex-shrink-0 border-1 h-[28px] border-y-[#025697] ${
+                    index === chunk.length - 1
+                      ? "border-r-[#025697]"
+                      : "border-r-white"
+                  } py-1 bg-[#E5F3FD] text-[12px] font-medium`}
+                  style={{ width: slotWidth }}
+                >
+                  {dateStr}
+                </div>
+              ))}
+            </div>
+
+            {/* Production Row */}
+            <div className="flex w-full items-center text-center">
+              <div
+                style={{ width: slotWidth }}
+                className="flex-shrink-0 font-semibold h-[53px] border-[#025697] border-t-transparent py-4 border text-[12px]"
+              >
+                Production
+              </div>
+              {chunk.map((dateStr) => (
+                <div
+                  key={dateStr}
+                  className="flex-shrink-0 border py-4 h-[53px] border-r-[#025697] border-b-[#025697] border-t-transparent text-[12px]"
+                  style={{ width: slotWidth }}
+                >
+                  {getProductionByDate(dateStr)}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+export default Unit5Spindle;

@@ -131,12 +131,16 @@ const InitialSldUnit5 = ({ roundedData }) => {
         {/* Buttons */}
         <button
           onClick={() => router.replace("/sld?unit=unit5&area=lt1")}
-          className="absolute top-[545px] left-[193px] w-[301px] h-[45px] cursor-pointer"
-        ></button>
+          className="absolute text-[30px]  border-1 border-black border-dashed font-bold top-[545px] left-[193px] w-[301px] bg-white h-[45px] cursor-pointer"
+        >
+          To Unit # 05 LT1
+        </button>
         <button
           onClick={() => router.push("/sld?unit=unit5&area=lt2")}
-          className="absolute top-[545px] left-[642px] w-[300px] h-[45px] cursor-pointer"
-        ></button>
+          className="absolute text-[30px] bg-white border-1 border-black border-dashed font-bold top-[545px] left-[642px] w-[300px] h-[45px] cursor-pointer"
+        >
+          To Unit # 05 LT2
+        </button>
 
         {/* Meter Readings */}
         {unit5InitialSldMeterTAgs.map((meter, index) => (
@@ -159,7 +163,12 @@ const InitialSldUnit5 = ({ roundedData }) => {
             </span>
           </div>
         ))}
-        {/* LT1 Power House */}
+        <div className="absolute top-[394px] left-[490px] text-[14px] font-bold bg-white ">
+          LT-1
+        </div>
+        <div className="absolute top-[394px] left-[620px] text-[14px] font-bold bg-white ">
+          LT-2
+        </div>
       </div>
     </div>
   );
