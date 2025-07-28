@@ -1,3 +1,6 @@
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+import Swal from "sweetalert2";
 const MultipleUnitComponent = ({
   unit,
   startDate,
@@ -282,6 +285,272 @@ const MultipleUnitComponent = ({
       u4andU5TotalConsumption: u4U5Total.auxunit5,
     },
   ];
+  // /////////////////////////////--------------export to excel
+  const exportEnergyReportToExcel = async () => {
+    try {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Energy Usage Report");
+
+      // Set column widths to match HTML table
+      worksheet.columns = [
+        { width: 35 }, // Department
+        { width: 8 }, // Unit 4 Mcs
+        { width: 15 }, // Unit 4 Load
+        { width: 18 }, // Unit 4 Consumption
+        { width: 5 }, // Spacer
+        { width: 8 }, // Unit 5 Mcs
+        { width: 15 }, // Unit 5 Load
+        { width: 18 }, // Unit 5 Consumption
+        { width: 5 }, // Spacer
+        { width: 20 }, // Combined Total
+      ];
+
+      // Merge and style heading area
+      worksheet.mergeCells("A1:B2");
+      const mainHeadingCell = worksheet.getCell("A1");
+      mainHeadingCell.value = `Energy Usage report of ${
+        unit === "Unit_4"
+          ? "Unit 4"
+          : unit === "Unit_5"
+          ? "Unit 5"
+          : "All Units"
+      }`;
+      mainHeadingCell.font = { size: 16, bold: true };
+      mainHeadingCell.alignment = {
+        vertical: "middle",
+        horizontal: "center",
+        wrapText: true,
+      };
+      mainHeadingCell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFDDEBF7" },
+      };
+
+      // Add dates
+      worksheet.mergeCells("C1:D1");
+      const startDateCell = worksheet.getCell("C1");
+      startDateCell.value = `Start Date: ${startDate}`;
+      startDateCell.font = { size: 12 };
+      startDateCell.alignment = { vertical: "middle", horizontal: "right" };
+      startDateCell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFDDEBF7" },
+      };
+
+      worksheet.mergeCells("C2:D2");
+      const endDateCell = worksheet.getCell("C2");
+      endDateCell.value = `End Date: ${endDate}`;
+      endDateCell.font = { size: 12 };
+      endDateCell.alignment = { vertical: "middle", horizontal: "right" };
+      endDateCell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFDDEBF7" },
+      };
+
+      // Add unit headers (matching the HTML divider lines)
+      const unitHeaderRow = worksheet.addRow([]);
+      unitHeaderRow.getCell(2).value = "Unit 4";
+      unitHeaderRow.getCell(6).value = "Unit 5";
+      unitHeaderRow.getCell(10).value = "Unit 4 + Unit 5";
+      unitHeaderRow.eachCell((cell) => {
+        if (cell.value) {
+          cell.font = { bold: true };
+          cell.alignment = { horizontal: "center" };
+        }
+      });
+
+      // Add main table headers
+      const headerRow = worksheet.addRow([
+        "Department",
+        "Mcs",
+        "Installed Load Kw",
+        "Consumed units Kwh",
+        "", // Spacer
+        "Mcs",
+        "Installed Load Kwh",
+        "Consumed Units Kwh",
+        "", // Spacer
+        "Total Consumed Units Kw",
+      ]);
+
+      // Style header row
+      headerRow.eachCell((cell) => {
+        if (cell.value) {
+          // Skip spacer cells
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "FF0070C0" },
+          };
+          cell.font = {
+            bold: true,
+            color: { argb: "FFFFFFFF" },
+          };
+          cell.alignment = {
+            vertical: "middle",
+            horizontal: "center",
+          };
+          cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" },
+          };
+        }
+      });
+      headerRow.height = 20;
+
+      // Add table data
+      tableData.forEach((item) => {
+        const row = worksheet.addRow([
+          item.dept,
+          item.u4Mcs,
+          item.u4Load,
+          item.u4Consumption || 0,
+          "", // Spacer
+          item.u5Mcs,
+          item.u5Load,
+          item.u5Consumption || 0,
+          "", // Spacer
+          item.u4andU5TotalConsumption || 0,
+        ]);
+
+        // Style data row
+        row.eachCell((cell, colNumber) => {
+          cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" },
+          };
+
+          // Alternate background for Unit 4 and Unit 5 data columns
+          if ([2, 3, 4, 6, 7, 8].includes(colNumber)) {
+            cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "FFE5F3FD" },
+            };
+          }
+
+          // Center numeric values
+          if (colNumber !== 1 && colNumber !== 5 && colNumber !== 9) {
+            cell.alignment = { horizontal: "center" };
+          }
+        });
+      });
+
+      // Add totals row
+      const totalRow = worksheet.addRow([
+        "Total Load",
+        "",
+        "",
+        unit4Total.toFixed(2),
+        "", // Spacer
+        "",
+        "",
+        unit5Total.toFixed(2),
+        "", // Spacer
+        allTotalofU4U5Sum.toFixed(2),
+      ]);
+
+      // Style totals row
+      totalRow.eachCell((cell) => {
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FF0070C0" },
+        };
+        cell.font = {
+          bold: true,
+          color: { argb: "FFFFFFFF" },
+        };
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+        if (cell.value) {
+          cell.alignment = { horizontal: "center" };
+        }
+      });
+
+      // Add spindles row
+      const spindleRow = worksheet.addRow([
+        "Total Spindles",
+        "",
+        "",
+        unit4Spindle.toFixed(2),
+        "", // Spacer
+        "",
+        "",
+        unit5Spindle.toFixed(2),
+        "", // Spacer
+        (unit4Spindle + unit5Spindle).toFixed(2),
+      ]);
+
+      // Style spindles row
+      spindleRow.eachCell((cell) => {
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FF0070C0" },
+        };
+        cell.font = {
+          bold: true,
+          color: { argb: "FFFFFFFF" },
+        };
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+        if (cell.value) {
+          cell.alignment = { horizontal: "center" };
+        }
+      });
+
+      // Format numeric cells
+      for (let i = 5; i <= worksheet.rowCount; i++) {
+        [4, 8, 10].forEach((col) => {
+          const cell = worksheet.getCell(
+            `${String.fromCharCode(64 + col)}${i}`
+          );
+          if (typeof cell.value === "number") {
+            cell.numFmt = "0.00";
+          }
+        });
+      }
+
+      // Generate Excel file
+      const buffer = await workbook.xlsx.writeBuffer();
+      saveAs(
+        new Blob([buffer]),
+        `${unit}_Energy_Usage_Report_${startDate}_to_${endDate}.xlsx`
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Report Exported",
+        text: "Energy usage report has been exported successfully",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.error("Error exporting to Excel:", error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Export Failed",
+        text: "An error occurred while exporting the report",
+      });
+    }
+  };
+  // /////////////////////////////--------------export to excel
 
   return (
     <>
@@ -314,7 +583,10 @@ const MultipleUnitComponent = ({
       <div className="w-full h-[2px] mt-5 bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
       <div className="flex flex-col gap-2 md:flex-row px-3 md:px-6 items-start justify-between pt-5">
         <div>
-          <button className="bg-[#1A68B2] cursor-pointer text-white py-1 px-5 rounded text-[14.22px] font-500 font-inter">
+          <button
+            onClick={() => exportEnergyReportToExcel()}
+            className="bg-[#1A68B2] cursor-pointer text-white py-1 px-5 rounded text-[14.22px] font-500 font-inter"
+          >
             Export
           </button>
         </div>

@@ -163,119 +163,193 @@ const SingleUnitComponent = ({
       InstalledLoad: "",
       ConsumedUnits: finalData?.Yarn_consumption || 0,
     },
-    {
-      Department: "Total Load",
-      Mcs: "",
-      InstalledLoad: "",
-      ConsumedUnits: totalConsumption,
-    },
-    {
-      Department: "Spindles",
-      Mcs: "",
-      InstalledLoad: "",
-      ConsumedUnits:
+  ];
+
+  // /////-------------------------export to excel
+  const exportEnergyReportToExcel = async () => {
+    try {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Energy Usage Report");
+      worksheet.columns = [
+        { width: 35 },
+        { width: 10 },
+        { width: 18 },
+        { width: 18 },
+      ];
+      worksheet.mergeCells("A1:B2");
+      const mainHeadingCell = worksheet.getCell("A1");
+      mainHeadingCell.value = `Energy Usage report of ${
+        unit === "Unit_4" ? "Unit 4" : unit === "Unit_5" ? "Unit 5" : ""
+      }`;
+      mainHeadingCell.font = { size: 16, bold: true };
+      mainHeadingCell.alignment = {
+        vertical: "middle",
+        horizontal: "center",
+        wrapText: true,
+      };
+      mainHeadingCell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFDDEBF7" },
+      };
+
+      worksheet.mergeCells("C1:D1");
+      const startDateCell = worksheet.getCell("C1");
+      startDateCell.value = `Start Date: ${startDate}`;
+      startDateCell.font = { size: 12 };
+      startDateCell.alignment = { vertical: "middle", horizontal: "right" };
+      startDateCell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFDDEBF7" },
+      };
+
+      worksheet.mergeCells("C2:D2");
+      const endDateCell = worksheet.getCell("C2");
+      endDateCell.value = `End Date: ${endDate}`;
+      endDateCell.font = { size: 12 };
+      endDateCell.alignment = { vertical: "middle", horizontal: "right" };
+      endDateCell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFDDEBF7" },
+      };
+      const headerRow = worksheet.addRow([
+        "Department",
+        "Mcs",
+        "Installed Load",
+        "Consumed Units",
+      ]);
+
+      headerRow.eachCell((cell) => {
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FF0070C0" },
+        };
+        cell.font = {
+          bold: true,
+          color: { argb: "FFFFFFFF" },
+        };
+        cell.alignment = {
+          vertical: "middle",
+          horizontal: "center",
+        };
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+      });
+      headerRow.height = 20;
+
+      tableData.forEach((item) => {
+        const row = worksheet.addRow([
+          item.Department,
+          item.Mcs,
+          item.InstalledLoad,
+          item.ConsumedUnits,
+        ]);
+        row.alignment = { vertical: "middle" };
+
+        row.eachCell((cell) => {
+          cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" },
+          };
+        });
+      });
+
+      const totalRow = worksheet.addRow([
+        "Total Load",
+        "",
+        "",
+        totalConsumption,
+      ]);
+      totalRow.font = { bold: true };
+      totalRow.alignment = { vertical: "middle" };
+      totalRow.cell = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFDDEBF7" },
+      };
+      totalRow.eachCell((cell) => {
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FF0070C0" },
+        };
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+        cell.font = {
+          bold: true,
+          color: { argb: "FFFFFFFF" },
+        };
+      });
+
+      const spindleRow = worksheet.addRow([
+        "No. of Spindles",
+        "",
+        "",
         unit === "Unit_4"
           ? unit4Spindle
           : unit === "Unit_5"
           ? unit5Spindle
           : "",
-    },
-  ];
-
-  const exportTableDataToExcel = async ({}) => {
-    try {
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet("Department Report");
-
-      const columnNames = [
-        "Department",
-        "Mcs",
-        "Installed Load Kwh",
-        "Consumed units Kwh",
-      ];
-
-      worksheet.getRow(1).height = 30;
-
-      // Heading Row (Row 1)
-      worksheet.mergeCells("A1", "B1");
-      worksheet.mergeCells("C1", "D1");
-
-      const leftTitle = worksheet.getCell("A1");
-      leftTitle.value = `Energy usage report of ${
-        unit === "Unit_4" ? "Unit 4" : unit === "Unit_5" ? "Unit 5" : ""
-      }`;
-      leftTitle.font = { bold: true, size: 14, color: { argb: "FF1D5999" } };
-      leftTitle.alignment = { horizontal: "left", vertical: "middle" };
-
-      const rightTitle = worksheet.getCell("C1");
-      rightTitle.value = `Start Date: ${startDate}\nEnd Date: ${endDate}`;
-      rightTitle.font = { size: 12, color: { argb: "FF1D5999" } };
-      rightTitle.alignment = {
-        horizontal: "right",
-        vertical: "middle",
-        wrapText: true,
-      };
-
-      worksheet.getRow(1).fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "cedef0" },
-      };
-
-      // Header Row (Row 2)
-      const headerRow = worksheet.getRow(2);
-      headerRow.values = columnNames;
-      headerRow.eachCell((cell) => {
-        cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-        cell.alignment = { horizontal: "center", vertical: "middle" };
+      ]);
+      spindleRow.font = { bold: true };
+      spindleRow.alignment = { vertical: "middle" };
+      spindleRow.eachCell((cell) => {
         cell.fill = {
           type: "pattern",
           pattern: "solid",
-          fgColor: { argb: "FF1D5999" },
+          fgColor: { argb: "FF0070C0" },
         };
         cell.border = {
-          top: { style: "thin", color: { argb: "cedef0" } },
-          bottom: { style: "thin", color: { argb: "cedef0" } },
-          left: { style: "thin", color: { argb: "cedef0" } },
-          right: { style: "thin", color: { argb: "cedef0" } },
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+        cell.font = {
+          bold: true,
+          color: { argb: "FFFFFFFF" },
         };
       });
 
-      // Add Table Data
-      tableData.forEach((row, index) => {
-        const newRow = worksheet.addRow([
-          row.Department,
-          row.Mcs,
-          row.InstalledLoad,
-          row.ConsumedUnits,
-        ]);
+      for (let i = 4; i <= worksheet.rowCount; i++) {
+        const consumedUnitsCell = worksheet.getCell(`D${i}`);
+        if (typeof consumedUnitsCell.value === "number") {
+          consumedUnitsCell.numFmt = "0.00";
+        }
+      }
 
-        const isBoldRow =
-          row.Department === "Total Load" || row.Department === "Spindles";
-        newRow.eachCell((cell) => {
-          cell.alignment = { horizontal: "center", vertical: "middle" };
-          if (isBoldRow) {
-            cell.font = { bold: true };
-          }
-        });
-      });
-
-      // Set Column Widths
-      worksheet.columns = columnNames.map(() => ({ width: 25 }));
-
-      // Export
       const buffer = await workbook.xlsx.writeBuffer();
-      const blob = new Blob([buffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      saveAs(
+        new Blob([buffer]),
+        `${unit}_Energy_Usage_Report_${startDate}_to_${endDate}.xlsx`
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Report Exported",
+        text: "Energy usage report has been exported successfully",
+        timer: 2000,
+        showConfirmButton: false,
       });
-      saveAs(blob, `unit_${unit}_trend_data_${startDate}_to_${endDate}.xlsx`);
     } catch (error) {
-      console.error("Export Error:", error);
+      console.error("Error exporting to Excel:", error.message);
       Swal.fire({
         icon: "error",
         title: "Export Failed",
-        text: "An error occurred while exporting the table data.",
-        theme,
+        text: "An error occurred while exporting the report",
       });
     }
   };
@@ -310,16 +384,7 @@ const SingleUnitComponent = ({
       <div className="flex flex-col gap-2 md:flex-row px-3 md:px-6 items-start justify-between pt-5">
         <div>
           <button
-            onClick={() =>
-              exportTableDataToExcel({
-                finalData: finalData, // ← this is your actual consumption data
-                startDate,
-                endDate,
-                selectedParameter: "Spindle", // or any other metric you're showing
-                unit,
-                theme: "light", // or "dark", depending on your app
-              })
-            }
+            onClick={() => exportEnergyReportToExcel()}
             className="bg-[#1A68B2] cursor-pointer text-white py-1 px-5 rounded text-[14.22px] font-500 font-inter"
           >
             Export
@@ -342,7 +407,7 @@ const SingleUnitComponent = ({
           {unit === "Unit_4" ? "Unit 4" : unit === "Unit_5" ? "Unit 5" : ""}
         </h2>
         <div className="w-full h-[10px]"></div>
-        <div className="overflow-x-scroll md:w-[100%] custom-scrollbar-report md:overflow-x-hidden h-full md:max-h-[47vh] overflow-y-auto">
+        <div className="overflow-x-scroll md:w-[97%] custom-scrollbar-report md:overflow-x-hidden h-full md:max-h-[44vh] overflow-y-auto">
           <table className="table w-full border-collapse border ">
             <thead className="sticky top-0 bg-[#E5F3FD] dark:bg-gray-600 z-10">
               <tr className="border border-gray-300 dark:border-gray-500">
@@ -361,301 +426,26 @@ const SingleUnitComponent = ({
               </tr>
             </thead>
             <tbody>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Blow Room
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  1
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  151.0
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.blowroom_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Card(TC03@60kg&TC15@82Kg/hr)
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  14
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  19.0
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.card_consumption}
-                </td>
-              </tr>
+              {tableData.map((row) => (
+                <tr
+                  key={row.Department}
+                  className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400"
+                >
+                  <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
+                    {row.Department}
+                  </td>
+                  <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
+                    {row.Mcs}
+                  </td>
+                  <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
+                    {row.InstalledLoad}
+                  </td>
+                  <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
+                    {row.ConsumedUnits}
+                  </td>
+                </tr>
+              ))}
 
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Comber
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  9
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  6.2
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.comber_consumption}
-                </td>
-              </tr>
-
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Drawing(Finsher)
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  6
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  13.6
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Drawing_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Simplex
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  6
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  16.5
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Simplex_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  R. Transport System
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.RTransportSystem_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Ring Dept
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  24
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  80.0
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Ring_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Auto Cone
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  8
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  30.0
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.AutoCone_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Air Compressor
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  3
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  119.0
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.AirCompressor_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Deep Well Turbine
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  1
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  22.0
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Turbine_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Bailing Press
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  1
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  15.0
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.BailingPress_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Residential Colony
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                  30.0
-                </td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Residentialcolony_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  spare
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Spare_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Winding
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Winding_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Bypass
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Bypass_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Packing
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Packing_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Lab
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Lab_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Frame Finisher
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.FrameFinisher_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  A/C Plant
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.ACPlant_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Fiber Deposit
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Fiberdeposit_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Yarn
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Yarn_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Water Chiller
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.WaterChiller_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  HFO 2nd Source
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.HFO2ndSource_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Lighting
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.Lightning_consumption}
-                </td>
-              </tr>
-              <tr className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                  Aux Unit
-                </td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center"></td>
-                <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                  {finalData.AuxUnit5_consumption}
-                </td>
-              </tr>
-              {/* -------------------- */}
               <tr className="border border-gray-300 dark:border-gray-500">
                 <td className="px-2 py-1 border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
                   Total Load
