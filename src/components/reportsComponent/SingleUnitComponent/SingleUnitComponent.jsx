@@ -166,18 +166,54 @@ const SingleUnitComponent = ({
   ];
 
   // /////-------------------------export to excel
+  const getImageBuffer = async (imageUrl) => {
+    const res = await fetch(imageUrl);
+    const blob = await res.blob();
+    return await blob.arrayBuffer();
+  };
   const exportEnergyReportToExcel = async () => {
     try {
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet("Energy Usage Report");
+      worksheet.properties.defaultGridColor = false;
+      worksheet.views = [{ showGridLines: false }];
+
+      const image1Buffer = await getImageBuffer(
+        "../../../suraj-cotton-logo.png"
+      );
+      const image1Id = workbook.addImage({
+        buffer: image1Buffer,
+        extension: "png",
+      });
+      worksheet.addImage(image1Id, {
+        tl: { col: 0, row: 0 },
+        ext: { width: 150, height: 70 },
+      });
+
+      const image2Buffer = await getImageBuffer("../../../jahaann-light.svg");
+      const image2Id = workbook.addImage({
+        buffer: image2Buffer,
+        extension: "svg",
+      });
+      worksheet.addImage(image2Id, {
+        tl: { col: 3, row: 1 },
+        ext: { width: 170, height: 40 },
+      });
+      const borderRow = worksheet.getRow(4);
+      for (let i = 1; i <= 4; i++) {
+        const cell = borderRow.getCell(i);
+        cell.border = {
+          top: { style: "medium", color: { argb: "FF000000" } },
+        };
+      }
       worksheet.columns = [
         { width: 35 },
-        { width: 10 },
-        { width: 18 },
-        { width: 18 },
+        { width: 15 },
+        { width: 25 },
+        { width: 25 },
       ];
-      worksheet.mergeCells("A1:B2");
-      const mainHeadingCell = worksheet.getCell("A1");
+      worksheet.mergeCells("A5:D6");
+      const mainHeadingCell = worksheet.getCell("A5");
       mainHeadingCell.value = `Energy Usage report of ${
         unit === "Unit_4" ? "Unit 4" : unit === "Unit_5" ? "Unit 5" : ""
       }`;
@@ -187,33 +223,19 @@ const SingleUnitComponent = ({
         horizontal: "center",
         wrapText: true,
       };
-      mainHeadingCell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "FFDDEBF7" },
-      };
 
-      worksheet.mergeCells("C1:D1");
-      const startDateCell = worksheet.getCell("C1");
+      worksheet.mergeCells("C4:C4");
+      const startDateCell = worksheet.getCell("C4");
       startDateCell.value = `Start Date: ${startDate}`;
       startDateCell.font = { size: 12 };
       startDateCell.alignment = { vertical: "middle", horizontal: "right" };
-      startDateCell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "FFDDEBF7" },
-      };
 
-      worksheet.mergeCells("C2:D2");
-      const endDateCell = worksheet.getCell("C2");
+      worksheet.mergeCells("D4:D4");
+      const endDateCell = worksheet.getCell("D4");
       endDateCell.value = `End Date: ${endDate}`;
       endDateCell.font = { size: 12 };
       endDateCell.alignment = { vertical: "middle", horizontal: "right" };
-      endDateCell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "FFDDEBF7" },
-      };
+
       const headerRow = worksheet.addRow([
         "Department",
         "Mcs",
@@ -253,13 +275,16 @@ const SingleUnitComponent = ({
         ]);
         row.alignment = { vertical: "middle" };
 
-        row.eachCell((cell) => {
+        row.eachCell((cell, colNumber) => {
           cell.border = {
             top: { style: "thin" },
             left: { style: "thin" },
             bottom: { style: "thin" },
             right: { style: "thin" },
           };
+          if (colNumber !== 1) {
+            cell.alignment = { horizontal: "center" };
+          }
         });
       });
 

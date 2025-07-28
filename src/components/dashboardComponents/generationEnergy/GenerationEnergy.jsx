@@ -129,7 +129,8 @@ const GenerationEnergy = () => {
       isDark ? "#ffffff" : "#000000"
     );
     xAxis.renderer.labels.template.fontSize = 10;
-
+    xAxis.renderer.cellStartLocation = 0.1;
+    xAxis.renderer.cellEndLocation = 0.7;
     const yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.renderer.labels.template.fill = am4core.color(
       isDark ? "#ffffff" : "#000000"
@@ -138,12 +139,13 @@ const GenerationEnergy = () => {
 
     function createSeries(field, name, color) {
       const series = chart.series.push(new am4charts.ColumnSeries());
+      series.clustered = true;
       series.dataFields.valueY = field;
       series.dataFields.categoryX = xField;
       series.name = name;
       series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
-      series.tooltip.pointerOrientation = "horizontal";
-      series.columns.template.width = am4core.percent(40);
+      series.tooltip.pointerOrientation = "vertical";
+      series.columns.template.width = am4core.percent(70);
       series.columns.template.fill = am4core.color(color);
       series.columns.template.stroke = am4core.color(color);
     }
@@ -166,7 +168,7 @@ const GenerationEnergy = () => {
           Generation Energy
         </span>
         <div className="flex gap-4">
-          <select
+          {/* <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="outline-none border-1 rounded text-[12px] font-raleway p-1 dark:bg-gray-600"
@@ -175,7 +177,7 @@ const GenerationEnergy = () => {
             <option value="WAPDA 2">WAPDA 2</option>
             <option value="Solar">Solar</option>
             <option value="HT Generation">HT Generation</option>
-          </select>
+          </select> */}
           <select
             value={selectedTimePeriod}
             onChange={(e) => setSelectedTimePeriod(e.target.value)}

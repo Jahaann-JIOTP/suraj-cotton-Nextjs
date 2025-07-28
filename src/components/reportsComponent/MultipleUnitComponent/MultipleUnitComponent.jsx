@@ -285,74 +285,94 @@ const MultipleUnitComponent = ({
       u4andU5TotalConsumption: u4U5Total.auxunit5,
     },
   ];
-  // /////////////////////////////--------------export to excel
+
+  const getImageBuffer = async (imageUrl) => {
+    const res = await fetch(imageUrl);
+    const blob = await res.blob();
+    return await blob.arrayBuffer();
+  };
+
   const exportEnergyReportToExcel = async () => {
     try {
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet("Energy Usage Report");
 
-      // Set column widths to match HTML table
+      worksheet.properties.defaultGridColor = false;
+      worksheet.views = [{ showGridLines: false }];
+
+      const image1Buffer = await getImageBuffer(
+        "../../../suraj-cotton-logo.png"
+      );
+      const image1Id = workbook.addImage({
+        buffer: image1Buffer,
+        extension: "png",
+      });
+      worksheet.addImage(image1Id, {
+        tl: { col: 0, row: 0 },
+        ext: { width: 150, height: 70 },
+      });
+
+      const image2Buffer = await getImageBuffer("../../../jahaann-light.svg");
+      const image2Id = workbook.addImage({
+        buffer: image2Buffer,
+        extension: "svg",
+      });
+      worksheet.addImage(image2Id, {
+        tl: { col: 9, row: 1 },
+        ext: { width: 170, height: 40 },
+      });
+
+      const borderRow = worksheet.getRow(4);
+      for (let i = 1; i <= 10; i++) {
+        const cell = borderRow.getCell(i);
+        cell.border = {
+          top: { style: "medium", color: { argb: "FF000000" } },
+        };
+      }
+
+      let currentRowIndex = 5;
+
       worksheet.columns = [
-        { width: 35 }, // Department
-        { width: 8 }, // Unit 4 Mcs
-        { width: 15 }, // Unit 4 Load
-        { width: 18 }, // Unit 4 Consumption
-        { width: 5 }, // Spacer
-        { width: 8 }, // Unit 5 Mcs
-        { width: 15 }, // Unit 5 Load
-        { width: 18 }, // Unit 5 Consumption
-        { width: 5 }, // Spacer
-        { width: 20 }, // Combined Total
+        { width: 35 },
+        { width: 8 },
+        { width: 20 },
+        { width: 25 },
+        { width: 3 },
+        { width: 8 },
+        { width: 20 },
+        { width: 25 },
+        { width: 3 },
+        { width: 25 },
       ];
 
-      // Merge and style heading area
-      worksheet.mergeCells("A1:B2");
-      const mainHeadingCell = worksheet.getCell("A1");
+      worksheet.mergeCells(`C${currentRowIndex}:G${currentRowIndex}`);
+      const mainHeadingCell = worksheet.getCell(`C${currentRowIndex}`);
       mainHeadingCell.value = `Energy Usage report of ${
         unit === "Unit_4"
           ? "Unit 4"
           : unit === "Unit_5"
           ? "Unit 5"
-          : "All Units"
+          : "Unit 4 and Unit 5"
       }`;
       mainHeadingCell.font = { size: 16, bold: true };
-      mainHeadingCell.alignment = {
-        vertical: "middle",
-        horizontal: "center",
-        wrapText: true,
-      };
-      mainHeadingCell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "FFDDEBF7" },
-      };
+      mainHeadingCell.alignment = { vertical: "middle", horizontal: "center" };
 
-      // Add dates
-      worksheet.mergeCells("C1:D1");
-      const startDateCell = worksheet.getCell("C1");
+      worksheet.mergeCells(`H${currentRowIndex - 1}:I${currentRowIndex - 1}`);
+      const startDateCell = worksheet.getCell(`H${currentRowIndex - 1}`);
       startDateCell.value = `Start Date: ${startDate}`;
       startDateCell.font = { size: 12 };
-      startDateCell.alignment = { vertical: "middle", horizontal: "right" };
-      startDateCell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "FFDDEBF7" },
-      };
+      startDateCell.alignment = { horizontal: "right", vertical: "middle" };
 
-      worksheet.mergeCells("C2:D2");
-      const endDateCell = worksheet.getCell("C2");
+      worksheet.mergeCells(`J${currentRowIndex - 1}:J${currentRowIndex - 1}`);
+      const endDateCell = worksheet.getCell(`J${currentRowIndex - 1}`);
       endDateCell.value = `End Date: ${endDate}`;
       endDateCell.font = { size: 12 };
-      endDateCell.alignment = { vertical: "middle", horizontal: "right" };
-      endDateCell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "FFDDEBF7" },
-      };
+      endDateCell.alignment = { horizontal: "right", vertical: "middle" };
 
-      // Add unit headers (matching the HTML divider lines)
+      currentRowIndex += 5;
+
       const unitHeaderRow = worksheet.addRow([]);
-      unitHeaderRow.getCell(2).value = "Unit 4";
+      unitHeaderRow.getCell(4).value = "Unit 4";
       unitHeaderRow.getCell(6).value = "Unit 5";
       unitHeaderRow.getCell(10).value = "Unit 4 + Unit 5";
       unitHeaderRow.eachCell((cell) => {
@@ -362,37 +382,27 @@ const MultipleUnitComponent = ({
         }
       });
 
-      // Add main table headers
       const headerRow = worksheet.addRow([
         "Department",
         "Mcs",
         "Installed Load Kw",
         "Consumed units Kwh",
-        "", // Spacer
+        "",
         "Mcs",
         "Installed Load Kwh",
         "Consumed Units Kwh",
-        "", // Spacer
+        "",
         "Total Consumed Units Kw",
       ]);
-
-      // Style header row
       headerRow.eachCell((cell) => {
         if (cell.value) {
-          // Skip spacer cells
           cell.fill = {
             type: "pattern",
             pattern: "solid",
             fgColor: { argb: "FF0070C0" },
           };
-          cell.font = {
-            bold: true,
-            color: { argb: "FFFFFFFF" },
-          };
-          cell.alignment = {
-            vertical: "middle",
-            horizontal: "center",
-          };
+          cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
+          cell.alignment = { vertical: "middle", horizontal: "center" };
           cell.border = {
             top: { style: "thin" },
             left: { style: "thin" },
@@ -401,33 +411,32 @@ const MultipleUnitComponent = ({
           };
         }
       });
-      headerRow.height = 20;
+      headerRow.height = 30;
 
-      // Add table data
       tableData.forEach((item) => {
         const row = worksheet.addRow([
           item.dept,
           item.u4Mcs,
           item.u4Load,
           item.u4Consumption || 0,
-          "", // Spacer
+          "",
           item.u5Mcs,
           item.u5Load,
           item.u5Consumption || 0,
-          "", // Spacer
+          "",
           item.u4andU5TotalConsumption || 0,
         ]);
 
-        // Style data row
         row.eachCell((cell, colNumber) => {
-          cell.border = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" },
-          };
+          if ([1, 2, 3, 4, 6, 7, 8, 10].includes(colNumber)) {
+            cell.border = {
+              top: { style: "thin" },
+              left: { style: "thin" },
+              bottom: { style: "thin" },
+              right: { style: "thin" },
+            };
+          }
 
-          // Alternate background for Unit 4 and Unit 5 data columns
           if ([2, 3, 4, 6, 7, 8].includes(colNumber)) {
             cell.fill = {
               type: "pattern",
@@ -436,83 +445,81 @@ const MultipleUnitComponent = ({
             };
           }
 
-          // Center numeric values
           if (colNumber !== 1 && colNumber !== 5 && colNumber !== 9) {
             cell.alignment = { horizontal: "center" };
           }
         });
       });
 
-      // Add totals row
       const totalRow = worksheet.addRow([
         "Total Load",
         "",
         "",
         unit4Total.toFixed(2),
-        "", // Spacer
+        "",
         "",
         "",
         unit5Total.toFixed(2),
-        "", // Spacer
+        "",
         allTotalofU4U5Sum.toFixed(2),
       ]);
-
-      // Style totals row
-      totalRow.eachCell((cell) => {
-        cell.fill = {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: "FF0070C0" },
-        };
-        cell.font = {
-          bold: true,
-          color: { argb: "FFFFFFFF" },
-        };
-        cell.border = {
-          top: { style: "thin" },
-          left: { style: "thin" },
-          bottom: { style: "thin" },
-          right: { style: "thin" },
-        };
-        if (cell.value) {
-          cell.alignment = { horizontal: "center" };
+      totalRow.eachCell((cell, colNumber) => {
+        if ([1, 2, 3, 4, 6, 7, 8, 10].includes(colNumber)) {
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "FF0070C0" },
+          };
         }
+        cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
+        if ([1, 2, 3, 4, 6, 7, 8, 10].includes(colNumber)) {
+          cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" },
+          };
+        }
+
+        if (cell.value) cell.alignment = { horizontal: "center" };
       });
 
-      // Add spindles row
       const spindleRow = worksheet.addRow([
         "Total Spindles",
         "",
         "",
         unit4Spindle.toFixed(2),
-        "", // Spacer
+        "",
         "",
         "",
         unit5Spindle.toFixed(2),
-        "", // Spacer
+        "",
         (unit4Spindle + unit5Spindle).toFixed(2),
       ]);
-
-      // Style spindles row
-      spindleRow.eachCell((cell) => {
-        cell.fill = {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: "FF0070C0" },
-        };
-        cell.font = {
-          bold: true,
-          color: { argb: "FFFFFFFF" },
-        };
-        cell.border = {
-          top: { style: "thin" },
-          left: { style: "thin" },
-          bottom: { style: "thin" },
-          right: { style: "thin" },
-        };
-        if (cell.value) {
-          cell.alignment = { horizontal: "center" };
+      spindleRow.eachCell((cell, colNumber) => {
+        if ([1, 2, 3, 4, 6, 7, 8, 10].includes(colNumber)) {
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "FF0070C0" },
+          };
         }
+        cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
+        // cell.border = {
+        //   top: { style: "thin" },
+        //   left: { style: "thin" },
+        //   bottom: { style: "thin" },
+        //   right: { style: "thin" },
+        // };
+        if ([1, 2, 3, 4, 6, 7, 8, 10].includes(colNumber)) {
+          cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" },
+          };
+        }
+        if (cell.value) cell.alignment = { horizontal: "center" };
       });
 
       // Format numeric cells
@@ -527,7 +534,6 @@ const MultipleUnitComponent = ({
         });
       }
 
-      // Generate Excel file
       const buffer = await workbook.xlsx.writeBuffer();
       saveAs(
         new Blob([buffer]),
@@ -555,9 +561,6 @@ const MultipleUnitComponent = ({
   return (
     <>
       <div className="flex px-3 md:px-6 pt-2 flex-col gap-3 overflow-hidden">
-        <h2 className="text-[18.22px] font-600 font-raleway">
-          Energy Usage Report
-        </h2>
         <div className="flex flex-col md:flex-row items-start justify-between  w-full flex-wrap  gap-1">
           <div className="flex flex-col items-start justify-start md:w-[49%]">
             <span className="text-[14.22px] font-500 font-inter">
@@ -611,7 +614,7 @@ const MultipleUnitComponent = ({
           <div className="flex gap-1 flex-col h-[23rem] mb-1 w-full max-w-full overflow-x-auto md:overflow-x-auto lg:overflow-x-visible custom-scrollbar-report">
             {/* ------------------- */}
             <div className="min-w-[1024px] lg:min-w-full flex justify-end gap-[1rem]">
-              <div className="w-[17rem] lg:w-[32.5%] flex items-center gap-2">
+              <div className="w-[17rem] lg:w-[29.6%] flex items-center gap-2">
                 <div className="w-[47.5%] relative h-[1px] bg-black dark:bg-gray-500">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] left-0"></div>
                 </div>
@@ -622,7 +625,7 @@ const MultipleUnitComponent = ({
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] right-0"></div>
                 </div>
               </div>
-              <div className="w-[23.5rem] lg:w-[37.05%] flex items-center gap-2">
+              <div className="w-[23.5rem] lg:w-[29.9%] flex items-center gap-2">
                 <div className="w-[47.5%] h-[1px] bg-black dark:bg-gray-500 relative">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] left-0"></div>
                 </div>
@@ -695,7 +698,7 @@ const MultipleUnitComponent = ({
                           {row.u4Load}
                         </td>
                         <td className="px-[5px] py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                          {row.u4Consumption || 0}
+                          {row.u4Consumption.toFixed(2) || 0}
                         </td>
                         <td className="px-[5px] py-1 border-r-1 border-gray-300 dark:border-gray-500 text-center text-[12px] font-inter font-400"></td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500  text-center">
@@ -709,7 +712,7 @@ const MultipleUnitComponent = ({
                         </td>
                         <td className="px-[5px] py-1 text-center border-r-1 text-[12px] font-inter font-400"></td>
                         <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                          {row.u4andU5TotalConsumption || 0}
+                          {row.u4andU5TotalConsumption?.toFixed(2) || 0}
                         </td>
                       </tr>
                     ))}

@@ -215,10 +215,10 @@ const Dashboard = () => {
       </div>
       {/* comparison graphs */}
       <div className="flex flex-col lg:flex-row mt-3 md:mt-[0.7vw] gap-3 md:gap-[0.7vw] justify-between">
-        <div className="w-full lg:w-[49.1%]">
+        <div className="w-full lg:w-[49.5%]">
           <EnergyComparison />
         </div>
-        <div className="w-full lg:w-[49.1%]">
+        <div className="w-full lg:w-[49.5%]">
           <PowerComparison />
         </div>
       </div>

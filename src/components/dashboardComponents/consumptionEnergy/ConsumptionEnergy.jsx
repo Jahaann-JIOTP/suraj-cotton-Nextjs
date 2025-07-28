@@ -114,6 +114,8 @@ const ConsumptionEnergy = () => {
       isDark ? "#ffffff" : "#000000"
     );
     xAxis.renderer.labels.template.fontSize = 10;
+    xAxis.renderer.cellStartLocation = 0.1;
+    xAxis.renderer.cellEndLocation = 0.7;
 
     const yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.renderer.labels.template.fill = am4core.color(
@@ -127,7 +129,7 @@ const ConsumptionEnergy = () => {
       series.dataFields.categoryX = xField;
       series.name = name;
       series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
-      series.columns.template.width = am4core.percent(40);
+      series.columns.template.width = am4core.percent(70);
       series.columns.template.fill = am4core.color(color);
       series.columns.template.stroke = am4core.color(color);
       return series;
@@ -152,7 +154,7 @@ const ConsumptionEnergy = () => {
           Consumption Energy
         </span>
         <div className="flex gap-4">
-          <select
+          {/* <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="outline-none border-1 text-[12px] font-raleway rounded p-1 dark:bg-gray-600 "
@@ -160,7 +162,7 @@ const ConsumptionEnergy = () => {
             <option value="Solar Generation">Solar Generation</option>
             <option value="FESCO">FESCO</option>
             <option value="Genset">Genset</option>
-          </select>
+          </select> */}
           <select
             value={selectedTimePeriod}
             onChange={(e) => setSelectedTimePeriod(e.target.value)}

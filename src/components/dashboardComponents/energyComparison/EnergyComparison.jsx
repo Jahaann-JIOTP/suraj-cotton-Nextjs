@@ -1072,7 +1072,7 @@ const EnergyComparison = () => {
     >
       {/* Header */}
       <div className="relative flex items-start md:items-center flex-col md:flex-row gap-3 md:gap-auto justify-between">
-        <span className="font-raleway text-[#3978A8] font-600 text-[12px]">
+        <span className="text-[15px] text-[#1A68B2] .font-raleway font-600">
           Energy Comparison
         </span>
         <div className=" flex items-center justify-center gap-2">
