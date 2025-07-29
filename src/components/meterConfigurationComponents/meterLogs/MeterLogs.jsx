@@ -78,9 +78,9 @@ const MeterLogs = () => {
                     <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[20%] py-1">
                       User Name
                     </th>
-                    <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[25%] py-1">
+                    {/* <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[25%] py-1">
                       User Email
-                    </th>
+                    </th> */}
                     <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[20%] py-1">
                       Updated At
                     </th>
@@ -88,31 +88,35 @@ const MeterLogs = () => {
                 </thead>
                 <tbody>
                   {paginatedData.length > 0 ? (
-                    paginatedData.map((log, index) => (
-                      <tr
-                        key={log._id}
-                        className="hover:bg-gray-300 dark:hover:bg-gray-500"
-                      >
-                        <td className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
-                          {(currentPage - 1) * itemsPerPage + index + 1}
-                        </td>
-                        <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
-                          {getMeterName(log.meterId)}
-                        </td>
-                        <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
-                          {log.area === "unit4" ? "Unit 4" : "Unit 5"}
-                        </td>
-                        <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
-                          {log.username}
-                        </td>
-                        <td className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
-                          {log.email}
-                        </td>
-                        <td className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
-                          {relativeDateTimeCalculator(log.updatedAt)}
-                        </td>
-                      </tr>
-                    ))
+                    paginatedData.map((log, index) => {
+                      const updatedAtTime = new Date(log.updatedAt);
+                      const updateTime = updatedAtTime.toLocaleString();
+                      return (
+                        <tr
+                          key={log._id}
+                          className="hover:bg-gray-300 dark:hover:bg-gray-500"
+                        >
+                          <td className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
+                            {(currentPage - 1) * itemsPerPage + index + 1}
+                          </td>
+                          <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
+                            {getMeterName(log.meterId)}
+                          </td>
+                          <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
+                            {log.area === "unit4" ? "Unit 4" : "Unit 5"}
+                          </td>
+                          <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
+                            {log.username}
+                          </td>
+                          {/* <td className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
+                            {log.email}
+                          </td> */}
+                          <td className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
+                            {updateTime}
+                          </td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
                       <td colSpan={6} className="text-center py-2">

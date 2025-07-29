@@ -372,9 +372,11 @@ const MultipleUnitComponent = ({
       currentRowIndex += 5;
 
       const unitHeaderRow = worksheet.addRow([]);
-      unitHeaderRow.getCell(4).value = "Unit 4";
+      unitHeaderRow.getCell(2).value = "Unit 4";
       unitHeaderRow.getCell(6).value = "Unit 5";
       unitHeaderRow.getCell(10).value = "Unit 4 + Unit 5";
+      worksheet.mergeCells(unitHeaderRow.number, 2, unitHeaderRow.number, 4);
+      worksheet.mergeCells(unitHeaderRow.number, 6, unitHeaderRow.number, 8);
       unitHeaderRow.eachCell((cell) => {
         if (cell.value) {
           cell.font = { bold: true };

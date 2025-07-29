@@ -18,6 +18,17 @@ const energySummaryPage = () => {
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
   const [resData, setResData] = useState([]);
+  const [tarifData, setTarifData] = useState({
+    wapda1: "",
+    wapda2: "",
+    niigata: "",
+    jms: "",
+    gg: "",
+    dg: "",
+    solar1: "",
+    solar2: "",
+  });
+  console.log(tarifData);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   useEffect(() => {
@@ -55,9 +66,10 @@ const energySummaryPage = () => {
     e.preventDefault();
     if (!unit || startDate.length === 0 || endDate.length === 0) {
       toast.warning("Please fill in all required fields.");
+
       return;
     }
-
+    console.log(tarifData);
     setLoading(true);
 
     setShowResults(true);
@@ -94,96 +106,229 @@ const energySummaryPage = () => {
       {!showResults ? (
         <div>
           <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
-            <div className="flex w-full items-center gap-5 flex-wrap">
+            <div className="flex w-full items-center justify-evenly gap-5 flex-wrap">
               {/* area slector dropdown */}
-              <div className="flex flex-col w-full items-start justify-center gap-1">
+              <div className="flex flex-col w-full md:w-[30%] items-start justify-center gap-1">
                 <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
                   Select Plants Units
                 </span>
-                <div className="relative inline-block w-full" ref={dropdownRef}>
-                  <button
-                    type="button"
-                    onClick={toggleDropdown}
-                    className="w-full bg-white cursor-pointer dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
-                  >
-                    {unit === "ALL"
-                      ? "ALL Units"
-                      : unit === "Unit_4"
-                      ? "Unit 4"
-                      : unit === "Unit_5"
-                      ? "Unit 5"
-                      : "Select Area"}
-                  </button>
-
-                  {isOpen && (
-                    <div className="absolute z-20 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
-                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
-                        <input
-                          type="checkbox"
-                          checked={unit === "Unit_4" || unit === "ALL"}
-                          onChange={() => handleUnitChange("Unit_4")}
-                        />
-                        Unit 4
-                      </label>
-                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
-                        <input
-                          type="checkbox"
-                          checked={unit === "Unit_5" || unit === "ALL"}
-                          onChange={() => handleUnitChange("Unit_5")}
-                        />
-                        Unit 5
-                      </label>
-                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
-                        <input
-                          type="checkbox"
-                          checked={unit === "ALL"}
-                          onChange={() => handleUnitChange("ALL")}
-                        />
-                        All
-                      </label>
-                    </div>
-                  )}
+                <div className="flex items-center justify-between w-full lg:w-[70%]">
+                  <label className="flex items-center cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                    <input
+                      type="checkbox"
+                      checked={unit === "Unit_4" || unit === "ALL"}
+                      onChange={() => handleUnitChange("Unit_4")}
+                    />
+                    Unit 4
+                  </label>
+                  <label className="flex items-center cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                    <input
+                      type="checkbox"
+                      checked={unit === "Unit_5" || unit === "ALL"}
+                      onChange={() => handleUnitChange("Unit_5")}
+                    />
+                    Unit 5
+                  </label>
+                  <label className="flex items-center cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                    <input
+                      type="checkbox"
+                      checked={unit === "ALL"}
+                      onChange={() => handleUnitChange("ALL")}
+                    />
+                    All
+                  </label>
                 </div>
               </div>
 
-              {/* start date selector */}
-              <div className="w-full flex items-center justify-between">
-                <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
-                  <label
-                    htmlFor="startDate"
-                    className="text-[13.51px] font-500 font-inter"
-                  >
-                    Start Date
-                  </label>
-                  <input
-                    type="date"
-                    value={startDate}
-                    id="startDate"
-                    name="startDate"
-                    required={true}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                  />
-                </div>
-                {/* end date selector */}
-                <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
-                  <label
-                    htmlFor="endDate"
-                    className="text-[13.51px] font-500 font-inter"
-                  >
-                    End Date
-                  </label>
-                  <input
-                    type="date"
-                    value={endDate}
-                    id="endDate"
-                    name="endDate"
-                    required={true}
-                    min={startDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                  />
-                </div>
+              <div className="flex flex-col w-full md:w-[30%] items-start justify-start gap-1">
+                <label
+                  htmlFor="startDate"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  value={startDate}
+                  id="startDate"
+                  name="startDate"
+                  required={true}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+              {/* end date selector */}
+              <div className="flex flex-col w-full md:w-[30%] items-start justify-start gap-1">
+                <label
+                  htmlFor="endDate"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  End Date
+                </label>
+                <input
+                  type="date"
+                  value={endDate}
+                  id="endDate"
+                  name="endDate"
+                  required={true}
+                  min={startDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+            </div>
+            <div className="w-full flex flex-col items-start lg:pl-5">
+              <h2 className="text-[18.5px] font-500 font-inter">
+                Tarrif Rates
+              </h2>
+              <span className="text-[12.6px] font-400 text-[#919191] font-inter">
+                Enter Tarrif Rates for the following:
+              </span>
+            </div>
+            <div className="flex w-full items-center lg:pl-5  gap-5 flex-wrap">
+              <div className="flex flex-col w-full md:w-[29%] lg:w-[32%] items-start justify-start gap-1">
+                <label
+                  htmlFor="startDate"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  WAPDA 1
+                </label>
+                <input
+                  type="number"
+                  value={tarifData.wapda1}
+                  id="wapda1"
+                  name="wapda1"
+                  required={true}
+                  placeholder="00"
+                  onChange={(e) => setTarifData(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+                <label
+                  htmlFor="endDate"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  WAPDA 2
+                </label>
+                <input
+                  type="number"
+                  value={tarifData.wapda2}
+                  id="wapda2"
+                  name="wapda2"
+                  required={true}
+                  placeholder="00"
+                  onChange={(e) => setTarifData(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+                <label
+                  htmlFor="endDate"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  Niigata
+                </label>
+                <input
+                  type="number"
+                  value={tarifData.niigata}
+                  id="niigata"
+                  name="niigata"
+                  required={true}
+                  placeholder="00"
+                  onChange={(e) => setTarifData(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+                <label
+                  htmlFor="endDate"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  JMS 1
+                </label>
+                <input
+                  type="number"
+                  value={tarifData.jms}
+                  id="jms"
+                  name="jms"
+                  required={true}
+                  placeholder="00"
+                  onChange={(e) => setTarifData(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+                <label
+                  htmlFor="endDate"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  GG
+                </label>
+                <input
+                  type="number"
+                  value={tarifData.gg}
+                  id="gg"
+                  name="gg"
+                  required={true}
+                  placeholder="00"
+                  onChange={(e) => setTarifData(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+                <label
+                  htmlFor="endDate"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  DG
+                </label>
+                <input
+                  type="number"
+                  value={tarifData.dg}
+                  id="dg"
+                  name="dg"
+                  required={true}
+                  placeholder="00"
+                  onChange={(e) => setTarifData(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+                <label
+                  htmlFor="endDate"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  Solar 1
+                </label>
+                <input
+                  type="number"
+                  value={tarifData.solar1}
+                  id="solar1"
+                  name="solar1"
+                  required={true}
+                  placeholder="00"
+                  onChange={(e) => setTarifData(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+                <label
+                  htmlFor="endDate"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  Solar 2
+                </label>
+                <input
+                  type="number"
+                  value={tarifData.solar2}
+                  id="solar2"
+                  name="solar2"
+                  required={true}
+                  placeholder="00"
+                  onChange={(e) => setTarifData(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
               </div>
             </div>
 

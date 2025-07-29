@@ -64,6 +64,7 @@ const page = () => {
       suffixTags[key] = roundedValue;
     }
   }
+  console.log(suffixTags);
   const voltageData = [
     {
       tag: suffixTags.Voltage_CA,
@@ -115,7 +116,7 @@ const page = () => {
     },
     {
       tag: suffixTags.Current_A,
-      unit: "A b",
+      unit: "A a",
       top: "215px",
       left: "328px",
       width: "113px",
@@ -400,7 +401,7 @@ const page = () => {
   ];
   const energyData = [
     {
-      tag: "N/A",
+      tag: suffixTags.ActiveEnergy_Imp_kWh,
       unit: "",
       top: "210px",
       left: "140px",
@@ -408,7 +409,7 @@ const page = () => {
       height: "46px",
     },
     {
-      tag: "N/A",
+      tag: suffixTags.ActiveEnergy_Exp_kWh,
       unit: "",
       top: "301px",
       left: "140px",
@@ -505,7 +506,7 @@ const page = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="relative w-full flex flex-col items-center dark:bg-gray-800 p-5 rounded-sm border-t-3 h-[81vh] border-[#1F5897]">
+    <div className="relative w-full flex flex-col items-center bg-white dark:bg-gray-800 p-5 rounded-sm border-t-3 h-[81vh] border-[#1F5897]">
       <div className="flex items-center justify-between w-full overflow-hidden">
         <h1 className="font-semibold text-2xl font-inter pb-4">{meterName}</h1>
         <button
@@ -571,7 +572,7 @@ const page = () => {
           </button>
         </div>
       </div>
-      <div className="w-full overflow-auto  h-[600px]">
+      <div className="w-full mt-[20px] overflow-auto  h-[600px]">
         <div className="relative w-[1030px] flex items-start flex-col mx-auto">
           {activeTab === "voltage" ? (
             theme === "light" ? (
@@ -682,26 +683,21 @@ const page = () => {
           )}
           {/* values */}
           {/* logs opener */}
-          <button
-            onClick={() =>
-              router.push(
-                `/logs?type=${activeTab}&lt_scheme=${ltScheme}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
-              )
-            }
-            className={`absolute ${
-              activeTab === "energy"
-                ? "left-[-40px] bottom-[10px]"
-                : activeTab === "power"
-                ? "left-[5px] bottom-0"
-                : "left-[22px] bottom-[50px]"
-            } border-1 border-[#1F5897] text-[#1F5897] dark:bg-gray-500 font-400 rounded text-[12px] flex flex-col items-center justify-center p-[7px] z-30  cursor-pointer`}
-            style={{
-              boxShadow: "2px 2px 15px 2px #1f579775",
-            }}
-          >
-            <FaRegFileAlt size={20} />
-          </button>
         </div>
+        <button
+          title="Logs"
+          onClick={() =>
+            router.push(
+              `/logs?type=${activeTab}&lt_scheme=${ltScheme}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
+            )
+          }
+          className={`absolute right-[20px] bottom-[5px] border-1 border-[#1F5897] text-[#1F5897] dark:bg-gray-500 font-400 rounded text-[12px] flex flex-col items-center justify-center p-[7px] z-30  cursor-pointer`}
+          style={{
+            boxShadow: "2px 2px 15px 2px #1f579775",
+          }}
+        >
+          <FaRegFileAlt size={20} />
+        </button>
       </div>
     </div>
   );

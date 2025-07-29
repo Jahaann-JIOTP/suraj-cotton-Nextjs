@@ -15,6 +15,7 @@ import { getActiveTabFromPathname } from "@/utils/navigation-utils";
 import { RxCross1 } from "react-icons/rx";
 import { Badge } from "../ui/badge";
 import { useTheme } from "next-themes";
+import { toast } from "react-toastify";
 
 const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
@@ -25,6 +26,7 @@ const Header = ({ handleTabClick, activeTab }) => {
   const [isNotificationVisible, setNotificationVisible] = useState(false);
   const [bellIcon, setBellIcon] = useState("basil_notification-solid.png");
   const [newAlarmCount, setNewAlarmCount] = useState(0);
+  const [realTimeData, setRealTimeData] = useState([]);
   const [error, setError] = useState(null);
   const acknowledgedAlarms = useRef([]);
   const { theme } = useTheme();
@@ -35,6 +37,20 @@ const Header = ({ handleTabClick, activeTab }) => {
       handleTabClick(currentTab);
     }
   }, [pathname]);
+  const getMeterData = async () => {
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.DIAGRAM.MAIN_METER_TAGS_LINK}`
+      );
+
+      const resData = await response.json();
+      if (response.ok) {
+        setRealTimeData(resData);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   // fetch user details
   const fetchUserDetails = async () => {
     const token = localStorage.getItem("token");
@@ -104,6 +120,10 @@ const Header = ({ handleTabClick, activeTab }) => {
 
   useEffect(() => {
     fetchUserDetails();
+    getMeterData();
+    const interval = setInterval(() => {
+      getMeterData();
+    }, 5000);
     const handleClickOutside = (event) => {
       if (
         notificationDropdownRef.current &&
@@ -115,6 +135,7 @@ const Header = ({ handleTabClick, activeTab }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      clearInterval(interval);
     };
 
     // fetchAlarms();
@@ -186,6 +207,21 @@ const Header = ({ handleTabClick, activeTab }) => {
             closeSidebar={() => setIsDropdownOpen(false)}
           />
         </div>
+      </div>
+      <div className="mr-4 w-[60px]">
+        {realTimeData.error === "Invalid data structure" ? (
+          <div className="flex flex-col items-center justify-center">
+            <img src={"../../../red_bl.gif"} className="w-[20px]" />
+            <span className="text-[10px] animate-pulse duration-300">
+              Link Down
+            </span>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center">
+            <img src={"../../../green_bl.gif"} className="w-[20px]" />
+            <span className="text-[10px]">Link Up</span>
+          </div>
+        )}
       </div>
       {/* Bell Icon */}
       <div className="flex items-center justify-center">

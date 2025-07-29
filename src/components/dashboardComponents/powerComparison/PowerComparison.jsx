@@ -123,6 +123,11 @@ const PowerComparison = () => {
       paddingTop: 0,
       paddingBottom: 0,
     });
+    legend.markers.template.setAll({
+      width: 10,
+      height: 10,
+      marginRight: 2,
+    });
 
     legend.set(
       "layout",

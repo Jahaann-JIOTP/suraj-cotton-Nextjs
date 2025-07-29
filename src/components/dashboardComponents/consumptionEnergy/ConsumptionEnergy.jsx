@@ -75,8 +75,8 @@ const ConsumptionEnergy = () => {
     chart.legend.labels.template.fill = am4core.color(
       isDark ? "#ffffff" : "#000000"
     );
-    chart.legend.markers.template.width = 12;
-    chart.legend.markers.template.height = 12;
+    chart.legend.markers.template.width = 10;
+    chart.legend.markers.template.height = 10;
 
     let xField, series1Field, series2Field, series1Name, series2Name;
 

@@ -112,15 +112,25 @@ const Settings = () => {
 
   return (
     <div className="px-4 md:px-20 rounded-md">
-      <h1 className="text-3xl font-bold mb-8 text-center text-[#1A68B2]">
+      <h1 className="text-3xl font-bold mb-2 text-center text-[#1A68B2]">
         Meter Control Panel
       </h1>
 
-      <div className="bg-white dark:bg-gray-800  shadow-xl rounded-2xl p-6 space-y-4">
+      <div
+        className="bg-white dark:bg-gray-800 rounded-2xl px-6 py-4 space-y-2"
+        style={{
+          boxShadow: "5px 5px 25px 10px rgba(0,0,0,0.1)",
+        }}
+      >
+        <div className="flex items-center justify-between pr-15">
+          <span className="text-[20px] text-[#1F5897]">Source</span>
+          <span className="text-[20px] text-[#1F5897]">Area</span>
+        </div>
+        <div className="w-full h-[2px] mt-3 mb-3 bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
         {meters.map((meter, index) => (
           <div
             key={index}
-            className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4 last:border-b-0"
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4 last:border-b-0"
           >
             <span className="text-lg font-semibold text-gray-700 dark:text-gray-200">
               {meter.name}
@@ -151,6 +161,9 @@ const Settings = () => {
           </div>
         ))}
       </div>
+      <span className="font-inter font-400 text-[12px] pl-3">
+        The highlighted blue button shows the selected meter area.
+      </span>
     </div>
   );
 };

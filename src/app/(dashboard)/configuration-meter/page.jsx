@@ -16,24 +16,30 @@ const MeterConfigurationPage = () => {
       <div className="flex mb-5 gap-16 border-b-2 border-[rgba(0,0,0,0.14)] dark:border-gray-500 mt-[40px] pb-2">
         <button
           onClick={() => setActiveTab("view")}
-          className={`font-[Raleway] text-[16.439px] font-semibold leading-normal cursor-pointer ${
+          className={`relative font-[Raleway] text-[16.439px] font-semibold cursor-pointer ${
             activeTab === "view"
               ? "text-[#1A68B2]"
               : "text-black dark:text-white"
-          }`}
+          } transition-all duration-500`}
         >
           Settings
+          {activeTab === "view" && (
+            <div className="absolute bg-[#1A68B2] w-[65px] h-[2px] bottom-[-10] left-0"></div>
+          )}
         </button>
 
         <button
           onClick={() => setActiveTab("roles")}
-          className={`font-[Raleway] text-[16.439px] font-semibold leading-normal cursor-pointer ${
+          className={`relative font-[Raleway] text-[16.439px] font-semibold cursor-pointer ${
             activeTab === "roles"
               ? "text-[#1A68B2]"
               : "text-black dark:text-white"
-          }`}
+          } transition-all duration-500`}
         >
           Logs
+          {activeTab === "roles" && (
+            <div className="absolute bg-[#1A68B2] w-[40px] h-[2px] bottom-[-10] left-0"></div>
+          )}
         </button>
       </div>
 

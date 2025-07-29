@@ -71,7 +71,7 @@ const PowerSummaryPage = () => {
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="Nilgata HFO"
+            title="Niigata HFO"
             value="00.00"
             unit="kWh"
             height="6rem"

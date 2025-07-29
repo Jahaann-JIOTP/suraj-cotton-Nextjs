@@ -21,7 +21,7 @@ function CustomTrend() {
   const [endDate, setEndDate] = useState("");
   const [area, setArea] = useState("");
   const [lt, setLt] = useState("");
-  const [selectedMeter, setSelectedMeter] = useState([""]);
+  const [selectedMeter, setSelectedMeter] = useState([]);
   const [selectedParameter, setSelectedParameter] = useState("");
   const [chartData, setChartData] = useState([]);
   const [showMeters, setShowMeters] = useState(false);
