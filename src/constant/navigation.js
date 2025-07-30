@@ -6,6 +6,7 @@ import {
   faBell,
   faBookOpen,
   faRotate,
+  faUsersGear,
 } from "@fortawesome/free-solid-svg-icons";
 
 import PowerIcon from "../../public/sidebarIcons/PowerIcon";
@@ -68,11 +69,18 @@ export const privilegeConfig = {
     tab: "Reports",
   },
   // "User Management": {
-  Configuration: {
+  Settings: {
     href: "/add_roles",
+    icon: faUsersGear,
+    label: "User Management",
+    matchPaths: ["/add_roles"],
+    tab: "Settings",
+  },
+  Configuration: {
+    href: "/configuration-meter",
     icon: faGear,
     label: "Configuration",
-    matchPaths: ["/add_roles", "/configuration-meter"],
+    matchPaths: ["/configuration-meter"],
     tab: "Configuration",
   },
   Production: {
@@ -90,6 +98,7 @@ export const privilegeOrder = [
   "Trends",
   "Alarms",
   "Reports",
+  "Settings",
   "Configuration",
   "Production",
 ];
@@ -195,28 +204,40 @@ export const sidebarLinksMap = {
 
   Reports: [
     {
-      title: "Energy-usage-report",
+      title: "Energy Usage Report",
       icon: PlantOverview,
       href: "/energy-usage-report",
     },
+    // {
+    //   title: "Energy Cost Report",
+    //   icon: PlantOverview,
+    //   href: "/energy-cost-report",
+    // },
     {
-      title: "Energy Cost Report",
-      icon: PlantOverview,
-      href: "/energy-cost-report",
-    },
-    {
-      title: "Power Summary Report",
+      title: "Energy Summary Report",
       icon: PlantOverview,
       href: "/energy-summary-report",
     },
   ],
 
-  Configuration: [
+  Settings: [
     {
       title: "User Configuration",
       icon: FaUserCog,
       href: "/add_roles",
     },
+    // {
+    //   title: "Meter Configuration",
+    //   icon: MdElectricMeter,
+    //   href: "/configuration-meter",
+    // },
+  ],
+  Configuration: [
+    // {
+    //   title: "User Configuration",
+    //   icon: FaUserCog,
+    //   href: "/add_roles",
+    // },
     {
       title: "Meter Configuration",
       icon: MdElectricMeter,

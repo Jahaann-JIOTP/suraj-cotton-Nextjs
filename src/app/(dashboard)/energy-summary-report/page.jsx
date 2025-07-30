@@ -17,7 +17,9 @@ const energySummaryPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [resData, setResData] = useState([]);
+  const [resData, setResData] = useState({});
+  const [unit4Spindle, setU4Spindle] = useState("");
+  const [unit5Spindle, setU5Spindle] = useState("");
   const [tarifData, setTarifData] = useState({
     wapda1: "",
     wapda2: "",
@@ -28,53 +30,123 @@ const energySummaryPage = () => {
     solar1: "",
     solar2: "",
   });
-  console.log(tarifData);
-
-  const toggleDropdown = () => setIsOpen(!isOpen);
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setTarifData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  // const toggleDropdown = () => setIsOpen(!isOpen);
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //       setIsOpen(false);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, []);
 
   const handleUnitChange = (unitClicked) => {
     if (unitClicked === "ALL") {
       setUnit("ALL");
     } else if (unit === "ALL") {
-      // If "All" is currently selected, toggle off and set clicked unit
       setUnit(unitClicked);
     } else if (unit === unitClicked) {
-      // Toggle off
       setUnit("");
     } else if (
       (unit === "Unit_4" && unitClicked === "Unit_5") ||
       (unit === "Unit_5" && unitClicked === "Unit_4")
     ) {
-      // If user selects both manually → treat as "All"
       setUnit("ALL");
     } else {
       setUnit(unitClicked);
     }
   };
 
+  //////fetching spindles
+  const fetchU4Spindles = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U4`,
+        {
+          method: "GET",
+        }
+      );
+      const resResult = await response.json();
+      if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
+        setU4Spindle(resResult[0].totalProduction);
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchU5Spindles = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U5`,
+        {
+          method: "GET",
+        }
+      );
+      const resResult = await response.json();
+      if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
+        setU5Spindle(resResult[0].totalProduction);
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   // getting energy usage reports
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!unit || startDate.length === 0 || endDate.length === 0) {
       toast.warning("Please fill in all required fields.");
-
       return;
     }
-    console.log(tarifData);
     setLoading(true);
-
-    setShowResults(true);
-    setLoading(false);
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.REPORTS.POWER_SUMMARY_REPORT}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            start_date: startDate,
+            end_date: endDate,
+            suffixes: ["Del_ActiveEnergy"],
+            area: unit,
+          }),
+        }
+      );
+      const resResult = await response.json();
+      if (response.ok) {
+        setResData(resResult[0]);
+        fetchU4Spindles();
+        fetchU5Spindles();
+        setShowResults(true);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  // useEffect(() => {
+  //   fetchU4Spindles();
+  //   fetchU5Spindles();
+  // }, []);
 
   return (
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
@@ -86,7 +158,7 @@ const energySummaryPage = () => {
       )}
       <div className="flex pb-3 items-center justify-between">
         <h1 className="text-[18.22px] text-raleway font-600">
-          Power Summary Report
+          Energy Summary Report
         </h1>
         {showResults && (
           <button
@@ -186,7 +258,7 @@ const energySummaryPage = () => {
               </span>
             </div>
             <div className="flex w-full items-center lg:pl-5  gap-5 flex-wrap">
-              <div className="flex flex-col w-full md:w-[29%] lg:w-[32%] items-start justify-start gap-1">
+              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                 <label
                   htmlFor="startDate"
                   className="text-[13.51px] font-500 font-inter"
@@ -200,11 +272,11 @@ const energySummaryPage = () => {
                   name="wapda1"
                   required={true}
                   placeholder="00"
-                  onChange={(e) => setTarifData(e.target.value)}
+                  onChange={handleChange}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />
               </div>
-              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                 <label
                   htmlFor="endDate"
                   className="text-[13.51px] font-500 font-inter"
@@ -218,11 +290,11 @@ const energySummaryPage = () => {
                   name="wapda2"
                   required={true}
                   placeholder="00"
-                  onChange={(e) => setTarifData(e.target.value)}
+                  onChange={handleChange}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />
               </div>
-              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                 <label
                   htmlFor="endDate"
                   className="text-[13.51px] font-500 font-inter"
@@ -236,11 +308,11 @@ const energySummaryPage = () => {
                   name="niigata"
                   required={true}
                   placeholder="00"
-                  onChange={(e) => setTarifData(e.target.value)}
+                  onChange={handleChange}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />
               </div>
-              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                 <label
                   htmlFor="endDate"
                   className="text-[13.51px] font-500 font-inter"
@@ -254,11 +326,11 @@ const energySummaryPage = () => {
                   name="jms"
                   required={true}
                   placeholder="00"
-                  onChange={(e) => setTarifData(e.target.value)}
+                  onChange={handleChange}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />
               </div>
-              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                 <label
                   htmlFor="endDate"
                   className="text-[13.51px] font-500 font-inter"
@@ -272,11 +344,11 @@ const energySummaryPage = () => {
                   name="gg"
                   required={true}
                   placeholder="00"
-                  onChange={(e) => setTarifData(e.target.value)}
+                  onChange={handleChange}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />
               </div>
-              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                 <label
                   htmlFor="endDate"
                   className="text-[13.51px] font-500 font-inter"
@@ -290,11 +362,11 @@ const energySummaryPage = () => {
                   name="dg"
                   required={true}
                   placeholder="00"
-                  onChange={(e) => setTarifData(e.target.value)}
+                  onChange={handleChange}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />
               </div>
-              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                 <label
                   htmlFor="endDate"
                   className="text-[13.51px] font-500 font-inter"
@@ -308,11 +380,11 @@ const energySummaryPage = () => {
                   name="solar1"
                   required={true}
                   placeholder="00"
-                  onChange={(e) => setTarifData(e.target.value)}
+                  onChange={handleChange}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />
               </div>
-              <div className="flex flex-col w-full md:w-[32%] items-start justify-start gap-1">
+              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                 <label
                   htmlFor="endDate"
                   className="text-[13.51px] font-500 font-inter"
@@ -326,7 +398,7 @@ const energySummaryPage = () => {
                   name="solar2"
                   required={true}
                   placeholder="00"
-                  onChange={(e) => setTarifData(e.target.value)}
+                  onChange={handleChange}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />
               </div>
@@ -361,6 +433,10 @@ const energySummaryPage = () => {
           unit={unit}
           startDate={startDate}
           endDate={endDate}
+          tarifData={tarifData}
+          resData={resData}
+          unit4Spindle={unit4Spindle}
+          unit5Spindle={unit5Spindle}
         />
       )}
     </div>

@@ -74,8 +74,6 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {}, [window.innerWidth]);
-
   useEffect(() => {
     fetchU4Spindles();
     fetchU5Spindles();
