@@ -7,10 +7,9 @@ import { FaChevronLeft } from "react-icons/fa";
 import config from "@/constant/apiRouteList";
 import { CircularProgress } from "@mui/material";
 import PowerSummaryTable from "@/components/reportsComponent/powerSummaryTable/PowerSummaryTable";
+import { ImArrowLeft2 } from "react-icons/im";
 
 const energySummaryPage = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
   const [unit, setUnit] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -20,6 +19,7 @@ const energySummaryPage = () => {
   const [resData, setResData] = useState({});
   const [unit4Spindle, setU4Spindle] = useState("");
   const [unit5Spindle, setU5Spindle] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
   const [tarifData, setTarifData] = useState({
     wapda1: "",
     wapda2: "",
@@ -161,16 +161,53 @@ const energySummaryPage = () => {
           Energy Summary Report
         </h1>
         {showResults && (
+          // <button
+          //   onClick={() => {
+          //     setShowResults(false);
+          //     setUnit("");
+          //     setStartDate("");
+          //     setEndDate("");
+          //   }}
+          //   className="bg-gray-800 dark:bg-gray-500 cursor-pointer text-white flex items-center justify-center text-center  w-[30px] h-[30px] rounded-full text-[14.22px] font-500 font-inter"
+          // >
+          //   <FaChevronLeft />
+          // </button>
           <button
             onClick={() => {
               setShowResults(false);
               setUnit("");
               setStartDate("");
               setEndDate("");
+              setTarifData({
+                wapda1: "",
+                wapda2: "",
+                niigata: "",
+                jms: "",
+                gg: "",
+                dg: "",
+                solar1: "",
+                solar2: "",
+              });
             }}
-            className="bg-gray-800 dark:bg-gray-500 cursor-pointer text-white flex items-center justify-center text-center  w-[30px] h-[30px] rounded-full text-[14.22px] font-500 font-inter"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className={`flex items-center ${
+              isHovered ? "justify-center" : "justify-start"
+            } gap-2 h-[40px] cursor-pointer bg-[#1F5897] transition-all duration-300 ease-in-out overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white px-2 ${
+              isHovered ? "w-[90px]" : "w-[40px]"
+            }`}
+            style={{
+              borderRadius: isHovered ? "8px" : "50%",
+            }}
           >
-            <FaChevronLeft />
+            <ImArrowLeft2 className="text-white shrink-0" />
+            <span
+              className={`whitespace-nowrap transition-opacity duration-300 ${
+                isHovered ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              Back
+            </span>
           </button>
         )}
       </div>
@@ -258,150 +295,162 @@ const energySummaryPage = () => {
               </span>
             </div>
             <div className="flex w-full items-center lg:pl-5  gap-5 flex-wrap">
-              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
-                <label
-                  htmlFor="startDate"
-                  className="text-[13.51px] font-500 font-inter"
-                >
-                  WAPDA 1
-                </label>
-                <input
-                  type="number"
-                  value={tarifData.wapda1}
-                  id="wapda1"
-                  name="wapda1"
-                  required={true}
-                  placeholder="00"
-                  onChange={handleChange}
-                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                />
-              </div>
-              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
-                <label
-                  htmlFor="endDate"
-                  className="text-[13.51px] font-500 font-inter"
-                >
-                  WAPDA 2
-                </label>
-                <input
-                  type="number"
-                  value={tarifData.wapda2}
-                  id="wapda2"
-                  name="wapda2"
-                  required={true}
-                  placeholder="00"
-                  onChange={handleChange}
-                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                />
-              </div>
-              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
-                <label
-                  htmlFor="endDate"
-                  className="text-[13.51px] font-500 font-inter"
-                >
-                  Niigata
-                </label>
-                <input
-                  type="number"
-                  value={tarifData.niigata}
-                  id="niigata"
-                  name="niigata"
-                  required={true}
-                  placeholder="00"
-                  onChange={handleChange}
-                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                />
-              </div>
-              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
-                <label
-                  htmlFor="endDate"
-                  className="text-[13.51px] font-500 font-inter"
-                >
-                  JMS 1
-                </label>
-                <input
-                  type="number"
-                  value={tarifData.jms}
-                  id="jms"
-                  name="jms"
-                  required={true}
-                  placeholder="00"
-                  onChange={handleChange}
-                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                />
-              </div>
-              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
-                <label
-                  htmlFor="endDate"
-                  className="text-[13.51px] font-500 font-inter"
-                >
-                  GG
-                </label>
-                <input
-                  type="number"
-                  value={tarifData.gg}
-                  id="gg"
-                  name="gg"
-                  required={true}
-                  placeholder="00"
-                  onChange={handleChange}
-                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                />
-              </div>
-              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
-                <label
-                  htmlFor="endDate"
-                  className="text-[13.51px] font-500 font-inter"
-                >
-                  DG
-                </label>
-                <input
-                  type="number"
-                  value={tarifData.dg}
-                  id="dg"
-                  name="dg"
-                  required={true}
-                  placeholder="00"
-                  onChange={handleChange}
-                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                />
-              </div>
-              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
-                <label
-                  htmlFor="endDate"
-                  className="text-[13.51px] font-500 font-inter"
-                >
-                  Solar 1
-                </label>
-                <input
-                  type="number"
-                  value={tarifData.solar1}
-                  id="solar1"
-                  name="solar1"
-                  required={true}
-                  placeholder="00"
-                  onChange={handleChange}
-                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                />
-              </div>
-              <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
-                <label
-                  htmlFor="endDate"
-                  className="text-[13.51px] font-500 font-inter"
-                >
-                  Solar 2
-                </label>
-                <input
-                  type="number"
-                  value={tarifData.solar2}
-                  id="solar2"
-                  name="solar2"
-                  required={true}
-                  placeholder="00"
-                  onChange={handleChange}
-                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                />
-              </div>
+              {(unit === "Unit_4" || unit === "ALL") && (
+                <>
+                  <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
+                    <label
+                      htmlFor="startDate"
+                      className="text-[13.51px] font-500 font-inter"
+                    >
+                      WAPDA 1
+                    </label>
+                    <input
+                      type="number"
+                      value={tarifData.wapda1}
+                      id="wapda1"
+                      name="wapda1"
+                      required={true}
+                      placeholder="00"
+                      onChange={handleChange}
+                      className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    />
+                  </div>
+                  <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
+                    <label
+                      htmlFor="endDate"
+                      className="text-[13.51px] font-500 font-inter"
+                    >
+                      WAPDA 2
+                    </label>
+                    <input
+                      type="number"
+                      value={tarifData.wapda2}
+                      id="wapda2"
+                      name="wapda2"
+                      required={true}
+                      placeholder="00"
+                      onChange={handleChange}
+                      className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    />
+                  </div>
+                </>
+              )}
+              {(unit === "Unit_5" || unit === "Unit_4" || unit === "ALL") && (
+                <>
+                  <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
+                    <label
+                      htmlFor="endDate"
+                      className="text-[13.51px] font-500 font-inter"
+                    >
+                      Niigata
+                    </label>
+                    <input
+                      type="number"
+                      value={tarifData.niigata}
+                      id="niigata"
+                      name="niigata"
+                      required={true}
+                      placeholder="00"
+                      onChange={handleChange}
+                      className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    />
+                  </div>
+                  <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
+                    <label
+                      htmlFor="endDate"
+                      className="text-[13.51px] font-500 font-inter"
+                    >
+                      JMS 1
+                    </label>
+                    <input
+                      type="number"
+                      value={tarifData.jms}
+                      id="jms"
+                      name="jms"
+                      required={true}
+                      placeholder="00"
+                      onChange={handleChange}
+                      className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    />
+                  </div>
+                  <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
+                    <label
+                      htmlFor="endDate"
+                      className="text-[13.51px] font-500 font-inter"
+                    >
+                      GG
+                    </label>
+                    <input
+                      type="number"
+                      value={tarifData.gg}
+                      id="gg"
+                      name="gg"
+                      required={true}
+                      placeholder="00"
+                      onChange={handleChange}
+                      className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    />
+                  </div>
+                  <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
+                    <label
+                      htmlFor="endDate"
+                      className="text-[13.51px] font-500 font-inter"
+                    >
+                      DG
+                    </label>
+                    <input
+                      type="number"
+                      value={tarifData.dg}
+                      id="dg"
+                      name="dg"
+                      required={true}
+                      placeholder="00"
+                      onChange={handleChange}
+                      className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    />
+                  </div>
+                </>
+              )}
+              {(unit === "Unit_5" || unit === "ALL") && (
+                <>
+                  <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
+                    <label
+                      htmlFor="endDate"
+                      className="text-[13.51px] font-500 font-inter"
+                    >
+                      Solar 1
+                    </label>
+                    <input
+                      type="number"
+                      value={tarifData.solar1}
+                      id="solar1"
+                      name="solar1"
+                      required={true}
+                      placeholder="00"
+                      onChange={handleChange}
+                      className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    />
+                  </div>
+                  <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
+                    <label
+                      htmlFor="endDate"
+                      className="text-[13.51px] font-500 font-inter"
+                    >
+                      Solar 2
+                    </label>
+                    <input
+                      type="number"
+                      value={tarifData.solar2}
+                      id="solar2"
+                      name="solar2"
+                      required={true}
+                      placeholder="00"
+                      onChange={handleChange}
+                      className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    />
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="w-full flex items-center justify-center mt-5 md:mt-10">

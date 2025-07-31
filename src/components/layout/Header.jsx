@@ -208,23 +208,24 @@ const Header = ({ handleTabClick, activeTab }) => {
           />
         </div>
       </div>
-      <div className="mr-4 w-[60px]">
-        {realTimeData.error === "Invalid data structure" ? (
-          <div className="flex flex-col items-center justify-center">
-            <img src={"../../../red_bl.gif"} className="w-[20px]" />
-            <span className="text-[10px] animate-pulse duration-300">
-              Link Down
-            </span>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center">
-            <img src={"../../../green_bl.gif"} className="w-[20px]" />
-            <span className="text-[10px]">Link Up</span>
-          </div>
-        )}
-      </div>
+
       {/* Bell Icon */}
       <div className="flex items-center justify-center">
+        <div className="mr-4 w-[60px]">
+          {realTimeData.error === "Invalid data structure" ? (
+            <div className="flex flex-col items-center justify-center">
+              <img src={"../../../red_bl.gif"} className="w-[20px]" />
+              <span className="text-[10px] animate-pulse duration-300">
+                Link Down
+              </span>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <img src={"../../../green_bl.gif"} className="w-[20px]" />
+              <span className="text-[10px]">Link Up</span>
+            </div>
+          )}
+        </div>
         {/* link status */}
         {/* alarms */}
         <div className="relative mr-4">
