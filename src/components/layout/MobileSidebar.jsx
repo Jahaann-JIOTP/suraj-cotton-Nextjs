@@ -51,7 +51,7 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
   return (
     <div
       ref={sidebarRef}
-      className="fixed top-[92px] left-0 h-[86.6vh] md:h-[92.5vh] bg-white dark:bg-gray-800 text-black dark:text-white shadow-lg z-50 w-full md:w-1/2 flex flex-col"
+      className="fixed top-[92px] left-0 h-[86vh] md:h-[86vh] bg-white dark:bg-gray-800 text-black dark:text-white shadow-lg z-50 w-full md:w-1/2 flex flex-col"
     >
       <div className="flex-1 overflow-y-auto scrollbar-hide p-4">
         {privilegeOrder
@@ -150,7 +150,7 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
       <div className="w-full px-4 py-4">
         <button
           onClick={handleLogout}
-          className="w-full py-4 bg-[#1A68B2] text-[16.004px] flex items-center justify-center gap-2 cursor-pointer rounded-md"
+          className="w-full py-3 bg-[#1A68B2] text-[16.004px] flex items-center justify-center gap-2 cursor-pointer rounded-md"
           style={{ fontWeight: 600 }}
         >
           <IoLogOut size={28} className="text-white" />

@@ -42,7 +42,7 @@ const PowerSummaryPage = () => {
   }, [powerSummaryTimePeriod]);
 
   return (
-    <div className="h-full lg:h-[81vh] overflow-y-auto lg:overflow-hidden">
+    <div className="h-full lg:h-[81vh] overflow-y-auto">
       {/* time period selector */}
       <div className="w-full z-100 flex items-center justify-center md:justify-start">
         <TimePeriodSelector
@@ -175,7 +175,7 @@ const PowerSummaryPage = () => {
         </div>
       </div>
       {/* fifth section first of small divs */}
-      <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
+      <div className="mt-3 md:mt-[0.9vw]  flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="WAPDA Energy Export"

@@ -35,7 +35,7 @@ const Sidebar = ({ activeTab, handleTabClick }) => {
   }, []);
   return (
     <aside
-      className={`hidden relative border-t-3 border-[#1F5897] rounded-lg shadow lg:flex flex-col bg-white dark:bg-gray-800 py-3  xl:h-[81vh] z-50 ${
+      className={`hidden relative border-t-3 border-[#1F5897] rounded-lg shadow 2xl:flex flex-col bg-white dark:bg-gray-800 py-3  xl:h-[81vh] z-50 ${
         iscollapese ? "w-[60px]" : tabWidth ? "w-[19vw]" : "w-[14vw]"
       }`}
     >

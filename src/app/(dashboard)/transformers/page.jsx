@@ -100,7 +100,7 @@ const TranformersPage = () => {
 
   return (
     <>
-      <div>
+      <div className="h-full lg:h-[81vh] overflow-y-auto">
         <div className="flex flex-col md:flex-row gap-2 items-start md:items-center justify-between mb-2">
           <h1 className="font-raleway font-600 text-[17px] md:text-[20px]">
             Transformer Energy Usage Heat Map

@@ -15,6 +15,7 @@ const ConsumptionEnergy = () => {
   const [selectedCategory, setSelectedCategory] = useState("Solar Generation");
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("week");
   const [loading, setLoading] = useState(false);
+  // const [token, setToken] = useState(null);
   const [isConsumptionEnergyFullView, setConsumptionEnergyFullView] =
     useState(false);
   const { theme } = useTheme(); // Light or dark
@@ -25,13 +26,20 @@ const ConsumptionEnergy = () => {
 
   const fetchConsumptionEnergyData = async () => {
     try {
+      // setToken(localStorage.getItem("token"));
+      const token = localStorage.getItem("token");
       setLoading(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_CONSUMPTION_ENERGY}${selectedTimePeriod}`,
         {
           method: "GET",
+          headers: {
+            "Content-Type": "application/",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
+      console.log(".............................on below fetch", token);
       if (response.ok) {
         const resResult = await response.json();
         if (Array.isArray(resResult) && resResult.length > 0) {
@@ -50,6 +58,7 @@ const ConsumptionEnergy = () => {
     }
   };
   useEffect(() => {
+    // setToken(localStorage.getItem("token"));
     fetchConsumptionEnergyData();
   }, [selectedTimePeriod, theme]);
 

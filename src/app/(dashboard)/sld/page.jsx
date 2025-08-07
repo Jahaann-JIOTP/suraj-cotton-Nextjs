@@ -30,7 +30,9 @@ const Page = () => {
         `${config.BASE_URL}${config.DIAGRAM.MAIN_METER_TAGS_LINK}`
       );
       const resData = await response.json();
-      if (response.ok) setMeterData(resData);
+      if (response.ok) {
+        setMeterData(resData);
+      }
     } catch (error) {
       console.error(error.message);
     }

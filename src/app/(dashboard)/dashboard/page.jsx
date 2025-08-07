@@ -73,6 +73,11 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+  const u4EnergyPerSpindle =
+    u4Spindle > 0 ? singleDivData.U4_Consumption / u4Spindle : 0;
+
+  const u5EnergyPerSpindle =
+    u5Spindle > 0 ? singleDivData.U5_Consumption / u5Spindle : 0;
 
   useEffect(() => {
     fetchU4Spindles();
@@ -165,7 +170,7 @@ const Dashboard = () => {
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
                 title="Energy/Spindle(U4)"
-                value={u4Spindle || "000"}
+                value={u4EnergyPerSpindle.toFixed(2) || "000"}
                 loading={loading}
                 unit="kWh"
               />
@@ -173,7 +178,7 @@ const Dashboard = () => {
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
                 title="Energy/Spindle(U5)"
-                value={u5Spindle || "000"}
+                value={u5EnergyPerSpindle.toFixed(2) || "000"}
                 loading={loading}
                 unit="kWh"
               />

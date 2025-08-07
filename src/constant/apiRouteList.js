@@ -43,6 +43,7 @@ const config = {
     MAIN_METER_TAGS_LINK: "/node-red-link",
     METER_DATA: "/meter-data",
     LOGS_DATA: "/logs_data",
+    NODE_RED_REAL_TIME_STATUS: "/node-red-link/check-status",
   },
   TRENDS: "/trends",
   ALARMS: {

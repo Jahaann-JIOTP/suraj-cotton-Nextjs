@@ -1,5 +1,6 @@
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { useTheme } from "next-themes";
 import Swal from "sweetalert2";
 const MultipleUnitComponent = ({
   unit,
@@ -9,6 +10,7 @@ const MultipleUnitComponent = ({
   unit5Spindle,
   resData,
 }) => {
+  const { theme } = useTheme();
   const data = resData[0];
   const u4U5Total = {};
   for (const key in data) {
@@ -561,27 +563,30 @@ const MultipleUnitComponent = ({
   // /////////////////////////////--------------export to excel
 
   return (
-    <>
+    <div>
       <div className="flex px-3 md:px-6 pt-2 flex-col gap-3 overflow-hidden">
-        <div className="flex flex-col md:flex-row items-start justify-between  w-full flex-wrap  gap-1">
+        <div className="flex flex-col md:flex-row items-center justify-between  w-full flex-wrap  gap-1">
           <div className="flex flex-col items-start justify-start md:w-[49%]">
-            <span className="text-[14.22px] font-500 font-inter">
-              Invoice To:
-            </span>
-            <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-              Suraj Cotton Pvt. Limited
-            </span>
+            <img
+              src={
+                theme === "light"
+                  ? "../../../suraj-cotton-logo.png"
+                  : "../../../suraj-cotton-login-logo.png"
+              }
+              alt=""
+              className="w-[8rem]"
+            />
           </div>
-          <div className="flex flex-col items-start md:items-end gap-1 justify-start md:w-[49%]">
-            <span className="text-[14.22px] font-500 font-inter">
-              Jahaann Technologies
-            </span>
-            <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-              22-C Block, G.E.C.H.S, Phase 3 Peco Road Lahore , Pakistan
-            </span>
-            <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-              Phone: +923245894399
-            </span>
+          <div className="flex flex-col items-center md:items-end gap-1 justify-start md:w-[49%]">
+            <img
+              src={
+                theme === "light"
+                  ? "../../../jahaann-light.png"
+                  : "../../../jahaann-dark.png"
+              }
+              alt=""
+              className="w-[10rem]"
+            />
           </div>
         </div>
       </div>
@@ -612,8 +617,8 @@ const MultipleUnitComponent = ({
           {unit === "unit4" ? "Unit 4" : unit === "unit5" ? "Unit 5" : ""}
         </h2>
 
-        <div className="w-full overflow-x-auto custom-scrollbar-report">
-          <div className="flex gap-1 flex-col h-[23rem] mb-1 w-full max-w-full overflow-x-auto md:overflow-x-auto lg:overflow-x-visible custom-scrollbar-report">
+        <div className="w-full">
+          <div className="flex gap-1 flex-col h-full mb-1 w-full max-w-full overflow-x-auto md:overflow-x-auto lg:overflow-x-visible custom-scrollbar-report">
             {/* ------------------- */}
             <div className="min-w-[1024px] lg:min-w-full flex justify-end gap-[1rem]">
               <div className="w-[17rem] lg:w-[29.6%] flex items-center gap-2">
@@ -765,7 +770,7 @@ const MultipleUnitComponent = ({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

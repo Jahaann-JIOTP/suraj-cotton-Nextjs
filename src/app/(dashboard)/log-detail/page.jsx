@@ -1,7 +1,6 @@
 "use client";
 import config from "@/constant/apiRouteList";
 import { useSearchParams, useRouter } from "next/navigation";
-
 import React, { useEffect, useState } from "react";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
@@ -15,7 +14,6 @@ const LogDetails = () => {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const searchParams = useSearchParams();
-  // const area = searchParams.get("area");
   const type = searchParams.get("val");
   const meter_id = searchParams.get("meter_id");
   const meterName = searchParams.get("meter-name");
@@ -51,6 +49,7 @@ const LogDetails = () => {
       console.error("Error:", error.message);
     }
   };
+
   useEffect(() => {
     getMeterLogsData();
   }, [startDate, endDate]);
@@ -62,29 +61,57 @@ const LogDetails = () => {
         .filter((key) => key !== "meterId")
     )
   );
+
+  const getImageBuffer = async (imageUrl) => {
+    const res = await fetch(imageUrl);
+    const blob = await res.blob();
+    return await blob.arrayBuffer();
+  };
+
   const exportToExcel = async () => {
     if (meterLogsData.length === 0) {
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "No data to export!",
-        theme: theme,
       });
       return;
     }
 
     try {
-      // Create a new workbook and worksheet
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet("Meter Logs");
+      worksheet.properties.defaultGridColor = false;
+      worksheet.views = [{ showGridLines: false }];
 
-      // Step 1: Prepare export data
+      // Get image buffers
+      const image1Buffer = await getImageBuffer(
+        "../../../suraj-cotton-logo.png"
+      );
+      const image2Buffer = await getImageBuffer("../../../jahaann-light.svg");
+
+      // Add images
+      const image1Id = workbook.addImage({
+        buffer: image1Buffer,
+        extension: "png",
+      });
+      const image2Id = workbook.addImage({
+        buffer: image2Buffer,
+        extension: "svg",
+      });
+
+      // Dynamically determine column count
       const exportData = meterLogsData.map((row) => {
         const newRow = {};
         columns.forEach((col) => {
           if (col === "time") {
-            newRow["Date"] = new Date(row[col]).toLocaleDateString();
-            newRow["Time"] = new Date(row[col]).toLocaleTimeString();
+            const date = new Date(row[col]);
+            newRow["Date"] = date.toLocaleDateString("en-GB");
+            newRow["Time"] = date.toLocaleTimeString("en-GB", {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            });
           } else {
             newRow[col.replace(/_/g, " ")] =
               typeof row[col] === "number"
@@ -101,47 +128,55 @@ const LogDetails = () => {
 
       const columnNames = Object.keys(exportData[0]);
       const columnCount = columnNames.length;
-      // row height
-      worksheet.getRow(1).height = 30;
+
+      // === Add images ===
+      worksheet.addImage(image1Id, {
+        tl: { col: 0, row: 0 },
+        ext: { width: 120, height: 50 },
+      });
+
+      // Dynamically place second image at last column
+      worksheet.addImage(image2Id, {
+        tl: { col: columnCount - 1, row: 0.5 },
+        ext: { width: 130, height: 30 },
+      });
+
+      // === Add Titles and Header Row ===
+      worksheet.getRow(1).height = 32;
       worksheet.getRow(2).height = 30;
       worksheet.getRow(3).height = 30;
+      // worksheet.getRow(4).height = 30;
+      for (let i = 1; i <= columnCount; i++) {
+        worksheet.getCell(1, i).border = {
+          bottom: { style: "thin", color: { argb: "FF000000" } },
+        };
+      }
 
-      // Step 2: Add title rows
-      // Merge cells for title rows
-      worksheet.mergeCells(1, 1, 1, columnCount); // A1 across all columns
-      worksheet.mergeCells(2, 1, 2, columnCount); // A2 across all columns
-
-      // Add meter name title (A1)
-      const title1 = worksheet.getCell(1, 1);
+      worksheet.mergeCells(1, 1, 1, columnCount);
+      // worksheet.mergeCells(2, 1, 2, columnCount);
+      worksheet.mergeCells(2, 1, 2, Math.floor(columnCount / 2));
+      const title1 = worksheet.getCell(2, 1);
       title1.value = `Meter Name: ${meterName?.toUpperCase()}`;
-      title1.font = { bold: true, size: 16, color: { argb: "FF1D5999" } };
-      title1.alignment = { horizontal: "center", vertical: "middle" };
-      title1.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "cedef0" },
-      };
+      title1.font = { bold: false, size: 16, color: { argb: "000000" } };
+      title1.alignment = { horizontal: "left", vertical: "middle" };
 
-      // Add log type title (A2)
-      const title2 = worksheet.getCell(2, 1);
+      worksheet.mergeCells(2, Math.floor(columnCount / 2) + 1, 2, columnCount);
+      const title2 = worksheet.getCell(2, Math.floor(columnCount / 2) + 1);
       title2.value = `Log Type: ${type?.toUpperCase()}`;
-      title2.font = { bold: true, size: 16, color: { argb: "FF1D5999" } };
-      title2.alignment = { horizontal: "center", vertical: "middle" };
-      title2.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "cedef0" },
-      };
-      title2.border = {
-        top: { style: "thin", color: { argb: "3A83C6" } },
-      };
+      title2.font = { bold: false, size: 13, color: { argb: "000000" } };
+      title2.alignment = { horizontal: "right", vertical: "middle" };
 
-      // Step 3: Add headers (row 3)
+      for (let i = 1; i <= columnCount; i++) {
+        worksheet.getCell(2, i).border = {
+          bottom: { style: "thin", color: { argb: "FF3A83C6" } },
+        };
+      }
+
+      // === Header row ===
       const headerRow = worksheet.getRow(3);
       headerRow.values = columnNames;
 
-      // Style header row
-      headerRow.eachCell((cell, colNumber) => {
+      headerRow.eachCell((cell) => {
         cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
         cell.alignment = { horizontal: "center", vertical: "middle" };
         cell.fill = {
@@ -149,7 +184,6 @@ const LogDetails = () => {
           pattern: "solid",
           fgColor: { argb: "FF1D5999" },
         };
-        cell.height = {};
         cell.border = {
           top: { style: "thin", color: { argb: "cedef0" } },
           bottom: { style: "thin", color: { argb: "cedef0" } },
@@ -158,20 +192,22 @@ const LogDetails = () => {
         };
       });
 
-      // Step 4: Add data rows
-      exportData.forEach((row, rowIndex) => {
+      // === Add data rows ===
+      exportData.forEach((row) => {
         const dataRow = worksheet.addRow(Object.values(row));
-
-        // Style data cells (center alignment)
         dataRow.eachCell((cell) => {
           cell.alignment = { horizontal: "center", vertical: "middle" };
+          cell.border = {
+            top: { style: "thin", color: { argb: "cedef0" } },
+            bottom: { style: "thin", color: { argb: "cedef0" } },
+            left: { style: "thin", color: { argb: "cedef0" } },
+            right: { style: "thin", color: { argb: "cedef0" } },
+          };
         });
       });
 
-      // Step 5: Set column widths
       worksheet.columns = columnNames.map(() => ({ width: 20 }));
 
-      // Step 6: Generate and download the file
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -189,8 +225,9 @@ const LogDetails = () => {
       });
     }
   };
+
   return (
-    <div className="h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1D5999] rounded-md px-5 py-2">
+    <div className="h-[81vh]  custom-scrollbar-report overflow-y-auto bg-white dark:bg-gray-800 border-t-3 border-[#1D5999] rounded-md px-5 py-2">
       <h1 className="font-700 font-inter text-[24px]">
         Meter Logs - <span className="uppercase text-[#1D5999]">{type}</span>
       </h1>
@@ -235,14 +272,15 @@ const LogDetails = () => {
           </button>
         </div>
       </div>
+
       <div className="mt-8">
         {loading ? (
           <CustomLoader />
         ) : (
-          <div className="rounded overflow-hidden border border-gray-300">
-            <div className="max-h-[63vh] overflow-y-auto custom-scrollbar-report">
+          <div className="rounded border border-gray-300">
+            <div className="max-full">
               <table className="w-full border-collapse table-fixed">
-                <thead className=" text-white sticky top-0 z-10">
+                <thead className=" text-white sticky top-[-9] z-10">
                   <tr className="bg-[#1D5999] border-t-2 border-[#1D5999]">
                     {columns.flatMap((col, index) => {
                       if (col === "time") {
@@ -283,13 +321,17 @@ const LogDetails = () => {
                               key={`${rowIdx}-date-${colIdx}`}
                               className="border border-gray-200 px-3 py-1 text-center text-sm"
                             >
-                              {new Date(row[col]).toLocaleDateString()}
+                              {new Date(row[col]).toLocaleDateString("en-GB")}
                             </td>,
                             <td
                               key={`${rowIdx}-time-${colIdx}`}
                               className="border border-gray-200 px-3 py-1 text-center text-sm"
                             >
-                              {new Date(row[col]).toLocaleTimeString()}
+                              {new Date(row[col]).toLocaleTimeString("en-GB", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              })}
                             </td>,
                           ]
                         ) : (

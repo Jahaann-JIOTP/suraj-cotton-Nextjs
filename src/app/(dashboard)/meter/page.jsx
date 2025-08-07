@@ -131,7 +131,7 @@ const page = () => {
       height: "37px",
     },
     {
-      tag: "N/A",
+      tag: suffixTags.Power_Phase_C,
       unit: "",
       top: "28px",
       left: "468px",
@@ -139,7 +139,7 @@ const page = () => {
       height: "37px",
     },
     {
-      tag: "N/A",
+      tag: suffixTags.Power_Phase_B,
       unit: "",
       top: "122px",
       left: "468px",
@@ -147,7 +147,7 @@ const page = () => {
       height: "37px",
     },
     {
-      tag: "N/A",
+      tag: suffixTags.Power_Phase_A,
       unit: "",
       top: "215px",
       left: "468px",
@@ -506,7 +506,7 @@ const page = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="relative w-full flex flex-col items-center bg-white dark:bg-gray-800 p-5 rounded-sm border-t-3 h-[81vh] border-[#1F5897]">
+    <div className="relative w-full overflow-y-auto bg-white dark:bg-gray-800 p-5 rounded-sm border-t-3 h-[81vh] border-[#1F5897]">
       <div className="flex items-center justify-between w-full overflow-hidden">
         <h1 className="font-semibold text-2xl font-inter pb-4">{meterName}</h1>
         <button
@@ -532,7 +532,7 @@ const page = () => {
           </span>
         </button>
       </div>
-      <div className="flex w-[1030px] mb-5 md:mb-auto items-center justify-center">
+      <div className="flex w-full mb-5 md:mb-auto items-center justify-center">
         <div
           className="flex flex-col md:flex-row items-center justify-center gap-1 rounded-sm bg-[#F9FAFB] dark:bg-[#f9fafb6c] p-1"
           style={{
@@ -684,6 +684,8 @@ const page = () => {
           {/* values */}
           {/* logs opener */}
         </div>
+      </div>
+      <div className="w-full flex items-center justify-end">
         <button
           title="Logs"
           onClick={() =>
@@ -691,7 +693,7 @@ const page = () => {
               `/logs?type=${activeTab}&lt_scheme=${ltScheme}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
             )
           }
-          className={`absolute right-[20px] bottom-[5px] border-1 border-[#1F5897] text-[#1F5897] dark:bg-gray-500 font-400 rounded text-[12px] flex flex-col items-center justify-center p-[7px] z-30  cursor-pointer`}
+          className={` border-1 border-[#1F5897] text-[#1F5897] dark:bg-gray-500 font-400 rounded text-[12px] flex flex-col items-center justify-center p-[7px] z-30  cursor-pointer`}
           style={{
             boxShadow: "2px 2px 15px 2px #1f579775",
           }}

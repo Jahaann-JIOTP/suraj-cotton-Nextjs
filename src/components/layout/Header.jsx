@@ -15,7 +15,6 @@ import { getActiveTabFromPathname } from "@/utils/navigation-utils";
 import { RxCross1 } from "react-icons/rx";
 import { Badge } from "../ui/badge";
 import { useTheme } from "next-themes";
-import { toast } from "react-toastify";
 
 const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
@@ -27,6 +26,7 @@ const Header = ({ handleTabClick, activeTab }) => {
   const [bellIcon, setBellIcon] = useState("basil_notification-solid.png");
   const [newAlarmCount, setNewAlarmCount] = useState(0);
   const [realTimeData, setRealTimeData] = useState([]);
+
   const [error, setError] = useState(null);
   const acknowledgedAlarms = useRef([]);
   const { theme } = useTheme();
@@ -40,7 +40,7 @@ const Header = ({ handleTabClick, activeTab }) => {
   const getMeterData = async () => {
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DIAGRAM.MAIN_METER_TAGS_LINK}`
+        `${config.BASE_URL}${config.DIAGRAM.NODE_RED_REAL_TIME_STATUS}`
       );
 
       const resData = await response.json();
@@ -174,32 +174,39 @@ const Header = ({ handleTabClick, activeTab }) => {
   return (
     <header className="bg-[#1F5897] text-white mx-0 my-2 mt-0 h-[44px] flex text-sm items-center justify-between w-full">
       {/* Dropdown menu for small screens */}
-      <div className="lg:hidden flex justify-between items-center px-4 py-2">
-        <button
-          // onClick={toggleDropdown}
-          onClick={() => {
-            isDropdownOpen === true
-              ? setIsDropdownOpen(false)
-              : setIsDropdownOpen(true);
-          }}
-          className="cursor-pointer"
-        >
-          <FontAwesomeIcon
-            icon={isDropdownOpen ? faXmark : faBars}
-            style={{ fontSize: "1.5em" }}
-          />
-        </button>
+
+      <div className="2xl:hidden flex justify-between items-center px-4 py-2 z-[10000] relative">
+        {!isDropdownOpen && (
+          <button
+            onClick={() => setIsDropdownOpen(true)}
+            className="cursor-pointer relative z-[10001]"
+            aria-label="Toggle menu"
+          >
+            <FontAwesomeIcon icon={faBars} style={{ fontSize: "1.5em" }} />
+          </button>
+        )}
+        {isDropdownOpen && (
+          <button
+            onClick={() => setIsDropdownOpen(true)}
+            className="cursor-pointer relative z-[10001]"
+            aria-label="Toggle menu"
+          >
+            <FontAwesomeIcon icon={faXmark} style={{ fontSize: "1.5em" }} />
+          </button>
+        )}
       </div>
-      <nav className={`bg-[#1F5897] hidden  lg:flex w-full`}>
+
+      {/* <nav className={`bg-[#1F5897] hidden  xl:flex w-full`}> */}
+      <nav className={`hidden  2xl:flex w-full`}>
         {privilegeOrder
           .filter((key) => userPrivileges.includes(key))
           .map((key) => renderLink(key))}
       </nav>
       {/* mobile menu */}
-      <div className="flex lg:hidden">
+      <div className="flex 2xl:hidden">
         <div
           className={`fixed top-[44px] left-0 w-full z-[999] transition-all duration-500 ${
-            isDropdownOpen ? "flex max-h-[1000px]" : "hidden"
+            isDropdownOpen ? "flex max-h-[900px]" : "hidden"
           }`}
         >
           <MobileSidebar
@@ -212,17 +219,17 @@ const Header = ({ handleTabClick, activeTab }) => {
       {/* Bell Icon */}
       <div className="flex items-center justify-center">
         <div className="mr-4 w-[60px]">
-          {realTimeData.error === "Invalid data structure" ? (
+          {realTimeData.message === "Link is up" ? (
+            <div className="flex flex-col items-center justify-center">
+              <img src={"../../../green_bl.gif"} className="w-[20px]" />
+              <span className="text-[10px]">Link Up</span>
+            </div>
+          ) : (
             <div className="flex flex-col items-center justify-center">
               <img src={"../../../red_bl.gif"} className="w-[20px]" />
               <span className="text-[10px] animate-pulse duration-300">
                 Link Down
               </span>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center">
-              <img src={"../../../green_bl.gif"} className="w-[20px]" />
-              <span className="text-[10px]">Link Up</span>
             </div>
           )}
         </div>
