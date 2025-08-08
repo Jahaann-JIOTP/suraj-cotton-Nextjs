@@ -53,6 +53,8 @@ const EnergyCostReportPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) return;
     if (!unit) {
       alert("Please select a unit before generating report.");
       return;
@@ -65,6 +67,7 @@ const EnergyCostReportPage = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             area: unit,

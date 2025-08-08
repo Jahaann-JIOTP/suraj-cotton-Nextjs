@@ -19,6 +19,8 @@ const page = () => {
   const meterName = searchParams.get("meter_name");
 
   const getSingleMeterData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DIAGRAM.METER_DATA}`,
@@ -26,6 +28,7 @@ const page = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             area,

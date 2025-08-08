@@ -261,12 +261,15 @@ function CustomTrend() {
       const suffixes = parameterMapping[selectedParameter];
 
       const fetchData = async (ltSelection) => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
         setLoading(true);
 
         const response = await fetch(`${config.BASE_URL}${config.TRENDS}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             start_date: startDate,

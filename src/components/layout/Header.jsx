@@ -38,9 +38,17 @@ const Header = ({ handleTabClick, activeTab }) => {
     }
   }, [pathname]);
   const getMeterData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DIAGRAM.NODE_RED_REAL_TIME_STATUS}`
+        `${config.BASE_URL}${config.DIAGRAM.NODE_RED_REAL_TIME_STATUS}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       const resData = await response.json();
@@ -175,7 +183,7 @@ const Header = ({ handleTabClick, activeTab }) => {
     <header className="bg-[#1F5897] text-white mx-0 my-2 mt-0 h-[44px] flex text-sm items-center justify-between w-full">
       {/* Dropdown menu for small screens */}
 
-      <div className="2xl:hidden flex justify-between items-center px-4 py-2 z-[10000] relative">
+      <div className="2xl:hidden flex justify-between items-center px-4 py-2 z-40 relative">
         {!isDropdownOpen && (
           <button
             onClick={() => setIsDropdownOpen(true)}

@@ -46,11 +46,16 @@ const TranformersPage = () => {
   // /----------------------------------------------------------
 
   const fetchTransformerTotalTag = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${startDate}&end_date=${endDate}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();
@@ -60,12 +65,17 @@ const TranformersPage = () => {
     } catch (error) {}
   };
   const fetchTransformerData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     setLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_HEAT_MAP_DATA}?start_date=${startDate}&end_date=${endDate}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();

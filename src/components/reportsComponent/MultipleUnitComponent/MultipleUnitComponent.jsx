@@ -564,7 +564,7 @@ const MultipleUnitComponent = ({
 
   return (
     <div>
-      <div className="flex px-3 md:px-6 pt-2 flex-col gap-3 overflow-hidden">
+      <div className="flex px-3 md:px-6 flex-col gap-3 overflow-hidden">
         <div className="flex flex-col md:flex-row items-center justify-between  w-full flex-wrap  gap-1">
           <div className="flex flex-col items-start justify-start md:w-[49%]">
             <img
@@ -590,7 +590,7 @@ const MultipleUnitComponent = ({
           </div>
         </div>
       </div>
-      <div className="w-full h-[2px] mt-5 bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
+      <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
       <div className="flex flex-col gap-2 md:flex-row px-3 md:px-6 items-start justify-between pt-5">
         <div>
           <button

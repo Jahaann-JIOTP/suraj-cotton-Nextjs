@@ -24,12 +24,17 @@ const GenerationEnergy = () => {
   };
 
   const fetchGenerationEnergyData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     setLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_GENERATION_ENERGY}${selectedTimePeriod}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       if (response.ok) {

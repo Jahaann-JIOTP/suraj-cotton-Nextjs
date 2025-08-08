@@ -12,17 +12,18 @@ const PowerSummaryPage = () => {
   const [powerSummaryTimePeriod, setPowerSummaryTimePeriod] = useState("today");
   const { startDate, endDate } = getDateRangeFromString(powerSummaryTimePeriod);
 
-  const handleTimePeriodForPowerSummary = (period) => {
-    setPowerSummaryTimePeriod(period);
-  };
-
   const fetchPowerSummaryData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     setLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${startDate}&end_date=${endDate}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();

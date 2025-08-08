@@ -31,10 +31,18 @@ const Unit5Spindle = () => {
 
   // Fetch production data
   const fetchSpindleProduction = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       const monthStr = `${year}-${month + 1 < 10 ? "0" : ""}${month + 1}`;
       const response = await fetch(
-        `${config.BASE_URL}${config.REPORTS.GET_SPINDLES}${monthStr}`
+        `${config.BASE_URL}${config.REPORTS.GET_SPINDLES}${monthStr}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const resResult = await response.json();
 
@@ -74,6 +82,8 @@ const Unit5Spindle = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) return;
     setLoading(true);
     try {
       const response = await fetch(
@@ -82,6 +92,7 @@ const Unit5Spindle = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(productionData),
         }

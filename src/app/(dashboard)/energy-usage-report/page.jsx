@@ -53,12 +53,17 @@ const FilterPage = () => {
   };
   // fetch unit 4 spindles
   const fetchU4Spindles = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       setLoading(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U4`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();
@@ -72,12 +77,17 @@ const FilterPage = () => {
     }
   };
   const fetchU5Spindles = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       setLoading(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U5`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();
@@ -99,6 +109,8 @@ const FilterPage = () => {
   // getting energy usage report
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) return;
     if (!unit || startDate.length === 0 || endDate.length === 0) {
       toast.warning("Please fill in all required fields.");
       return;
@@ -135,6 +147,7 @@ const FilterPage = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             start_date: startDate,

@@ -1,5 +1,6 @@
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { useTheme } from "next-themes";
 import Swal from "sweetalert2";
 
 const SingleUnitComponent = ({
@@ -10,6 +11,7 @@ const SingleUnitComponent = ({
   unit5Spindle,
   resData,
 }) => {
+  const { theme } = useTheme();
   const data = resData[0];
   const removePrefix = (data, unitPrefix) => {
     const result = {};
@@ -21,6 +23,7 @@ const SingleUnitComponent = ({
     }
     return result;
   };
+
   const unit4CleanData = removePrefix(data, "unit_4");
   const unit5CleanData = removePrefix(data, "unit_5");
   const finalData =
@@ -382,30 +385,33 @@ const SingleUnitComponent = ({
 
   return (
     <>
-      <div className="flex  flex-col gap-3 overflow-hidden pt-3">
-        <div className="flex flex-col md:flex-row items-start justify-between  w-full flex-wrap  gap-1">
+      <div className="flex  flex-col gap-3">
+        <div className="flex flex-col md:flex-row items-center justify-between  w-full flex-wrap  gap-1">
           <div className="flex flex-col items-start justify-start md:w-[49%]">
-            <span className="text-[14.22px] font-500 font-inter">
-              Invoice To:
-            </span>
-            <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-              Suraj Cotton Pvt. Limited
-            </span>
+            <img
+              src={
+                theme === "light"
+                  ? "../../../suraj-cotton-logo.png"
+                  : "../../../suraj-cotton-login-logo.png"
+              }
+              alt=""
+              className="w-[8rem]"
+            />
           </div>
-          <div className="flex flex-col items-start md:items-end gap-1 justify-start md:w-[49%]">
-            <span className="text-[14.22px] font-500 font-inter">
-              Jahaann Technologies
-            </span>
-            <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-              22-C Block, G.E.C.H.S, Phase 3 Peco Road Lahore , Pakistan
-            </span>
-            <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-              Phone: +923245894399
-            </span>
+          <div className="flex flex-col items-center md:items-end gap-1 justify-start md:w-[49%]">
+            <img
+              src={
+                theme === "light"
+                  ? "../../../jahaann-light.png"
+                  : "../../../jahaann-dark.png"
+              }
+              alt=""
+              className="w-[10rem]"
+            />
           </div>
         </div>
       </div>
-      <div className="w-full h-[2px] mt-5 bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
+      <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
       <div className="flex flex-col gap-2 md:flex-row px-3 md:px-6 items-start justify-between pt-5">
         <div>
           <button
@@ -432,7 +438,7 @@ const SingleUnitComponent = ({
           {unit === "Unit_4" ? "Unit 4" : unit === "Unit_5" ? "Unit 5" : ""}
         </h2>
         <div className="w-full h-[10px]"></div>
-        <div className="overflow-x-scroll md:w-[97%] custom-scrollbar-report md:overflow-x-hidden h-full md:max-h-[44vh] overflow-y-auto">
+        <div className="overflow-x-scroll md:w-[97%] custom-scrollbar-report md:overflow-x-hidden mb-3 h-full ">
           <table className="table w-full border-collapse border ">
             <thead className="sticky top-0 bg-[#E5F3FD] dark:bg-gray-600 z-10">
               <tr className="border border-gray-300 dark:border-gray-500">

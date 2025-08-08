@@ -17,12 +17,17 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const { startDate, endDate } = getDateRangeFromString(dashboardTimePeriod);
   const fetchSingleValueData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     setLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${startDate}&end_date=${endDate}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       if (response.ok) {
@@ -36,12 +41,17 @@ const Dashboard = () => {
     }
   };
   const fetchU4Spindles = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       setLoading(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U4`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();
@@ -55,12 +65,17 @@ const Dashboard = () => {
     }
   };
   const fetchU5Spindles = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       setLoading(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U5`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();

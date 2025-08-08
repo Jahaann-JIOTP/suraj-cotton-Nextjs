@@ -6,28 +6,6 @@ import { useEffect, useState } from "react";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
-// const sankeyData = [
-//   { from: "tf2", to: "totalLT2", value: 35798698 },
-//   { from: "GasGen", to: "totalLT2", value: 1.71 },
-//   { from: "totalLT2", to: "Drying Simplex AC", value: 1229925.43 },
-//   { from: "totalLT2", to: "Weikel Conditioning Machine", value: 885060.34 },
-//   { from: "totalLT2", to: "Winding AC", value: 2205441.5 },
-//   { from: "totalLT2", to: "Mills RES-CLNY& Workshop", value: 0 },
-//   { from: "totalLT2", to: "Card 1", value: 3702715 },
-//   { from: "totalLT2", to: "Colony", value: 0 },
-//   { from: "totalLT2", to: "Power House and Source", value: 0 },
-//   { from: "totalLT2", to: "Blow Room", value: 2917736 },
-//   { from: "totalLT2", to: "Card 2", value: 2413052.75 },
-//   { from: "totalLT2", to: "Winding 01", value: 7302094.5 },
-//   { from: "totalLT2", to: "Card  Filter (Bypass)", value: 0 },
-//   { from: "totalLT2", to: "D/R Card Filter", value: 338064.46 },
-//   { from: "totalLT2", to: "Ring 02 (Auto Cone 10-18)", value: 9749442 },
-//   { from: "totalLT2", to: "Ring 04", value: 2799442.25 },
-//   { from: "totalLT2", to: "Ring 03", value: 2254752.75 },
-//   { from: "totalLT2", to: "Bale Press", value: 20.42 },
-//   { from: "totalLT2", to: "AC Lab", value: 1.85 },
-//   { from: "totalLT2", to: "Spare 01", value: 2.45 },
-// ];
 
 const UnitLt42Page = () => {
   const [Unit4Lt2TimePeriod, setUnit4Lt2TimePeriod] = useState("today");
@@ -37,6 +15,8 @@ const UnitLt42Page = () => {
   console.log(data);
 
   const fetchUnit4Lt2Data = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     setLoading(true);
     try {
       const response = await fetch(
@@ -45,6 +25,7 @@ const UnitLt42Page = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             startDate: startDate,

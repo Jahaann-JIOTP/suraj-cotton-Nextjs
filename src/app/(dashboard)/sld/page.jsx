@@ -25,9 +25,17 @@ const Page = () => {
   const area = searchParams.get("area");
 
   const getMeterData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DIAGRAM.MAIN_METER_TAGS_LINK}`
+        `${config.BASE_URL}${config.DIAGRAM.MAIN_METER_TAGS_LINK}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const resData = await response.json();
       if (response.ok) {

@@ -31,28 +31,29 @@ const EnergyComparison = () => {
   };
 
   const meterNameMap = {
+    U19_PLC_Del_ActiveEnergy: "Diesel IC",
+    U11_GW01_Del_ActiveEnergy: "Gas LT Panel",
     U6_GW02_Del_ActiveEnergy: "Solar",
     U17_GW03_Del_ActiveEnergy: "Solar 2",
-    U23_GW01_Del_ActiveEnergy: "Wapda 1 Incoming",
-    U20_GW03_Del_ActiveEnergy: "T/F 3",
-    U21_GW03_Del_ActiveEnergy: "T/F 4",
-    U7_GW01_Del_ActiveEnergy: "Power House",
-    U19_PLC_Del_ActiveEnergy: "Diesel IC",
-    U21_PLC_Del_ActiveEnergy: "Wapda IC",
-    U11_GW01_Del_ActiveEnergy: "Gas LT Panel",
     U13_GW02_ActiveEnergy_Imp_kWh: "Transformer 1 LT-1 ACB",
-    U13_GW02_Del_ActiveEnergy: "Transformer 1 LT-1 ACB",
     U16_GW03_ActiveEnergy_Imp_kWh: "Transformer 2 LT-2 ACB",
-    U16_GW03_Del_ActiveEnergy: "Transformer 2 LT-2 ACB",
-    U13_GW01_Del_ActiveEnergy: "Wapda HFO Gas IC",
+    U23_GW01_Del_ActiveEnergy: "Wapda 1 Incoming",
+    U22_GW01_Del_ActiveEnergy: "HFO Incomming",
+    U20_GW03_Del_ActiveEnergy: "T/F 3",
+    U19_GW03_Del_ActiveEnergy: "Wapda + HFO + Gas Incomming",
   };
 
   const fetchPieChartData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_ENERGY_COMPARISON}?start_date=${startDate}&end_date=${endDate}&Label=Custom`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       if (response.ok) {

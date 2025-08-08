@@ -19,12 +19,17 @@ const MeterLogs = () => {
   const itemsPerPage = 13;
 
   const fetchMeterLogsData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     setLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.METER_CONFIG.GET_METER_LOGS}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();

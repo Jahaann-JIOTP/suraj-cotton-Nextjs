@@ -1,6 +1,7 @@
 import config from "@/constant/apiRouteList";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 // Meters with display name and ID
 const meters = [
@@ -42,11 +43,16 @@ const Settings = () => {
 
   // fetch current status of meters
   const fetchMeterToggleStatus = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.METER_CONFIG.GET_METER_TOGGLE_STATUS}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();
@@ -67,7 +73,34 @@ const Settings = () => {
   };
   // Toggle handler
   const handleToggle = async (meterId, unit) => {
-    const areaName = unit === 4 ? "unit4" : "unit5";
+    const currentUnit = selectedUnits[meterId];
+    const targetAreaName = unit === 4 ? "Unit 4" : "Unit 5";
+    const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
+
+    // If already in the selected unit, no need to confirm
+    if (currentUnit === unit) {
+      toast.info(`This meter is already assigned to ${targetAreaName}`);
+      return;
+    }
+
+    // Show confirmation popup
+    const result = await Swal.fire({
+      title: "Confirm Switch",
+      html: `
+      Currently you are in <b>${currentAreaName || "N/A"}</b>.<br/>
+      Are you sure you want to switch to <b>${targetAreaName}</b>?
+    `,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Switch",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#1A68B2",
+      cancelButtonColor: "#d33",
+    });
+
+    if (!result.isConfirmed) {
+      return; // User cancelled
+    }
 
     // ✅ Set selected unit for specific meter
     setSelectedUnits((prev) => ({
@@ -85,7 +118,7 @@ const Settings = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            area: areaName,
+            area: unit === 4 ? "unit4" : "unit5",
             meterId: meterId,
             email: userData.email,
             username: userData.name,

@@ -37,16 +37,6 @@ const energySummaryPage = () => {
       [name]: value,
     }));
   };
-  // const toggleDropdown = () => setIsOpen(!isOpen);
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-  //       setIsOpen(false);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => document.removeEventListener("mousedown", handleClickOutside);
-  // }, []);
 
   const handleUnitChange = (unitClicked) => {
     if (unitClicked === "ALL") {
@@ -67,12 +57,17 @@ const energySummaryPage = () => {
 
   //////fetching spindles
   const fetchU4Spindles = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       setLoading(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U4`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();
@@ -86,12 +81,17 @@ const energySummaryPage = () => {
     }
   };
   const fetchU5Spindles = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     try {
       setLoading(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U5`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const resResult = await response.json();
@@ -107,6 +107,8 @@ const energySummaryPage = () => {
   // getting energy usage reports
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) return;
     if (!unit || startDate.length === 0 || endDate.length === 0) {
       toast.warning("Please fill in all required fields.");
       return;
@@ -119,6 +121,7 @@ const energySummaryPage = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             start_date: startDate,
@@ -143,11 +146,6 @@ const energySummaryPage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchU4Spindles();
-  //   fetchU5Spindles();
-  // }, []);
-
   return (
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
       {!showResults && errorMessage.length !== 0 && (
@@ -161,17 +159,6 @@ const energySummaryPage = () => {
           Energy Summary Report
         </h1>
         {showResults && (
-          // <button
-          //   onClick={() => {
-          //     setShowResults(false);
-          //     setUnit("");
-          //     setStartDate("");
-          //     setEndDate("");
-          //   }}
-          //   className="bg-gray-800 dark:bg-gray-500 cursor-pointer text-white flex items-center justify-center text-center  w-[30px] h-[30px] rounded-full text-[14.22px] font-500 font-inter"
-          // >
-          //   <FaChevronLeft />
-          // </button>
           <button
             onClick={() => {
               setShowResults(false);

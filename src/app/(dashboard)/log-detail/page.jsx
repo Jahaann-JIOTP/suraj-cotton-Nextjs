@@ -20,6 +20,8 @@ const LogDetails = () => {
   const router = useRouter();
 
   const getMeterLogsData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     setLoading(true);
     try {
       const response = await fetch(
@@ -28,6 +30,7 @@ const LogDetails = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             type,

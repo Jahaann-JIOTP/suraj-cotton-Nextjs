@@ -23,12 +23,17 @@ const PowerComparison = () => {
   };
 
   const fetchPowerComparisonData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     setLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}/power_comparison?start_date=${startDate}&end_date=${endDate}&label=${timeRange}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       if (response.ok) {
