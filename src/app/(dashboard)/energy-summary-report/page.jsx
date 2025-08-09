@@ -147,7 +147,7 @@ const energySummaryPage = () => {
   };
 
   return (
-    <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
+    <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report pb-5 rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
       {!showResults && errorMessage.length !== 0 && (
         <div className="flex relative md:absolute top-0 right-0 bg-[#D40000] text-[14.22px] items-center gap-3 px-5 py-1.5 rounded rounded-t-md md:rounded-tr-md text-white">
           <RiErrorWarningFill size={23} />

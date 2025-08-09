@@ -12,6 +12,8 @@ const Unit5Spindle = () => {
   const [daysInMonth, setDaysInMonth] = useState([]);
   const [chunkSize, setChunkSize] = useState(15);
   const [loading, setLoading] = useState(false);
+  const [singleDaySpindle, setSingleDaySpindle] = useState({});
+  const [formMode, setFormMode] = useState("create");
   const [productionData, setProductionData] = useState({
     unit: "U5",
     startDate: "",
@@ -62,6 +64,46 @@ const Unit5Spindle = () => {
     }
   };
 
+  // fetch single day production
+  const fetchSingleDaySpindle = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.REPORTS.GET_SINGLE_DAY_SPINDLE}unit=U5&date=${productionData.startDate}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const resResult = await response.json();
+
+      if (response.ok) {
+        if (resResult.length > 0) {
+          setSingleDaySpindle(resResult[0]);
+          setProductionData((prev) => ({
+            ...prev,
+            values: [resResult[0].value], // fill the value
+          }));
+          // setRecordId(resResult[0]._id);
+          setFormMode("update");
+        } else {
+          // No record → create mode
+          setProductionData((prev) => ({
+            ...prev,
+            values: [],
+          }));
+          setRecordId(null);
+          setFormMode("create");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchSpindleProduction();
   }, [month]);
@@ -85,22 +127,68 @@ const Unit5Spindle = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     setLoading(true);
+
     try {
-      const response = await fetch(
-        `${config.BASE_URL}${config.REPORTS.ADD_SPINDLES}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(productionData),
+      if (formMode === "create") {
+        // POST new record
+        const response = await fetch(
+          `${config.BASE_URL}${config.REPORTS.ADD_SPINDLES}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(productionData),
+          }
+        );
+
+        if (response.ok) {
+          toast.success("Unit 5 Spindle Added");
+          await fetchSpindleProduction();
         }
-      );
+      }
+
+      // Reset form after submit
+      setProductionData((prev) => ({
+        ...prev,
+        values: [],
+      }));
+      setFormMode("create");
+      // setRecordId(null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // update unit 5 spindle production
+  const updateSpindle = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${config.BASE_URL}/production`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: singleDaySpindle._id,
+          value: Number(productionData.values.join()),
+          unit: "U5",
+          date: productionData.startDate,
+        }),
+      });
       if (response.ok) {
-        await fetchSpindleProduction();
+        setProductionData({ unit: "U5", startDate: "", values: [] });
+        toast.success("Unit 5 Spindles Updated");
         setLoading(false);
-        toast.success("Unit 5 Spindle Added");
+        await fetchSpindleProduction();
       }
     } catch (error) {
       console.error(error);
@@ -109,6 +197,11 @@ const Unit5Spindle = () => {
     }
   };
 
+  useEffect(() => {
+    if (productionData.startDate) {
+      fetchSingleDaySpindle();
+    }
+  }, [productionData.startDate]);
   // Responsive chunk size
   const getChunkSize = (width) => {
     if (width >= 1400) return 15;
@@ -155,14 +248,16 @@ const Unit5Spindle = () => {
   return (
     <div className="flex flex-col bg-white dark:bg-gray-800 w-full h-full md:h-[81vh] rounded-md border-t-3 overflow-x-auto border-[#1F5897] px-4 py-2">
       <h1 className="font-raleway text-[18.22px] text-black dark:text-white font-600">
-        Spindle Production Unit 5
+        {formMode === "create"
+          ? "Add Spindle Production Unit 5"
+          : "Update Spindle Production Unit 5"}
       </h1>
 
       {/* Form */}
       <div className="w-full flex items-center justify-center">
         <div className="w-full md:w-[80%] lg:w-[50%] flex flex-col items-center">
           <form
-            onSubmit={handleSubmit}
+            onSubmit={formMode === "create" ? handleSubmit : updateSpindle}
             className="w-full flex flex-col items-center mt-10"
           >
             <div className="flex flex-col items-center justify-center">

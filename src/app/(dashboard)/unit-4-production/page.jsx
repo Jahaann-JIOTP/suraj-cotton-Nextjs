@@ -13,7 +13,7 @@ const Unit4Spindle = () => {
   const [loading, setLoading] = useState(false);
   const [chunkSize, setChunkSize] = useState(15);
   const [singleDaySpindle, setSingleDaySpindle] = useState({});
-  console.log(singleDaySpindle);
+
   const [formMode, setFormMode] = useState("create"); // "create" or "update"
   const [recordId, setRecordId] = useState(null);
   const [productionData, setProductionData] = useState({
@@ -39,7 +39,6 @@ const Unit4Spindle = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      // const monthStr = `${year}-${month + 1 < 10 ? "0" : ""}${month + 1}`;
       const response = await fetch(
         `${config.BASE_URL}${config.REPORTS.GET_SPINDLES}${monthStr}`,
         {
@@ -85,35 +84,6 @@ const Unit4Spindle = () => {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const token = localStorage.getItem("token");
-  //   if (!token) return;
-  //   setLoading(true);
-  //   try {
-  //     const response = await fetch(
-  //       `${config.BASE_URL}${config.REPORTS.ADD_SPINDLES}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify(productionData),
-  //       }
-  //     );
-  //     if (response.ok) {
-  //       toast.success("Unit 4 Spindle Added");
-  //       await fetchSpindleProduction();
-  //       setLoading(false);
-  //       productionData.values = "";
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -140,29 +110,6 @@ const Unit4Spindle = () => {
           await fetchSpindleProduction();
         }
       }
-      //else if (formMode === "update" && recordId) {
-      //   // PATCH existing record
-      //   const response = await fetch(
-      //     `${config.BASE_URL}${config.REPORTS.UPDATE_SPINDLE}${recordId}`,
-      //     {
-      //       method: "PATCH",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         Authorization: `Bearer ${token}`,
-      //       },
-      //       body: JSON.stringify({
-      //         value: productionData.values[0],
-      //         unit: "U4",
-      //         date: productionData.startDate,
-      //       }),
-      //     }
-      //   );
-
-      //   if (response.ok) {
-      //     toast.success("Unit 4 Spindle Updated");
-      //     await fetchSpindleProduction();
-      //   }
-      // }
 
       // Reset form after submit
       setProductionData((prev) => ({
@@ -218,20 +165,34 @@ const Unit4Spindle = () => {
   const updateSpindle = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-    console.log("token from update", token);
-    const reponse = await fetch(`${config.BASE_URL}/production`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        id: singleDaySpindle._id,
-        value: Number(productionData.values.join()),
-        unit: "U4",
-        date: productionData.startDate,
-      }),
-    });
+    if (!token) return;
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${config.BASE_URL}/production`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: singleDaySpindle._id,
+          value: Number(productionData.values.join()),
+          unit: "U4",
+          date: productionData.startDate,
+        }),
+      });
+      if (response.ok) {
+        setProductionData({ unit: "U4", startDate: "", values: [] });
+        toast.success("Unit 4 Spindles Updated");
+        setLoading(false);
+        await fetchSpindleProduction();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
   useEffect(() => {
     if (productionData.startDate) {
@@ -289,8 +250,8 @@ const Unit4Spindle = () => {
       </h1> */}
       <h1 className="font-raleway text-[18.22px] text-black dark:text-white font-600">
         {formMode === "create"
-          ? "Add Spindle Production"
-          : "Update Spindle Production"}
+          ? "Add Spindle Production Unit 4"
+          : "Update Spindle Production Unit 4"}
       </h1>
 
       {/* Form */}
@@ -332,12 +293,6 @@ const Unit4Spindle = () => {
               {loading === true ? "Submitting..." : "Submit"}
             </button>
           </form>
-          {/* <button
-            onClick={() => updateSpindle}
-            className="bg-[#1F5897] cursor-pointer text-white px-5 py-1.5 rounded mt-4"
-          >
-            Update
-          </button> */}
         </div>
       </div>
 

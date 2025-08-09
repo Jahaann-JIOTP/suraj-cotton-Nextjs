@@ -218,7 +218,33 @@ const PowerComparison = () => {
         }),
       })
     );
+    xAxis.get("tooltip").label.adapters.add("text", (text, target) => {
+      const dataItem = target.dataItem;
+      if (!dataItem) return text;
 
+      const raw = dataItem.get("category");
+      if (!raw) return text;
+
+      const date = new Date(raw);
+      if (isNaN(date)) return text;
+
+      // Format in UTC based on timeRange
+      switch (timeRange) {
+        case "hourly":
+          return date.toLocaleString(); // Example: "Sat, 09 Aug 2025 12:00:00 GMT"
+        case "daily":
+          return `${date.getDate()}-${
+            date.getMonth() + 1
+          }-${date.getFullYear()}`;
+        case "monthly":
+          return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+            2,
+            "0"
+          )}`;
+        default:
+          return date.toUTCString();
+      }
+    });
     xRenderer.grid.template.setAll({ location: 1 });
     xAxis.data.setAll(stackChartData);
 

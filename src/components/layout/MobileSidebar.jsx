@@ -51,7 +51,7 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
   return (
     <div
       ref={sidebarRef}
-      className="fixed top-[92px] left-0 h-[86vh] md:h-[86vh] bg-white dark:bg-gray-800 text-black dark:text-white shadow-lg z-50 w-full md:w-1/2 flex flex-col"
+      className="fixed top-[92px] left-0 h-[86vh] md:h-[86vh] bg-white dark:bg-gray-800 text-black dark:text-white shadow-lg z-50 w-full md:w-1/2 lg:w-1/5 flex flex-col"
     >
       <div className="flex-1 overflow-y-auto scrollbar-hide p-4">
         {privilegeOrder

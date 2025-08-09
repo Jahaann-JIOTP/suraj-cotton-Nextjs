@@ -39,7 +39,7 @@ const ConsumptionEnergy = () => {
           },
         }
       );
-      console.log(".............................on below fetch", token);
+
       if (response.ok) {
         const resResult = await response.json();
         if (Array.isArray(resResult) && resResult.length > 0) {

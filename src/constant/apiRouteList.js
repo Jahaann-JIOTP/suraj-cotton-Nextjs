@@ -1,6 +1,5 @@
 const config = {
   BASE_URL: process.env.NEXT_PUBLIC_SURAJ_COTTON_BASE_URL,
-  // BASE_URL: "https://surajapi.jiotp.com",
 
   AUTH: {
     LOGIN: "/auth/login",
@@ -32,6 +31,11 @@ const config = {
     GET_ENERGY_COMPARISON: "/pie-chart/chart-data",
     GET_HEAT_MAP_DATA: "/heat-map",
     GET_SPINDLES: "/energy-spindle",
+    ADD_MAINTENANCE_HOURS: "/heat-map/transformers",
+    GET_MAINTENANCE_HOURS_T1: "/heat-map/transformers/T1",
+    GET_MAINTENANCE_HOURS_T2: "/heat-map/transformers/T2",
+    GET_MAINTENANCE_HOURS_T3: "/heat-map/transformers/T3",
+    GET_MAINTENANCE_HOURS_T4: "/heat-map/transformers/T4",
   },
   SANKEY: {
     UNIT4_LT1: "/unit4-lt1",

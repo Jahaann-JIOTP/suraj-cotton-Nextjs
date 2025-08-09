@@ -6,16 +6,19 @@ import TimePeriodSelector from "@/components/dashboardComponents/timePeriodSelec
 import TransformerSide from "@/components/dashboardComponents/heatMapCharts/TransformerSide";
 import config from "@/constant/apiRouteList";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
+import { useMaintenanceCountdown } from "@/components/dashboardComponents/heatMapCharts/useCountdonwTimer";
+
 const intervalPeriod = 60 * 60 * 1000;
 const TranformersPage = () => {
-  const initialHrs = 200;
+  const [maintenanceHrsT1, setmaintenanceHrsT1] = useState({});
+  const [maintenanceHrsT2, setmaintenanceHrsT2] = useState({});
+  const [maintenanceHrsT3, setmaintenanceHrsT3] = useState({});
+  const [maintenanceHrsT4, setmaintenanceHrsT4] = useState({});
   const [transformerTimePeriod, setTransformerTimePeriod] =
     useState("thisweek");
   const [loading, setLoading] = useState(false);
   const [transformerTotalValTag, setTransformerTotalValTag] = useState({});
-  const [remaininghrs, setRemainingHrs] = useState(initialHrs);
   const [data, setData] = useState([]);
-
   const { startDate, endDate } = getDateRangeFromString(transformerTimePeriod);
 
   // /----------------------------Destructure main to four array------------------------------
@@ -24,26 +27,42 @@ const TranformersPage = () => {
   const trafo3 = data.map(({ date, Trafo3 }) => ({ date, Trafo3 }));
   const trafo4 = data.map(({ date, Trafo4 }) => ({ date, Trafo4 }));
 
-  // //////////////////////////////
-  // timer calculateor
-  useEffect(() => {
-    let current = initialHrs;
+  const remainingHrsT1 = useMaintenanceCountdown(
+    maintenanceHrsT1.value,
+    maintenanceHrsT1.updatedAt
+  );
+  const remainingHrsT2 = useMaintenanceCountdown(
+    maintenanceHrsT2.value,
+    maintenanceHrsT2.updatedAt
+  );
+  const remainingHrsT3 = useMaintenanceCountdown(
+    maintenanceHrsT3.value,
+    maintenanceHrsT3.updatedAt
+  );
+  const remainingHrsT4 = useMaintenanceCountdown(
+    maintenanceHrsT4.value,
+    maintenanceHrsT4.updatedAt
+  );
 
-    const timer = setInterval(() => {
-      setRemainingHrs((prev) => {
-        if (prev <= 0) {
-          clearInterval(timer);
-          console.log("Countdown finished");
-          return 0;
-        }
-        return prev - 1;
+  const fetchMaintenanceHrs = async (url, setState) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const response = await fetch(`${config.BASE_URL}${url}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
-    }, 2000);
-
-    return () => clearInterval(timer);
-  }, [initialHrs]);
-
-  // /----------------------------------------------------------
+      const resResult = await response.json();
+      if (response.ok) {
+        setState(resResult);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchTransformerTotalTag = async () => {
     const token = localStorage.getItem("token");
@@ -62,7 +81,9 @@ const TranformersPage = () => {
       if (response.ok) {
         setTransformerTotalValTag(resResult.total_consumption);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
   const fetchTransformerData = async () => {
     const token = localStorage.getItem("token");
@@ -100,7 +121,26 @@ const TranformersPage = () => {
   ];
 
   useEffect(() => {
+    fetchMaintenanceHrs(
+      config.DASHBOARD.GET_MAINTENANCE_HOURS_T1,
+      setmaintenanceHrsT1
+    );
+    fetchMaintenanceHrs(
+      config.DASHBOARD.GET_MAINTENANCE_HOURS_T2,
+      setmaintenanceHrsT2
+    );
+    fetchMaintenanceHrs(
+      config.DASHBOARD.GET_MAINTENANCE_HOURS_T3,
+      setmaintenanceHrsT3
+    );
+    fetchMaintenanceHrs(
+      config.DASHBOARD.GET_MAINTENANCE_HOURS_T4,
+      setmaintenanceHrsT4
+    );
+  }, []);
+  useEffect(() => {
     fetchTransformerTotalTag();
+
     fetchTransformerData();
     const interval = setInterval(() => {
       fetchTransformerData();
@@ -133,7 +173,6 @@ const TranformersPage = () => {
             <div>
               <div className="flex">
                 <div className="w-[70%] flex items-center justify-center">
-                  {/* <HeatMapChart TransformerData={trafo1} id="transformer1" /> */}
                   <HeatMapChart
                     TransformerData={trafo1}
                     id="transformer1"
@@ -144,10 +183,11 @@ const TranformersPage = () => {
                 <div className="w-[30%]">
                   <TransformerSide
                     transformerReading={"2.5 MVA"}
-                    nxtMaintenance={initialHrs}
-                    remainingHrs={remaininghrs}
+                    nxtMaintenance={maintenanceHrsT1.value}
+                    remainingHrs={remainingHrsT1}
                     traffoTemp={"00.00"}
                     losses={"00.00"}
+                    trafoName="T1"
                   />
                 </div>
               </div>
@@ -205,10 +245,11 @@ const TranformersPage = () => {
                 <div className="w-[30%]">
                   <TransformerSide
                     transformerReading={"2.5 MVA"}
-                    nxtMaintenance={100}
-                    remainingHrs={100}
+                    nxtMaintenance={maintenanceHrsT2.value}
+                    remainingHrs={remainingHrsT2}
                     traffoTemp={"00.00"}
                     losses={"00.00"}
+                    trafoName="T2"
                   />
                 </div>
               </div>
@@ -269,10 +310,11 @@ const TranformersPage = () => {
                 <div className="w-[30%]">
                   <TransformerSide
                     transformerReading={"2.0 MVA"}
-                    nxtMaintenance={100}
-                    remainingHrs={100}
+                    nxtMaintenance={maintenanceHrsT3.value}
+                    remainingHrs={remainingHrsT3}
                     traffoTemp={"00.00"}
                     losses={"00.00"}
+                    trafoName="T3"
                   />
                 </div>
               </div>
@@ -330,10 +372,11 @@ const TranformersPage = () => {
                 <div className="w-[30%]">
                   <TransformerSide
                     transformerReading={"2.0 MVA"}
-                    nxtMaintenance={100}
-                    remainingHrs={100}
+                    nxtMaintenance={maintenanceHrsT4.value}
+                    remainingHrs={remainingHrsT4}
                     traffoTemp={"00.00"}
                     losses={"00.00"}
+                    trafoName="T4"
                   />
                 </div>
               </div>

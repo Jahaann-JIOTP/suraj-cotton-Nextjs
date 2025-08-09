@@ -8,7 +8,6 @@ export const countDownTimer = (hours) => {
 
     if (current < 0) {
       clearInterval(timer); // Stop the timer when done
-      console.log("Countdown finished");
     }
     return reaminghrs;
   }, 2000);

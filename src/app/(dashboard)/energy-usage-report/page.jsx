@@ -394,7 +394,7 @@ const FilterPage = () => {
             <div className="w-full flex items-center justify-center mt-5 md:mt-10">
               <button
                 type="submit"
-                className="bg-[#1A68B2] cursor-pointer text-white px-4 py-1 rounded flex items-center justify-center gap-2"
+                className="bg-[#1A68B2]  cursor-pointer text-white px-4 py-1 rounded flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>

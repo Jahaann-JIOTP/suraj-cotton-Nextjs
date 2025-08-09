@@ -10,6 +10,8 @@ const page = () => {
   const [activeTab, setActiveTab] = useState("voltage");
   const [data, setData] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
+  const [u0Meters, setU0Meters] = useState({});
+  console.log("...................", u0Meters);
   const router = useRouter();
   const { theme } = useTheme();
   const searchParams = useSearchParams();
@@ -45,6 +47,28 @@ const page = () => {
       console.error(error.message);
     }
   };
+  // get data for only u03 meters
+  const getMeterDataAll = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.DIAGRAM.MAIN_METER_TAGS_LINK}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const resData = await response.json();
+      if (response.ok) {
+        setU0Meters(resData);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   // get prefixes of keys
   const suffixTags = {};
@@ -67,7 +91,7 @@ const page = () => {
       suffixTags[key] = roundedValue;
     }
   }
-  console.log(suffixTags);
+
   const voltageData = [
     {
       tag: suffixTags.Voltage_CA,
@@ -256,7 +280,12 @@ const page = () => {
   ];
   const powerData = [
     {
-      tag: suffixTags.Harmonics_I1_THD,
+      tag:
+        id === "U3_PLC"
+          ? Number(u0Meters.U03_PLC_Harmonics_I1_THD).toFixed(2)
+          : id === "U4_PLC"
+          ? Number(u0Meters.U04_PLC_Harmonics_I1_THD).toFixed(2)
+          : suffixTags.Harmonics_I1_THD,
       unit: "",
       top: "178px",
       left: "40px",
@@ -264,7 +293,12 @@ const page = () => {
       height: "39px",
     },
     {
-      tag: suffixTags.Harmonics_I2_THD,
+      tag:
+        id === "U3_PLC"
+          ? Number(u0Meters.U03_PLC_Harmonics_I2_THD).toFixed(2)
+          : id === "U4_PLC"
+          ? Number(u0Meters.U04_PLC_Harmonics_I2_THD).toFixed(2)
+          : suffixTags.Harmonics_I2_THD,
       unit: "",
       top: "257px",
       left: "41px",
@@ -272,7 +306,12 @@ const page = () => {
       height: "39px",
     },
     {
-      tag: suffixTags.Harmonics_I3_THD,
+      tag:
+        id === "U3_PLC"
+          ? Number(u0Meters.U03_PLC_Harmonics_I3_THD).toFixed(2)
+          : id === "U4_PLC"
+          ? Number(u0Meters.U04_PLC_Harmonics_I3_THD).toFixed(2)
+          : suffixTags.Harmonics_I3_THD,
       unit: "",
       top: "335px",
       left: "41px",
@@ -503,8 +542,10 @@ const page = () => {
   ];
   useEffect(() => {
     getSingleMeterData();
+    getMeterDataAll();
     const interval = setInterval(() => {
       getSingleMeterData();
+      getMeterDataAll();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
