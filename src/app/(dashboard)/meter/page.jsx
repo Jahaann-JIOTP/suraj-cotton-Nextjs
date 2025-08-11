@@ -280,12 +280,7 @@ const page = () => {
   ];
   const powerData = [
     {
-      tag:
-        id === "U3_PLC"
-          ? Number(u0Meters.U03_PLC_Harmonics_I1_THD).toFixed(2)
-          : id === "U4_PLC"
-          ? Number(u0Meters.U04_PLC_Harmonics_I1_THD).toFixed(2)
-          : suffixTags.Harmonics_I1_THD,
+      tag:suffixTags.Harmonics_I1_THD,
       unit: "",
       top: "178px",
       left: "40px",
@@ -293,12 +288,7 @@ const page = () => {
       height: "39px",
     },
     {
-      tag:
-        id === "U3_PLC"
-          ? Number(u0Meters.U03_PLC_Harmonics_I2_THD).toFixed(2)
-          : id === "U4_PLC"
-          ? Number(u0Meters.U04_PLC_Harmonics_I2_THD).toFixed(2)
-          : suffixTags.Harmonics_I2_THD,
+      tag:suffixTags.Harmonics_I2_THD,
       unit: "",
       top: "257px",
       left: "41px",
@@ -306,12 +296,7 @@ const page = () => {
       height: "39px",
     },
     {
-      tag:
-        id === "U3_PLC"
-          ? Number(u0Meters.U03_PLC_Harmonics_I3_THD).toFixed(2)
-          : id === "U4_PLC"
-          ? Number(u0Meters.U04_PLC_Harmonics_I3_THD).toFixed(2)
-          : suffixTags.Harmonics_I3_THD,
+      tag: suffixTags.Harmonics_I3_THD,
       unit: "",
       top: "335px",
       left: "41px",

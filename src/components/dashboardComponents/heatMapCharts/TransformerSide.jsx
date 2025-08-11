@@ -1,8 +1,11 @@
 import config from "@/constant/apiRouteList";
+import { Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { RxCross2 } from "react-icons/rx";
 import { BiReset } from "react-icons/bi";
 import { toast } from "react-toastify";
 const TransformerSide = ({
+  onMaintenanceUpdated,
   transformerReading,
   nxtMaintenance,
   remainingHrs,
@@ -37,10 +40,10 @@ const TransformerSide = ({
       );
       if (response.ok) {
         setHours("");
-        window.location.reload();
         setLoading(false);
         setOpenModel(false);
         toast.success("Next Maintenance Hours Updated");
+        onMaintenanceUpdated?.(trafoName);
       }
     } catch (error) {
       console.error(error);
@@ -68,15 +71,40 @@ const TransformerSide = ({
           <span className="font-raleway font-500 text-center text-[11px]">
             Nxt. Maintenance Hrs
           </span>
-          <div className="bg-[#424242] flex items-center justify-center text-[15px] text-green-400 w-[80px] h-[20px]">
+          <div
+            className={`bg-[#424242] flex items-center justify-center text-[15px] ${
+              remainingHrs <= 0 ? "text-red-500" : "text-green-400"
+            } w-[80px] h-[20px]`}
+          >
             {nxtMaintenance || "000"}
           </div>
-          <button
-            onClick={() => setOpenModel(true)}
-            className="absolute right-[-10px] top-4 cursor-pointer border-1 border-gray-500 p-[1px] rounded-[3px]"
+          <Tooltip
+            title={"Reset Maintenance Hours"}
+            arrow
+            placement="left"
+            slotProps={{
+              tooltip: {
+                sx: {
+                  bgcolor: "#025697",
+                  color: "#ffffff",
+                  fontSize: "12px",
+                  fontWeight: 500,
+                },
+              },
+              arrow: {
+                sx: {
+                  color: "#025697",
+                },
+              },
+            }}
           >
-            <BiReset />
-          </button>
+            <button
+              onClick={() => setOpenModel(true)}
+              className="absolute right-[-10px] hover:bg-[#1F5897] hover:text-white top-4 cursor-pointer border-1 border-gray-500 p-[1px] rounded-[3px]"
+            >
+              <BiReset />
+            </button>
+          </Tooltip>
         </div>
         <div className="flex flex-col items-center justify-center">
           <span className="font-raleway font-500 text-[11px]">
@@ -90,8 +118,8 @@ const TransformerSide = ({
           <span className="font-raleway font-500 text-[11px]">
             Traffo Temp.
           </span>
-          <div className="bg-[#424242] flex items-center justify-center text-[15px] text-green-400 w-[80px] h-[20px]">
-            {traffoTemp} °C
+          <div className="bg-[#424242] flex items-center justify-center text-[10px] text-green-400 w-[80px] h-[20px]">
+            {traffoTemp}
           </div>
         </div>
         <div className="flex flex-col items-center justify-center">
@@ -103,10 +131,13 @@ const TransformerSide = ({
       </div>
       {openModel && (
         <div className="absolute top-0 left-0 w-full h-screen flex items-center justify-center bg-black/80 dark:bg-gray-600/80 z-50">
-          <div className="bg-white dark:bg-gray-800 w-[90%] md:w-[50%] lg:w-[30%] p-8 rounded-md border-t-3 flex flex-col items-center justify-center border-[#3978A8]">
+          <div className="bg-white relative dark:bg-gray-800 w-[90%] md:w-[50%] lg:w-[30%] p-8 rounded-md border-t-3 flex flex-col items-center justify-center border-[#3978A8]">
             <h2 className="text-[20px] font-500 font-inter pb-6">
               Update Next Maintenance Hours
             </h2>
+            <button 
+            className="absolute top-2 right-2 text-red-500 cursor-pointer"
+            onClick={()=>setOpenModel(false)}><RxCross2 size={20}/></button>
             <form
               onSubmit={handleSubmit}
               className="flex gap-3 flex-col items-center w-full justify-center"

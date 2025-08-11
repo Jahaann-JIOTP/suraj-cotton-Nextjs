@@ -139,7 +139,7 @@ const EnergyCostReportsTable = ({
             Start Date: {startDate}
           </span>
           <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-            End date: {endDate}
+            End Date: {endDate}
           </span>
           <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
             Tarif Rate: {rates}

@@ -47,7 +47,7 @@ const UnitLt42Page = () => {
   }, [Unit4Lt2TimePeriod]);
 
   return (
-    <div className="w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] p-4 rounded-md border-t-3 border-[#025697] ">
+    <div className="w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-center flex justify-between">
         <h2 className="text-[20px] font-600 font-inter">Unit 4 LT 2</h2>
         <TimePeriodSelector

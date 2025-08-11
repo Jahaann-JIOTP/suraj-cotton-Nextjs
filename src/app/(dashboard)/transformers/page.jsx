@@ -18,6 +18,7 @@ const TranformersPage = () => {
     useState("thisweek");
   const [loading, setLoading] = useState(false);
   const [transformerTotalValTag, setTransformerTotalValTag] = useState({});
+  console.log("..............................",transformerTotalValTag)
   const [data, setData] = useState([]);
   const { startDate, endDate } = getDateRangeFromString(transformerTimePeriod);
 
@@ -44,6 +45,13 @@ const TranformersPage = () => {
     maintenanceHrsT4.updatedAt
   );
 
+
+  // /////////trafo losses
+  const trafo1Losses = (Number(transformerTotalValTag.Trafo1losses)/(Number(transformerTotalValTag.Trafo1Incoming) + Number(transformerTotalValTag.Trafo1outgoing)))*100;
+  const trafo2Losses = (Number(transformerTotalValTag.Trafo2losses)/(Number(transformerTotalValTag.Trafo2Incoming) + Number(transformerTotalValTag.Trafo2outgoing)))*100;
+  const trafo3Losses = (Number(transformerTotalValTag.Trafo3losses)/(Number(transformerTotalValTag.Trafo3Incoming) + Number(transformerTotalValTag.Trafo3outgoing)))*100;
+  const trafo4Losses = (Number(transformerTotalValTag.Trafo4losses)/(Number(transformerTotalValTag.Trafo4Incoming) + Number(transformerTotalValTag.Trafo4outgoing)))*100;
+  
   const fetchMaintenanceHrs = async (url, setState) => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -120,24 +128,25 @@ const TranformersPage = () => {
     2100, 2200, 2300, 2400, 2500,
   ];
 
-  useEffect(() => {
-    fetchMaintenanceHrs(
-      config.DASHBOARD.GET_MAINTENANCE_HOURS_T1,
-      setmaintenanceHrsT1
-    );
-    fetchMaintenanceHrs(
-      config.DASHBOARD.GET_MAINTENANCE_HOURS_T2,
-      setmaintenanceHrsT2
-    );
-    fetchMaintenanceHrs(
-      config.DASHBOARD.GET_MAINTENANCE_HOURS_T3,
-      setmaintenanceHrsT3
-    );
-    fetchMaintenanceHrs(
-      config.DASHBOARD.GET_MAINTENANCE_HOURS_T4,
-      setmaintenanceHrsT4
-    );
-  }, []);
+  const loadMaintenanceHrs = (transformerName) => {
+  const apiMap = {
+    T1: { url: config.DASHBOARD.GET_MAINTENANCE_HOURS_T1, setter: setmaintenanceHrsT1 },
+    T2: { url: config.DASHBOARD.GET_MAINTENANCE_HOURS_T2, setter: setmaintenanceHrsT2 },
+    T3: { url: config.DASHBOARD.GET_MAINTENANCE_HOURS_T3, setter: setmaintenanceHrsT3 },
+    T4: { url: config.DASHBOARD.GET_MAINTENANCE_HOURS_T4, setter: setmaintenanceHrsT4 },
+  };
+
+  const selected = apiMap[transformerName];
+  if (selected) {
+    fetchMaintenanceHrs(selected.url, selected.setter);
+  } else {
+    console.warn(`Unknown transformerName: ${transformerName}`);
+  }
+};
+useEffect(() => {
+  // Initial load for all transformers
+  ["T1", "T2", "T3", "T4"].forEach(loadMaintenanceHrs);
+}, []);
   useEffect(() => {
     fetchTransformerTotalTag();
 
@@ -181,12 +190,13 @@ const TranformersPage = () => {
                   />
                 </div>
                 <div className="w-[30%]">
-                  <TransformerSide
+                  <TransformerSide 
+                  onMaintenanceUpdated={loadMaintenanceHrs}
                     transformerReading={"2.5 MVA"}
                     nxtMaintenance={maintenanceHrsT1.value}
                     remainingHrs={remainingHrsT1}
-                    traffoTemp={"00.00"}
-                    losses={"00.00"}
+                    traffoTemp={"Not Connected"}
+                    losses={trafo1Losses.toFixed(2)}
                     trafoName="T1"
                   />
                 </div>
@@ -244,11 +254,12 @@ const TranformersPage = () => {
                 </div>
                 <div className="w-[30%]">
                   <TransformerSide
+                  onMaintenanceUpdated={loadMaintenanceHrs}
                     transformerReading={"2.5 MVA"}
                     nxtMaintenance={maintenanceHrsT2.value}
                     remainingHrs={remainingHrsT2}
-                    traffoTemp={"00.00"}
-                    losses={"00.00"}
+                    traffoTemp={"Not Connected"}
+                    losses={trafo2Losses.toFixed(2)}
                     trafoName="T2"
                   />
                 </div>
@@ -309,11 +320,12 @@ const TranformersPage = () => {
                 </div>
                 <div className="w-[30%]">
                   <TransformerSide
+                  onMaintenanceUpdated={loadMaintenanceHrs}
                     transformerReading={"2.0 MVA"}
                     nxtMaintenance={maintenanceHrsT3.value}
                     remainingHrs={remainingHrsT3}
-                    traffoTemp={"00.00"}
-                    losses={"00.00"}
+                    traffoTemp={"Not Connected"}
+                    losses={trafo3Losses.toFixed(2)}
                     trafoName="T3"
                   />
                 </div>
@@ -371,11 +383,12 @@ const TranformersPage = () => {
                 </div>
                 <div className="w-[30%]">
                   <TransformerSide
+                  onMaintenanceUpdated={loadMaintenanceHrs}
                     transformerReading={"2.0 MVA"}
                     nxtMaintenance={maintenanceHrsT4.value}
                     remainingHrs={remainingHrsT4}
-                    traffoTemp={"00.00"}
-                    losses={"00.00"}
+                    traffoTemp={"Not Connected"}
+                    losses={trafo4Losses.toFixed(2)}
                     trafoName="T4"
                   />
                 </div>

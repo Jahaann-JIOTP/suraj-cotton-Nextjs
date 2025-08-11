@@ -183,11 +183,17 @@ function CustomTrend() {
     "Power Factor B": "PowerFactor_B",
     "Power Factor C": "PowerFactor_C",
     "Power Factor Avg": "PowerFactor_Avg",
+    "Power Phase A": "Power_Phase_A",
+    "Power Phase B": "Power_Phase_B",
+    "Power Phase C": "Power_Phase_C",
     "Reactive Power Total": "ReactivePower_Total",
     "Apparent Power Total": "ApparentPower_Total",
     "Harmonics V1": "Harmonics_V1_THD",
     "Harmonics V2": "Harmonics_V2_THD",
     "Harmonics V3": "Harmonics_V3_THD",
+    "Harmonics I1": "Harmonics_I1_THD",
+    "Harmonics I2": "Harmonics_I2_THD",
+    "Harmonics I3": "Harmonics_I3_THD",
   };
 
   let filteredMeters = [];

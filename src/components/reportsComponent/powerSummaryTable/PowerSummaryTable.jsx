@@ -2,395 +2,7 @@
 import React from "react";
 import ExcelJS from "exceljs";
 import { useTheme } from "next-themes";
-///////////////////////////////////////////////
-// const exportToExcel = ({
-//   unit,
-//   startDate,
-//   endDate,
-//   tarifData,
-//   resData,
-//   unit4Spindle,
-//   unit5Spindle,
-// }) => {
-//   // Create a new workbook
-//   const workbook = new ExcelJS.Workbook();
-//   const worksheet = workbook.addWorksheet("Energy Summary Report");
-//   worksheet.properties.defaultGridColor = false;
-//   worksheet.views = [{ showGridLines: false }];
 
-//   // Set some default styles
-//   const headerStyle = {
-//     font: { bold: true, size: 12 },
-//     alignment: { horizontal: "center" },
-//     fill: {
-//       type: "pattern",
-//       pattern: "solid",
-//       fgColor: { argb: "FFE5F3FD" },
-//     },
-//     border: {
-//       top: { style: "thin" },
-//       left: { style: "thin" },
-//       bottom: { style: "thin" },
-//       right: { style: "thin" },
-//     },
-//   };
-
-//   const titleStyle = {
-//     font: { bold: true, size: 12 },
-//     alignment: { horizontal: "center" },
-//   };
-
-//   const dataStyle = {
-//     font: { size: 11 },
-//     border: {
-//       top: { style: "thin" },
-//       left: { style: "thin" },
-//       bottom: { style: "thin" },
-//       right: { style: "thin" },
-//     },
-//   };
-
-//   const boldDataStyle = {
-//     ...dataStyle,
-//     font: { ...dataStyle.font, bold: true },
-//   };
-
-//   // Helper function to add a row with merged cells
-//   const addMergedRow = (worksheet, text, startCol, endCol, style) => {
-//     const row = worksheet.addRow([text]);
-//     row.height = 20;
-//     worksheet.mergeCells(row.number, startCol, row.number, endCol);
-//     row.getCell(1).style = style;
-//     return row;
-//   };
-
-//   // Helper function to add a header row
-//   const addHeaderRow = (worksheet, headers, startCol = 1) => {
-//     const row = worksheet.addRow(headers);
-//     row.height = 20;
-//     headers.forEach((_, index) => {
-//       row.getCell(startCol + index).style = headerStyle;
-//     });
-//     return row;
-//   };
-
-//   // Calculate values
-//   const wapda1Tarif = Number(tarifData.wapda1);
-//   const solar1Tarif = Number(tarifData.solar1);
-//   const solar2Tarif = Number(tarifData.solar2);
-//   const totalGenerationCost =
-//     unit === "Unit_4"
-//       ? resData.total_generation
-//       : unit === "Unit_5"
-//       ? resData.total_generation / 2
-//       : resData.total_generation / 3;
-//   const averageUnitcost =
-//     unit === "Unit_4"
-//       ? totalGenerationCost
-//       : unit === "Unit_5"
-//       ? totalGenerationCost / 2
-//       : totalGenerationCost / 3;
-
-//   // Add tariff rates
-//   const tariffRow = worksheet.addRow(["Tarrif Rates:", "", "", "", ""]);
-//   worksheet.mergeCells(tariffRow.number, 1, tariffRow.number, 5);
-//   tariffRow.getCell(1).style = { font: { size: 12 } };
-
-//   const tariffValuesRow = worksheet.addRow([]);
-//   if (unit === "Unit_4" || unit === "ALL") {
-//     tariffValuesRow.getCell(1).value = `Wapda 1: ${tarifData.wapda1}`;
-//     tariffValuesRow.getCell(2).value = `Wapda 2: ${tarifData.wapda2}`;
-//   }
-//   if (unit === "Unit_5" || unit === "ALL") {
-//     tariffValuesRow.getCell(3).value = `Solar 1: ${tarifData.solar1}`;
-//     tariffValuesRow.getCell(4).value = `Solar 2: ${tarifData.solar2}`;
-//   }
-
-//   // Add empty rows
-//   worksheet.addRow([]);
-//   worksheet.addRow([]);
-
-//   // GENERATION TABLE
-//   addMergedRow(worksheet, "Generation", 1, 3, titleStyle);
-//   addHeaderRow(worksheet, ["Resources", "KW", "Cost"]);
-
-//   if (unit === "Unit_4" || unit === "ALL") {
-//     worksheet.addRow([
-//       "Wapda 1",
-//       resData.wapda1,
-//       (resData.wapda1 * wapda1Tarif).toFixed(1),
-//     ]);
-//   }
-
-//   if (unit === "Unit_5" || unit === "ALL") {
-//     worksheet.addRow([
-//       "Solar 1",
-//       resData.solar1,
-//       ((resData.solar1 * solar1Tarif) / 2).toFixed(1),
-//     ]);
-//     worksheet.addRow([
-//       "Solar 2",
-//       resData.solar2,
-//       ((resData.solar2 * solar2Tarif) / 2).toFixed(1),
-//     ]);
-//   }
-
-//   worksheet.addRow([
-//     "Total",
-//     resData.total_generation,
-//     totalGenerationCost.toFixed(1),
-//   ]);
-//   worksheet.addRow(["Average Unit Cost", "", averageUnitcost.toFixed(1)]);
-
-//   // Apply styles to data rows
-//   for (let i = 10; i <= worksheet.rowCount; i++) {
-//     const row = worksheet.getRow(i);
-//     row.height = 20;
-//     row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-//       cell.style = dataStyle;
-//       if (i === worksheet.rowCount - 1 || i === worksheet.rowCount) {
-//         cell.style = boldDataStyle;
-//       }
-//       if (colNumber === 1 && i < worksheet.rowCount - 1) {
-//         cell.style = {
-//           ...cell.style,
-//           alignment: { horizontal: "left", indent: 1 },
-//         };
-//       } else {
-//         cell.style = { ...cell.style, alignment: { horizontal: "center" } };
-//       }
-//     });
-//   }
-
-//   // Add empty rows
-//   worksheet.addRow([]);
-//   worksheet.addRow([]);
-
-//   // PRODUCTION TABLE
-//   addMergedRow(worksheet, "Production", 1, 4, titleStyle);
-//   addHeaderRow(
-//     worksheet,
-//     ["Plant", "No. of Spindle", "Kw/Spindle", "Cost/Spindle"],
-//     1
-//   );
-
-//   if (unit === "Unit_4" || unit === "ALL") {
-//     worksheet.addRow([
-//       "Unit 4",
-//       unit4Spindle,
-//       (resData.unit4_consumption / unit4Spindle).toFixed(2),
-//       "00",
-//     ]);
-//   }
-
-//   if (unit === "Unit_5" || unit === "ALL") {
-//     worksheet.addRow([
-//       "Unit 5",
-//       unit5Spindle,
-//       (resData.unit5_consumption / unit5Spindle).toFixed(2),
-//       "00",
-//     ]);
-//   }
-
-//   worksheet.addRow([
-//     "Total",
-//     unit4Spindle + unit5Spindle,
-//     ((unit4Spindle + unit5Spindle) / resData.total_consumption).toFixed(2),
-//     "00",
-//   ]);
-
-//   // Apply styles to production data
-//   for (let i = worksheet.rowCount - 3; i <= worksheet.rowCount; i++) {
-//     const row = worksheet.getRow(i);
-//     row.height = 20;
-//     row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-//       cell.style = dataStyle;
-//       if (i === worksheet.rowCount) {
-//         cell.style = boldDataStyle;
-//       }
-//       if (colNumber === 1) {
-//         cell.style = {
-//           ...cell.style,
-//           alignment: { horizontal: "left", indent: 1 },
-//         };
-//       } else {
-//         cell.style = { ...cell.style, alignment: { horizontal: "center" } };
-//       }
-//     });
-//   }
-
-//   // Add empty rows
-//   worksheet.addRow([]);
-//   worksheet.addRow([]);
-
-//   // CONSUMPTION TABLE
-//   addMergedRow(worksheet, "Consumption", 1, 3, titleStyle);
-//   addHeaderRow(worksheet, ["Resources", "KW", "Cost"]);
-
-//   if (unit === "Unit_4" || unit === "ALL") {
-//     worksheet.addRow([
-//       "Unit 4",
-//       resData.unit4_consumption,
-//       (resData.unit4_consumption / 4).toFixed(1),
-//     ]);
-//   }
-
-//   if (unit === "Unit_5" || unit === "ALL") {
-//     worksheet.addRow([
-//       "Unit 5",
-//       resData.unit5_consumption,
-//       (resData.unit5_consumption / 4).toFixed(1),
-//     ]);
-//   }
-
-//   worksheet.addRow([
-//     "Total",
-//     resData.total_consumption,
-//     (resData.total_consumption / 8).toFixed(1),
-//   ]);
-
-//   // Apply styles to consumption data
-//   for (let i = worksheet.rowCount - 3; i <= worksheet.rowCount; i++) {
-//     const row = worksheet.getRow(i);
-//     row.height = 20;
-//     row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-//       cell.style = dataStyle;
-//       if (i === worksheet.rowCount) {
-//         cell.style = boldDataStyle;
-//       }
-//       if (colNumber === 1) {
-//         cell.style = {
-//           ...cell.style,
-//           alignment: { horizontal: "left", indent: 1 },
-//         };
-//       } else {
-//         cell.style = { ...cell.style, alignment: { horizontal: "center" } };
-//       }
-//     });
-//   }
-
-//   // Add empty rows
-//   worksheet.addRow([]);
-//   worksheet.addRow([]);
-
-//   // MISCELLANEOUS TABLE
-//   addMergedRow(worksheet, "Miscellaneous", 1, 3, titleStyle);
-//   addHeaderRow(worksheet, ["Resources", "KW", "Cost"]);
-
-//   if (unit === "Unit_4" || unit === "ALL") {
-//     worksheet.addRow([
-//       "Wapda Export",
-//       resData.wapdaexport,
-//       resData.wapdaexport,
-//     ]);
-//   }
-
-//   worksheet.addRow([
-//     "Unaccountable Energy",
-//     resData.unaccountable_energy,
-//     (resData.unaccountable_energy / 2).toFixed(1),
-//   ]);
-
-//   // Apply styles to miscellaneous data
-//   for (let i = worksheet.rowCount - 2; i <= worksheet.rowCount; i++) {
-//     const row = worksheet.getRow(i);
-//     row.height = 20;
-//     row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-//       cell.style = dataStyle;
-//       if (colNumber === 1) {
-//         cell.style = {
-//           ...cell.style,
-//           alignment: { horizontal: "left", indent: 1 },
-//         };
-//       } else {
-//         cell.style = { ...cell.style, alignment: { horizontal: "center" } };
-//       }
-//     });
-//   }
-
-//   // Add empty rows
-//   worksheet.addRow([]);
-//   worksheet.addRow([]);
-
-//   // TRANSFORMER LOSSES TABLE (only for Unit_5 or ALL)
-//   if (unit === "Unit_5" || unit === "ALL") {
-//     addMergedRow(worksheet, "Trans. / Traffo Losses", 1, 3, titleStyle);
-//     addHeaderRow(worksheet, ["Resources", "KW", "Cost"]);
-
-//     worksheet.addRow([
-//       "TF1",
-//       resData.trafo1Loss,
-//       (resData.trafo1Loss / 2).toFixed(1),
-//     ]);
-//     worksheet.addRow([
-//       "TF2",
-//       resData.trafo2Loss,
-//       (resData.trafo2Loss / 2).toFixed(1),
-//     ]);
-//     worksheet.addRow([
-//       "TF3",
-//       resData.trafo3Loss,
-//       (resData.trafo3Loss / 2).toFixed(1),
-//     ]);
-//     worksheet.addRow([
-//       "TF4",
-//       resData.trafo4Loss,
-//       (resData.trafo4Loss / 2).toFixed(1),
-//     ]);
-//     worksheet.addRow([
-//       "Total",
-//       resData.transformerLosses,
-//       (resData.transformerLosses / 8).toFixed(1),
-//     ]);
-
-//     // Apply styles to transformer losses data
-//     for (let i = worksheet.rowCount - 5; i <= worksheet.rowCount; i++) {
-//       const row = worksheet.getRow(i);
-//       row.height = 20;
-//       row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-//         cell.style = dataStyle;
-//         if (i === worksheet.rowCount) {
-//           cell.style = boldDataStyle;
-//         }
-//         if (colNumber === 1) {
-//           cell.style = {
-//             ...cell.style,
-//             alignment: { horizontal: "left", indent: 1 },
-//           };
-//         } else {
-//           cell.style = { ...cell.style, alignment: { horizontal: "center" } };
-//         }
-//       });
-//     }
-//   }
-
-//   // Auto-fit columns
-//   worksheet.columns.forEach((column) => {
-//     let maxLength = 0;
-//     column.eachCell({ includeEmpty: true }, (cell) => {
-//       let columnLength = cell.value ? cell.value.toString().length : 0;
-//       if (columnLength > maxLength) {
-//         maxLength = columnLength;
-//       }
-//     });
-//     column.width = maxLength < 10 ? 10 : maxLength + 2;
-//   });
-
-//   // Generate Excel file
-//   workbook.xlsx.writeBuffer().then((buffer) => {
-//     const blob = new Blob([buffer], {
-//       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-//     });
-//     const url = URL.createObjectURL(blob);
-//     const a = document.createElement("a");
-//     a.href = url;
-//     a.download = `Power_Summary_${startDate}_to_${endDate}.xlsx`;
-//     a.click();
-//     URL.revokeObjectURL(url);
-//   });
-// };
-
-// ///////////////////////////////////////////////
 const PowerSummaryTable = ({
   unit,
   startDate,
@@ -500,85 +112,104 @@ const PowerSummaryTable = ({
 
     // Define styles
     const titleStyle = {
-      font: { bold: true, size: 12 },
-      alignment: { horizontal: "center", vertical: "middle" },
-      fill: {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "FFE5F3FD" },
-      },
-    };
+    font: { bold: true, size: 12, color: { argb: "00000000" } }, // White text
+    alignment: { horizontal: "center", vertical: "middle" },
+    fill: {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "E5F3FD" }, // Dark blue background
+    },
+  };
 
     const headerStyle = {
-      font: { bold: true, size: 11 },
-      alignment: { horizontal: "center", vertical: "middle" },
-      fill: {
-        type: "pattern",
-        pattern: "solid",
-        color: { argb: "FFFF0000" },
-        fgColor: { argb: "1A68B2" },
-      },
-      border: {
-        top: { style: "thin", color: { argb: "FFFFFF" } },
-        bottom: { style: "thin", color: { argb: "FFFFFF" } },
-        left: { style: "thin", color: { argb: "FFFFFF" } },
-        right: { style: "thin", color: { argb: "FFFFFF" } },
-      },
-    };
+    font: { bold: true, size: 11, color: { argb: "FFFFFFFF" } }, // White text
+    alignment: { horizontal: "center", vertical: "middle" },
+    fill: {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "FF1A68B2" }, // Dark blue background
+    },
+    border: {
+      top: { style: "thin", color: { argb: "FFFFFFFF" } },
+      bottom: { style: "thin", color: { argb: "FFFFFFFF" } },
+      left: { style: "thin", color: { argb: "FFFFFFFF" } },
+      right: { style: "thin", color: { argb: "FFFFFFFF" } },
+    },
+  };
 
     const dataStyle = {
-      font: { size: 11 },
-      alignment: { vertical: "middle", horizontal: "center" },
-      border: {
-        top: { style: "thin", color: { argb: "FF000000" } },
-        bottom: { style: "thin", color: { argb: "FF000000" } },
-        left: { style: "thin", color: { argb: "FF000000" } },
-        right: { style: "thin", color: { argb: "FF000000" } },
-      },
-    };
+    font: { size: 11 },
+    alignment: { vertical: "middle", horizontal: "center" },
+    border: {
+      top: { style: "thin", color: { argb: "FF000000" } },
+      bottom: { style: "thin", color: { argb: "FF000000" } },
+      left: { style: "thin", color: { argb: "FF000000" } },
+      right: { style: "thin", color: { argb: "FF000000" } },
+    },
+  };
 
     const boldDataStyle = {
-      ...dataStyle,
-      font: { ...dataStyle.font, bold: true },
-    };
+    ...dataStyle,
+    font: { ...dataStyle.font, bold: true },
+  };
 
-    const leftAlignStyle = {
-      ...dataStyle,
-      alignment: { horizontal: "left", vertical: "middle", indent: 1 },
-    };
+  const leftAlignStyle = {
+    ...dataStyle,
+    alignment: { horizontal: "left", vertical: "middle", indent: 1 },
+  };
 
     // Add logos
     try {
-      const logo1Path = "../../../suraj-cotton-logo.png";
+    const logo1Path = "../../../suraj-cotton-logo.png";
+    const logo2Path = "../../../jahaann-light.png";
 
-      const logo2Path = "../../../jahaann-light.png";
-
-      const image1Buffer = await getImageBuffer(logo1Path);
-      if (image1Buffer) {
-        const image1Id = workbook.addImage({
-          buffer: image1Buffer,
-          extension: "png",
-        });
-        worksheet.addImage(image1Id, {
-          tl: { col: 0, row: 0 },
-          ext: { width: 150, height: 70 },
-        });
-      }
-
-      const image2Buffer = await getImageBuffer(logo2Path);
-      if (image2Buffer) {
-        const image2Id = workbook.addImage({
-          buffer: image2Buffer,
-          extension: "png",
-        });
-        worksheet.addImage(image2Id, {
-          tl: { col: 2, row: 0.5 }, // Adjusted column position
-          ext: { width: 170, height: 40 },
-        });
-      }
-    } catch (error) {
-      console.error("Error adding logos:", error);
+    const image1Buffer = await getImageBuffer(logo1Path);
+    if (image1Buffer) {
+      const image1Id = workbook.addImage({
+        buffer: image1Buffer,
+        extension: "png",
+      });
+      worksheet.addImage(image1Id, {
+        tl: { col: 0, row: 0 },
+        ext: { width: 150, height: 70 },
+      });
     }
+
+    const image2Buffer = await getImageBuffer(logo2Path);
+    if (image2Buffer) {
+      const image2Id = workbook.addImage({
+        buffer: image2Buffer,
+        extension: "png",
+      });
+      worksheet.addImage(image2Id, {
+        tl: { col: 2, row: 0.5 },
+        ext: { width: 170, height: 40 },
+      });
+    }
+  } catch (error) {
+    console.error("Error adding logos:", error);
+  }
+  const dateRow = worksheet.getRow(4);
+  dateRow.getCell(1).value = `Start Date: ${startDate}`;
+  dateRow.getCell(3).value = `End Date: ${endDate}`;
+  dateRow.getCell(1).style = { font: { size: 11 }};
+  dateRow.getCell(3).style = { font: { size: 11 },alignment:{horizontal:"right", vertical:"middle"}  };
+  const titleRow = worksheet.getRow(5);
+  titleRow.getCell(1).value = `Energy Summary Reports of ${
+    unit === "Unit_4"
+      ? "Unit 4"
+      : unit === "Unit_5"
+      ? "Unit 5"
+      : unit === "ALL"
+      ? "Unit 4 and Unit 5"
+      : ""
+  }`;
+  worksheet.mergeCells(5, 1, 5, 3);
+  titleRow.getCell(1).style = {
+    font: { bold: true, size: 14 },
+    alignment: { horizontal: "center" },
+  };
+  titleRow.height = 20;
     const secondRow = worksheet.getRow(4);
     secondRow.getCell(1).border = {
       top: { style: "thin", color: { argb: "FF000000" } },
@@ -589,43 +220,8 @@ const PowerSummaryTable = ({
     secondRow.getCell(3).border = {
       top: { style: "thin", color: { argb: "FF000000" } },
     };
-    const dateRow = worksheet.addRow([
-      `Start Date: ${startDate}`,
-      "",
-      `End Date: ${endDate}`,
-    ]);
-    // Add report title and dates
-    worksheet.addRow([]);
-    const titleRow = worksheet.addRow([
-      `Energy Summary Reports of ${
-        unit === "Unit_4"
-          ? "Unit 4"
-          : unit === "Unit_5"
-          ? "Unit 5"
-          : unit === "ALL"
-          ? "Unit 4 and Unit 5"
-          : ""
-      }`,
-    ]);
-    titleRow.height = 20;
-    // worksheet.mergeCells(titleRow.number, 1, titleRow.number, 3);
-    // worksheet.mergeCells(4, 1, 4, 3);
-    titleRow.getCell(1).style = {
-      font: { bold: true, size: 14 },
-      alignment: { horizontal: "center" },
-    };
-
-    // worksheet.mergeCells(dateRow.number, 1, dateRow.number, 3);
-    // worksheet.mergeCells(dateRow.number, 4, dateRow.number, 4);
-
-    worksheet.mergeCells(2, 3, 2, 3);
-    dateRow.getCell(1).style = { font: { size: 11 } };
-    dateRow.getCell(4).style = {
-      font: { size: 20 },
-      alignment: { horizontal: "right" },
-    };
-
-    // Add empty row
+    worksheet.mergeCells(2, 2, 2, 2);
+  
     worksheet.addRow([]);
 
     const tariffHeaderRow = worksheet.addRow(["Tariff Rates"]);
@@ -659,8 +255,6 @@ const PowerSummaryTable = ({
       alignment: { horizontal: "left" },
     };
 
-    // Add empty rows
-    worksheet.addRow([]);
     worksheet.addRow([]);
 
     // Helper function to add a table
@@ -693,9 +287,6 @@ const PowerSummaryTable = ({
         });
         row.height = 20;
       });
-
-      // Add empty rows after table
-      worksheet.addRow([]);
       worksheet.addRow([]);
     };
 
@@ -912,7 +503,7 @@ const PowerSummaryTable = ({
             Start Date: {startDate}
           </span>
           <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-            End date: {endDate}
+            End Date: {endDate}
           </span>
           <div className="flex items-center justify-end gap-4">
             <span className="text-[14.22px] font-400 font-inter">

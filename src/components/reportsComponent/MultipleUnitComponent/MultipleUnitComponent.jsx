@@ -608,13 +608,13 @@ const MultipleUnitComponent = ({
             Start Date: {startDate}
           </span>
           <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-            End date: {endDate}
+            End Date: {endDate}
           </span>
         </div>
       </div>
       <div className="px-3 md:px-6 ">
         <h2 className="text-[18.62px] pb-4 font-inter font-500">
-          {unit === "unit4" ? "Unit 4" : unit === "unit5" ? "Unit 5" : ""}
+          Unit 4 + Unit 5
         </h2>
 
         <div className="w-full">

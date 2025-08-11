@@ -52,9 +52,18 @@ const Unit5Spindle = () => {
         const grouped = {};
         resResult.data.forEach(({ date, unit, value }) => {
           const d = new Date(date);
+          const options = {
+            timeZone: "Asia/Karachi",
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          };
+          console.log("Normal", d.getDate('en-GB', options));
+          console.log("UTC", d.getUTCDate());
           const key = `${d.getDate()}/${
             d.getMonth() + 1
           }/${d.getFullYear()}-${unit}`;
+          // const key = `${d.getUTCDate()}/${d.getUTCMonth() + 1}/${d.getUTCFullYear()}-${unit}`;
           grouped[key] = (grouped[key] || 0) + value;
         });
         setGetProductionData(grouped);
@@ -87,7 +96,7 @@ const Unit5Spindle = () => {
             ...prev,
             values: [resResult[0].value], // fill the value
           }));
-          // setRecordId(resResult[0]._id);
+
           setFormMode("update");
         } else {
           // No record → create mode
@@ -95,7 +104,7 @@ const Unit5Spindle = () => {
             ...prev,
             values: [],
           }));
-          setRecordId(null);
+
           setFormMode("create");
         }
       }
@@ -155,7 +164,6 @@ const Unit5Spindle = () => {
         values: [],
       }));
       setFormMode("create");
-      // setRecordId(null);
     } catch (error) {
       console.error(error);
     } finally {
@@ -232,8 +240,9 @@ const Unit5Spindle = () => {
     const today = new Date();
     const [day, month, year] = dateStr.split("/").map(Number);
     const dateObj = new Date(year, month - 1, day);
-
+    
     const unit5 = getProductionData[`${dateStr}-U5`] || 0;
+
 
     if (dateObj > today && unit5 === 0) return " ";
 
@@ -357,7 +366,9 @@ const Unit5Spindle = () => {
               >
                 Production
               </div>
-              {chunk.map((dateStr) => (
+              {chunk.map((dateStr) => 
+                
+                (
                 <div
                   key={dateStr}
                   className="flex-shrink-0 border py-4 h-[53px] border-r-[#025697] border-b-[#025697] border-t-transparent text-[12px]"
