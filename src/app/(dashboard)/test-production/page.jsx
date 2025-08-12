@@ -4,7 +4,7 @@ import config from "@/constant/apiRouteList";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const Unit4Spindle = () => {
+const TestingSpindle = () => {
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
   const year = today.getFullYear();
@@ -107,11 +107,7 @@ const Unit4Spindle = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     setLoading(true);
-    if (productionData.values.length <= 0) {
-      toast.error("Please Enter Valid Number");
-      setLoading(false);
-      return null;
-    }
+
     try {
       if (formMode === "create") {
         const response = await fetch(
@@ -391,4 +387,4 @@ const Unit4Spindle = () => {
   );
 };
 
-export default Unit4Spindle;
+export default TestingSpindle;

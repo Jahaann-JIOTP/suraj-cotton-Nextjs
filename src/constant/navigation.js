@@ -87,7 +87,7 @@ export const privilegeConfig = {
     href: "/unit-4-production",
     icon: faRotate,
     label: "Production",
-    matchPaths: ["/unit-4-production", "/unit-5-production"],
+    matchPaths: ["/unit-4-production", "/unit-5-production", "test-production"],
     tab: "Production",
   },
 };
@@ -226,18 +226,8 @@ export const sidebarLinksMap = {
       icon: FaUserCog,
       href: "/add_roles",
     },
-    // {
-    //   title: "Meter Configuration",
-    //   icon: MdElectricMeter,
-    //   href: "/configuration-meter",
-    // },
   ],
   Configuration: [
-    // {
-    //   title: "User Configuration",
-    //   icon: FaUserCog,
-    //   href: "/add_roles",
-    // },
     {
       title: "Meter Configuration",
       icon: MdElectricMeter,
@@ -254,6 +244,11 @@ export const sidebarLinksMap = {
       title: "Unit 5",
       icon: MdOutlineSettingsBackupRestore,
       href: "/unit-5-production",
+    },
+    {
+      title: "Testing",
+      icon: MdOutlineSettingsBackupRestore,
+      href: "/test-production",
     },
   ],
 };
