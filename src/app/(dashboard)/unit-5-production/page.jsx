@@ -10,75 +10,140 @@ const Unit5Spindle = () => {
   const year = today.getFullYear();
   const [getProductionData, setGetProductionData] = useState({});
   const [daysInMonth, setDaysInMonth] = useState([]);
-  const [chunkSize, setChunkSize] = useState(15);
   const [loading, setLoading] = useState(false);
+  const [chunkSize, setChunkSize] = useState(15);
   const [singleDaySpindle, setSingleDaySpindle] = useState({});
+
   const [formMode, setFormMode] = useState("create");
+
   const [productionData, setProductionData] = useState({
     unit: "U5",
     startDate: "",
     values: [],
   });
-
-  // Generate days for current month
-  useEffect(() => {
-    const days = new Date(year, month + 1, 0).getDate();
-    const datesArray = Array.from({ length: days }, (_, i) => {
-      const day = i + 1;
-      const monthStr = month + 1;
-      return `${day}/${monthStr}/${year}`;
-    });
-    setDaysInMonth(datesArray);
-  }, [month, year]);
-
-  // Fetch production data
-  const fetchSpindleProduction = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const monthStr = `${year}-${month + 1 < 10 ? "0" : ""}${month + 1}`;
-      const response = await fetch(
-        `${config.BASE_URL}${config.REPORTS.GET_SPINDLES}${monthStr}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const resResult = await response.json();
-
-      if (response.ok) {
-        const grouped = {};
-        resResult.data.forEach(({ date, unit, value }) => {
-          const d = new Date(date);
-          const options = {
-            timeZone: "Asia/Karachi",
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          };
-          console.log("Normal", d.getDate('en-GB', options));
-          console.log("UTC", d.getUTCDate());
-          const key = `${d.getDate()}/${
-            d.getMonth() + 1
-          }/${d.getFullYear()}-${unit}`;
-          // const key = `${d.getUTCDate()}/${d.getUTCMonth() + 1}/${d.getUTCFullYear()}-${unit}`;
-          grouped[key] = (grouped[key] || 0) + value;
-        });
-        setGetProductionData(grouped);
-      }
-    } catch (error) {
-      console.error(error.message);
+  const parseDateString = (dateStr) => {
+    let date;
+    if (dateStr.includes("T")) {
+      date = dateStr.split("T")[0];
+    } else if (dateStr.includes("-")) {
+      date = dateStr;
+    } else {
+      date = dateStr;
     }
+
+    const [year, month, day] = date.split("-").map(Number);
+    return { year, month, day };
   };
 
-  // fetch single day production
+  const formatDateKey = (year, month, day) => {
+    return `${day}/${month}/${year}`;
+  };
+   useEffect(() => {
+      const days = new Date(year, month + 1, 0).getDate();
+      const datesArray = Array.from({ length: days }, (_, i) => {
+        const day = i + 1;
+        const monthStr = month + 1;
+        return `${day}/${monthStr}/${year}`;
+      });
+      setDaysInMonth(datesArray);
+    }, [month, year]);
+    const fetchSpindleProduction = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        try {
+          const monthStr = `${year}-${month + 1 < 10 ? "0" : ""}${month + 1}`;
+          const response = await fetch(
+            `${config.BASE_URL}${config.REPORTS.GET_SPINDLES}${monthStr}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const resResult = await response.json();
+    
+          if (response.ok) {
+            const grouped = {};
+            resResult.data.forEach(({ date, unit, value }) => {
+              const {
+                year: dateYear,
+                month: dateMonth,
+                day: dateDay,
+              } = parseDateString(date);
+    
+              const key = `${formatDateKey(dateYear, dateMonth, dateDay)}-${unit}`;
+              grouped[key] = (grouped[key] || 0) + value;
+            });
+            setGetProductionData(grouped);
+          }
+        } catch (error) {
+          console.error(error.message);
+        }
+      };
+        useEffect(() => {
+    fetchSpindleProduction();
+  }, [month]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProductionData((prev) => ({
+      ...prev,
+      [name]:
+        name === "values"
+          ? !isNaN(Number.parseFloat(value))
+            ? [Number.parseFloat(value)]
+            : []
+          : value,
+    }));
+  };
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    setLoading(true);
+    if (productionData.values.length <= 0) {
+      toast.error("Please Enter Valid Number");
+      setLoading(false);
+      return null;
+    }
+    try {
+      if (formMode === "create") {
+        const response = await fetch(
+          `${config.BASE_URL}${config.REPORTS.ADD_SPINDLES}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(productionData),
+          }
+        );
+
+        if (response.ok) {
+          toast.success("Unit 4 Spindle Added");
+          await fetchSpindleProduction();
+        }
+      }
+
+      setProductionData((prev) => ({
+        ...prev,
+        values: [],
+        startDate: "",
+      }));
+      setFormMode("create");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const fetchSingleDaySpindle = async () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.REPORTS.GET_SINGLE_DAY_SPINDLE}unit=U5&date=${productionData.startDate}`,
+        `${config.BASE_URL}${config.REPORTS.GET_SINGLE_DAY_SPINDLE}unit=U4&date=${productionData.startDate}`,
         {
           method: "GET",
           headers: {
@@ -94,17 +159,14 @@ const Unit5Spindle = () => {
           setSingleDaySpindle(resResult[0]);
           setProductionData((prev) => ({
             ...prev,
-            values: [resResult[0].value], // fill the value
+            values: [resResult[0].value],
           }));
-
           setFormMode("update");
         } else {
-          // No record → create mode
           setProductionData((prev) => ({
             ...prev,
             values: [],
           }));
-
           setFormMode("create");
         }
       }
@@ -112,104 +174,43 @@ const Unit5Spindle = () => {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    fetchSpindleProduction();
-  }, [month]);
-
-  // Form Handling
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProductionData((prev) => ({
-      ...prev,
-      [name]:
-        name === "values"
-          ? !isNaN(parseFloat(value))
-            ? [parseFloat(value)]
-            : []
-          : value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    setLoading(true);
-
-    try {
-      if (formMode === "create") {
-        // POST new record
-        const response = await fetch(
-          `${config.BASE_URL}${config.REPORTS.ADD_SPINDLES}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(productionData),
-          }
-        );
-
+  const updateSpindle = async (e) => {
+      e.preventDefault();
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      setLoading(true);
+      try {
+        const response = await fetch(`${config.BASE_URL}/production`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            id: singleDaySpindle._id,
+            value: Number(productionData.values.join()),
+            unit: "U5",
+            date: productionData.startDate,
+          }),
+        });
         if (response.ok) {
-          toast.success("Unit 5 Spindle Added");
+          setProductionData({ unit: "U5", startDate: "", values: [] });
+          toast.success("Unit 5 Spindles Updated");
+          setLoading(false);
           await fetchSpindleProduction();
         }
-      }
-
-      // Reset form after submit
-      setProductionData((prev) => ({
-        ...prev,
-        values: [],
-      }));
-      setFormMode("create");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // update unit 5 spindle production
-  const updateSpindle = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    setLoading(true);
-
-    try {
-      const response = await fetch(`${config.BASE_URL}/production`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          id: singleDaySpindle._id,
-          value: Number(productionData.values.join()),
-          unit: "U5",
-          date: productionData.startDate,
-        }),
-      });
-      if (response.ok) {
-        setProductionData({ unit: "U5", startDate: "", values: [] });
-        toast.success("Unit 5 Spindles Updated");
+      } catch (error) {
+        console.error(error);
+      } finally {
         setLoading(false);
-        await fetchSpindleProduction();
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
+    };
+    useEffect(() => {
     if (productionData.startDate) {
       fetchSingleDaySpindle();
     }
   }, [productionData.startDate]);
+
   // Responsive chunk size
   const getChunkSize = (width) => {
     if (width >= 1400) return 15;
@@ -228,7 +229,6 @@ const Unit5Spindle = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
   const chunkArray = (arr, size) => {
     const result = [];
     for (let i = 0; i < arr.length; i += size)
@@ -240,19 +240,19 @@ const Unit5Spindle = () => {
     const today = new Date();
     const [day, month, year] = dateStr.split("/").map(Number);
     const dateObj = new Date(year, month - 1, day);
-    
-    const unit5 = getProductionData[`${dateStr}-U5`] || 0;
 
+    const unit4 = getProductionData[`${dateStr}-U5`] || 0;
 
-    if (dateObj > today && unit5 === 0) return " ";
+    if (dateObj > today && unit4 === 0) return " ";
 
-    if (productionData.unit === "U5") return unit5 !== 0 ? unit5 : "-";
+    if (productionData.unit === "U5") return unit4 !== 0 ? unit4 : "-";
 
-    return unit5 === 0 ? "-" : unit5;
+    return unit4 === 0 ? "-" : unit4;
   };
 
   const dayChunks = chunkArray(daysInMonth, chunkSize);
   const slotWidth = `${100 / (chunkSize + 1)}%`;
+
 
   return (
     <div className="flex flex-col bg-white dark:bg-gray-800 w-full h-full md:h-[81vh] rounded-md border-t-3 overflow-x-auto border-[#1F5897] px-4 py-2">

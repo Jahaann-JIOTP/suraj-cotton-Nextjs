@@ -32,6 +32,7 @@ const Unit4Spindle = () => {
       date = dateStr;
     }
 
+   
     const [year, month, day] = date.split("-").map(Number);
     return { year, month, day };
   };
@@ -74,7 +75,7 @@ const Unit4Spindle = () => {
             month: dateMonth,
             day: dateDay,
           } = parseDateString(date);
-
+console.log(parseDateString(date))
           const key = `${formatDateKey(dateYear, dateMonth, dateDay)}-${unit}`;
           grouped[key] = (grouped[key] || 0) + value;
         });

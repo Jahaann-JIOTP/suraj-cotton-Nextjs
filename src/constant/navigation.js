@@ -87,7 +87,7 @@ export const privilegeConfig = {
     href: "/unit-4-production",
     icon: faRotate,
     label: "Production",
-    matchPaths: ["/unit-4-production", "/unit-5-production", "test-production"],
+    matchPaths: ["/unit-4-production", "/unit-5-production"],
     tab: "Production",
   },
 };
@@ -208,11 +208,6 @@ export const sidebarLinksMap = {
       icon: PlantOverview,
       href: "/energy-usage-report",
     },
-    // {
-    //   title: "Energy Cost Report",
-    //   icon: PlantOverview,
-    //   href: "/energy-cost-report",
-    // },
     {
       title: "Energy Summary Report",
       icon: PlantOverview,
@@ -244,11 +239,6 @@ export const sidebarLinksMap = {
       title: "Unit 5",
       icon: MdOutlineSettingsBackupRestore,
       href: "/unit-5-production",
-    },
-    {
-      title: "Testing",
-      icon: MdOutlineSettingsBackupRestore,
-      href: "/test-production",
     },
   ],
 };
