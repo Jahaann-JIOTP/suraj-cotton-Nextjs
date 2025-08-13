@@ -143,7 +143,7 @@ const Unit5Spindle = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.REPORTS.GET_SINGLE_DAY_SPINDLE}unit=U4&date=${productionData.startDate}`,
+        `${config.BASE_URL}${config.REPORTS.GET_SINGLE_DAY_SPINDLE}unit=U5&date=${productionData.startDate}`,
         {
           method: "GET",
           headers: {
