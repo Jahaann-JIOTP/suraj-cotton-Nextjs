@@ -91,7 +91,7 @@ const LogDetails = () => {
       const image1Buffer = await getImageBuffer(
         "../../../suraj-cotton-logo.png"
       );
-      const image2Buffer = await getImageBuffer("../../../jahaann-light.svg");
+      const image2Buffer = await getImageBuffer("../../../jahaann-light.png");
 
       // Add images
       const image1Id = workbook.addImage({
@@ -100,7 +100,7 @@ const LogDetails = () => {
       });
       const image2Id = workbook.addImage({
         buffer: image2Buffer,
-        extension: "svg",
+        extension: "png",
       });
 
       // Dynamically determine column count
