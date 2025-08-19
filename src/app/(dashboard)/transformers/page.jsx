@@ -176,7 +176,7 @@ useEffect(() => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 1 (kWh) Total:{" "}
-                {transformerTotalValTag.Trafo1outgoing || "00.00"}
+                {Number(transformerTotalValTag.Trafo1outgoing||0).toLocaleString("en-US")}
               </h2>
             </div>
             <div>
@@ -238,7 +238,7 @@ useEffect(() => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 2 (kWh) Total:
-                {transformerTotalValTag.Trafo2outgoing || "00.00"}
+                {Number(transformerTotalValTag.Trafo2outgoing||0).toLocaleString("en-US")}
               </h2>
             </div>
             <div>
@@ -304,13 +304,12 @@ useEffect(() => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 3 (kWh) Total:{" "}
-                {transformerTotalValTag.Trafo3outgoing || "00.00"}
+                {Number(transformerTotalValTag.Trafo3outgoing||0).toLocaleString("en-US")}
               </h2>
             </div>
             <div>
               <div className="flex">
                 <div className="w-[70%] flex items-center justify-center">
-                  {/* <HeatMapChart TransformerData={trafo3} id="transformer3" /> */}
                   <HeatMapChart
                     TransformerData={trafo3}
                     id="transformer3"
@@ -367,7 +366,7 @@ useEffect(() => {
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
                 Transformer 4 (kWh) Total:{" "}
-                {transformerTotalValTag.Trafo4outgoing || "00.00"}
+                {Number(transformerTotalValTag.Trafo4outgoing||0).toLocaleString("en-US")}
               </h2>
             </div>
             <div>

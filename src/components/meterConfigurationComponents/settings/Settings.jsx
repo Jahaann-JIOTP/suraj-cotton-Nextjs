@@ -5,20 +5,51 @@ import Swal from "sweetalert2";
 
 // Meters with display name and ID
 const meters = [
-  { name: "Transport", id: "U1_PLC" },
-  { name: "Unit 05 aux", id: "U2_PLC" },
-  { name: "Lighting External", id: "U3_PLC" },
-  { name: "Light Internal", id: "U4_PLC" },
-  { name: "Power House", id: "U5_PLC" },
-  { name: "Turbine", id: "U6_PLC" },
+  { name: "Autocone 10-18", id: "U22_GW03" },
+  { name: "Autoconde 1-9", id: "U23_GW03" },
+  { name: "Carding DB 1~14", id: "U3_GW02" },
+  { name: "Card DB 01", id: "U1_GW02" },
+  { name: "Card DB 02", id: "U2_GW02" },
+  { name: "Comber 1-14", id: "U4_GW02" },
 ];
 
 const Settings = () => {
   const [selectedUnits, setSelectedUnits] = useState({});
+
   const [userData, setUserData] = useState({});
   const [meterToggleStatus, setMeterToggleStatus] = useState([]);
   const token = localStorage.getItem("token");
 
+
+
+  // toggle meter for storing real time values
+  const postMeterWithrealTimeValues = async(meterId, unit)=>{
+     const currentUnit = selectedUnits[meterId];
+    const targetAreaName = unit === 4 ? "Unit_4" : "Unit_5";
+    const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
+    // If already in the selected unit, no need to confirm
+    // if (currentUnit === unit) {
+    //   return;
+    // }
+    try {
+      const response = await fetch(`${config.BASE_URL}/meter/fetch-real-time`,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          unit:targetAreaName,
+          meterIds:[meterId]
+        })
+      })
+      // if(response.ok){
+      //   toast.success("meter toggle")
+      // }
+    } catch (error) {
+      console.error(error)
+      
+    }
+  }
   // Fetch user details
   const fetchUserDetails = async () => {
     if (!token) return;
@@ -76,12 +107,12 @@ const Settings = () => {
     const currentUnit = selectedUnits[meterId];
     const targetAreaName = unit === 4 ? "Unit 4" : "Unit 5";
     const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
-
     // If already in the selected unit, no need to confirm
     if (currentUnit === unit) {
       toast.info(`This meter is already assigned to ${targetAreaName}`);
       return;
     }
+    
 
     // Show confirmation popup
     const result = await Swal.fire({
@@ -102,7 +133,7 @@ const Settings = () => {
       return; // User cancelled
     }
 
-    // ✅ Set selected unit for specific meter
+   
     setSelectedUnits((prev) => ({
       ...prev,
       [meterId]: unit,
@@ -143,9 +174,10 @@ const Settings = () => {
     fetchMeterToggleStatus();
   }, []);
 
+
   return (
     <div className="px-4 md:px-20 rounded-md">
-      <h1 className="text-3xl font-bold mb-2 text-center text-[#1A68B2]">
+      <h1 className="text-2xl font-semibold mb-2 text-center text-[#1A68B2]">
         Meter Control Panel
       </h1>
 
@@ -171,7 +203,10 @@ const Settings = () => {
 
             <div className="flex gap-4">
               <button
-                onClick={() => handleToggle(meter.id, 4)}
+                onClick={() => {
+                  handleToggle(meter.id, 4)
+                postMeterWithrealTimeValues(meter.id,4)
+                }}
                 className={`px-4 py-2 rounded-xl transition-all duration-300 ${
                   selectedUnits[meter.id] === 4
                     ? "bg-[#1A68B2] text-white"
@@ -181,7 +216,10 @@ const Settings = () => {
                 Unit 4
               </button>
               <button
-                onClick={() => handleToggle(meter.id, 5)}
+                onClick={() =>{
+                   handleToggle(meter.id, 5)
+                   postMeterWithrealTimeValues(meter.id,5)
+                }}
                 className={`px-4 py-2 rounded-xl transition-all duration-300 ${
                   selectedUnits[meter.id] === 5
                     ? "bg-[#1A68B2] text-white"

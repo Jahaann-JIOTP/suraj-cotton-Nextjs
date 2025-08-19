@@ -194,6 +194,8 @@ function CustomTrend() {
     "Harmonics I1": "Harmonics_I1_THD",
     "Harmonics I2": "Harmonics_I2_THD",
     "Harmonics I3": "Harmonics_I3_THD",
+    "Active Energy Export": "ActiveEnergy_Exp_kWh",
+
   };
 
   let filteredMeters = [];

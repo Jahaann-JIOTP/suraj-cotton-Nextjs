@@ -1,22 +1,21 @@
 import CustomLoader from "@/components/customLoader/CustomLoader";
 import config from "@/constant/apiRouteList";
-import { relativeDateTimeCalculator } from "@/utils/relativeDateTimeCalculator";
 import React, { useEffect, useState } from "react";
 
 const meters = [
-  { name: "Transport", id: "U1_PLC" },
-  { name: "Unit 05 aux", id: "U2_PLC" },
-  { name: "Lighting External", id: "U3_PLC" },
-  { name: "Light Internal", id: "U4_PLC" },
-  { name: "Power House", id: "U5_PLC" },
-  { name: "Turbine", id: "U6_PLC" },
+   { name: "Autocone 10-18", id: "U22_GW03" },
+  { name: "Autoconde 1-9", id: "U23_GW03" },
+  { name: "Carding DB 1~14", id: "U3_GW02" },
+  { name: "Card DB 01", id: "U1_GW02" },
+  { name: "Card DB 02", id: "U2_GW02" },
+  { name: "Comber 1-14", id: "U4_GW02" },
 ];
 
 const MeterLogs = () => {
   const [meterLogsData, setMeterLogsData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const itemsPerPage = 13;
+  const itemsPerPage = 17;
 
   const fetchMeterLogsData = async () => {
     const token = localStorage.getItem("token");
@@ -69,26 +68,30 @@ const MeterLogs = () => {
           <div className="w-full overflow-x-auto md:overflow-x-visible">
             <div className="min-w-[800px]">
               <table className="w-full">
-                <thead>
+                <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f]">
                   <tr>
-                    <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[10%] py-1">
+                    <th className="border-1 border-gray-300 dark:border-gray-500  w-[10%] py-1 text-[12px] font-inter font-semibold">
                       No.
                     </th>
-                    <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[15%] py-1">
+                     <th className="border-1 border-gray-300 dark:border-gray-500 w-[20%] py-1 text-[12px] font-inter font-semibold">
+                      Updated At
+                    </th>
+                    {/* <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[15%] py-1">
                       Meter
+                    </th> */}
+                    <th className="border-1 border-gray-300 dark:border-gray-500 w-[50%] py-1 text-[12px] font-inter font-semibold">
+                      Description
                     </th>
-                    <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[10%] py-1">
+                    {/* <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[10%] py-1">
                       Area
-                    </th>
-                    <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[20%] py-1">
-                      User Name
+                    </th> */}
+                    <th className="border-1 border-gray-300 dark:border-gray-500 w-[20%] py-1 text-[12px] font-inter font-semibold">
+                      UserName
                     </th>
                     {/* <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[25%] py-1">
                       User Email
                     </th> */}
-                    <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[20%] py-1">
-                      Updated At
-                    </th>
+                   
                   </tr>
                 </thead>
                 <tbody>
@@ -101,24 +104,28 @@ const MeterLogs = () => {
                           key={log._id}
                           className="hover:bg-gray-300 dark:hover:bg-gray-500"
                         >
-                          <td className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
+                          <td className="border-1 border-gray-300 dark:border-gray-500 py-1 w-[10%] text-center text-[12px] font-inter font-400">
                             {(currentPage - 1) * itemsPerPage + index + 1}
                           </td>
-                          <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
+                          <td className="border-1 border-gray-300 dark:border-gray-500 py-1 w-[20%] text-center text-[12px] font-inter font-400">
+                            {updateTime}
+                          </td>
+                          {/* <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
                             {getMeterName(log.meterId)}
+                          </td> */}
+                          <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 w-[50%] text-center text-[12px] font-inter font-400">
+                            {`${getMeterName(log.meterId)} switched from ${log.area ==="unit4"? "Unit 5" :"Unit 4"} to ${log.area ==="unit4"? "Unit 4" :"Unit 5"}`}
                           </td>
-                          <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
+                          {/* <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
                             {log.area === "unit4" ? "Unit 4" : "Unit 5"}
-                          </td>
-                          <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
+                          </td> */}
+                          <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 w-[20%] text-center text-[12px] font-inter font-400">
                             {log.username}
                           </td>
                           {/* <td className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
                             {log.email}
                           </td> */}
-                          <td className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
-                            {updateTime}
-                          </td>
+                          
                         </tr>
                       );
                     })

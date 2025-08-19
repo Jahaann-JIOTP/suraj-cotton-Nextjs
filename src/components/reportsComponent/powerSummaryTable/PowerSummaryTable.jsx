@@ -551,23 +551,23 @@ const PowerSummaryTable = ({
           <div className="w-full  custom-scrollbar-report">
             {/* generation table */}
             <table className="min-w-full border border-gray-200">
-              <thead className="bg-[#E5F3FD]">
+              <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f] ">
                 <tr>
                   <th
                     colSpan="3"
-                    className="text-center text-[15px] text-black font-500 border-b border-gray-200"
+                    className="text-center text-[12px] font-inter font-semibold border-b border-gray-200"
                   >
                     Generation
                   </th>
                 </tr>
                 <tr>
-                  <th className="text-start pl-[3rem] text-[15px] text-black font-semibold w-[50%] border-1 border-gray-300">
+                  <th className="text-start pl-[3rem] text-[12px] font-inter font-semibold w-[50%] border-1 border-gray-300">
                     Resources
                   </th>
-                  <th className="text-center text-[15px] text-black font-semibold w-[25%] border-1 border-gray-300">
+                  <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     KW
                   </th>
-                  <th className="text-center text-[15px] text-black font-semibold w-[25%] border-1 border-gray-300">
+                  <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     Cost
                   </th>
                 </tr>
@@ -576,71 +576,71 @@ const PowerSummaryTable = ({
                 {(unit === "Unit_4" || unit === "ALL") && (
                   <>
                     <tr>
-                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[15px]  text-gray-900">
+                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
                         Wapda 1
                       </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {resData.wapda1}
                       </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {wapda1Cost.toFixed(1)}
                       </td>
                     </tr>
 
                     <tr>
-                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[15px]  text-gray-900">
+                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
                         Wapda 2
                       </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         0
                       </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {0 * tarifData.wapda2}
                       </td>
                     </tr>
                   </>
                 )}
                 <tr>
-                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[15px]  text-gray-900">
+                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
                     Niigata
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     0
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     0
                   </td>
                 </tr>
                 <tr>
-                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[15px]  text-gray-900">
+                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
                     JMS 1
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     0
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     0
                   </td>
                 </tr>
                 <tr>
-                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[15px]  text-gray-900">
+                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
                     GG
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     0
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     0
                   </td>
                 </tr>
                 <tr>
-                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[15px]  text-gray-900">
+                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
                     DG
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     0
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     0
                   </td>
                 </tr>
@@ -648,24 +648,24 @@ const PowerSummaryTable = ({
                 {(unit === "Unit_5" || unit === "ALL") && (
                   <>
                     <tr>
-                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[15px]  text-gray-900">
+                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
                         Solar 1
                       </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {resData.solar1}
                       </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {solar1Cost.toFixed(1)}
                       </td>
                     </tr>
                     <tr>
-                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[15px]  text-gray-900">
+                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
                         Solar 2
                       </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {resData.solar2}
                       </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {solar2Cost.toFixed(1)}
                       </td>
                     </tr>
@@ -673,22 +673,22 @@ const PowerSummaryTable = ({
                 )}
 
                 <tr>
-                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[15px]  text-black font-600">
+                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
                     Total
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     {resData.total_generation}
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     {totalCost.toFixed(2)}
                   </td>
                 </tr>
                 <tr>
-                  <td className="w-[50%] pl-[3rem] border-y-1 border-gray-300 py-[0.5px] text-[15px]  text-black font-600">
+                  <td className="w-[50%] pl-[3rem] border-y-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     Average Unit Cost
                   </td>
                   <td className="text-center w-[25%] border-y-1 border-gray-300"></td>
-                  <td className="text-center w-[25%] border-y-1 border-gray-300 py-[0.5px] text-[15px] text-gray-500 font-600">
+                  <td className="text-center w-[25%] border-y-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     {avgUnitCost.toFixed(2)}
                   </td>
                 </tr>
@@ -702,22 +702,22 @@ const PowerSummaryTable = ({
                 <tr>
                   <th
                     colSpan="4"
-                    className="text-center text-[15px] text-black font-500 border-1 border-gray-200"
+                    className="text-center text-[12px] font-inter font-semibold border-1 border-gray-200"
                   >
                     Production
                   </th>
                 </tr>
                 <tr>
-                  <th className="text-center text-[15px] text-black font-500 w-[25%] border-1 border-gray-300">
+                  <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     Plant
                   </th>
-                  <th className="text-center text-[15px] text-black font-500 w-[25%] border-1 border-gray-300">
+                  <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     No. of Spindle
                   </th>
-                  <th className="text-center text-[15px] text-black font-500 w-[25%] border-1 border-gray-300">
+                  <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     Kw/Spindle
                   </th>
-                  <th className="text-center text-[15px] text-black font-500 w-[25%] border-1 border-gray-300">
+                  <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     Cost/Spindle
                   </th>
                 </tr>
@@ -725,47 +725,47 @@ const PowerSummaryTable = ({
               <tbody className="bg-white divide-y divide-gray-200">
                 {(unit === "Unit_4" || unit === "ALL") && (
                   <tr>
-                    <td className="w-[25%] pl-[3rem] border-y-1 border-gray-300  text-[15px]  text-gray-900">
+                    <td className="w-[25%] pl-[3rem] border-y-1 border-gray-300  text-[12px] font-inter font-400">
                       Unit 4
                     </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {unit4Spindle}
                     </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {unit4SpindlePerKw.toFixed(2)}
                     </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {unit4SpindleCost.toFixed(2)}
                     </td>
                   </tr>
                 )}
                 {(unit === "Unit_5" || unit === "ALL") && (
                   <tr>
-                    <td className="w-[25%] pl-[3rem] border-y-1 border-gray-300  text-[15px]  text-gray-900">
+                    <td className="w-[25%] pl-[3rem] border-y-1 border-gray-300  text-[12px] font-inter font-400">
                       Unit 5
                     </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {unit5Spindle}
                     </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {unit5SpindlePerKw.toFixed(2)}
                     </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {unit5SpindleCost.toFixed(2)}
                     </td>
                   </tr>
                 )}
                 <tr>
-                  <td className="w-[25%] pl-[3rem] border-y-1 border-gray-300  text-[15px] font-500 text-gray-900">
+                  <td className="w-[25%] pl-[3rem] border-y-1 border-gray-300  text-[12px] font-inter font-400">
                     Total
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
                     {unit4Spindle + unit5Spindle}
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
                     {totalSpindlePerKw.toFixed(2)}
                   </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
                     {totalSpindlecost.toFixed(2)}
                   </td>
                 </tr>
@@ -781,69 +781,69 @@ const PowerSummaryTable = ({
                 <tr>
                   <th
                     colSpan="3"
-                    className="text-center text-[15px] text-black font-500 border-b border-gray-200"
+                    className="text-center text-[12px] font-inter font-semibold border-b border-gray-200"
                   >
                     Consumption
                   </th>
                 </tr>
                 <tr>
-                  <th className="text-start pl-[3rem] text-[14px] text-black font-500 w-[50%] border-1 border-gray-300">
+                  <th className="text-start pl-[3rem] text-[12px] font-inter font-semibold w-[50%] border-1 border-gray-300">
                     Resources
                   </th>
-                  <th className="text-center text-[14px] text-black font-500 w-[25%] border-1 border-gray-300">
+                  <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     KW
                   </th>
-                  <th className="text-center text-[14px] text-black font-500 w-[25%] border-1 border-gray-300">
+                  <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     Cost
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {/* <tr>
-                  <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[14.6px]  text-gray-900">
+                  <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
                     Power House Aux.
                   </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[14.6px] text-gray-500">
+                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                     888.7
                   </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[14.6px] text-gray-500">
+                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                     888.87
                   </td>
                 </tr> */}
                 {(unit === "Unit_4" || unit === "ALL") && (
                   <tr>
-                    <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[14.6px]  text-gray-900">
+                    <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
                       Unit 4
                     </td>
-                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[14.6px] text-gray-500">
+                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {resData.unit4_consumption.toFixed(2)}
                     </td>
-                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[14.6px] text-gray-500">
+                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {unit4Cost.toFixed(1)}
                     </td>
                   </tr>
                 )}
                 {(unit === "Unit_5" || unit === "ALL") && (
                   <tr>
-                    <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[14.6px]  text-gray-900">
+                    <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
                       Unit 5
                     </td>
-                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[14.6px] text-gray-500">
+                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {resData.unit5_consumption.toFixed(2)}
                     </td>
-                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[14.6px] text-gray-500">
+                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {unit5Cost.toFixed(1)}
                     </td>
                   </tr>
                 )}
                 <tr>
-                  <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[14.6px] font-500 text-black">
+                  <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
                     Total
                   </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[14.6px] text-gray-500">
+                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                     {resData.total_consumption.toFixed(2)}
                   </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[14.6px] text-gray-500">
+                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                     {totalconsumption.toFixed(1)}
                   </td>
                 </tr>
@@ -857,19 +857,19 @@ const PowerSummaryTable = ({
                 <tr>
                   <th
                     colSpan="3"
-                    className="text-center text-[15px] text-black font-500 border-b border-gray-200"
+                    className="text-center text-[12px] font-inter font-semibold border-b border-gray-200"
                   >
                     Miscellaneous
                   </th>
                 </tr>
                 <tr>
-                  <th className="text-start pl-[3rem] text-[14px] text-black font-500 w-[50%] border-1 border-gray-300">
+                  <th className="text-start pl-[3rem] text-[12px] font-inter font-semibold w-[50%] border-1 border-gray-300">
                     Resources
                   </th>
-                  <th className="text-center text-[14px] text-black font-500 w-[25%] border-1 border-gray-300">
+                  <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     KW
                   </th>
-                  <th className="text-center text-[14px] text-black font-500 w-[25%] border-1 border-gray-300">
+                  <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     Cost
                   </th>
                 </tr>
@@ -877,25 +877,25 @@ const PowerSummaryTable = ({
               <tbody className="bg-white divide-y divide-gray-200">
                 {(unit === "Unit_4" || unit === "ALL") && (
                   <tr>
-                    <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[15px]  text-gray-900">
+                    <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
                       Wapda Export
                     </td>
-                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {resData.wapdaexport.toFixed(2)}
                     </td>
-                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {wapdaExportCost}
                     </td>
                   </tr>
                 )}
                 <tr>
-                  <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[15px]  text-gray-900">
+                  <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
                     Unaccountable Energy
                   </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                     {resData.unaccountable_energy.toFixed(1)}
                   </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[15px] text-gray-500">
+                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                     {unAccountableEnergyCost.toFixed(1)}
                   </td>
                 </tr>
@@ -910,76 +910,76 @@ const PowerSummaryTable = ({
                   <tr>
                     <th
                       colSpan="3"
-                      className="text-center text-[15px] text-black font-500 border-b border-gray-200"
+                      className="text-center text-[12px] font-inter font-semibold border-b border-gray-200"
                     >
                       Trans. / Traffo Losses
                     </th>
                   </tr>
                   <tr>
-                    <th className="text-start pl-[3rem] text-[14px] text-black font-500 w-[50%] border-1 border-gray-300">
+                    <th className="text-start pl-[3rem] text-[12px] font-inter font-semibold w-[50%] border-1 border-gray-300">
                       Resources
                     </th>
-                    <th className="text-center text-[14px] text-black font-500 w-[25%] border-1 border-gray-300">
+                    <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                       KW
                     </th>
-                    <th className="text-center text-[14px] text-black font-500 w-[25%] border-1 border-gray-300">
+                    <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                       Cost
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   <tr>
-                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[15px]  text-gray-900">
+                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
                       TF1
                     </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {resData.trafo1Loss.toFixed(2)}
                     </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {tf1Cost.toFixed(2)}
                     </td>
                   </tr>
                   <tr>
-                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[15px]  text-gray-900">
+                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
                       TF2
                     </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {resData.trafo2Loss.toFixed(2)}
                     </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {tf2Cost.toFixed(2)}
                     </td>
                   </tr>
                   <tr>
-                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[15px]  text-gray-900">
+                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
                       TF3
                     </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {resData.trafo3Loss.toFixed(2)}
                     </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {tf3Cost.toFixed(2)}
                     </td>
                   </tr>
                   <tr>
-                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[15px]  text-gray-900">
+                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
                       TF4
                     </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {resData.trafo4Loss}
                     </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {tf4Cost.toFixed(2)}
                     </td>
                   </tr>
                   <tr>
-                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[15px] font-500  text-black">
+                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
                       Total
                     </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {resData.transformerLosses}
                     </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[15px] text-gray-500">
+                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
                       {totalTfCost.toFixed(2)}
                     </td>
                   </tr>

@@ -56,7 +56,7 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="WAPDA 1"
-            value={powerSummaryData.Wapda1 || "00.00"}
+            value={Number(powerSummaryData.Wapda1).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
             height="6rem"
@@ -86,25 +86,25 @@ const PowerSummaryPage = () => {
       <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full lg:w-[49.5%]">
           <TrafoCard
-            mainTitle="Trafo 1"
-            icomingValue={powerSummaryData.Trafo1Incoming || "00.00"}
+            mainTitle="Unit 4 Transformer 1"
+            icomingValue={Number(powerSummaryData.Trafo1Incoming||0).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
-            outgoingValue={powerSummaryData.Trafo1outgoing || "00.00"}
+            outgoingValue={Number(powerSummaryData.Trafo1outgoing||0).toLocaleString("en-US")}
             outgoingUnit="kWh"
-            lossesValue={powerSummaryData.Trafo1losses || "00.00"}
+            lossesValue={Number(powerSummaryData.Trafo1losses||0).toLocaleString("en-US")}
             lossesUnit="kWh"
           />
         </div>
         <div className="w-full lg:w-[49.5%]">
           <TrafoCard
-            mainTitle="Trafo 2"
-            icomingValue={powerSummaryData.Trafo2Incoming || "00.00"}
+            mainTitle="Unit 4 Transformer 2"
+            icomingValue={Number(powerSummaryData.Trafo2Incoming||0).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
-            outgoingValue={powerSummaryData.Trafo2outgoing || "00.00"}
+            outgoingValue={Number(powerSummaryData.Trafo2outgoing||0).toLocaleString("en-US")}
             outgoingUnit="kWh"
-            lossesValue={powerSummaryData.Trafo2losses || "00.00"}
+            lossesValue={Number(powerSummaryData.Trafo2losses||0).toLocaleString("en-US")}
             lossesUnit="kWh"
           />
         </div>
@@ -113,25 +113,25 @@ const PowerSummaryPage = () => {
       <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full lg:w-[49.5%]">
           <TrafoCard
-            mainTitle="Trafo 3"
-            icomingValue={powerSummaryData.Trafo3Incoming || "00.00"}
+            mainTitle="Unit 5 Transformer 1"
+            icomingValue={Number(powerSummaryData.Trafo3Incoming||0).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
-            outgoingValue={powerSummaryData.Trafo3outgoing || "00.00"}
+            outgoingValue={Number(powerSummaryData.Trafo3outgoing||0).toLocaleString("en-US")}
             outgoingUnit="kWh"
-            lossesValue={powerSummaryData.Trafo3losses || "00.00"}
+            lossesValue={Number(powerSummaryData.Trafo3losses||0).toLocaleString("en-US")}
             lossesUnit="kWh"
           />
         </div>
         <div className="w-full lg:w-[49.5%]">
           <TrafoCard
-            mainTitle="Trafo 4"
-            icomingValue={powerSummaryData.Trafo4Incoming || "00.00"}
+            mainTitle="Unit 5 Transformer 2"
+            icomingValue={Number(powerSummaryData.Trafo4Incoming||0).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
-            outgoingValue={powerSummaryData.Trafo4outgoing || "00.00"}
+            outgoingValue={Number(powerSummaryData.Trafo4outgoing||0).toLocaleString("en-US")}
             outgoingUnit="kWh"
-            lossesValue={powerSummaryData.Trafo4losses || "00.00"}
+            lossesValue={Number(powerSummaryData.Trafo4losses||0).toLocaleString("en-US")}
             lossesUnit="kWh"
           />
         </div>
@@ -142,7 +142,7 @@ const PowerSummaryPage = () => {
           <SingleValueDiv
             title="Solar 1"
             loading={loading}
-            value={powerSummaryData.Solar1 || "00.00"}
+            value={Number(powerSummaryData.Solar1||0).toLocaleString("en-US")}
             unit="kWh"
             height="6rem"
           />
@@ -150,7 +150,7 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Solar 2"
-            value={powerSummaryData.Solar2 || "00.00"}
+            value={Number(powerSummaryData.Solar2||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
             height="6rem"
@@ -159,7 +159,7 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Diesel Genset"
-            value={powerSummaryData.DieselGenset || "00.00"}
+            value={Number(powerSummaryData.DieselGenset||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
             height="6rem"
@@ -168,7 +168,7 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Gas Genset"
-            value={powerSummaryData.GasGenset || "00.00"}
+            value={Number(powerSummaryData.GasGenset||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
             height="6rem"
@@ -189,7 +189,7 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Unaccountable Energy"
-            value={powerSummaryData.unaccoutable_energy || "00.00"}
+            value={Number(powerSummaryData.unaccoutable_energy||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
             height="6rem"
@@ -199,7 +199,7 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Transformer losses"
-            value={powerSummaryData.TrasformerLosses || "00.00"}
+            value={Number(powerSummaryData.TrasformerLosses||0).toLocaleString("en-US")}
             unit="kWh"
             height="6rem"
             loading={loading}

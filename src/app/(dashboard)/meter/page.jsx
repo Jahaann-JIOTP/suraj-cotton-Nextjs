@@ -10,8 +10,6 @@ const page = () => {
   const [activeTab, setActiveTab] = useState("voltage");
   const [data, setData] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
-  const [u0Meters, setU0Meters] = useState({});
-  console.log("...................", u0Meters);
   const router = useRouter();
   const { theme } = useTheme();
   const searchParams = useSearchParams();
@@ -47,28 +45,7 @@ const page = () => {
       console.error(error.message);
     }
   };
-  // get data for only u03 meters
-  const getMeterDataAll = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const response = await fetch(
-        `${config.BASE_URL}${config.DIAGRAM.MAIN_METER_TAGS_LINK}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const resData = await response.json();
-      if (response.ok) {
-        setU0Meters(resData);
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+
 
   // get prefixes of keys
   const suffixTags = {};
@@ -527,11 +504,9 @@ const page = () => {
   ];
   useEffect(() => {
     getSingleMeterData();
-    getMeterDataAll();
     const interval = setInterval(() => {
       getSingleMeterData();
-      getMeterDataAll();
-    }, 5000);
+}, 5000);
     return () => clearInterval(interval);
   }, []);
   return (

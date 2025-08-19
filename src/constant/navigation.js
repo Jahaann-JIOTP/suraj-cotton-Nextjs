@@ -15,7 +15,7 @@ import EnergySankey from "../../public/sidebarIcons/energySankey";
 import Unit4Lt1 from "../../public/sidebarIcons/Unit4Lt1";
 import PlantOverview from "../../public/sidebarIcons/PlantOverview";
 import { FaUserCog } from "react-icons/fa";
-import { MdElectricMeter } from "react-icons/md";
+import { MdElectricMeter, MdOutlineVerified } from "react-icons/md";
 import { BsFillDiagram3Fill } from "react-icons/bs";
 import { MdOutlineSettingsBackupRestore } from "react-icons/md";
 
@@ -80,7 +80,7 @@ export const privilegeConfig = {
     href: "/configuration-meter",
     icon: faGear,
     label: "Configuration",
-    matchPaths: ["/configuration-meter"],
+    matchPaths: ["/configuration-meter","/data-verification"],
     tab: "Configuration",
   },
   Production: {
@@ -227,6 +227,11 @@ export const sidebarLinksMap = {
       title: "Meter Configuration",
       icon: MdElectricMeter,
       href: "/configuration-meter",
+    },
+    {
+      title: "Data Verification",
+      icon: MdOutlineVerified,
+      href: "/data-verification",
     },
   ],
   Production: [

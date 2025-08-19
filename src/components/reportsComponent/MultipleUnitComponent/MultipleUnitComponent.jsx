@@ -509,12 +509,7 @@ const MultipleUnitComponent = ({
           };
         }
         cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-        // cell.border = {
-        //   top: { style: "thin" },
-        //   left: { style: "thin" },
-        //   bottom: { style: "thin" },
-        //   right: { style: "thin" },
-        // };
+       
         if ([1, 2, 3, 4, 6, 7, 8, 10].includes(colNumber)) {
           cell.border = {
             top: { style: "thin" },

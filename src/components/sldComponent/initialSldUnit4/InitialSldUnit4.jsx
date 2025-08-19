@@ -55,9 +55,9 @@ const InitialSldUnit4 = ({ roundedData }) => {
     },
     // power house
     {
-      activePowerTotalTag: roundedData?.U7_PLC_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U7_PLC_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U7_PLC_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U7_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U7_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U7_GW01_Voltage_Avg,
       top: 198,
       left: 857,
     },

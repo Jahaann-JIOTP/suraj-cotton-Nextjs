@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initializeAuth } from "@/redux/slices/authSlice";
 
 import Sidebar from "@/components/layout/Sidebar";
-import { getActiveTabFromPathname } from "@/utils/navigation-utils";
+import { getActiveTabFromPathname } from "../../utils/navigation-utils";
 import config from "@/constant/apiRouteList";
 
 export default function DashboardLayout({ children }) {

@@ -115,7 +115,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="HT Generation"
-            value={singleDivData.HT_Generation || "000"}
+            value={Number(singleDivData?.HT_Generation||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
           />
@@ -123,7 +123,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="LT Generation"
-            value={singleDivData.LTGeneration || "000"}
+            value={Number(singleDivData.LTGeneration||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
           />
@@ -131,7 +131,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Solar Generation"
-            value={singleDivData.SolarGeneration || "000"}
+            value={Number(singleDivData.SolarGeneration||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
           />
@@ -139,7 +139,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="WAPDA Import"
-            value={singleDivData.WapdaImport || "000"}
+            value={Number(singleDivData.WapdaImport||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
             height="3"
@@ -155,7 +155,7 @@ const Dashboard = () => {
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
                 title="Total Generation"
-                value={singleDivData.Total_Generation || "000"}
+                value={Number(singleDivData.Total_Generation || 0).toLocaleString("en-US")}
                 loading={loading}
                 unit="kWh"
               />
@@ -163,7 +163,7 @@ const Dashboard = () => {
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
                 title="Total Energy Input"
-                value={singleDivData.total_energy_input || "000"}
+                value={Number(singleDivData.total_energy_input || 0).toLocaleString("en-US")}
                 loading={loading}
                 unit="kWh"
               />
@@ -185,7 +185,7 @@ const Dashboard = () => {
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
                 title="Energy/Spindle(U4)"
-                value={u4EnergyPerSpindle.toFixed(2) || "000"}
+                value={Number(u4EnergyPerSpindle||0).toFixed(2).toLocaleString("en-US")}
                 loading={loading}
                 unit="kWh"
               />
@@ -193,7 +193,7 @@ const Dashboard = () => {
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
                 title="Energy/Spindle(U5)"
-                value={u5EnergyPerSpindle.toFixed(2) || "000"}
+                value={Number(u5EnergyPerSpindle||0).toFixed(2).toLocaleString("en-US")}
                 loading={loading}
                 unit="kWh"
               />
@@ -206,7 +206,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="U4 Consumption"
-            value={singleDivData.U4_Consumption || "000"}
+            value={Number(singleDivData.U4_Consumption||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
           />
@@ -214,7 +214,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="U5 Consumption"
-            value={singleDivData.U5_Consumption || "000"}
+            value={Number(singleDivData.U5_Consumption||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
           />
@@ -225,7 +225,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Total Energy Output"
-            value={singleDivData.totalenergyoutput || "000"}
+            value={Number(singleDivData.totalenergyoutput||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
           />
