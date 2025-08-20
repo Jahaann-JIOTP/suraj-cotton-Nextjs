@@ -197,7 +197,7 @@ const Settings = () => {
             key={index}
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4 last:border-b-0"
           >
-            <span className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+            <span className="text-[16px] font-semibold text-gray-700 dark:text-gray-200">
               {meter.name}
             </span>
 

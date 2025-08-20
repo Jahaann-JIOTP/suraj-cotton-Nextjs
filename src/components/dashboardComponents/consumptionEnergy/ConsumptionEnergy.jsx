@@ -15,7 +15,7 @@ const ConsumptionEnergy = () => {
   const [selectedCategory, setSelectedCategory] = useState("Solar Generation");
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("week");
   const [loading, setLoading] = useState(false);
-  // const [token, setToken] = useState(null);
+
   const [isConsumptionEnergyFullView, setConsumptionEnergyFullView] =
     useState(false);
   const { theme } = useTheme(); // Light or dark
@@ -26,7 +26,6 @@ const ConsumptionEnergy = () => {
 
   const fetchConsumptionEnergyData = async () => {
     try {
-      // setToken(localStorage.getItem("token"));
       const token = localStorage.getItem("token");
       setLoading(true);
       const response = await fetch(
@@ -58,23 +57,19 @@ const ConsumptionEnergy = () => {
     }
   };
   useEffect(() => {
-    // setToken(localStorage.getItem("token"));
     fetchConsumptionEnergyData();
   }, [selectedTimePeriod, theme]);
-
-  // useEffect(() => {
-  //   updateChart(energyConsumption[selectedTimePeriod], selectedTimePeriod);
-  // }, [selectedCategory, selectedTimePeriod, theme]);
 
   const updateChart = (data, value) => {
     const isDark = theme === "dark";
 
-    // am4core.disposeAllCharts(); // destroy previous chart
     if (chartRef.current) {
       chartRef.current.dispose();
     }
 
     const chart = am4core.create("consumptionEnergyChart", am4charts.XYChart);
+    chartRef.current = chart;
+
     if (chart.logo) chart.logo.disabled = true;
 
     chart.legend = new am4charts.Legend();
@@ -159,25 +154,14 @@ const ConsumptionEnergy = () => {
       } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
     >
       <div className="relative flex items-center flex-col md:flex-row gap-3 md:gap-[0.7vw] justify-between">
-        <span className="text-[15px] text-[#1A68B2] .font-raleway font-600">
-          Consumption Energy
-        </span>
+        <span className="text-[15px] text-[#1A68B2] .font-raleway font-600">Consumption Energy</span>
         <div className="flex gap-4">
-          {/* <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="outline-none border-1 text-[12px] font-raleway rounded p-1 dark:bg-gray-600 "
-          >
-            <option value="Solar Generation">Solar Generation</option>
-            <option value="FESCO">FESCO</option>
-            <option value="Genset">Genset</option>
-          </select> */}
           <select
             value={selectedTimePeriod}
             onChange={(e) => setSelectedTimePeriod(e.target.value)}
             className="outline-none border-1 text-[12px] font-raleway rounded p-1 dark:bg-gray-600"
+            disabled={loading} // Disable dropdown while loading
           >
-            {/* <option value="today">Today</option> */}
             <option value="week">This Week</option>
             <option value="month">This Month</option>
             <option value="year">This Year</option>
@@ -186,28 +170,21 @@ const ConsumptionEnergy = () => {
             className="cursor-pointer absolute md:relative top-[0px] right-[0px]"
             onClick={handleConsumptionEnergyFullView}
           >
-            {isConsumptionEnergyFullView ? (
-              <MdOutlineFullscreenExit size={20} />
-            ) : (
-              <MdOutlineFullscreen size={20} />
-            )}
+            {isConsumptionEnergyFullView ? <MdOutlineFullscreenExit size={20} /> : <MdOutlineFullscreen size={20} />}
           </button>
         </div>
       </div>
-      {/* {loading === true ? (
-        !isConsumptionEnergyFullView && (
-          <CustomLoader size="50px" containerHeight="15vh" />
-        )
-      ) : ( */}
+
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-700/50 rounded-md z-10">
+          <CustomLoader />
+        </div>
+      )}
+
       <div
         id="consumptionEnergyChart"
-        className={`w-full ${
-          isConsumptionEnergyFullView
-            ? " h-[90%] pt-10"
-            : "h-[12rem] pb-2 lg:h-full"
-        }`}
+        className={`w-full ${isConsumptionEnergyFullView ? " h-[90%] pt-10" : "h-[12rem] pb-2 lg:h-full"}`}
       ></div>
-      {/* )} */}
     </div>
   );
 };

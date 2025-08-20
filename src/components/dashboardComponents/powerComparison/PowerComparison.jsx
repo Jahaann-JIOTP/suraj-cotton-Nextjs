@@ -5,6 +5,7 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 
 const PowerComparison = () => {
   const date = new Date();
@@ -481,6 +482,7 @@ const PowerComparison = () => {
             <input
               type="date"
               value={endDate}
+              min={startDate}
               onChange={(e) => handleDateChange(e, "end")}
               className="text-[12px] font-raleway px-1 py-0.5 border rounded"
             />
@@ -508,6 +510,11 @@ const PowerComparison = () => {
         </div>
       </div>
 
+{/* {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-red-500 w-full h-[9rem] rounded-md z-10">
+          <CustomLoader />
+        </div>
+      )} */}
       <div
         className={`w-full ${
           isPowerComparisonFullView ? "h-[80vh]" : "h-[9rem]"

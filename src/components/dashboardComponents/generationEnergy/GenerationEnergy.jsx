@@ -205,16 +205,18 @@ const GenerationEnergy = () => {
           </button>
         </div>
       </div>
-      {/* {loading ? (
-        <CustomLoader size="50px" containerHeight="15vh" />
-      ) : ( */}
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-700/50 rounded-md z-10">
+          <CustomLoader />
+        </div>
+      )}
+
       <div
         id="generationEnergy"
         className={`w-full ${
           isGenerationEnergyFullView ? "h-[90%]" : "h-[12rem] pb-2 lg:h-full"
         }`}
       ></div>
-      {/* )} */}
     </div>
   );
 };

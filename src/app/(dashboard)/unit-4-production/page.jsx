@@ -332,7 +332,7 @@ const Unit4Spindle = () => {
 
         <div className="w-full flex items-center justify-center">
           <h2
-            className="text-white bg-[#025697] px-10 py-1.5 text-[17.62px] font-inter font-500"
+            className="text-white capitalize bg-[#025697] px-10 py-1.5 text-[17.62px] font-inter font-500"
             style={{ clipPath: "polygon(10% 0, 90% 0, 100% 100%, 0 100%)" }}
           >
             History of daily production
@@ -348,7 +348,7 @@ const Unit4Spindle = () => {
             <div className="flex w-full items-center text-center">
               <div
                 style={{ width: slotWidth }}
-                className="flex-shrink-0 border-1 h-[28px] border-[#025697] border-r-white py-1 bg-[#E5F3FD] text-[10px] md:text-[12px] font-medium"
+                className="flex-shrink-0 border-1 h-[28px] border-[#025697] border-r-white py-1 bg-[#E5F3FD] dark:bg-gray-600 text-[10px] md:text-[12px] font-medium"
               >
                 Date
               </div>
@@ -359,7 +359,7 @@ const Unit4Spindle = () => {
                     index === chunk.length - 1
                       ? "border-r-[#025697]"
                       : "border-r-white"
-                  } py-1 bg-[#E5F3FD] text-[12px] font-medium`}
+                  } py-1 bg-[#E5F3FD] dark:bg-gray-600 text-[12px] font-medium`}
                   style={{ width: slotWidth }}
                 >
                   {dateStr}

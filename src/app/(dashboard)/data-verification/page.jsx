@@ -12,10 +12,13 @@ import { IoFilterOutline } from "react-icons/io5";
 
 const areaOptions = [
   "ALL",
-  "UNIT 4 LT 01",
-  "UNIT 4 LT 02",
-  "Unit 5 LT 1",
-  "Unit 5 LT 2",
+  "HFO",
+  "HT ROOM 1",
+  "HT Room 2",
+  "UNIT 4 LT 1",
+  "UNIT 4 LT 2",
+  "UNIT 5 LT 1",
+  "UNIT 5 LT 2",
 ];
 
 const PageContent = () => {
@@ -210,7 +213,7 @@ const PageContent = () => {
                   {isFilterOpen && (
                     <div
                       ref={filterRef}
-                      className="absolute top-[2.2rem] z-50 bg-white dark:bg-gray-700 shadow-lg rounded border border-gray-200 w-37 max-h-[15.5rem] overflow-y-auto"
+                      className="absolute top-[2.2rem] z-50 bg-white dark:bg-gray-700 shadow-lg rounded border border-gray-200 w-40 max-h-[20rem] overflow-y-auto"
                     >
                       {areaOptions.map((option) => (
                         <div

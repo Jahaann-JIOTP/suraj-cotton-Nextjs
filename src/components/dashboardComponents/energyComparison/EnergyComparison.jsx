@@ -6,10 +6,11 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { useTheme } from "next-themes";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 
 const EnergyComparison = () => {
   const today = new Date().toISOString().split("T")[0];
-
+  const [loading, setLoading] = useState(false)
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const [isEnergyComparisonFullView, setEnergyComparisonFullView] =
@@ -46,6 +47,7 @@ const EnergyComparison = () => {
   const fetchPieChartData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
+    setLoading(true)
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_ENERGY_COMPARISON}?start_date=${startDate}&end_date=${endDate}&Label=Custom`,
@@ -68,9 +70,12 @@ const EnergyComparison = () => {
           })),
         }));
         setPieChartData(transformedData);
+        setLoading(false)
       }
     } catch (error) {
       console.error(error.message);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -375,6 +380,11 @@ const EnergyComparison = () => {
         </div>
       </div>
 
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-700/50 rounded-md z-10">
+          <CustomLoader />
+        </div>
+      )}
       {/* Chart */}
       <div
         className={`flex justify-end ${

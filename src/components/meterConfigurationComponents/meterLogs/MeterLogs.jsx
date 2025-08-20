@@ -114,7 +114,7 @@ const MeterLogs = () => {
                             {getMeterName(log.meterId)}
                           </td> */}
                           <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 w-[50%] text-center text-[12px] font-inter font-400">
-                            {`${getMeterName(log.meterId)} switched from ${log.area ==="unit4"? "Unit 5" :"Unit 4"} to ${log.area ==="unit4"? "Unit 4" :"Unit 5"}`}
+                            <strong className="text-[#1F5897]">{getMeterName(log.meterId)}</strong> switched from <strong className="text-[#1F5897]">{log.area ==="unit4"? "Unit 5" :"Unit 4"}</strong> to <strong className="text-[#1F5897]">{log.area ==="unit4"? "Unit 4" :"Unit 5"}</strong>
                           </td>
                           {/* <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
                             {log.area === "unit4" ? "Unit 4" : "Unit 5"}
@@ -132,7 +132,7 @@ const MeterLogs = () => {
                   ) : (
                     <tr className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
                       <td colSpan={6} className="text-center py-2">
-                        No active meter configuration
+                        No Logs Available
                       </td>
                     </tr>
                   )}
