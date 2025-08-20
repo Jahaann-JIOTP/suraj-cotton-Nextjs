@@ -380,11 +380,11 @@ const EnergyComparison = () => {
         </div>
       </div>
 
-      {loading && (
+      {/* {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-700/50 rounded-md z-10">
           <CustomLoader />
         </div>
-      )}
+      )} */}
       {/* Chart */}
       <div
         className={`flex justify-end ${
