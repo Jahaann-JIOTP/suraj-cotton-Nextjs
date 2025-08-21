@@ -186,7 +186,6 @@ export default function GenerationEnergy() {
       );
       series.columns.template.setAll({
         tooltipText: "[fontSize: 12px]{name}, {categoryX}: {valueY}",
-        
         fontSize:12,
         width: am5.percent(70),
         strokeOpacity: 0,

@@ -56,7 +56,7 @@ const ConsumptionEnergy = () => {
 
   useEffect(() => {
     fetchConsumptionEnergyData();
-  }, [selectedTimePeriod, theme]);
+  }, [selectedTimePeriod]);
 
   const updateChart = (data, value) => {
     const isDark = theme === "dark";
@@ -139,9 +139,10 @@ const ConsumptionEnergy = () => {
       series.name = name;
 
       // ✅ Tooltip
-      series.columns.template.tooltipText =
-        "[fontSize:12px]{name}, {categoryX}: {valueY}";
-
+  series.columns.template.tooltipText =
+    "{name}, {categoryX}: {valueY}";
+  series.tooltip.label.fontSize = 12; 
+      
       // ✅ Styling
       series.columns.template.width = am4core.percent(70);
       series.columns.template.fill = am4core.color(color);
@@ -154,7 +155,11 @@ const ConsumptionEnergy = () => {
     createSeries(series1Field, series1Name, "#11A8D7"); // previous
     createSeries(series2Field, series2Name, "#00378A"); // current
   };
-
+useEffect(() => {
+  if (chartRef.current && !loading) {
+    updateChart(chartRef.current.data || [], selectedTimePeriod);
+  }
+}, [theme, selectedTimePeriod]);
   return (
     <div
       className={`${

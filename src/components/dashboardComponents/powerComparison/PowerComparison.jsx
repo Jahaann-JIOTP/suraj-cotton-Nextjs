@@ -7,6 +7,7 @@ import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 import { CircularProgress } from "@mui/material";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const PowerComparison = () => {
   const date = new Date();
@@ -124,7 +125,7 @@ const PowerComparison = () => {
     legend.labels.template.setAll({
       fontSize: 10,
       fontWeight: 500,
-      maxWidth: 100,
+      maxWidth: 30,
       paddingLeft: 0,
       paddingRight: 0,
       paddingTop: 0,
@@ -139,7 +140,7 @@ const PowerComparison = () => {
     legend.set(
       "layout",
       am5.GridLayout.new(root, {
-        columns: 20,
+        columns: 8,
         fixedWidthGrid: false,
       })
     );
@@ -149,7 +150,7 @@ const PowerComparison = () => {
     const daysInRange = dateRange / (1000 * 60 * 60 * 24);
 
     const xRenderer = am5xy.AxisRendererX.new(root, {
-      minorGridEnabled: true,
+      minorGridEnabled: false,
       minGridDistance: calculateGridDistance(timeRange, daysInRange),
     });
 
@@ -285,7 +286,7 @@ const PowerComparison = () => {
 
       series.columns.template.setAll({
         tooltipText: "{name}: {valueY}",
-        width: am5.percent(30), // Reduced from 70% to 50%
+        width: am5.percent(40), // Increased width to reduce gap
         fill: am5.color(color),
         stroke: am5.color(color),
         strokeWidth: 0.5,
@@ -314,16 +315,16 @@ const PowerComparison = () => {
       "unaccoutable_energy",
       "#6A7E91",
       CLUSTER_GROUPS.LOSSES,
-      true
+      false
     );
 
-    // Configure clustering spacing
+    // Configure clustering spacing - remove margins to eliminate gaps
     chart.series.each((series) => {
       if (series instanceof am5xy.ColumnSeries) {
         series.set("clustered", true);
         series.columns.template.setAll({
-          marginLeft: 2,
-          marginRight: 2,
+          marginLeft: 0,  // Changed from 2 to 0
+          marginRight: 0, // Changed from 2 to 0
         });
       }
     });
@@ -466,7 +467,7 @@ const PowerComparison = () => {
             )}
           </button>
         </div>
-        <div className="flex items-center justify-end w-full gap-3 flex-col xl:flex-row ">
+        <div className="flex items-center justify-end w-full gap-3 flex-col md:flex-row ">
           <div className="flex items-center justify-center gap-2">
             <span className="hidden xl:flex text-[12px] font-raleway font-semibold text-black dark:text-white">
               Start Date

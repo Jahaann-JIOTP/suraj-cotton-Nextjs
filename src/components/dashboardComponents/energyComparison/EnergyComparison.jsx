@@ -10,7 +10,7 @@ import CustomLoader from "@/components/customLoader/CustomLoader";
 
 const EnergyComparison = () => {
   const today = new Date().toISOString().split("T")[0];
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const [isEnergyComparisonFullView, setEnergyComparisonFullView] =
@@ -47,7 +47,7 @@ const EnergyComparison = () => {
   const fetchPieChartData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_ENERGY_COMPARISON}?start_date=${startDate}&end_date=${endDate}&Label=Custom`,
@@ -70,12 +70,12 @@ const EnergyComparison = () => {
           })),
         }));
         setPieChartData(transformedData);
-        setLoading(false)
+        setLoading(false);
       }
     } catch (error) {
       console.error(error.message);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -147,7 +147,7 @@ const EnergyComparison = () => {
     });
 
     series.ticks.template.set("visible", false);
-    series.slices.template.set("tooltipText", ""); // close tooltip for main pie chart
+    series.slices.template.set("tooltipText", null); // close tooltip for main pie chart
     series.slices.template.set("toggleKey", "none");
 
     // Sub Pie Chart
@@ -168,6 +168,14 @@ const EnergyComparison = () => {
     // ✅ Hide labels and ticks on sub pie chart
     subSeries.labels.template.setAll({
       visible: false,
+    });
+    subSeries.slices.template.setAll({
+      toggleKey: "none",
+      interactive: true, // ✅ enable hover interactions
+    });
+
+    subSeries.slices.template.states.create("hover", {
+      scale: 1.05, // ✅ subtle hover zoom
     });
 
     subSeries.ticks.template.setAll({
