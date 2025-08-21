@@ -6,6 +6,7 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
+import { CircularProgress } from "@mui/material";
 
 const PowerComparison = () => {
   const date = new Date();
@@ -510,9 +511,9 @@ const PowerComparison = () => {
         </div>
       </div>
 
-{/* {loading && (
+      {/* {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-red-500 w-full h-[9rem] rounded-md z-10">
-          <CustomLoader />
+          <CircularProgress color="inherit" />
         </div>
       )} */}
       <div

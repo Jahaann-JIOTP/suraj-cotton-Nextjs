@@ -301,9 +301,9 @@ const MeterParameterList = ({
           </thead>
           <tbody>
             {isLoading ? (
-              <tr className="height-[200px]">
+              <tr className="">
                 <td colSpan={4} className="p-8">
-                  <div className="flex justify-center items-center h-[50vh]">
+                  <div className="flex justify-center items-center">
                     <CustomLoader />
                   </div>
                 </td>

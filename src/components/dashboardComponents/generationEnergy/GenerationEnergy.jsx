@@ -1,46 +1,44 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { generationConsumption } from "@/data/generationEnergy";
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+
+import { useEffect, useRef, useState } from "react";
+import * as am5 from "@amcharts/amcharts5";
+import * as am5xy from "@amcharts/amcharts5/xy";
+import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { useTheme } from "next-themes";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 
-am4core.useTheme(am4themes_animated);
+export default function GenerationEnergy() {
+  const chartRef = useRef(null);
+  const rootRef = useRef(null);
+  const { theme } = useTheme();
 
-const GenerationEnergy = () => {
-  const [selectedCategory, setSelectedCategory] = useState("WAPDA 1");
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("week");
   const [loading, setLoading] = useState(false);
-  const [isGenerationEnergyFullView, setGenerationEnergyFullView] =
-    useState(false);
-  const { theme } = useTheme(); // Light or dark
-  const chartRef = useRef(null);
-  const handleGenerationEnergyFullView = () => {
-    setGenerationEnergyFullView((prev) => !prev);
-  };
+  const [isFullView, setIsFullView] = useState(false);
+  const [chartData, setChartData] = useState([]);
+
+  const toggleFullView = () => setIsFullView((prev) => !prev);
 
   const fetchGenerationEnergyData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     setLoading(true);
+
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_GENERATION_ENERGY}${selectedTimePeriod}`,
         {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
+
       if (response.ok) {
         const resResult = await response.json();
         if (Array.isArray(resResult) && resResult.length > 0) {
-          updateChart(resResult, selectedTimePeriod);
+          setChartData(resResult);
         } else {
           console.warn("No chart data received.");
         }
@@ -51,40 +49,67 @@ const GenerationEnergy = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    fetchGenerationEnergyData();
-  }, [selectedTimePeriod, theme]);
-  // useEffect(() => {
-  //   fetchGenerationEnergyData();
-  //   const categoryData = generationConsumption[selectedCategory];
-  //   if (categoryData) {
-  //     updateChart(categoryData[selectedTimePeriod], selectedTimePeriod);
-  //   }
-  // }, [selectedCategory, selectedTimePeriod, theme]);
 
-  const updateChart = (data, value) => {
-    const isDark = theme === "dark";
+  const createChart = (data, value) => {
+    if (!chartRef.current) return;
 
-    if (chartRef.current) {
-      chartRef.current.dispose();
+    // Dispose old chart
+    if (rootRef.current) {
+      rootRef.current.dispose();
     }
 
-    const chart = am4core.create("generationEnergy", am4charts.XYChart);
-    chartRef.current = chart;
+    const root = am5.Root.new(chartRef.current);
+    rootRef.current = root;
+    root._logo?.dispose();
 
-    if (chart.logo) chart.logo.disabled = true;
+    // ✅ Theme setup
+    root.setThemes([
+      am5themes_Animated.new(root),
+      am5.Theme.new(root, {
+        rule: (target) => {
+          // Global font size
+          if (
+            target instanceof am5.Label &&
+            (target.get("themeTags")?.includes("axis") ||
+              target.get("themeTags")?.includes("legend"))
+          ) {
+            return true;
+          }
+          return false;
+        },
+        applyOnClones: true,
+        settings: { fontSize: 12 },
+      }),
+    ]);
 
-    chart.legend = new am4charts.Legend();
-    chart.legend.position = "bottom";
-    chart.legend.labels.template.fontSize = 10;
-    chart.legend.labels.template.fontWeight = "500";
-    chart.legend.labels.template.fill = am4core.color(
-      isDark ? "#ffffff" : "#000000"
+    const chart = root.container.children.push(
+      am5xy.XYChart.new(root, {
+        panX: false,
+        panY: false,
+        layout: root.verticalLayout,
+      })
     );
-    chart.legend.markers.template.width = 10;
-    chart.legend.markers.template.height = 10;
 
-    let xField, series1Field, series2Field, series1Name, series2Name;
+    const legend = chart.children.push(
+      am5.Legend.new(root, {
+        centerX: am5.p50,
+        x: am5.p50,
+        layout: root.horizontalLayout,
+      })
+    );
+
+    // ✅ Legend font + marker size
+    legend.labels.template.setAll({ fontSize: 12,fill:theme==="dark"?"#ffffff":"#000000" });
+    legend.markers.template.setAll({
+      width: 12,
+      height: 12,
+    });
+
+    let xField,
+      series1Field,
+      series2Field,
+      series1Name,
+      series2Name;
 
     switch (value) {
       case "today":
@@ -120,84 +145,118 @@ const GenerationEnergy = () => {
         return;
     }
 
-    // ⚠️ Check for empty or invalid data
     if (!Array.isArray(data) || data.length === 0) {
       console.warn("No data provided for chart");
       return;
     }
 
-    chart.data = data;
-
-    const xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    xAxis.dataFields.category = xField;
-    xAxis.renderer.labels.template.fill = am4core.color(
-      isDark ? "#ffffff" : "#000000"
+    // X Axis
+    const xRenderer = am5xy.AxisRendererX.new(root, {
+      cellStartLocation: 0.1,
+      cellEndLocation: 0.9,
+    });
+    const xAxis = chart.xAxes.push(
+      am5xy.CategoryAxis.new(root, {
+        categoryField: xField,
+        renderer: xRenderer,
+        tooltip: am5.Tooltip.new(root, {}),
+      })
     );
-    xAxis.renderer.labels.template.fontSize = 10;
-    xAxis.renderer.cellStartLocation = 0.1;
-    xAxis.renderer.cellEndLocation = 0.7;
-    const yAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    yAxis.renderer.labels.template.fill = am4core.color(
-      isDark ? "#ffffff" : "#000000"
+    xAxis.get("renderer").labels.template.setAll({ fontSize: 12, fill:theme==="dark"?"#ffffff":"#000000" });
+    xAxis.data.setAll(data);
+
+    // Y Axis
+    const yAxis = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        renderer: am5xy.AxisRendererY.new(root, { strokeOpacity: 0.1 }),
+      })
     );
-    yAxis.renderer.labels.template.fontSize = 10;
+    yAxis.get("renderer").labels.template.setAll({ fontSize: 12,fill:theme==="dark"?"#ffffff":"#000000" });
 
-    function createSeries(field, name, color) {
-      const series = chart.series.push(new am4charts.ColumnSeries());
-      series.clustered = true;
-      series.dataFields.valueY = field;
-      series.dataFields.categoryX = xField;
-      series.name = name;
-      series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
-      series.tooltip.pointerOrientation = "vertical";
-      series.columns.template.width = am4core.percent(70);
-      series.columns.template.fill = am4core.color(color);
-      series.columns.template.stroke = am4core.color(color);
-    }
+    // Series
+    const makeSeries = (name, fieldName, color) => {
+      const series = chart.series.push(
+        am5xy.ColumnSeries.new(root, {
+          name,
+          xAxis,
+          yAxis,
+          valueYField: fieldName,
+          categoryXField: xField,
+        })
+      );
+      series.columns.template.setAll({
+        tooltipText: "[fontSize: 12px]{name}, {categoryX}: {valueY}",
+        
+        fontSize:12,
+        width: am5.percent(70),
+        strokeOpacity: 0,
+        fill: am5.color(color),
+      });
+      series.data.setAll(data);
 
-    createSeries(series1Field, series1Name, "#11A8D7");
-    createSeries(series2Field, series2Name, "#00378A");
+      series.bullets.push(() =>
+        am5.Bullet.new(root, {
+          locationY: 0,
+          sprite: am5.Label.new(root, {
+            text: "{valueY}",
+            fill: root.interfaceColors.get("alternativeText"),
+            centerX: am5.p50,
+            centerY: 0,
+            fontSize: 10,
+          }),
+        })
+      );
 
-    chart.cursor = new am4charts.XYCursor();
+      series.appear();
+      legend.data.push(series);
+    };
+
+    makeSeries(series1Name, series1Field, "#11A8D7");
+    makeSeries(series2Name, series2Field, "#00378A");
+
+    chart.appear(1000, 100);
   };
+
+  useEffect(() => {
+    fetchGenerationEnergyData();
+  }, [selectedTimePeriod]);
+
+  useEffect(() => {
+    if (chartData.length > 0) {
+      createChart(chartData, selectedTimePeriod);
+    }
+    return () => {
+      if (rootRef.current) rootRef.current.dispose();
+    };
+  }, [theme, chartData, selectedTimePeriod]);
+
   return (
     <div
       className={`${
-        isGenerationEnergyFullView
-          ? "fixed inset-0 z-50  p-5 overflow-auto w-[100%] m-auto h-[100vh]"
-          : "relative  px-1 py-2 md:p-3 h-[15rem] md:h-[13.5rem] lg:h-[12rem]"
-      } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
+        isFullView
+          ? "fixed inset-0 z-50 p-5 overflow-auto w-[100%] m-auto h-[100vh]"
+          : "relative px-1 py-2 md:p-3 h-[15rem] md:h-[13.5rem] lg:h-[12rem]"
+      } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md`}
     >
       <div className="relative flex items-center flex-col md:flex-row gap-3 md:gap-[0.7vw] justify-between">
-        <span className="text-[15px] text-[#1A68B2] .font-raleway font-600">
+        <span className="text-[15px] text-[#1A68B2] font-raleway font-600">
           Generation Energy
         </span>
         <div className="flex gap-4">
-          {/* <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="outline-none border-1 rounded text-[12px] font-raleway p-1 dark:bg-gray-600"
-          >
-            <option value="WAPDA 1">WAPDA 1</option>
-            <option value="WAPDA 2">WAPDA 2</option>
-            <option value="Solar">Solar</option>
-            <option value="HT Generation">HT Generation</option>
-          </select> */}
           <select
             value={selectedTimePeriod}
             onChange={(e) => setSelectedTimePeriod(e.target.value)}
             className="outline-none border-1 text-[12px] font-raleway rounded p-1 dark:bg-gray-600"
           >
-            {/* <option value="today">Today</option> */}
             <option value="week">This Week</option>
             <option value="month">This Month</option>
             <option value="year">This Year</option>
           </select>
           <button
             className="cursor-pointer absolute md:relative top-[0px] right-[0px]"
-            onClick={handleGenerationEnergyFullView}
+            onClick={toggleFullView}
           >
-            {isGenerationEnergyFullView ? (
+            {isFullView ? (
               <MdOutlineFullscreenExit size={20} />
             ) : (
               <MdOutlineFullscreen size={20} />
@@ -205,6 +264,7 @@ const GenerationEnergy = () => {
           </button>
         </div>
       </div>
+
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-700/50 rounded-md z-10">
           <CustomLoader />
@@ -212,13 +272,11 @@ const GenerationEnergy = () => {
       )}
 
       <div
-        id="generationEnergy"
+        ref={chartRef}
         className={`w-full ${
-          isGenerationEnergyFullView ? "h-[90%]" : "h-[12rem] pb-2 lg:h-full"
+          isFullView ? "h-[90%]" : "h-[12rem] pb-2 lg:h-full"
         }`}
-      ></div>
+      />
     </div>
   );
-};
-
-export default GenerationEnergy;
+}

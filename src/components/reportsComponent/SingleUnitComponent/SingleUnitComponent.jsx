@@ -59,7 +59,7 @@ const SingleUnitComponent = ({
       ConsumedUnits: finalData?.comber_consumption || 0,
     },
     {
-      Department: "Drawing(Finsher)",
+      Department: "Drawing",
       Mcs: "6",
       InstalledLoad: "13.6",
       ConsumedUnits: finalData?.Drawing_consumption || 0,
