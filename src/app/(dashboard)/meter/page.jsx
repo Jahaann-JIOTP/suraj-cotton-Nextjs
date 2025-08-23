@@ -104,7 +104,7 @@ const page = () => {
     },
     {
       tag: suffixTags.Current_C,
-      unit: "A c",
+      unit: "Ac",
       top: "28px",
       left: "328px",
       width: "113px",
@@ -112,7 +112,7 @@ const page = () => {
     },
     {
       tag: suffixTags.Current_B,
-      unit: "A b",
+      unit: "Ab",
       top: "122px",
       left: "328px",
       width: "113px",
@@ -120,7 +120,7 @@ const page = () => {
     },
     {
       tag: suffixTags.Current_A,
-      unit: "A a",
+      unit: "Aa",
       top: "215px",
       left: "328px",
       width: "113px",

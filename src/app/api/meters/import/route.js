@@ -18,6 +18,7 @@ export async function POST() {
     const liveData = await response.json();
     const meterMap = {};
 
+    // Group parameters by uniqueKey
     for (const key of Object.keys(liveData)) {
       if (["Time", "timestamp", "UNIXtimestamp"].includes(key)) continue;
 
@@ -34,12 +35,16 @@ export async function POST() {
     }
 
     let insertedCount = 0;
+    let updatedCount = 0;
 
     for (const [uniqueKey, paramsSet] of Object.entries(meterMap)) {
-      const parameters = Array.from(paramsSet).map((p) => ({ paramName: p }));
+      const newParams = Array.from(paramsSet).map((p) => ({ paramName: p }));
 
-      const exists = await Meter.findOne({ unique_key: uniqueKey });
-      if (!exists) {
+      // Check if meter exists
+      const existingMeter = await Meter.findOne({ unique_key: uniqueKey });
+
+      if (!existingMeter) {
+        // Insert new meter
         const meterNameDoc = await MeterName.findOne(
           { unique_key: uniqueKey },
           { meter_name: 1, location: 1 }
@@ -49,16 +54,35 @@ export async function POST() {
           unique_key: uniqueKey,
           name: meterNameDoc?.meter_name || uniqueKey,
           location: meterNameDoc?.location || "Not Available",
-          parameters,
+          parameters: newParams,
           comment: "",
         });
 
         insertedCount++;
+      } else {
+        // Merge parameters (add only missing ones)
+        let updated = false;
+        newParams.forEach((param) => {
+          const exists = existingMeter.parameters.some(
+            (p) => p.paramName === param.paramName
+          );
+          if (!exists) {
+            existingMeter.parameters.push(param);
+            updated = true;
+          }
+        });
+
+        if (updated) {
+          await existingMeter.save();
+          updatedCount++;
+        }
       }
     }
 
     return NextResponse.json(
-      { message: `Inserted ${insertedCount} new meters` },
+      {
+        message: `Inserted ${insertedCount} new meters, updated ${updatedCount} existing meters`,
+      },
       { status: 201 }
     );
   } catch (error) {

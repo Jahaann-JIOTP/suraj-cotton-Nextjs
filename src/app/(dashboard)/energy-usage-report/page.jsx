@@ -15,16 +15,17 @@ const FilterPage = () => {
   const [unit, setUnit] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [unit4Spindle, setUnit4Spindle] = useState("");
-  const [unit5Spindle, setUnit5Spindle] = useState("");
+  const [unit4Spindle, setUnit4Spindle] = useState(null); // null = not fetched yet
+  const [unit5Spindle, setUnit5Spindle] = useState(null);
+  const [fetched, setFetched] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isHovered, setIsHovered] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [loadingSpindle, setLoadingSpindle] = useState(false);
   const [resData, setResData] = useState([]);
   const unit4 = unit === "Unit_4" || unit === "ALL" ? "U4" : "";
   const unit5 = unit === "Unit_5" || unit === "ALL" ? "U5" : "";
-
   const toggleDropdown = () => setIsOpen(!isOpen);
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -56,50 +57,74 @@ const FilterPage = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      setLoading(true);
+      setLoadingSpindle(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U4`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       const resResult = await response.json();
+
       if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
-        setUnit4Spindle(resResult[0].totalProduction);
+        setUnit4Spindle(resResult[0].totalProduction); // can be 0 or >0
+      } else {
+        setUnit4Spindle(0); // ✅ empty array → treat as zero
       }
     } catch (error) {
       console.error(error.message);
+      setUnit4Spindle(0);
     } finally {
-      setLoading(false);
+      setLoadingSpindle(false);
+      setFetched(true); // ✅ mark as fetched
     }
   };
+  // fetch unit 4 spindles
   const fetchU5Spindles = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      setLoading(true);
+      setLoadingSpindle(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U5`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       const resResult = await response.json();
+
       if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
         setUnit5Spindle(resResult[0].totalProduction);
+      } else {
+        setUnit5Spindle(0); // ✅ empty array → treat as zero
       }
     } catch (error) {
       console.error(error.message);
+      setUnit5Spindle(0);
     } finally {
-      setLoading(false);
+      setLoadingSpindle(false);
+      setFetched(true); // ✅ mark as fetched
     }
   };
+  useEffect(() => {
+    if (!fetched) return; // ✅ don’t run before spindle API completes
+
+    if (unit === "Unit_4" && unit4Spindle === 0) {
+      setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
+    } else if (unit === "Unit_5" && unit5Spindle === 0) {
+      setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
+    } else if (unit === "ALL") {
+      if (unit4Spindle === 0 && unit5Spindle === 0) {
+        setErrorMessage(
+          "Add Unit 4 and Unit 5 spindles first in Spindle Production Tab"
+        );
+      } else if (unit4Spindle === 0) {
+        setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
+      } else if (unit5Spindle === 0) {
+        setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
+      } else {
+        setErrorMessage("");
+      }
+    } else {
+      setErrorMessage("");
+    }
+  }, [unit, unit4Spindle, unit5Spindle, fetched]);
   useEffect(() => {
     if (unit !== "" && startDate !== "" && endDate !== "") {
       fetchU4Spindles();
@@ -109,37 +134,17 @@ const FilterPage = () => {
   // getting energy usage report
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (errorMessage.length > 0) return; // 🚫 prevent submit when error exists
+
     const token = localStorage.getItem("token");
     if (!token) return;
-    if (!unit || startDate.length === 0 || endDate.length === 0) {
+
+    if (!unit || !startDate || !endDate) {
       toast.warning("Please fill in all required fields.");
       return;
     }
 
-    if (unit === "Unit_4" && unit4Spindle === 0) {
-      setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
-      return;
-    }
-    if (unit === "Unit_5" && unit5Spindle === 0) {
-      setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
-      return;
-    }
-
-    if (unit === "ALL") {
-      if (unit4Spindle === 0 && unit5Spindle === 0) {
-        setErrorMessage(
-          "Add Unit 4 and Unit 5 spindles first in Spindle Production Tab"
-        );
-        return;
-      } else if (unit4Spindle === 0) {
-        setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
-        return;
-      } else if (unit5Spindle === 0) {
-        setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
-        return;
-      }
-    }
-    setLoading(true);
+    setLoadingSubmit(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.REPORTS.ENERGY_USAGE_REPORTS}`,
@@ -161,12 +166,12 @@ const FilterPage = () => {
         const resResult = await response.json();
         setResData(resResult);
       }
+      setShowResults(true);
     } catch (error) {
       console.error(error.message);
+    } finally {
+      setLoadingSubmit(false);
     }
-
-    setShowResults(true);
-    setLoading(false);
   };
 
   return (
@@ -320,7 +325,7 @@ const FilterPage = () => {
                     </label>
                     <input
                       type="number"
-                      value={unit4Spindle}
+                      value={unit4Spindle ?? ""}
                       id="rates"
                       name="rates"
                       readOnly
@@ -339,7 +344,7 @@ const FilterPage = () => {
                     </label>
                     <input
                       type="number"
-                      value={unit5Spindle}
+                      value={unit5Spindle ?? ""}
                       id="rates"
                       name="rates"
                       readOnly
@@ -392,26 +397,31 @@ const FilterPage = () => {
             </div>
 
             <div className="w-full flex items-center justify-center mt-5 md:mt-10">
-              <button
-                type="submit"
-                className="bg-[#1A68B2]  cursor-pointer text-white px-4 py-1 rounded flex items-center justify-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <span>Generating</span>
-                    <CircularProgress
-                      size={20}
-                      sx={{
-                        color: "white",
-                        top: "50%",
-                        left: "50%",
-                      }}
-                    />
-                  </>
-                ) : (
-                  "Generate Report"
-                )}
-              </button>
+              {loadingSpindle ? (
+                <div className="flex justify-center items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mt-2">
+                  <CircularProgress size={16} />{" "}
+                  <span>Fetching Spindles...</span>
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={loadingSubmit || errorMessage.length > 0}
+                  className={`bg-[#1A68B2] cursor-pointer text-white px-4 py-1 rounded flex items-center justify-center gap-2 ${
+                    errorMessage.length > 0
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                >
+                  {loadingSubmit ? (
+                    <>
+                      <span>Generating</span>
+                      <CircularProgress size={20} sx={{ color: "white" }} />
+                    </>
+                  ) : (
+                    "Generate Report"
+                  )}
+                </button>
+              )}
             </div>
           </form>
         </div>

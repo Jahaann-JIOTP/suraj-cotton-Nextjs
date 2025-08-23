@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import * as am4core from "@amcharts/amcharts4/core";
@@ -30,7 +31,11 @@ function CustomTrend() {
   const [loading, setLoading] = useState(false);
   const [unitForExportFile, setUnitForExportFile] = useState("");
   const [showPdfBtn, setShowPdfBtn] = useState(false);
-
+  console.log("Start Date",startDate);
+  console.log("End Date",endDate);
+  console.log("area",area);
+  console.log("Select meter",selectedMeter);
+  console.log("Select param",selectedParameter);
   const { theme } = useTheme();
 
   const meterDropdownRef = useRef();
@@ -91,6 +96,13 @@ function CustomTrend() {
     "Diesel + Gas Incoming": "U19_PLC",
     "Compressor (Bypass)": "U20_PLC",
     "Wapda + HFO + Gas Incoming (PLC)": "U21_PLC",
+    "HFO 1": "U22_PLC",
+    "O/G 2": "U23_PLC",
+    "O/G 1": "U24_PLC",
+    "S/T": "U25_PLC",
+    "I-GG": "U26_PLC",
+    "Wapda 2": "U27_PLC",
+    // unit 4 lt 2
     "Drying Simplex AC": "U1_GW01",
     "Weikel Conditioning Machine": "U2_GW01",
     "Winding AC": "U3_GW01",
@@ -195,42 +207,46 @@ function CustomTrend() {
     "Harmonics I2": "Harmonics_I2_THD",
     "Harmonics I3": "Harmonics_I3_THD",
     "Active Energy Export": "ActiveEnergy_Exp_kWh",
-
   };
 
-  let filteredMeters = [];
-  if (area === "Unit 4") {
-    const allMeters = Object.keys(meterMapping);
-    const lt1Meters = allMeters.filter((key) =>
-      meterMapping[key].endsWith("PLC")
+  // let filteredMeters = [];
+  
+let filteredMeters = [];
+  if (area === "HFO") {
+    filteredMeters = [
+      "HFO 1", "O/G 2", "O/G 1", "S/T", "I-GG", "Wapda 2"
+    ];
+  } else if (area === "HT_Room1") {
+    filteredMeters = [
+      "HFO Incoming", "Wapda 1 Incoming"
+    ];
+  } else if (area === "HT_Room2") {
+    filteredMeters = [
+      "WAPDA + HFO + Gas Outgoing T/F 3", "WAPDA + HFO + Gas Outgoing T/F 4"
+    ];
+  } else if (area === "Unit 4 LT_1") {
+    // All meters ending with PLC except HFO meters
+    filteredMeters = Object.keys(meterMapping).filter(key => 
+      meterMapping[key].endsWith("PLC") && 
+      !["HFO 1", "O/G 2", "O/G 1", "S/T", "I-GG", "Wapda 2"].includes(key)
     );
-    const lt2Meters = allMeters.filter((key) =>
-      meterMapping[key].endsWith("GW01")
+  } else if (area === "Unit 4 LT_2") {
+    // All meters ending with GW01 except HT Room 1 meters
+    filteredMeters = Object.keys(meterMapping).filter(key => 
+      meterMapping[key].endsWith("GW01") && 
+      !["HFO Incoming", "Wapda 1 Incoming"].includes(key)
     );
-
-    if (lt === "LT_1") {
-      filteredMeters = lt1Meters;
-    } else if (lt === "LT_2") {
-      filteredMeters = lt2Meters;
-    } else if (lt === "ALL") {
-      filteredMeters = [...lt1Meters, ...lt2Meters];
-    }
-  } else if (area === "Unit 5") {
-    const allMeters = Object.keys(meterMapping);
-    const lt1Meters = allMeters.filter((key) =>
+  } else if (area === "Unit 5 LT_1") {
+    // All meters ending with GW02
+    filteredMeters = Object.keys(meterMapping).filter(key => 
       meterMapping[key].endsWith("GW02")
     );
-    const lt2Meters = allMeters.filter((key) =>
-      meterMapping[key].endsWith("GW03")
+  } else if (area === "Unit 5 LT_2") {
+    // All meters ending with GW03 except HT Room 2 meters
+    filteredMeters = Object.keys(meterMapping).filter(key => 
+      meterMapping[key].endsWith("GW03") && 
+      !["WAPDA + HFO + Gas Outgoing T/F 3", "WAPDA + HFO + Gas Outgoing T/F 4"].includes(key)
     );
-
-    if (lt === "LT_3") {
-      filteredMeters = lt1Meters;
-    } else if (lt === "LT_4") {
-      filteredMeters = lt2Meters;
-    } else if (lt === "ALL") {
-      filteredMeters = [...lt1Meters, ...lt2Meters];
-    }
   }
 
   const parameters = Object.keys(parameterMapping);
@@ -256,23 +272,23 @@ function CustomTrend() {
     });
   };
 
-  useEffect(() => {
-    if (
-      startDate &&
-      endDate &&
-      area &&
-      lt &&
-      selectedMeter.length > 0 &&
-      selectedParameter
-    ) {
-      const meterIds = selectedMeter.map((m) => meterMapping[m]).join(",");
-      const suffixes = parameterMapping[selectedParameter];
+useEffect(() => {
+  if (
+    startDate &&
+    endDate &&
+    area &&
+    selectedMeter.length > 0 &&
+    selectedParameter
+  ) {
+    const meterIds = selectedMeter.map((m) => meterMapping[m]).join(",");
+    const suffixes = parameterMapping[selectedParameter];
 
-      const fetchData = async (ltSelection) => {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-        setLoading(true);
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      setLoading(true);
 
+      try {
         const response = await fetch(`${config.BASE_URL}${config.TRENDS}`, {
           method: "POST",
           headers: {
@@ -285,69 +301,60 @@ function CustomTrend() {
             meterId: meterIds,
             suffixes: suffixes,
             area: area,
-            LT_selections: ltSelection,
           }),
         });
+        
         if (!response.ok) {
           throw new Error(
-            `Failed to fetch trend data for ${ltSelection}: ${response.statusText}`
+            `Failed to fetch trend data: ${response.statusText}`
           );
         }
+        
+        const data = await response.json();
+        console.log("API Response:", data);
+        
         setLoading(false);
         setShowPdfBtn(true);
-        return response.json();
-      };
-
-      const fetchAllData = async () => {
-        try {
-          let data = [];
-          if (lt === "ALL" && area === "Unit 5") {
-            const [lt1Data, lt2Data] = await Promise.all([
-              fetchData("LT_1"),
-              fetchData("LT_2"),
-            ]);
-            data = [...lt1Data, ...lt2Data];
-          } else {
-            data = await fetchData(lt);
-          }
-          const formatted = data.map((item) => {
-            // const point = { timestamp: new Date(item.timestamp) };
-            const point = {
-              Date: new Date(item.timestamp),
-              Time: new Date(item.timestamp).toLocaleTimeString(),
-            };
-            selectedMeter.forEach((m) => {
-              const key = `${meterMapping[m]}_${suffixes}`;
-
-              point[m] =
-                item[key] !== undefined
-                  ? parseFloat(item[key]).toFixed(2) || null
-                  : null;
-            });
-
-            return point;
+        
+        // Format the data
+        const formatted = data.map((item) => {
+          const point = {
+            Date: new Date(item.timestamp),
+            Time: new Date(item.timestamp).toLocaleTimeString(),
+          };
+          
+          selectedMeter.forEach((m) => {
+            const key = `${meterMapping[m]}_${suffixes}`;
+            point[m] =
+              item[key] !== undefined
+                ? parseFloat(item[key]).toFixed(2) || null
+                : null;
           });
-          if (
-            formatted.length === 0 ||
-            !formatted.some((d) => Object.values(d).some((v) => v !== null))
-          ) {
-            console.warn("No valid data available for the selected criteria");
-            setChartData([]);
-          } else {
-            setChartData(formatted);
-          }
-        } catch (err) {
-          console.error("Error fetching trend data:", err);
+
+          return point;
+        });
+        
+        if (
+          formatted.length === 0 ||
+          !formatted.some((d) => Object.values(d).some((v) => v !== null))
+        ) {
+          console.warn("No valid data available for the selected criteria");
           setChartData([]);
+        } else {
+          setChartData(formatted);
         }
-      };
+      } catch (err) {
+        console.error("Error fetching trend data:", err);
+        setLoading(false);
+        setChartData([]);
+      }
+    };
 
-      fetchAllData();
-    } else {
-      setChartData([]);
-    }
-  }, [startDate, endDate, area, lt, selectedMeter, selectedParameter]);
-
+    fetchData();
+  } else {
+    setChartData([]);
+  }
+}, [startDate, endDate, area, selectedMeter, selectedParameter]);
   useEffect(() => {
     if (chartData.length === 0) {
       console.warn("No chart data to render");
@@ -850,7 +857,7 @@ function CustomTrend() {
         <h1 className="text-lg font-bold mb-4 font-raleway text-[#1F5897] dark:text-[#D1D5DB]">
           Customized Trend
         </h1>
-        <div className="w-full flex flex-col gap-4 mb-6 md:grid md:grid-cols-6 md:gap-4">
+        <div className="w-full flex flex-col lg:flex-row gap-2">
           <div className="w-full">
             <label
               className="block text-sm font-medium text-gray-600 dark:text-gray-300"
@@ -900,84 +907,51 @@ function CustomTrend() {
                 Select Area
               </option>
               <option
-                value="Unit 4"
+                value="HFO"
                 className="dark:text-gray-300 dark:bg-gray-800"
               >
-                UNIT 4
+                HFO
               </option>
               <option
-                value="Unit 5"
+                value="HT_Room1"
                 className="dark:text-gray-300 dark:bg-gray-800"
               >
-                UNIT 5
+                HT ROOM 1
+              </option>
+              <option
+                value="HT_Room2"
+                className="dark:text-gray-300 dark:bg-gray-800"
+              >
+                HT ROOM 2
+              </option>
+              <option
+                // value="Unit 4 LT_1"
+                value="Unit 4 LT_1"
+                className="dark:text-gray-300 dark:bg-gray-800"
+              >
+                UNIT 4 LT 1
+              </option>
+              <option
+                value="Unit 4 LT_2"
+                className="dark:text-gray-300 dark:bg-gray-800"
+              >
+                UNIT 4 LT 2
+              </option>
+              <option
+                value="Unit 5 LT_1"
+                className="dark:text-gray-300 dark:bg-gray-800"
+              >
+                UNIT 5 LT 1
+              </option>
+              <option
+                value="Unit 5 LT_2"
+                className="dark:text-gray-300 dark:bg-gray-800"
+              >
+                UNIT 5 LT 2
               </option>
             </select>
           </div>
-          <div className="w-full">
-            <label
-              className="block text-sm font-medium text-gray-600 dark:text-gray-300"
-              style={{ color: "#1F5897" }}
-            >
-              Select LT
-            </label>
-            <select
-              value={lt}
-              onChange={(e) => {
-                const value = e.target.value;
-                setLt(value);
-                setSelectedMeter([]);
-              }}
-              className="w-full p-2 border rounded"
-            >
-              <option value="" className="dark:bg-gray-800 dark:text-gray-300">
-                Select LT
-              </option>
-              {area === "Unit 4" && (
-                <>
-                  <option
-                    value="LT_1"
-                    className="dark:bg-gray-800 dark:text-gray-300"
-                  >
-                    LT1
-                  </option>
-                  <option
-                    value="LT_2"
-                    className="dark:bg-gray-800 dark:text-gray-300"
-                  >
-                    LT2
-                  </option>
-                  <option
-                    value="ALL"
-                    className="dark:bg-gray-800 dark:text-gray-300"
-                  >
-                    Select All
-                  </option>
-                </>
-              )}
-              {area === "Unit 5" && (
-                <>
-                  <option
-                    value="LT_3"
-                    className="dark:bg-gray-800 dark:text-gray-300"
-                  >
-                    LT_3
-                  </option>
-                  <option
-                    value="LT_4"
-                    className="dark:bg-gray-800 dark:text-gray-300"
-                  >
-                    LT_4
-                  </option>
-                  <option
-                    value="ALL"
-                    className="dark:bg-gray-800 dark:text-gray-300"
-                  >
-                    Select All
-                  </option>
-                </>
-              )}
-            </select>
-          </div>
+          
           <div ref={meterDropdownRef} className="relative w-full">
             <label
               className="block text-sm font-medium text-gray-600 dark:text-gray-300"

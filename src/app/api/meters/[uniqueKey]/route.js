@@ -1,17 +1,13 @@
 import { connectDB } from "../../../../lib/mongodb";
 import Meter from "../../../../../models/Meter";
 import MeterName from "../../../../../models/MeterName";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(
-  req,
-  { params } 
-){
+export async function GET(req, { params }) {
   try {
-    const resolvedParams = await params;
     await connectDB();
 
-    const uniqueKey = resolvedParams.uniqueKey?.trim();
+    const uniqueKey = params?.uniqueKey?.trim();
     if (!uniqueKey) {
       return NextResponse.json(
         { message: "Unique key not provided" },
@@ -19,10 +15,11 @@ export async function GET(
       );
     }
 
+    // 🔹 Basic info from meter_name collection
     const meterInfo = await MeterName.findOne(
       { unique_key: uniqueKey },
       { _id: 0, meter_name: 1, location: 1, unique_key: 1 }
-    );
+    ).lean();
 
     if (!meterInfo) {
       return NextResponse.json(
@@ -31,16 +28,17 @@ export async function GET(
       );
     }
 
+    // 🔹 Details from meters collection
     const meterData = await Meter.findOne(
       { unique_key: uniqueKey },
       {
         _id: 0,
         parameters: 1,
         comment: 1,
-        commentUpdatedAt: 1,
-        statusUpdatedAt: 1,
+        createdAt: 1,
+        updatedAt: 1,
       }
-    );
+    ).lean();
 
     return NextResponse.json(
       {
@@ -49,10 +47,8 @@ export async function GET(
         location: meterInfo.location,
         comment: meterData?.comment || "",
         parameters: meterData?.parameters || [],
-
-        commentUpdatedAt: meterData?.commentUpdatedAt || null,
-
-        statusUpdatedAt: meterData?.statusUpdatedAt || null,
+        createdAt: meterData?.createdAt || null,
+        updatedAt: meterData?.updatedAt || null,
       },
       { status: 200 }
     );

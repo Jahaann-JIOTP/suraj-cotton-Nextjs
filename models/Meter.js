@@ -1,30 +1,41 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
-const ParameterSchema = new mongoose.Schema(
+// export type StatusType = "Verified" | "Not Verified" | "Not Sure" | "Not Used";
+
+export const ALLOWED_STATUSES = [
+  "Verified",
+  "Not Verified",
+  "Not Sure",
+  "Not Used",
+];
+
+
+const ParameterSchema = new Schema(
   {
-    paramName: String,
+    paramName: { type: String, required: true },
     status: {
       type: String,
-      enum: ["Verified", "Not Verified", "Not Sure", "Not Used"],
+      enum: ALLOWED_STATUSES,
       default: "Not Verified",
+      required: true,
     },
   },
   { _id: false }
 );
 
-const MeterSchema = new mongoose.Schema(
+const MeterSchema = new Schema(
   {
-    unique_key: { type: String, required: true },
-    name: String,
-    location: String,
-    parameters: [ParameterSchema],
+    unique_key: { type: String, required: true, index: true, unique: true },
+    name: { type: String },
+    location: { type: String },
+    parameters: { type: [ParameterSchema], default: [] },
     comment: { type: String, default: "" },
-
-    commentUpdatedAt: { type: Date },
-    statusUpdatedAt: { type: Date },
   },
-  { timestamps: true }
+  { timestamps: true, collection: "meters" }
 );
 
-export default mongoose.models.Meter ||
-  mongoose.model("Meter", MeterSchema, "meters");
+const Meter =
+  (mongoose.models.Meter) ||
+  mongoose.model("Meter", MeterSchema);
+
+export default Meter;

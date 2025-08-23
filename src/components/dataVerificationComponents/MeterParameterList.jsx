@@ -31,7 +31,8 @@ const MeterParameterList = ({
   const [isRealTimeLoading, setIsRealTimeLoading] = useState(true);
   const [updatingStatus, setUpdatingStatus] = useState({});
   const [meterComment, setMeterComment] = useState("");
-
+  const [updatedAt, setUpdateAT] = useState("")
+  const updateTimeToLocal = new Date(updatedAt).toLocaleString("en-US")
   const updateMeterData = async (updates) => {
     try {
       const response = await fetch(`/api/meters/${uniqueKey}/update-status`, {
@@ -108,6 +109,7 @@ const MeterParameterList = ({
           }));
           setParameters(dynamicParams);
           setMeterComment(apiData.comment || "");
+          setUpdateAT(apiData?.updatedAt)
         }
       } else {
         setParameters(data);
@@ -253,7 +255,7 @@ const MeterParameterList = ({
         </span>
         <span>
           <span className="font-medium">Last Updated: </span>
-          <span className="text-[#265F95] dark:text-[#4DA0F0]">{lastUpdated || "N/A"}</span>
+          <span className="text-[#265F95] dark:text-[#4DA0F0]">{updateTimeToLocal || "N/A"}</span>
         </span>
         <span>
           <span className="font-medium">Last Fetched: </span>
