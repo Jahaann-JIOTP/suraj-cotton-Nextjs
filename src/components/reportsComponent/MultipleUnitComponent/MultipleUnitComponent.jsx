@@ -492,11 +492,11 @@ const MultipleUnitComponent = ({
         "Total Spindles",
         "",
         "",
-        unit4Spindle.toFixed(2),
+        unit4Spindle,
         "",
         "",
         "",
-        unit5Spindle.toFixed(2),
+        unit5Spindle,
         "",
         (unit4Spindle + unit5Spindle).toFixed(2),
       ]);
@@ -745,13 +745,13 @@ const MultipleUnitComponent = ({
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-[5px] py-1 text-center border-r-1 border-gray-300 dark:border-gray-500 text-[12px] font-inter font-semibold">
-                        {unit4Spindle.toFixed(2)}
+                        {unit4Spindle}
                       </td>
                       <td className="px-[5px] py-1 border-r-1 border-gray-300 dark:border-gray-500 text-center text-[12px] font-inter font-semibold"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500  text-[12px] font-inter font-semibold">
-                        {unit5Spindle.toFixed(2)}
+                        {unit5Spindle}
                       </td>
                       <td className="px-[5px] py-1 text-center border-r-1 text-[12px] font-inter font-semibold"></td>
                       <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-semibold">

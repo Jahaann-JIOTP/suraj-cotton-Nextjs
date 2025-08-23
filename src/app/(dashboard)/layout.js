@@ -22,16 +22,36 @@ export default function DashboardLayout({ children }) {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const token = useSelector((state) => state.auth.token);
 
-  // useEffect(() => {
-  //   const currentTab = getActiveTabFromPathname(pathname);
-  //   setActiveTab(currentTab);
-  // }, []);
+  // fetch use details
+  const fetchUserDetails = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const res = await fetch(`${config.BASE_URL}${config.USER.PROFILE}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const privileges = data?.role?.privelleges?.map((p) => p.name) || [];
+        
+      } else {
+        console.error("Failed to fetch user profile");
+      }
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+    }
+  };
   useEffect(() => {
     const currentTab = getActiveTabFromPathname(pathname);
     setActiveTab(currentTab);
   }, [pathname]);
 
   useEffect(() => {
+    fetchUserDetails();
     const checkAuth = async () => {
       await dispatch(initializeAuth());
       setAuthChecked(true);
@@ -66,34 +86,6 @@ export default function DashboardLayout({ children }) {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-  // 🧠 Update active tab based on route
-  // useEffect(() => {
-  //   setActiveTab((prevTab) => {
-  //     if (
-  //       pathname === "/sld" ||
-  //       pathname === "/sld_meters1" ||
-  //       pathname === "/Logs1" ||
-  //       pathname === "/log_detail1"
-  //     )
-  //       return "Diagram";
-  //     else if (
-  //       pathname === "/custom_trend" ||
-  //       pathname === "/comparison_trends"
-  //     )
-  //       return "Trends";
-  //     else if (
-  //       pathname === "/add_roles" ||
-  //       pathname === "/add_user" ||
-  //       pathname === "/view_users"
-  //     )
-  //       return "Setting";
-  //     else if (pathname === "/Recent_Alarms" || pathname === "/All_Alarms")
-  //       return "Alarms";
-  //     else if (pathname === "/energy_cost" || pathname === "/energy_usage")
-  //       return "Reports";
-  //     return prevTab;
-  //   });
-  // }, [pathname]);
 
   if (!isAuthenticated) return null;
 

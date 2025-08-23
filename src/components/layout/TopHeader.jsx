@@ -13,7 +13,7 @@ const TopHeader = () => {
   if (!mounted) return null;
   return (
     <header className="h-[48px] flex items-center justify-between px-4 bg-white dark:bg-gray-800">
-      <Link href={"/dashboard"} className="flex items-center">
+      <div className="flex items-center">
         {theme === "light" ? (
           <img src="./suraj-cotton-logo.png" className="h-14" alt="Logo" />
         ) : (
@@ -23,7 +23,7 @@ const TopHeader = () => {
             alt="Logo"
           />
         )}
-      </Link>
+      </div>
 
       <div className="header-right flex items-center space-x-4">
         {theme === "light" ? (

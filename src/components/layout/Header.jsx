@@ -37,6 +37,7 @@ const Header = ({ handleTabClick, activeTab }) => {
       handleTabClick(currentTab);
     }
   }, [pathname]);
+  // Get meter status
   const getMeterData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;

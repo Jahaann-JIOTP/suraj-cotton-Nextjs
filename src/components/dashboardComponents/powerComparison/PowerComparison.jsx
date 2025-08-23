@@ -224,13 +224,12 @@ const PowerComparison = () => {
     xAxis.get("tooltip").label.adapters.add("text", (text, target) => {
       const dataItem = target.dataItem;
       if (!dataItem) return text;
-
       const raw = dataItem.get("category");
       if (!raw) return text;
-
+      
       const date = new Date(raw);
       if (isNaN(date)) return text;
-
+      
       // Format in UTC based on timeRange
       switch (timeRange) {
         case "hourly":
@@ -283,9 +282,8 @@ const PowerComparison = () => {
           stacked,
         })
       );
-
       series.columns.template.setAll({
-        tooltipText: "{name}: {valueY}",
+        tooltipText: "[fontSize: 12px]{name}: {valueY}",
         width: am5.percent(40), // Increased width to reduce gap
         fill: am5.color(color),
         stroke: am5.color(color),
@@ -311,7 +309,7 @@ const PowerComparison = () => {
 
     // Cluster 2: LOSSES
     makeSeries(
-      "Unacc. energy",
+      "Unacc. Energy",
       "unaccoutable_energy",
       "#6A7E91",
       CLUSTER_GROUPS.LOSSES,
@@ -363,7 +361,7 @@ const PowerComparison = () => {
         stroke: am5.color("#C20000"),
         fill: am5.color("#C20000"),
         tooltip: am5.Tooltip.new(root, {
-          labelText: "Efficiency: {valueY}%",
+          labelText: "[fontSize: 12px]Efficiency: {valueY}%",
         }),
         strokeWidth: 2,
         connect: false,

@@ -1,9 +1,10 @@
-
-import { connectDB } from '../../../../../lib/mongodb'
+import { connectDB } from "../../../../../lib/mongodb";
 import Meter from "../../../../../../models/Meter";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(req,{ params } ){
+export async function PATCH(
+  req,params 
+) {
   try {
     const resolvedParams = await params;
     await connectDB();
@@ -51,6 +52,7 @@ export async function PATCH(req,{ params } ){
       if (param.status !== newStatus) {
         param.status = newStatus;
         statusUpdated = true;
+        meter.statusUpdatedAt = new Date();
       }
     }
 
@@ -59,6 +61,7 @@ export async function PATCH(req,{ params } ){
       if (meter.comment !== trimmedComment) {
         meter.comment = trimmedComment;
         commentUpdated = true;
+        meter.commentUpdatedAt = new Date();
       }
     }
 
@@ -72,8 +75,14 @@ export async function PATCH(req,{ params } ){
     await meter.save();
 
     const responsePayload = { success: true };
-    if (statusUpdated) responsePayload.updatedStatus = newStatus;
-    if (commentUpdated) responsePayload.updatedComment = meter.comment;
+    if (statusUpdated){ 
+      responsePayload.updatedStatus = newStatus;
+      responsePayload.statusUpdatedAt = meter.statusUpdatedAt;
+    }
+    if (commentUpdated){
+      responsePayload.updatedComment = meter.comment;
+    responsePayload.commentUpdatedAt = meter.commentUpdatedAt;
+    }
 
     return NextResponse.json(responsePayload, { status: 200 });
   } catch (error) {

@@ -16,6 +16,7 @@ const Dashboard = () => {
   const [u5Spindle, setU5Spindle] = useState(0);
   const [loading, setLoading] = useState(false);
   const { startDate, endDate } = getDateRangeFromString(dashboardTimePeriod);
+
   const fetchSingleValueData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -139,7 +140,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="WAPDA Import"
-            value={Number(singleDivData.WapdaImport||0).toLocaleString("en-US")}
+            value={Number(singleDivData.Wapda1||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
             height="3"

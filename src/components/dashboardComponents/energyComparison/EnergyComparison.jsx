@@ -106,6 +106,9 @@ const EnergyComparison = () => {
       root.interfaceColors.set("grid", am5.color(0xcccccc));
       root.interfaceColors.set("background", am5.color(0xffffff));
     }
+    const tooltip = am5.Tooltip.new(root, {
+      labelText: "[fontSize: 12px]{category}: {value} kWh",
+    });
 
     const container = root.container.children.push(
       am5.Container.new(root, {
@@ -120,9 +123,9 @@ const EnergyComparison = () => {
     );
 
     // Main Pie Chart
-    const chart = container.children.push(
+   const chart = container.children.push(
       am5percent.PieChart.new(root, {
-        tooltip: am5.Tooltip.new(root, {}),
+        tooltip: tooltip, // Use the custom tooltip
       })
     );
 
@@ -133,6 +136,7 @@ const EnergyComparison = () => {
         alignLabels: true,
       })
     );
+    
 
     series.slices.template.adapters.add("fill", (fill, target) => {
       const category = target.dataItem?.dataContext?.category;
@@ -147,14 +151,14 @@ const EnergyComparison = () => {
     });
 
     series.ticks.template.set("visible", false);
-    series.slices.template.set("tooltipText", null); // close tooltip for main pie chart
+
     series.slices.template.set("toggleKey", "none");
 
     // Sub Pie Chart
     const subChart = container.children.push(
       am5percent.PieChart.new(root, {
         radius: am5.percent(70),
-        tooltip: am5.Tooltip.new(root, {}),
+        tooltip: tooltip, // Use the same custom tooltip
       })
     );
 
@@ -297,7 +301,7 @@ const EnergyComparison = () => {
       updateLines();
     }
 
-    subSeries.slices.template.set("tooltipText", ""); // close tooltip for subpie chart
+    // subSeries.slices.template.set("tooltipText", ""); // close tooltip for subpie chart
 
     series.slices.template.events.on("click", (e) => {
       selectSlice(e.target);

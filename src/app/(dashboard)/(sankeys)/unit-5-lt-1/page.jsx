@@ -2,15 +2,16 @@
 import TimePeriodSelector from "@/components/dashboardComponents/timePeriodSelector/TimePeriodSelector";
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
 import { useEffect, useState } from "react";
+import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
-import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 
-const Unit5Lt4Page = () => {
-  const [Unit5Lt4TimePeriod, setUnit5Lt4TimePeriod] = useState("today");
+const Unit5Lt3Page = () => {
+  const [Unit5lt3TimePeriod, setUnit5lt3TimePeriod] = useState("today");
   const [data, setData] = useState([]);
+
   const [loading, setLoading] = useState(false);
-  const { startDate, endDate } = getDateRangeFromString(Unit5Lt4TimePeriod);
+  const { startDate, endDate } = getDateRangeFromString(Unit5lt3TimePeriod);
 
   const fetchSankeyData = async () => {
     const token = localStorage.getItem("token");
@@ -18,7 +19,7 @@ const Unit5Lt4Page = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.SANKEY.UNIT5_LT4}`,
+        `${config.BASE_URL}${config.SANKEY.UNIT5_LT3}`,
         {
           method: "POST",
           headers: {
@@ -45,15 +46,14 @@ const Unit5Lt4Page = () => {
   };
   useEffect(() => {
     fetchSankeyData();
-  }, [Unit5Lt4TimePeriod]);
-
+  }, [Unit5lt3TimePeriod]);
   return (
     <div className="w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-center flex justify-between">
-        <h2 className="text-[20px] font-600 font-inter">Unit 5 LT 4</h2>
+        <h2 className="text-[20px] font-600 font-inter">Unit 5 LT 1</h2>
         <TimePeriodSelector
-          selected={Unit5Lt4TimePeriod}
-          setSelected={setUnit5Lt4TimePeriod}
+          selected={Unit5lt3TimePeriod}
+          setSelected={setUnit5lt3TimePeriod}
         />
       </div>
       <div className=" w-full  flex items-center justify-center">
@@ -61,7 +61,7 @@ const Unit5Lt4Page = () => {
           {loading ? (
             <CustomLoader />
           ) : (
-            <SankeyChart data={data} id="unit5Lt4Chart" />
+            <SankeyChart data={data} id="unit5Lt3Chart" />
           )}
         </div>
       </div>
@@ -69,4 +69,4 @@ const Unit5Lt4Page = () => {
   );
 };
 
-export default Unit5Lt4Page;
+export default Unit5Lt3Page;

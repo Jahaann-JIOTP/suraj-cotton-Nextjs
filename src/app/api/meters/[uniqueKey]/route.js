@@ -3,7 +3,10 @@ import Meter from "../../../../../models/Meter";
 import MeterName from "../../../../../models/MeterName";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req,{ params }) {
+export async function GET(
+  req,
+  { params } 
+){
   try {
     const resolvedParams = await params;
     await connectDB();
@@ -30,7 +33,13 @@ export async function GET(req,{ params }) {
 
     const meterData = await Meter.findOne(
       { unique_key: uniqueKey },
-      { _id: 0, parameters: 1, comment: 1 }
+      {
+        _id: 0,
+        parameters: 1,
+        comment: 1,
+        commentUpdatedAt: 1,
+        statusUpdatedAt: 1,
+      }
     );
 
     return NextResponse.json(
@@ -40,6 +49,10 @@ export async function GET(req,{ params }) {
         location: meterInfo.location,
         comment: meterData?.comment || "",
         parameters: meterData?.parameters || [],
+
+        commentUpdatedAt: meterData?.commentUpdatedAt || null,
+
+        statusUpdatedAt: meterData?.statusUpdatedAt || null,
       },
       { status: 200 }
     );
