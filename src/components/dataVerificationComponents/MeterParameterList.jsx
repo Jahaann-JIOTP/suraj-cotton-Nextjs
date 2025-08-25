@@ -10,7 +10,6 @@ const statusOptions = ["Verified", "Not Verified", "Not Sure", "Not Used"];
 const PAGE_SIZE = 10;
 
 const MeterParameterList = ({
-  selectedMeter,
   data,
   location,
   uniqueKey,
@@ -391,7 +390,7 @@ const MeterParameterList = ({
         <div className="flex flex-wrap justify-center items-center gap-2 mt-4">
           <button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-            className="px-3 py-1 border rounded shadow-sm bg-white dark:bg-gray-700 text-gray-600 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition disabled:opacity-50 disabled:shadow-none"
+            className="px-3 py-1 border rounded shadow-sm bg-white dark:bg-gray-700 text-gray-600 cursor-pointer hover:bg-blue-50 dark:text-blue-100 hover:text-blue-700 transition disabled:opacity-50 disabled:shadow-none"
             disabled={currentPage === 1}
           >
             {"<"}
@@ -432,7 +431,7 @@ const MeterParameterList = ({
           })}
           <button
             onClick={() => setCurrentPage(Math.min(pageCount, currentPage + 1))}
-            className="px-3 py-1 border rounded shadow-sm bg-white dark:bg-gray-700 text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition disabled:opacity-50 disabled:shadow-none cursor-pointer"
+            className="px-3 py-1 border rounded shadow-sm bg-white dark:bg-gray-700 text-gray-600 hover:bg-blue-50  hover:text-blue-700 transition disabled:opacity-50 disabled:shadow-none cursor-pointer"
             disabled={currentPage === pageCount}
           >
             {">"}

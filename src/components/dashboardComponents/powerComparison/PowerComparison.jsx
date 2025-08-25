@@ -5,9 +5,7 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
-import CustomLoader from "@/components/customLoader/CustomLoader";
-import { CircularProgress } from "@mui/material";
-import { faL } from "@fortawesome/free-solid-svg-icons";
+import { useTheme } from "next-themes";
 
 const PowerComparison = () => {
   const date = new Date();
@@ -17,6 +15,7 @@ const PowerComparison = () => {
   const [endDate, setEndDate] = useState(today);
   const [timeRange, setTimeRange] = useState("hourly");
   const [loading, setLoading] = useState(false);
+   const { theme } = useTheme();
   const [isPowerComparisonFullView, setIsPowerComparisonFullView] =
     useState(false);
   const chartRef = useRef(null);
@@ -99,6 +98,11 @@ const PowerComparison = () => {
     const root = am5.Root.new(chartRef.current);
     root.setThemes([am5themes_Animated.new(root)]);
     root._logo?.dispose();
+
+    const isDark = theme === "dark";
+    root.interfaceColors.set("text", am5.color(isDark ? 0xffffff : 0x000000));
+    root.interfaceColors.set("grid", am5.color(isDark ? 0x555555 : 0xcccccc));
+    root.interfaceColors.set("background", am5.color(isDark ? 0x111111 : 0xffffff));
 
     const chart = root.container.children.push(
       am5xy.XYChart.new(root, {
@@ -403,7 +407,7 @@ const PowerComparison = () => {
     return () => {
       root.dispose();
     };
-  }, [isPowerComparisonFullView, stackChartData, timeRange]);
+  }, [isPowerComparisonFullView, stackChartData,theme, timeRange]);
 
   function calculateGridDistance(timeRange, daysInRange) {
     if (timeRange === "hourly") {

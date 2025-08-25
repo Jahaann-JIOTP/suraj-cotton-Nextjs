@@ -181,7 +181,7 @@ const Header = ({ handleTabClick, activeTab }) => {
   };
 
   return (
-    <header className="bg-[#1F5897] text-white mx-0 my-2 mt-0 h-[44px] flex text-sm items-center justify-between w-full">
+    <header className="bg-gradient-to-t from-[#183A5C] to-[#1F5897] text-white mx-0 my-2 mt-0 h-[50px] flex text-sm items-center justify-between w-full">
       {/* Dropdown menu for small screens */}
 
       <div className="2xl:hidden flex justify-between items-center px-4 py-2 z-40 relative">

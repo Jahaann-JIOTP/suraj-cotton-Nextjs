@@ -11,7 +11,9 @@ const MultipleUnitComponent = ({
   resData,
 }) => {
   const { theme } = useTheme();
-  const data = resData[0];
+  const data = resData[0]||{};
+  
+
   const u4U5Total = {};
   for (const key in data) {
     const match = key.match(/^unit_([45])(.+?)_consumption$/);
@@ -287,6 +289,8 @@ const MultipleUnitComponent = ({
       u4andU5TotalConsumption: u4U5Total.auxunit5,
     },
   ];
+  console.log(".........................................",tableData)
+
 
   const getImageBuffer = async (imageUrl) => {
     const res = await fetch(imageUrl);
@@ -459,13 +463,13 @@ const MultipleUnitComponent = ({
         "Total Load",
         "",
         "",
-        unit4Total.toFixed(2),
+        unit4Total?.toFixed(2) || 0,
         "",
         "",
         "",
-        unit5Total.toFixed(2),
+        unit5Total?.toFixed(2) || 0,
         "",
-        allTotalofU4U5Sum.toFixed(2),
+        allTotalofU4U5Sum?.toFixed(2) || 0,
       ]);
       totalRow.eachCell((cell, colNumber) => {
         if ([1, 2, 3, 4, 6, 7, 8, 10].includes(colNumber)) {
@@ -498,7 +502,7 @@ const MultipleUnitComponent = ({
         "",
         unit5Spindle,
         "",
-        (unit4Spindle + unit5Spindle).toFixed(2),
+        (unit4Spindle + unit5Spindle)?.toFixed(2) || 0,
       ]);
       spindleRow.eachCell((cell, colNumber) => {
         if ([1, 2, 3, 4, 6, 7, 8, 10].includes(colNumber)) {
@@ -560,7 +564,7 @@ const MultipleUnitComponent = ({
   return (
     <div>
       <div className="flex px-3 md:px-6 flex-col gap-3 overflow-hidden">
-        <div className="flex flex-col md:flex-row items-center justify-between  w-full flex-wrap  gap-1">
+        <div className="flex items-center justify-between  w-full flex-wrap  gap-1">
           <div className="flex flex-col items-start justify-start md:w-[49%]">
             <img
               src={
@@ -586,7 +590,7 @@ const MultipleUnitComponent = ({
         </div>
       </div>
       <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
-      <div className="flex flex-col gap-2 md:flex-row px-3 md:px-6 items-start justify-between pt-5">
+      <div className="flex gap-2 px-3 md:px-6 items-start justify-between pt-5">
         <div>
           <button
             onClick={() => exportEnergyReportToExcel()}
@@ -700,7 +704,7 @@ const MultipleUnitComponent = ({
                           {row.u4Load}
                         </td>
                         <td className="px-[5px] py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                          {row.u4Consumption.toFixed(2) || 0}
+                          {row?.u4Consumption?.toFixed(2) || 0}
                         </td>
                         <td className="px-[5px] py-1 border-r-1 border-gray-300 dark:border-gray-500 text-center text-[12px] font-inter font-400"></td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500  text-center">
@@ -714,7 +718,7 @@ const MultipleUnitComponent = ({
                         </td>
                         <td className="px-[5px] py-1 text-center border-r-1 text-[12px] font-inter font-400"></td>
                         <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                          {row.u4andU5TotalConsumption?.toFixed(2) || 0}
+                          {row?.u4andU5TotalConsumption?.toFixed(2) || 0}
                         </td>
                       </tr>
                     ))}
@@ -725,17 +729,17 @@ const MultipleUnitComponent = ({
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-[5px] py-1 text-center border-r-1 border-gray-300 dark:border-gray-500 text-[12px] font-inter font-semibold">
-                        {unit4Total.toFixed(2)}
+                        {unit4Total?.toFixed(2) || 0}
                       </td>
                       <td className="px-[5px] py-1 border-r-1 border-gray-300 dark:border-gray-500 text-center text-[12px] font-inter font-semibold"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500  text-[12px] font-inter font-semibold">
-                        {unit5Total.toFixed(2)}
+                        {unit5Total?.toFixed(2) || 0}
                       </td>
                       <td className="px-[5px] py-1 text-center border-r-1 text-[12px] font-inter font-semibold"></td>
                       <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-semibold">
-                        {allTotalofU4U5Sum.toFixed(2)}
+                        {allTotalofU4U5Sum?.toFixed(2) || 0}
                       </td>
                     </tr>
                     <tr className="h-[27px] border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-semibold">

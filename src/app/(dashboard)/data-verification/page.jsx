@@ -151,7 +151,6 @@ const PageContent = () => {
       meter.name.toLowerCase().includes(dropdownSearch.toLowerCase()) ||
       meter.location.toLowerCase().includes(dropdownSearch.toLowerCase())
   );
-
   // unified outside click handler
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -330,7 +329,6 @@ const PageContent = () => {
                 <DataVerificationPanelEmptyPage />
               ) : (
                 <MeterParameterList
-                  selectedMeter={selectedMeter}
                   data={[]}
                   location={selectedMeterObj?.location || ""}
                   uniqueKey={selectedMeterObj?.unique_key || ""}

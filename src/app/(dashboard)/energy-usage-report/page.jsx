@@ -15,7 +15,7 @@ const FilterPage = () => {
   const [unit, setUnit] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [unit4Spindle, setUnit4Spindle] = useState(null); // null = not fetched yet
+  const [unit4Spindle, setUnit4Spindle] = useState(null);
   const [unit5Spindle, setUnit5Spindle] = useState(null);
   const [fetched, setFetched] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -198,20 +198,17 @@ const FilterPage = () => {
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`flex items-center ${
-              isHovered ? "justify-center" : "justify-start"
-            } gap-2 h-[40px] cursor-pointer bg-[#1F5897] transition-all duration-300 ease-in-out overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white px-2 ${
-              isHovered ? "w-[90px]" : "w-[40px]"
-            }`}
+            className={`flex items-center ${isHovered ? "justify-center" : "justify-start"
+              } gap-2 h-[40px] cursor-pointer bg-[#1F5897] transition-all duration-300 ease-in-out overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white px-2 ${isHovered ? "w-[90px]" : "w-[40px]"
+              }`}
             style={{
               borderRadius: isHovered ? "8px" : "50%",
             }}
           >
             <ImArrowLeft2 className="text-white shrink-0" />
             <span
-              className={`whitespace-nowrap transition-opacity duration-300 ${
-                isHovered ? "opacity-100" : "opacity-0"
-              }`}
+              className={`whitespace-nowrap transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"
+                }`}
             >
               Back
             </span>
@@ -237,10 +234,10 @@ const FilterPage = () => {
                     {unit === "ALL"
                       ? "ALL Units"
                       : unit === "Unit_4"
-                      ? "Unit 4"
-                      : unit === "Unit_5"
-                      ? "Unit 5"
-                      : "Select Area"}
+                        ? "Unit 4"
+                        : unit === "Unit_5"
+                          ? "Unit 5"
+                          : "Select Area"}
                   </button>
 
                   {isOpen && (
@@ -317,15 +314,12 @@ const FilterPage = () => {
               <div className="w-full flex items-center justify-between">
                 {unit === "Unit_4" ? (
                   <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
-                    <label
-                      htmlFor="unit4Spindels"
-                      className="text-[13.51px] font-500 font-inter"
-                    >
+                    <label htmlFor="unit4Spindels" className="text-[13.51px] font-500 font-inter">
                       No. of Spindles Unit 4
                     </label>
                     <input
                       type="number"
-                      value={unit4Spindle ?? ""}
+                      value={unit4Spindle ?? ""} // Use nullish coalescing
                       id="rates"
                       name="rates"
                       readOnly
@@ -336,15 +330,12 @@ const FilterPage = () => {
                   </div>
                 ) : unit === "Unit_5" ? (
                   <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
-                    <label
-                      htmlFor="unit4Spindels"
-                      className="text-[13.51px] font-500 font-inter"
-                    >
+                    <label htmlFor="unit4Spindels" className="text-[13.51px] font-500 font-inter">
                       No. of Spindles Unit 5
                     </label>
                     <input
                       type="number"
-                      value={unit5Spindle ?? ""}
+                      value={unit5Spindle ?? ""} // Use nullish coalescing
                       id="rates"
                       name="rates"
                       readOnly
@@ -356,15 +347,12 @@ const FilterPage = () => {
                 ) : unit === "ALL" ? (
                   <>
                     <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
-                      <label
-                        htmlFor="unit4Spindels"
-                        className="text-[13.51px] font-500 font-inter"
-                      >
+                      <label htmlFor="unit4Spindels" className="text-[13.51px] font-500 font-inter">
                         No. of Spindles Unit 4
                       </label>
                       <input
                         type="number"
-                        value={unit4Spindle}
+                        value={unit4Spindle ?? ""}
                         id="rates"
                         name="rates"
                         readOnly
@@ -374,15 +362,12 @@ const FilterPage = () => {
                       />
                     </div>
                     <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
-                      <label
-                        htmlFor="unit4Spindels"
-                        className="text-[13.51px] font-500 font-inter"
-                      >
+                      <label htmlFor="unit4Spindels" className="text-[13.51px] font-500 font-inter">
                         No. of Spindles Unit 5
                       </label>
                       <input
                         type="number"
-                        value={unit5Spindle}
+                        value={unit5Spindle ?? ""}
                         id="rates"
                         name="rates"
                         readOnly
@@ -406,11 +391,10 @@ const FilterPage = () => {
                 <button
                   type="submit"
                   disabled={loadingSubmit || errorMessage.length > 0}
-                  className={`bg-[#1A68B2] cursor-pointer text-white px-4 py-1 rounded flex items-center justify-center gap-2 ${
-                    errorMessage.length > 0
+                  className={`bg-[#1A68B2] cursor-pointer text-white px-4 py-1 rounded flex items-center justify-center gap-2 ${errorMessage.length > 0
                       ? "opacity-50 cursor-not-allowed"
                       : ""
-                  }`}
+                    }`}
                 >
                   {loadingSubmit ? (
                     <>

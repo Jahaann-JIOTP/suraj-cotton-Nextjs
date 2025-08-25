@@ -572,7 +572,7 @@ const PowerSummaryTable = ({
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200">
                 {(unit === "Unit_4" || unit === "ALL") && (
                   <>
                     <tr>
@@ -698,7 +698,7 @@ const PowerSummaryTable = ({
           <div className="">
             {/* production */}
             <table className="min-w-full border border-gray-200">
-              <thead className="bg-[#E5F3FD]">
+              <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f]">
                 <tr>
                   <th
                     colSpan="4"
@@ -722,7 +722,7 @@ const PowerSummaryTable = ({
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200">
                 {(unit === "Unit_4" || unit === "ALL") && (
                   <tr>
                     <td className="w-[25%] pl-[3rem] border-y-1 border-gray-300  text-[12px] font-inter font-400">
@@ -777,7 +777,7 @@ const PowerSummaryTable = ({
           <div>
             {/* Consumption */}
             <table className="min-w-full border border-gray-200">
-              <thead className="bg-[#E5F3FD]">
+              <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f]">
                 <tr>
                   <th
                     colSpan="3"
@@ -798,7 +798,7 @@ const PowerSummaryTable = ({
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200">
                 {/* <tr>
                   <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
                     Power House Aux.
@@ -853,7 +853,7 @@ const PowerSummaryTable = ({
           <div>
             {/* Miscellaneous */}
             <table className="min-w-full border border-gray-200">
-              <thead className="bg-[#E5F3FD]">
+              <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f]">
                 <tr>
                   <th
                     colSpan="3"
@@ -874,7 +874,7 @@ const PowerSummaryTable = ({
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200">
                 {(unit === "Unit_4" || unit === "ALL") && (
                   <tr>
                     <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
@@ -906,7 +906,7 @@ const PowerSummaryTable = ({
             {/* Trans. / Traffo Losses */}
             {(unit === "Unit_5" || unit === "ALL") && (
               <table className="min-w-full border border-gray-200">
-                <thead className="bg-[#E5F3FD]">
+                <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f]">
                   <tr>
                     <th
                       colSpan="3"
@@ -927,7 +927,7 @@ const PowerSummaryTable = ({
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-200">
                   <tr>
                     <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
                       TF1
