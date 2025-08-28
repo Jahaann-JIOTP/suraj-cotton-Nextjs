@@ -62,7 +62,7 @@ const TransformerSide = ({
             {transformerReading}
           </div>
           <img
-            src="../../../heatmapTransformer.png"
+            src="../../../transformerforheatmap.png"
             className="w-[110px]"
             alt=""
           />
@@ -122,12 +122,12 @@ const TransformerSide = ({
             {traffoTemp}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center">
+        {/* <div className="flex flex-col items-center justify-center">
           <span className="font-raleway font-500 text-[11px]">% Losses</span>
           <div className="bg-[#424242] flex items-center justify-center text-[15px] text-green-400 w-[80px] h-[20px]">
             {losses} %
           </div>
-        </div>
+        </div> */}
       </div>
       {openModel && (
         <div className="absolute top-0 left-0 w-full h-screen flex items-center justify-center bg-black/80 dark:bg-gray-600/80 z-50">

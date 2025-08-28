@@ -132,7 +132,7 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
                           </div>
                         ) : (
                           <Link href={item.href} onClick={closeSidebar}>
-                            <div className="flex items-center gap-2 py-1 px-2 text-sm hover:bg-gray-100 rounded-md">
+                            <div className="flex items-center gap-2 py-1 px-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
                               <item.icon />
                               {item.label || item.title}
                             </div>

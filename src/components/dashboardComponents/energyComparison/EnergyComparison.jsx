@@ -375,6 +375,7 @@ const EnergyComparison = () => {
             <input
               type="date"
               value={endDate}
+              min={startDate}
               onChange={(e) => setEndDate(e.target.value)}
               className="text-[12px] font-raleway px-1 py-0.5 border rounded"
             />

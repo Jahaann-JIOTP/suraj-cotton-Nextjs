@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import * as am4core from "@amcharts/amcharts4/core";
@@ -27,33 +26,13 @@ function CustomTrend() {
   const [chartData, setChartData] = useState([]);
   const [showMeters, setShowMeters] = useState(false);
   const [showParameters, setShowParameters] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [unitForExportFile, setUnitForExportFile] = useState("");
   const [showPdfBtn, setShowPdfBtn] = useState(false);
-  console.log("Start Date",startDate);
-  console.log("End Date",endDate);
-  console.log("area",area);
-  console.log("Select meter",selectedMeter);
-  console.log("Select param",selectedParameter);
   const { theme } = useTheme();
 
   const meterDropdownRef = useRef();
   const parameterDropdownRef = useRef();
-
-  useEffect(() => {
-    const handleThemeChange = () => {
-      setIsDarkMode(document.documentElement.classList.contains("dark"));
-    };
-    handleThemeChange();
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", handleThemeChange);
-    return () =>
-      window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .removeEventListener("change", handleThemeChange);
-  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -210,42 +189,45 @@ function CustomTrend() {
   };
 
   // let filteredMeters = [];
-  
-let filteredMeters = [];
+
+  let filteredMeters = [];
   if (area === "HFO") {
-    filteredMeters = [
-      "HFO 1", "O/G 2", "O/G 1", "S/T", "I-GG", "Wapda 2"
-    ];
+    filteredMeters = ["HFO 1", "O/G 2", "O/G 1", "S/T", "I-GG", "Wapda 2"];
   } else if (area === "HT_Room1") {
-    filteredMeters = [
-      "HFO Incoming", "Wapda 1 Incoming"
-    ];
+    filteredMeters = ["HFO Incoming", "Wapda 1 Incoming"];
   } else if (area === "HT_Room2") {
     filteredMeters = [
-      "WAPDA + HFO + Gas Outgoing T/F 3", "WAPDA + HFO + Gas Outgoing T/F 4"
+      "WAPDA + HFO + Gas Outgoing T/F 3",
+      "WAPDA + HFO + Gas Outgoing T/F 4",
     ];
   } else if (area === "Unit 4 LT_1") {
     // All meters ending with PLC except HFO meters
-    filteredMeters = Object.keys(meterMapping).filter(key => 
-      meterMapping[key].endsWith("PLC") && 
-      !["HFO 1", "O/G 2", "O/G 1", "S/T", "I-GG", "Wapda 2"].includes(key)
+    filteredMeters = Object.keys(meterMapping).filter(
+      (key) =>
+        meterMapping[key].endsWith("PLC") &&
+        !["HFO 1", "O/G 2", "O/G 1", "S/T", "I-GG", "Wapda 2"].includes(key)
     );
   } else if (area === "Unit 4 LT_2") {
     // All meters ending with GW01 except HT Room 1 meters
-    filteredMeters = Object.keys(meterMapping).filter(key => 
-      meterMapping[key].endsWith("GW01") && 
-      !["HFO Incoming", "Wapda 1 Incoming"].includes(key)
+    filteredMeters = Object.keys(meterMapping).filter(
+      (key) =>
+        meterMapping[key].endsWith("GW01") &&
+        !["HFO Incoming", "Wapda 1 Incoming"].includes(key)
     );
   } else if (area === "Unit 5 LT_1") {
     // All meters ending with GW02
-    filteredMeters = Object.keys(meterMapping).filter(key => 
+    filteredMeters = Object.keys(meterMapping).filter((key) =>
       meterMapping[key].endsWith("GW02")
     );
   } else if (area === "Unit 5 LT_2") {
     // All meters ending with GW03 except HT Room 2 meters
-    filteredMeters = Object.keys(meterMapping).filter(key => 
-      meterMapping[key].endsWith("GW03") && 
-      !["WAPDA + HFO + Gas Outgoing T/F 3", "WAPDA + HFO + Gas Outgoing T/F 4"].includes(key)
+    filteredMeters = Object.keys(meterMapping).filter(
+      (key) =>
+        meterMapping[key].endsWith("GW03") &&
+        ![
+          "WAPDA + HFO + Gas Outgoing T/F 3",
+          "WAPDA + HFO + Gas Outgoing T/F 4",
+        ].includes(key)
     );
   }
 
@@ -272,89 +254,88 @@ let filteredMeters = [];
     });
   };
 
-useEffect(() => {
-  if (
-    startDate &&
-    endDate &&
-    area &&
-    selectedMeter.length > 0 &&
-    selectedParameter
-  ) {
-    const meterIds = selectedMeter.map((m) => meterMapping[m]).join(",");
-    const suffixes = parameterMapping[selectedParameter];
+  useEffect(() => {
+    if (
+      startDate &&
+      endDate &&
+      area &&
+      selectedMeter.length > 0 &&
+      selectedParameter
+    ) {
+      const meterIds = selectedMeter.map((m) => meterMapping[m]).join(",");
+      const suffixes = parameterMapping[selectedParameter];
 
-    const fetchData = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      setLoading(true);
+      const fetchData = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        setLoading(true);
 
-      try {
-        const response = await fetch(`${config.BASE_URL}${config.TRENDS}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            start_date: startDate,
-            end_date: endDate,
-            meterId: meterIds,
-            suffixes: suffixes,
-            area: area,
-          }),
-        });
-        
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch trend data: ${response.statusText}`
-          );
-        }
-        
-        const data = await response.json();
-        console.log("API Response:", data);
-        
-        setLoading(false);
-        setShowPdfBtn(true);
-        
-        // Format the data
-        const formatted = data.map((item) => {
-          const point = {
-            Date: new Date(item.timestamp),
-            Time: new Date(item.timestamp).toLocaleTimeString(),
-          };
-          
-          selectedMeter.forEach((m) => {
-            const key = `${meterMapping[m]}_${suffixes}`;
-            point[m] =
-              item[key] !== undefined
-                ? parseFloat(item[key]).toFixed(2) || null
-                : null;
+        try {
+          const response = await fetch(`${config.BASE_URL}${config.TRENDS}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              start_date: startDate,
+              end_date: endDate,
+              meterId: meterIds,
+              suffixes: suffixes,
+              area: area,
+            }),
           });
 
-          return point;
-        });
-        
-        if (
-          formatted.length === 0 ||
-          !formatted.some((d) => Object.values(d).some((v) => v !== null))
-        ) {
-          console.warn("No valid data available for the selected criteria");
-          setChartData([]);
-        } else {
-          setChartData(formatted);
-        }
-      } catch (err) {
-        console.error("Error fetching trend data:", err);
-        setLoading(false);
-        setChartData([]);
-      }
-    };
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch trend data: ${response.statusText}`
+            );
+          }
 
-    fetchData();
-  } else {
-    setChartData([]);
-  }
-}, [startDate, endDate, area, selectedMeter, selectedParameter]);
+          const data = await response.json();
+
+          setLoading(false);
+          setShowPdfBtn(true);
+
+          // Format the data
+          const formatted = data.map((item) => {
+            const point = {
+              Date: new Date(item.timestamp),
+              Time: new Date(item.timestamp).toLocaleTimeString(),
+            };
+
+            selectedMeter.forEach((m) => {
+              const key = `${meterMapping[m]}_${suffixes}`;
+              point[m] =
+                item[key] !== undefined
+                  ? parseFloat(item[key]).toFixed(2) || null
+                  : null;
+            });
+
+            return point;
+          });
+
+          if (
+            formatted.length === 0 ||
+            !formatted.some((d) => Object.values(d).some((v) => v !== null))
+          ) {
+            console.warn("No valid data available for the selected criteria");
+            setChartData([]);
+          } else {
+            setChartData(formatted);
+          }
+        } catch (err) {
+          console.error("Error fetching trend data:", err);
+          setLoading(false);
+          setChartData([]);
+        }
+      };
+
+      fetchData();
+    } else {
+      setChartData([]);
+    }
+  }, [startDate, endDate, area, selectedMeter, selectedParameter]);
   useEffect(() => {
     if (chartData.length === 0) {
       console.warn("No chart data to render");
@@ -368,14 +349,15 @@ useEffect(() => {
     chart.logo.disabled = true;
     chart.data = chartData;
 
-    const textColor = isDarkMode ? "#ccc" : "#5f5f5f";
-    const gridColor = isDarkMode ? "#666" : "#888";
+    // const textColor = isDarkMode ? "#ccc" : "#5f5f5f";
+    const textColor = theme === "dark" ? "#ccc" : "#5f5f5f";
+    const gridColor = theme === "dark" ? "#666" : "#888";
 
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.baseInterval = { timeUnit: "second", count: 1 };
     dateAxis.renderer.grid.template.stroke = am4core.color(gridColor);
     dateAxis.renderer.labels.template.fill = am4core.color(textColor);
-
+    dateAxis.renderer.grid.template.fontSize = 12;
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     const param = selectedParameter.trim().toLowerCase();
     if (param.includes("current a")) {
@@ -560,6 +542,7 @@ useEffect(() => {
     chart.legend = new am4charts.Legend();
     chart.legend.position = "bottom";
     chart.legend.labels.template.fill = am4core.color(textColor);
+    chart.legend.labels.template.fontSize = 12;
 
     chart.exporting.menu = new am4core.ExportMenu();
     chart.exporting.menu.items = [
@@ -608,7 +591,7 @@ useEffect(() => {
       chart.dispose();
       am4core.unuseAllThemes();
     };
-  }, [chartData, isDarkMode, selectedParameter]);
+  }, [chartData, theme, selectedParameter]);
   //------------------excel export--------------------------
   // Add this function inside your CustomTrend component
   const exportToExcel = async () => {
@@ -852,7 +835,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="relative flex-shrink-0 w-full px-2 py-2 sm:px-4 sm:py-4 md:px-6 md:py-6 h-max lg:h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1F5897] rounded-[8px] shadow-md">
+    <div className="relative flex-shrink-0 w-full px-2 py-2 overflow-auto sm:px-4 sm:py-4 md:px-6 md:py-6 h-max lg:h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1F5897] rounded-[8px] shadow-md">
       <div className="relative z-10 h-full flex flex-col">
         <h1 className="text-lg font-bold mb-4 font-raleway text-[#1F5897] dark:text-[#D1D5DB]">
           Customized Trend
@@ -951,7 +934,7 @@ useEffect(() => {
               </option>
             </select>
           </div>
-          
+
           <div ref={meterDropdownRef} className="relative w-full">
             <label
               className="block text-sm font-medium text-gray-600 dark:text-gray-300"
@@ -986,7 +969,7 @@ useEffect(() => {
                   filteredMeters.map((meter) => (
                     <label
                       key={meter}
-                      className="block px-4 py-2 hover:bg-gray-100 dark:text-gray-300"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer dark:text-gray-300"
                     >
                       <input
                         type="checkbox"
@@ -1027,7 +1010,7 @@ useEffect(() => {
                 {parameters.map((param) => (
                   <label
                     key={param}
-                    className="block px-4 py-2 hover:bg-gray-100"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                   >
                     <input
                       type="radio"
@@ -1047,50 +1030,55 @@ useEffect(() => {
             )}
           </div>
         </div>
-        <div className="flex-1 w-full">
-          {loading === true ? (
-            <CustomLoader />
-          ) : (
-            <div className="relative">
-              <div
-                className="absolute z-20 top-[40px] left-[5.5px] items-center group"
-                style={{
-                  display: !showPdfBtn ? "none" : "flex",
-                }}
-              >
-                {/* Main button */}
-                <button className="bg-[#f3f0f0] hover:bg-[#afafaf] dark:bg-gray-600 text-[#969393] hover:text-black rounded transition-colors duration-200">
-                  <LuFileUp className="w-[28.5px] h-[37px]" />
-                </button>
+        {filteredMeters.length<=0 ?
+        <div className="w-full flex flex-col items-center justify-center h-full">
+          <img src="../../../trend_icon.svg" alt="" />
+          <span>Select Desired Filters to view Trend!</span>
+        </div>:
+          <div className="flex-1 w-full">
+            {loading === true ? (
+              <CustomLoader />
+            ) : (
+              <div className="relative">
+                <div
+                  className="absolute z-20 top-[40px] left-[5.5px] items-center group"
+                  style={{
+                    display: !showPdfBtn ? "none" : "flex",
+                  }}
+                >
+                  {/* Main button */}
+                  <button className="bg-[#f3f0f0] hover:bg-[#afafaf] dark:bg-gray-600 text-[#969393] hover:text-black rounded transition-colors duration-200">
+                    <LuFileUp className="w-[28.5px] h-[37px]" />
+                  </button>
 
-                {/* Vertical buttons - shown on hover only */}
-                {/* <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible flex flex-col ml-1 space-y-1 transition-all duration-200"> */}
-                <div className="absolute top-[0px] left-[25px] hidden group-hover:flex flex-col ml-1 gap-[1px]  transition-all duration-200">
-                  <button
-                    onClick={exportToPDF}
-                    className="cursor-pointer bg-[#e2e2e2] hover:bg-[#ACACAC] text-black rounded p-3 transition-colors duration-200"
-                  >
-                    PDF
-                  </button>
-                  <button
-                    onClick={exportToExcel}
-                    className="cursor-pointer bg-[#e2e2e2] hover:bg-[#ACACAC] text-black rounded p-3 transition-colors duration-200"
-                  >
-                    XLSX
-                  </button>
+                  {/* Vertical buttons - shown on hover only */}
+                  {/* <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible flex flex-col ml-1 space-y-1 transition-all duration-200"> */}
+                  <div className="absolute top-[0px] left-[25px] hidden group-hover:flex flex-col ml-1 gap-[1px]  transition-all duration-200">
+                    <button
+                      onClick={exportToPDF}
+                      className="cursor-pointer bg-[#e2e2e2] hover:bg-[#ACACAC] text-black rounded p-3 transition-colors duration-200"
+                    >
+                      PDF
+                    </button>
+                    <button
+                      onClick={exportToExcel}
+                      className="cursor-pointer bg-[#e2e2e2] hover:bg-[#ACACAC] text-black rounded p-3 transition-colors duration-200"
+                    >
+                      XLSX
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div
-                id="chartDiv"
-                className="w-full transition-all duration-300 rounded-md bg-white dark:bg-gray-800 overflow-x-auto"
-                style={{
-                  height: "60vh",
-                  minHeight: "220px",
-                  maxHeight: "98%",
-                }}
-              >
-                <style>
-                  {`
+                <div
+                  id="chartDiv"
+                  className="w-full transition-all duration-300 rounded-md bg-white dark:bg-gray-800 overflow-x-auto"
+                  style={{
+                    height: "60vh",
+                    minHeight: "220px",
+                    maxHeight: "98%",
+                  }}
+                >
+                  <style>
+                    {`
                 #chartDiv::-webkit-scrollbar {
                   width: 0px;
                   height: 0px;
@@ -1111,11 +1099,12 @@ useEffect(() => {
                   #chartDiv { height: 28vh !important; min-height: 100px; }
                 }
               `}
-                </style>
+                  </style>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        }
       </div>
     </div>
   );

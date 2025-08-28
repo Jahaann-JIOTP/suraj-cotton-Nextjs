@@ -61,7 +61,8 @@ const PowerComparison = () => {
             solar: item.solar || 0,
             unit4: item.unit4 || 0,
             unit5: item.unit5 || 0,
-            losses_main: item.totalConsumption || 0,
+            // losses_main: item.totalConsumption || 0,
+            losses: item.losses || 0,
             unaccoutable_energy: item.unaccountable_energy || 0,
             efficiency: item.efficiency,
           };
@@ -313,11 +314,18 @@ const PowerComparison = () => {
 
     // Cluster 2: LOSSES
     makeSeries(
+      "Losses",
+      "losses",
+      "#008B8B",
+      CLUSTER_GROUPS.LOSSES,
+      false
+    );
+    makeSeries(
       "Unacc. Energy",
       "unaccoutable_energy",
       "#6A7E91",
       CLUSTER_GROUPS.LOSSES,
-      false
+      true
     );
 
     // Configure clustering spacing - remove margins to eliminate gaps

@@ -14,7 +14,7 @@ export default function GenerationEnergy() {
   const rootRef = useRef(null);
   const { theme } = useTheme();
 
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState("week");
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("today");
   const [loading, setLoading] = useState(false);
   const [isFullView, setIsFullView] = useState(false);
   const [chartData, setChartData] = useState([]);
@@ -247,6 +247,7 @@ export default function GenerationEnergy() {
             onChange={(e) => setSelectedTimePeriod(e.target.value)}
             className="outline-none border-1 text-[12px] font-raleway rounded p-1 dark:bg-gray-600"
           >
+            <option value="today">Today</option>
             <option value="week">This Week</option>
             <option value="month">This Month</option>
             <option value="year">This Year</option>

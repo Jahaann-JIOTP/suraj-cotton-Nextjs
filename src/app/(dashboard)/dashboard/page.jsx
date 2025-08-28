@@ -140,7 +140,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="WAPDA Import"
-            value={Number(singleDivData.Wapda1||0).toLocaleString("en-US")}
+            value={Number(singleDivData.WapdaImport||0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
             height="3"

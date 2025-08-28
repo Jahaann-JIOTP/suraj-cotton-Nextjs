@@ -210,34 +210,27 @@
   }
 }
 
- 
 
-/* WebKit scrollbar styles */
-.custom-scrollbar-report::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-  background-color: transparent;
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  transition: all 0.3s ease; /* won't apply directly */
 }
 
-.custom-scrollbar-report::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 15px;
 }
 
-.custom-scrollbar-report::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 2px;
-}
-
-
-.custom-scrollbar-report::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: #1f5897;
-  border-radius: 2px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
 }
 
-
-.custom-scrollbar-report::-webkit-scrollbar-thumb:hover {
-  background: #e6e6e6;
+::-webkit-scrollbar-thumb:hover {
+  background: #14406d;
+  cursor: pointer;
 }
 
 

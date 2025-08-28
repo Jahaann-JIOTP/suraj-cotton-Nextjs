@@ -11,7 +11,7 @@ import CustomLoader from "@/components/customLoader/CustomLoader";
 am4core.useTheme(am4themes_animated);
 
 const ConsumptionEnergy = () => {
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState("week");
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("today");
   const [loading, setLoading] = useState(false);
   const [isConsumptionEnergyFullView, setConsumptionEnergyFullView] =
     useState(false);
@@ -179,6 +179,7 @@ useEffect(() => {
             className="outline-none border-1 text-[12px] font-raleway rounded p-1 dark:bg-gray-600"
             disabled={loading}
           >
+            <option value="today">Today</option>
             <option value="week">This Week</option>
             <option value="month">This Month</option>
             <option value="year">This Year</option>

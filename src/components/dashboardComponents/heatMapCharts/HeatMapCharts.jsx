@@ -4,11 +4,12 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import CustomLoader from "@/components/customLoader/CustomLoader";
+import { useTheme } from "next-themes";
 
 const HeatmapChart = ({ TransformerData, id, dataKey, loading }) => {
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
-
+const { theme } = useTheme();
   // Initialize theme only once
   const initializeTheme = () => {
     let themeInitialized = false;
@@ -64,7 +65,18 @@ const HeatmapChart = ({ TransformerData, id, dataKey, loading }) => {
 
     // Enhanced tooltip to show date, time, and original value
     columnTemplate.tooltipText = "{fullDate} at {hour}: {originalValue}";
+ // ✅ Light/Dark Theme Integration
+  const isDarkMode = theme === "dark";
 
+  xAxis.renderer.labels.template.fill = isDarkMode
+    ? am4core.color("#f9fafb")
+    : am4core.color("#111827");
+
+  yAxis.renderer.labels.template.fill = isDarkMode
+    ? am4core.color("#f9fafb")
+    : am4core.color("#111827");
+
+ 
     columnTemplate.column.adapter.add("fill", (fill, target) => {
       if (target.dataItem) {
         const val = target.dataItem.value;
@@ -414,7 +426,7 @@ const HeatmapChart = ({ TransformerData, id, dataKey, loading }) => {
         chartInstanceRef.current = null;
       }
     };
-  }, [loading]);
+  }, [loading, theme]);
 
   // Cleanup on unmount
   useEffect(() => {

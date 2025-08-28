@@ -28,9 +28,9 @@ const Settings = () => {
     const targetAreaName = unit === 4 ? "Unit_4" : "Unit_5";
     const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
     // If already in the selected unit, no need to confirm
-    // if (currentUnit === unit) {
-    //   return;
-    // }
+    if (currentUnit === unit) {
+      return;
+    }
     try {
       const response = await fetch(`${config.BASE_URL}/meter/fetch-real-time`,{
         method:"POST",
@@ -109,7 +109,14 @@ const Settings = () => {
     const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
     // If already in the selected unit, no need to confirm
     if (currentUnit === unit) {
-      toast.info(`This meter is already assigned to ${targetAreaName}`);
+      // toast.info(`This meter is already assigned to ${targetAreaName}`);
+      Swal.fire({
+        icon: "question",
+        html: `
+      This meter is already assigned to <b>${targetAreaName|| "N/A"}</b>
+    `,
+      })
+
       return;
     }
     
