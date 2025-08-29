@@ -45,42 +45,49 @@ const SingleUnitComponent = ({
       Mcs: "1",
       InstalledLoad: "151.0",
       ConsumedUnits: finalData?.blowroom_consumption || 0,
+      unit: "both",
     },
     {
-      Department: "Card(TC03@60kg&TC15@82Kg/hr)",
+      Department: "Card",
       Mcs: "14",
       InstalledLoad: "19.0",
       ConsumedUnits: finalData?.card_consumption || 0,
+      unit: "both",
     },
     {
-      Department: "Comber",
+      Department: "Comber + Unitlap",
       Mcs: "9",
       InstalledLoad: "6.2",
       ConsumedUnits: finalData?.comber_consumption || 0,
+      unit: "both",
     },
     {
       Department: "Drawing",
       Mcs: "6",
       InstalledLoad: "13.6",
       ConsumedUnits: finalData?.Drawing_consumption || 0,
+      unit: "Unit_4",
     },
     {
       Department: "Simplex",
       Mcs: "6",
       InstalledLoad: "16.5",
       ConsumedUnits: finalData?.Simplex_consumption || 0,
+      unit: "both",
     },
     {
       Department: "R. Transport System",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.RTransportSystem_consumption || 0,
+      unit: "both",
     },
     {
       Department: "Ring Dept",
       Mcs: "24",
       InstalledLoad: "80.0",
       ConsumedUnits: finalData?.Ring_consumption || 0,
+      unit: "both",
     },
     {
       Department: "Auto Cone",
@@ -505,71 +512,7 @@ const SingleUnitComponent = ({
           </table>
         </div>
 
-        {/* <div className="overflow-x-scroll  md:w-full md:overflow-x-hidden max-h-[29vh] overflow-y-auto">
-          <table className="table w-full border-collapse border border-gray-300 dark:border-gray-500">
-            <thead className="sticky top-0 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] w-full  z-10">
-              <tr className="border border-gray-300 dark:border-gray-500">
-                <th className="border border-gray-300 dark:border-gray-500 w-[30%] px-2 py-1 text-[12px] font-inter font-500">
-                  Department
-                </th>
-                <th className="border border-gray-300 dark:border-gray-500 w-[20%] px-2 py-1 text-[12px] font-inter font-500">
-                  Mcs
-                </th>
-                <th className="border border-gray-300 dark:border-gray-500 w-[20%] px-2 py-1 text-[12px] font-inter font-500">
-                  Consumed units Kwh
-                </th>
-                <th className="border border-gray-300 dark:border-gray-500 w-[30%] px-2 py-1 text-[12px] font-inter font-500">
-                  Installed Load Kw
-                </th>
-              </tr>
-            </thead>
-          </table>
-          <div className="">
-            <table className="table w-full border-collapse border border-gray-400">
-              <tbody>
-                {tableData.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400"
-                  >
-                    <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                      {item.department}
-                    </td>
-                    <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                      {item.mcs}
-                    </td>
-                    <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                      {item.consumedUnitKwh}
-                    </td>
-                    <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                      {item.installedLoadKw}
-                    </td>
-                  </tr>
-                ))}
-                <tr className="border border-gray-300 dark:border-gray-500">
-                  <td className="px-2 py-1 border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
-                    Total Load
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td className="px-2 py-1 text-center text-[12px] font-inter font-500">
-                    {totalInstalledLoad}
-                  </td>
-                </tr>
-                <tr className="border border-gray-300 dark:border-gray-500">
-                  <td className="border px-2 py-1 border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
-                    No. of Spindles
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td className="text-center px-2 py-1 text-[12px] font-inter font-500">
-                    {spindles}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div> */}
+       
       </div>
     </>
   );

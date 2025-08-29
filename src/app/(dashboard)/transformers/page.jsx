@@ -175,7 +175,7 @@ useEffect(() => {
             <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
-                Transformer 1 (kWh) Total:{" "}
+                Unit 4 Transformer 1 (kWh) Total:
                 {Number(transformerTotalValTag.Trafo1outgoing||0).toLocaleString("en-US")}
               </h2>
             </div>
@@ -192,7 +192,7 @@ useEffect(() => {
                 <div className="w-[30%]">
                   <TransformerSide 
                   onMaintenanceUpdated={loadMaintenanceHrs}
-                    transformerReading={"2.5 MVA"}
+                    transformerReading={"2.0 MVA"}
                     nxtMaintenance={maintenanceHrsT1.value}
                     remainingHrs={remainingHrsT1}
                     traffoTemp={"Not Connected"}
@@ -237,7 +237,7 @@ useEffect(() => {
             <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
-                Transformer 2 (kWh) Total:
+                Unit 4 Transformer 2 (kWh) Total:
                 {Number(transformerTotalValTag.Trafo2outgoing||0).toLocaleString("en-US")}
               </h2>
             </div>
@@ -255,7 +255,7 @@ useEffect(() => {
                 <div className="w-[30%]">
                   <TransformerSide
                   onMaintenanceUpdated={loadMaintenanceHrs}
-                    transformerReading={"2.5 MVA"}
+                    transformerReading={"2.0 MVA"}
                     nxtMaintenance={maintenanceHrsT2.value}
                     remainingHrs={remainingHrsT2}
                     traffoTemp={"Not Connected"}
@@ -303,7 +303,7 @@ useEffect(() => {
             <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
-                Transformer 3 (kWh) Total:{" "}
+                Unit 5 Transformer 1 (kWh) Total:
                 {Number(transformerTotalValTag.Trafo3outgoing||0).toLocaleString("en-US")}
               </h2>
             </div>
@@ -320,7 +320,7 @@ useEffect(() => {
                 <div className="w-[30%]">
                   <TransformerSide
                   onMaintenanceUpdated={loadMaintenanceHrs}
-                    transformerReading={"2.0 MVA"}
+                    transformerReading={"2.5 MVA"}
                     nxtMaintenance={maintenanceHrsT3.value}
                     remainingHrs={remainingHrsT3}
                     traffoTemp={"Not Connected"}
@@ -365,7 +365,7 @@ useEffect(() => {
             <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
-                Transformer 4 (kWh) Total:{" "}
+                Unit 5 Transformer 2 (kWh) Total:
                 {Number(transformerTotalValTag.Trafo4outgoing||0).toLocaleString("en-US")}
               </h2>
             </div>
@@ -383,7 +383,7 @@ useEffect(() => {
                 <div className="w-[30%]">
                   <TransformerSide
                   onMaintenanceUpdated={loadMaintenanceHrs}
-                    transformerReading={"2.0 MVA"}
+                    transformerReading={"2.5 MVA"}
                     nxtMaintenance={maintenanceHrsT4.value}
                     remainingHrs={remainingHrsT4}
                     traffoTemp={"Not Connected"}

@@ -23,7 +23,7 @@ const TrafoCard = ({
   }, []);
   if (!mounted) return null;
   return (
-    <div className="w-full bg-white dark:bg-gray-700 h-full shadow-md lg:h-[12vw] rounded-md border-t-3 border-[#1A68B2] px-1 p-7 pb-10 flex flex-col items-center justify-between ">
+    <div className="w-full bg-white dark:bg-gray-700 h-full shadow-md lg:h-[12.6rem] rounded-md border-t-3 border-[#1A68B2] px-1 p-7 pb-10 flex flex-col items-center justify-between ">
       <span className="text-[17px] text-[#1A68B2] mb-7 md:mb-auto font-700 font-inter">
         {mainTitle}
       </span>
