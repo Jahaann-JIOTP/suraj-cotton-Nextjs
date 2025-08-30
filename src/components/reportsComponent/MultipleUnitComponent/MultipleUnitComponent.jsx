@@ -44,29 +44,32 @@ const MultipleUnitComponent = ({
       u5Mcs: 1,
       u4Load: 151.0,
       u5Load: 151.0,
-      u4Consumption: data.unit_4blowroom_consumption,
-      u5Consumption: data.unit_5blowroom_consumption,
+      u4Consumption: data.unit_4BlowRoom_consumption,
+      u5Consumption: data.unit_5BlowRoom_consumption,
       u4andU5TotalConsumption: u4U5Total.blowroom,
+      unit: "both",
     },
     {
-      dept: "Card(TC03@60kg&TC15@82Kg/hr)",
+      dept: "Card",
       u4Mcs: 14,
       u5Mcs: 14,
       u4Load: 19.0,
       u5Load: 19.0,
-      u4Consumption: data.unit_4card_consumption,
-      u5Consumption: data.unit_5card_consumption,
-      u4andU5TotalConsumption: u4U5Total.Card,
+      u4Consumption: data.unit_4Carding_consumption,
+      u5Consumption: data.unit_5Carding_consumption,
+      u4andU5TotalConsumption: u4U5Total.carding,
+      unit: "both",
     },
     {
-      dept: "Comber",
+      dept: "Comber + Unitlap",
       u4Mcs: 9,
       u5Mcs: 9,
       u4Load: 6.2,
       u5Load: 6.2,
-      u4Consumption: data.unit_4comber_consumption,
-      u5Consumption: data.unit_5comber_consumption,
+      u4Consumption: data.unit_4Comber_consumption,
+      u5Consumption: data.unit_5Comber_consumption,
       u4andU5TotalConsumption: u4U5Total.comber,
+      unit: "both",
     },
     {
       dept: "Drawing",
@@ -77,6 +80,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Drawing_consumption,
       u5Consumption: data.unit_5Drawing_consumption,
       u4andU5TotalConsumption: u4U5Total.drawing,
+      unit: "Unit_4",
     },
     {
       dept: "simplex",
@@ -87,9 +91,10 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Simplex_consumption,
       u5Consumption: data.unit_5Simplex_consumption,
       u4andU5TotalConsumption: u4U5Total.simplex,
+      unit: "both",
     },
     {
-      dept: "R Transport System",
+      dept: "Transport",
       u4Mcs: 0,
       u5Mcs: 0,
       u4Load: 0,
@@ -97,9 +102,10 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4RTransportSystem_consumption,
       u5Consumption: data.unit_5RTransportSystem_consumption,
       u4andU5TotalConsumption: u4U5Total.rtransportsystem,
+      unit: "both",
     },
     {
-      dept: "Ring Dept",
+      dept: "Ring",
       u4Mcs: 24,
       u5Mcs: 24,
       u4Load: 80.0,
@@ -107,6 +113,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Ring_consumption,
       u5Consumption: data.unit_5Ring_consumption,
       u4andU5TotalConsumption: u4U5Total.ring,
+      unit: "both",
     },
     {
       dept: "Auto Cone",
@@ -117,6 +124,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4AutoCone_consumption,
       u5Consumption: data.unit_5AutoCone_consumption,
       u4andU5TotalConsumption: u4U5Total.autocone,
+      unit: "both",
     },
     {
       dept: "Air Compressor",
@@ -127,9 +135,10 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4AirCompressor_consumption,
       u5Consumption: data.unit_5AirCompressor_consumption,
       u4andU5TotalConsumption: u4U5Total.aircompressor,
+      unit: "Unit_4",
     },
     {
-      dept: "Deep weel turbine",
+      dept: "Deep well turbine",
       u4Mcs: 1,
       u5Mcs: 1,
       u4Load: 22.0,
@@ -137,9 +146,10 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Turbine_consumption,
       u5Consumption: data.unit_5Turbine_consumption,
       u4andU5TotalConsumption: u4U5Total.turbine,
+      unit: "both",
     },
     {
-      dept: "bailing press",
+      dept: "bailing",
       u4Mcs: 1,
       u5Mcs: 1,
       u4Load: 15.0,
@@ -147,16 +157,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4BailingPress_consumption,
       u5Consumption: data.unit_5BailingPress_consumption,
       u4andU5TotalConsumption: u4U5Total.bailingpress,
-    },
-    {
-      dept: "Residential Colony",
-      u4Mcs: 0,
-      u5Mcs: 0,
-      u4Load: 30.0,
-      u5Load: 30.0,
-      u4Consumption: data.unit_4Residentialcolony_consumption,
-      u5Consumption: data.unit_5Residentialcolony_consumption,
-      u4andU5TotalConsumption: u4U5Total.residentialcolony,
+      unit: "both",
     },
     {
       dept: "spare",
@@ -167,6 +168,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Spare_consumption,
       u5Consumption: data.unit_5Spare_consumption,
       u4andU5TotalConsumption: u4U5Total.spare,
+      unit: "both",
     },
     {
       dept: "Winding",
@@ -177,6 +179,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Winding_consumption,
       u5Consumption: data.unit_5Winding_consumption,
       u4andU5TotalConsumption: u4U5Total.winding,
+      unit: "both",
     },
     {
       dept: "Bypass",
@@ -187,16 +190,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Bypass_consumption,
       u5Consumption: data.unit_5Bypass_consumption,
       u4andU5TotalConsumption: u4U5Total.bypass,
-    },
-    {
-      dept: "packing",
-      u4Mcs: 0,
-      u5Mcs: 0,
-      u4Load: 0,
-      u5Load: 0,
-      u4Consumption: data.unit_4Packing_consumption,
-      u5Consumption: data.unit_5Packing_consumption,
-      u4andU5TotalConsumption: u4U5Total.packing,
+      unit: "Unit_4",
     },
     {
       dept: "lab",
@@ -207,6 +201,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Lab_consumption,
       u5Consumption: data.unit_5Lab_consumption,
       u4andU5TotalConsumption: u4U5Total.lab,
+      unit: "Unit_4",
     },
     {
       dept: "Frame Finisher",
@@ -217,9 +212,10 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4FrameFinisher_consumption,
       u5Consumption: data.unit_5FrameFinisher_consumption,
       u4andU5TotalConsumption: u4U5Total.framefinisher,
+      unit: "Unit_4",
     },
-    {
-      dept: "A/C plant",
+     {
+      dept: "AC plant",
       u4Mcs: 0,
       u5Mcs: 0,
       u4Load: 0,
@@ -227,6 +223,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4ACPlant_consumption,
       u5Consumption: data.unit_5ACPlant_consumption,
       u4andU5TotalConsumption: u4U5Total.acplant,
+      unit: "Unit_5",
     },
     {
       dept: "fiber deposit",
@@ -237,8 +234,9 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Fiberdeposit_consumption,
       u5Consumption: data.unit_5Fiberdeposit_consumption,
       u4andU5TotalConsumption: u4U5Total.fiberdeposit,
+      unit: "Unit_5",
     },
-    {
+     {
       dept: "yarn",
       u4Mcs: 0,
       u5Mcs: 0,
@@ -247,6 +245,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Yarn_consumption,
       u5Consumption: data.unit_5Yarn_consumption,
       u4andU5TotalConsumption: u4U5Total.yarn,
+      unit: "Unit_5",
     },
     {
       dept: "water chiller",
@@ -257,9 +256,10 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4WaterChiller_consumption,
       u5Consumption: data.unit_5WaterChiller_consumption,
       u4andU5TotalConsumption: u4U5Total.waterchiller,
+      unit: "Unit_5",
     },
     {
-      dept: "HFO 2nd source",
+      dept: "HFO",
       u4Mcs: 9,
       u5Mcs: 9,
       u4Load: 6.2,
@@ -267,9 +267,10 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4HFO2ndSource_consumption,
       u5Consumption: data.unit_5HFO2ndSource_consumption,
       u4andU5TotalConsumption: u4U5Total.hfo2ndsource,
+      unit: "Unit_4",
     },
     {
-      dept: "lighting",
+      dept: "mills lighting",
       u4Mcs: 0,
       u5Mcs: 0,
       u4Load: 0,
@@ -277,9 +278,10 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Lightning_consumption,
       u5Consumption: data.unit_5Lightning_consumption,
       u4andU5TotalConsumption: u4U5Total.lightning,
+      unit: "Unit_4",
     },
     {
-      dept: "aux unit",
+      dept: "aux",
       u4Mcs: 0,
       u5Mcs: 0,
       u4Load: 0,
@@ -287,9 +289,32 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4AuxUnit5_consumption,
       u5Consumption: data.unit_5AuxUnit5_consumption,
       u4andU5TotalConsumption: u4U5Total.auxunit5,
+      unit: "Unit_4",
+    },
+    {
+      dept: "Residential Colony + workshop",
+      u4Mcs: 0,
+      u5Mcs: 0,
+      u4Load: 30.0,
+      u5Load: 30.0,
+      u4Consumption: data.unit_4Residentialcolony_consumption,
+      u5Consumption: data.unit_5Residentialcolony_consumption,
+      u4andU5TotalConsumption: u4U5Total.residentialcolony,
+      unit: "Unit_4",
+    },
+    {
+      dept: "packing",
+      u4Mcs: 0,
+      u5Mcs: 0,
+      u4Load: 0,
+      u5Load: 0,
+      u4Consumption: data.unit_4Packing_consumption,
+      u5Consumption: data.unit_5Packing_consumption,
+      u4andU5TotalConsumption: u4U5Total.packing,
+      unit: "Unit_4",
     },
   ];
-  console.log(".........................................",tableData)
+ 
 
 
   const getImageBuffer = async (imageUrl) => {
@@ -318,10 +343,10 @@ const MultipleUnitComponent = ({
         ext: { width: 150, height: 70 },
       });
 
-      const image2Buffer = await getImageBuffer("../../../jahaann-light.svg");
+      const image2Buffer = await getImageBuffer("../../../jahaann-light.png");
       const image2Id = workbook.addImage({
         buffer: image2Buffer,
-        extension: "svg",
+        extension: "png",
       });
       worksheet.addImage(image2Id, {
         tl: { col: 9, row: 1 },
@@ -424,13 +449,13 @@ const MultipleUnitComponent = ({
       tableData.forEach((item) => {
         const row = worksheet.addRow([
           item.dept,
-          item.u4Mcs,
-          item.u4Load,
-          item.u4Consumption || 0,
+          item.unit!=="Unit_5"?item.u4Mcs:"",
+          item.unit!=="Unit_5"?item.u4Load:"",
+          item.unit!=="Unit_5"?item.u4Consumption || 0:"--",
           "",
-          item.u5Mcs,
-          item.u5Load,
-          item.u5Consumption || 0,
+          item.unit!=="Unit_4"?item.u5Mcs:"",
+          item.unit!=="Unit_4"?item.u5Load:"",
+          item.unit!=="Unit_4"?item.u5Consumption || 0:"--",
           "",
           item.u4andU5TotalConsumption || 0,
         ]);
@@ -445,7 +470,7 @@ const MultipleUnitComponent = ({
             };
           }
 
-          if ([2, 3, 4, 6, 7, 8].includes(colNumber)) {
+          if ([2, 3, 6, 7,].includes(colNumber)) {
             cell.fill = {
               type: "pattern",
               pattern: "solid",
@@ -698,23 +723,23 @@ const MultipleUnitComponent = ({
                           {row.dept}
                         </td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 text-center">
-                          {row.u4Mcs}
+                          {row.unit!=="Unit_5"?row.u4Mcs:""}
                         </td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 text-center">
-                          {row.u4Load}
+                          {row.unit!=="Unit_5"?row.u4Load:""}
                         </td>
                         <td className="px-[5px] py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                          {row?.u4Consumption?.toFixed(2) || 0}
+                          {row.unit!=="Unit_5"?row?.u4Consumption?.toFixed(2) || 0:"--"}
                         </td>
                         <td className="px-[5px] py-1 border-r-1 border-gray-300 dark:border-gray-500 text-center text-[12px] font-inter font-400"></td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500  text-center">
-                          {row.u5Mcs}
+                          {row.unit!=="Unit_4"?row.u5Mcs:""}
                         </td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500  text-center">
-                          {row.u5Load}
+                          {row.unit!=="Unit_4" ? row.u5Load:""}
                         </td>
                         <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500  text-[12px] font-inter font-400">
-                          {row.u5Consumption || 0}
+                          {row.unit!=="Unit_4"?row.u5Consumption || 0:"--"}
                         </td>
                         <td className="px-[5px] py-1 text-center border-r-1 text-[12px] font-inter font-400"></td>
                         <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">

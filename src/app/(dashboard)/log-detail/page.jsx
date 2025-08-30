@@ -6,6 +6,8 @@ import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 import Swal from "sweetalert2";
+import { BiExport } from "react-icons/bi";
+import { IoIosArrowBack } from "react-icons/io";
 
 const LogDetails = () => {
   const [meterLogsData, setMeterLogsData] = useState([]);
@@ -17,8 +19,11 @@ const LogDetails = () => {
   const type = searchParams.get("val");
   const meter_id = searchParams.get("meter_id");
   const meterName = searchParams.get("meter-name");
+  const ltScheme = searchParams.get("lt-scheme");
+  const unit = searchParams.get("unit");
   const router = useRouter();
-
+  console.log("....................", ltScheme);
+  console.log("===================", unit);
   const getMeterLogsData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -230,13 +235,36 @@ const LogDetails = () => {
   };
 
   return (
-    <div className="h-[81vh]  custom-scrollbar-report overflow-y-auto bg-white dark:bg-gray-800 border-t-3 border-[#1D5999] rounded-md px-5 py-2">
-      <h1 className="font-700 font-inter text-[24px]">
-        Meter Logs - <span className="uppercase text-[#1D5999]">{type}</span>
-      </h1>
-      <div className="flex items-center justify-between mt-5">
+    <div className="h-[81vh] overflow-hidden custom-scrollbar-report overflow-y-auto bg-white dark:bg-gray-800 border-t-3 border-[#1D5999] rounded-md px-5 py-2">
+      <div className="flex flex-col-reverse md:flex-row items-center justify-between">
+        <h1 className="font-700 font-inter text-[24px]">
+          Meter Logs - <span className="uppercase text-[#1D5999]">{type}</span>
+        </h1>
+        <div className="flex flex-row-reverse md:flex w-full md:w-auto  items-center justify-between md:justify-end gap-3">
+          <button
+            onClick={exportToExcel}
+            className="px-3 py-2 rounded-sm bg-gradient-to-r from-[#22C35D] to-[#15813D] text-white text-[16px] font-400 font-inter hover:scale-103 transition-all duration-500 cursor-pointer"
+          >
+            <span className="flex md:hidden">
+              <BiExport size={20} />
+            </span>
+            <span className="hidden md:flex">Export excel</span>
+          </button>
+          <button
+            onClick={() => router.back()}
+            className="px-3 py-2 rounded-sm bg-[#1D5999] text-white text-[16px] font-400 font-inter hover:scale-103 transition-all duration-500 cursor-pointer"
+          >
+             <span className="flex md:hidden">
+              <IoIosArrowBack size={20} />
+            </span>
+            <span className="hidden md:flex">Back</span>
+          </button>
+        </div>
+      </div>
+      <div className="flex flex-col-reverse md:flex-row gap-2 items-center justify-between mt-2 md:mt-5">
+        {/* input fields */}
         <div className="flex items-center justify-start gap-5">
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-2">
             <label htmlFor="startDate">Start Date</label>
             <input
               type="date"
@@ -247,7 +275,7 @@ const LogDetails = () => {
               className="focus:outline-none border-1 border-gray-300 dark:border-gray-500 px-2 py-1 rounded"
             />
           </div>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-2">
             <label htmlFor="endDate">End Date</label>
             <input
               type="date"
@@ -260,19 +288,20 @@ const LogDetails = () => {
             />
           </div>
         </div>
-        <div className="flex items-center justify-end gap-3">
-          <button
-            onClick={exportToExcel}
-            className="px-3 py-2 rounded-sm bg-gradient-to-r from-[#22C35D] to-[#15813D] text-white text-[16px] font-400 font-inter hover:scale-103 transition-all duration-500 cursor-pointer"
-          >
-            Export excel
-          </button>
-          <button
-            onClick={() => router.back()}
-            className="px-3 py-2 rounded-sm bg-gradient-to-r from-[#989FAC] to-[#4E5765] text-white text-[16px] font-400 font-inter hover:scale-103 transition-all duration-500 cursor-pointer"
-          >
-            Back
-          </button>
+       
+       <div className="flex gap-3 items-center justify-end">
+          <span className="font-semibold">
+            Unit:{" "}
+            <span className="font-normal text-[#1D5999]">
+              {unit.replace("_", " ")}
+            </span>
+          </span>
+          <span className="font-semibold">
+            LT Panel:{" "}
+            <span className="font-normal text-[#1D5999]">
+              {ltScheme.replace("_", " ")}
+            </span>
+          </span>
         </div>
       </div>
 
@@ -281,8 +310,8 @@ const LogDetails = () => {
           <CustomLoader />
         ) : (
           <div className="rounded border border-gray-300">
-            <div className="max-full">
-              <table className="w-full border-collapse table-fixed">
+            <div className="sm:overflow-x-hidden overflow-x-auto">
+              <table className="w-full min-w-[600px] border-collapse table-fixed">
                 <thead className=" text-white sticky top-[-9] z-10">
                   <tr className="bg-[#1D5999] border-t-2 border-[#1D5999]">
                     {columns.flatMap((col, index) => {

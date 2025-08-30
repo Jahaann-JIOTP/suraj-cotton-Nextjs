@@ -24,6 +24,7 @@ const Settings = () => {
 
   // toggle meter for storing real time values
   const postMeterWithrealTimeValues = async(meterId, unit)=>{
+    const token = localStorage.getItem("token")
      const currentUnit = selectedUnits[meterId];
     const targetAreaName = unit === 4 ? "Unit_4" : "Unit_5";
     const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
@@ -35,7 +36,8 @@ const Settings = () => {
       const response = await fetch(`${config.BASE_URL}/meter/fetch-real-time`,{
         method:"POST",
         headers:{
-          "Content-Type":"application/json"
+          "Content-Type":"application/json",
+          Authorization: `Bearer ${token}`,
         },
         body:JSON.stringify({
           unit:targetAreaName,
@@ -109,7 +111,6 @@ const Settings = () => {
     const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
     // If already in the selected unit, no need to confirm
     if (currentUnit === unit) {
-      // toast.info(`This meter is already assigned to ${targetAreaName}`);
       Swal.fire({
         icon: "question",
         html: `

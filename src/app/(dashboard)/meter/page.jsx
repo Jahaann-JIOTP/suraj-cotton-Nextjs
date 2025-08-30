@@ -17,7 +17,6 @@ const page = () => {
   const ltScheme = searchParams.get("lt_scheme");
   const id = searchParams.get("meter_id");
   const meterName = searchParams.get("meter_name");
-
   const getSingleMeterData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -694,7 +693,7 @@ const page = () => {
           title="Logs"
           onClick={() =>
             router.push(
-              `/logs?type=${activeTab}&lt_scheme=${ltScheme}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
+              `/logs?type=${activeTab}&lt_scheme=${ltScheme}&unit=${area}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
             )
           }
           className={` border-1 border-[#1F5897] text-[#1F5897] dark:bg-gray-500 font-400 rounded text-[12px] flex flex-col items-center justify-center p-[7px] z-30  cursor-pointer`}

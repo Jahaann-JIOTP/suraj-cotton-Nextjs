@@ -32,33 +32,34 @@ const SingleUnitComponent = ({
       : unit === "Unit_5"
       ? unit5CleanData
       : "";
-
+console.log("......................",unit4CleanData)
   let totalConsumption = 0;
 
   for (const key in finalData) {
     totalConsumption += finalData[key];
   }
+  
   // /////-------------------------export to excel
   const tableData = [
     {
       Department: "Blow Room",
       Mcs: "1",
       InstalledLoad: "151.0",
-      ConsumedUnits: finalData?.blowroom_consumption || 0,
+      ConsumedUnits: finalData?.BlowRoom_consumption || 0,
       unit: "both",
     },
     {
       Department: "Card",
       Mcs: "14",
       InstalledLoad: "19.0",
-      ConsumedUnits: finalData?.card_consumption || 0,
+      ConsumedUnits: finalData?.Carding_consumption || 0,
       unit: "both",
     },
     {
       Department: "Comber + Unitlap",
       Mcs: "9",
       InstalledLoad: "6.2",
-      ConsumedUnits: finalData?.comber_consumption || 0,
+      ConsumedUnits: finalData?.Comber_consumption || 0,
       unit: "both",
     },
     {
@@ -76,14 +77,14 @@ const SingleUnitComponent = ({
       unit: "both",
     },
     {
-      Department: "R. Transport System",
+      Department: "Transport",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.RTransportSystem_consumption || 0,
       unit: "both",
     },
     {
-      Department: "Ring Dept",
+      Department: "Ring",
       Mcs: "24",
       InstalledLoad: "80.0",
       ConsumedUnits: finalData?.Ring_consumption || 0,
@@ -94,86 +95,130 @@ const SingleUnitComponent = ({
       Mcs: "8",
       InstalledLoad: "30.0",
       ConsumedUnits: finalData?.AutoCone_consumption || 0,
+      unit: "both",
     },
     {
       Department: "Air Compressor",
       Mcs: "3",
       InstalledLoad: "119.0",
       ConsumedUnits: finalData?.AirCompressor_consumption || 0,
+      unit: "Unit_4",
     },
     {
       Department: "Deep Well Turbine",
       Mcs: "1",
       InstalledLoad: "22.0",
       ConsumedUnits: finalData?.Turbine_consumption || 0,
+      unit: "both",
     },
     {
-      Department: "Bailing Press",
+      Department: "Bailing",
       Mcs: "1",
       InstalledLoad: "15.0",
       ConsumedUnits: finalData?.BailingPress_consumption || 0,
-    },
-    {
-      Department: "Residential Colony",
-      Mcs: "",
-      InstalledLoad: "30.0",
-      ConsumedUnits: finalData?.Residentialcolony_consumption || 0,
+      unit: "both",
     },
     {
       Department: "spare",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.Spare_consumption || 0,
+      unit: "both",
     },
     {
       Department: "Winding",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.Winding_consumption || 0,
+      unit: "both",
     },
     {
       Department: "Bypass",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.Bypass_consumption || 0,
-    },
-    {
-      Department: "Packing",
-      Mcs: "",
-      InstalledLoad: "",
-      ConsumedUnits: finalData?.Packing_consumption || 0,
+      unit: "Unit_4",
     },
     {
       Department: "Lab",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.Lab_consumption || 0,
+      unit: "Unit_4",
     },
     {
       Department: "Frame Finisher",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.FrameFinisher_consumption || 0,
+      unit: "Unit_4",
     },
     {
-      Department: "A/C Plant",
+      Department: "AC Plant",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.ACPlant_consumption || 0,
+      unit: "Unit_5",
     },
     {
       Department: "Fiber Deposit",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.Fiberdeposit_consumption || 0,
+      unit: "Unit_5",
     },
     {
       Department: "Yarn",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.Yarn_consumption || 0,
+      unit: "Unit_5",
+    },
+    {
+      Department: "Water Chilller",
+      Mcs: "",
+      InstalledLoad: "",
+      ConsumedUnits: finalData?.WaterChiller_consumption || 0,
+      unit: "Unit_5",
+    },
+    {
+      Department: "HFO",
+      Mcs: "",
+      InstalledLoad: "",
+      ConsumedUnits: finalData?.HFO2ndSource_consumption || 0,
+      unit: "Unit_4",
+    },
+    {
+      Department: "Mills Lighting",
+      Mcs: "",
+      InstalledLoad: "",
+      ConsumedUnits: finalData?.Lightning_consumption || 0,
+      unit: "Unit_4",
+    },
+    {
+      Department: "Aux",
+      Mcs: "",
+      InstalledLoad: "",
+      ConsumedUnits: finalData?.AuxUnit5_consumption || 0,
+      unit: "Unit_4",
+    },
+    {
+      Department: "Residential Colony + Workshop",
+      Mcs: "",
+      InstalledLoad: "30.0",
+      ConsumedUnits: finalData?.Residentialcolony_consumption || 0,
+      unit: "Unit_4",
+
+    },
+    {
+      Department: "Packing",
+      Mcs: "",
+      InstalledLoad: "",
+      ConsumedUnits: finalData?.Packing_consumption || 0,
+      unit: "Unit_4",
     },
   ];
+
 
   // /////-------------------------export to excel
   const getImageBuffer = async (imageUrl) => {
@@ -200,10 +245,10 @@ const SingleUnitComponent = ({
         ext: { width: 150, height: 70 },
       });
 
-      const image2Buffer = await getImageBuffer("../../../jahaann-light.svg");
+      const image2Buffer = await getImageBuffer("../../../jahaann-light.png");
       const image2Id = workbook.addImage({
         buffer: image2Buffer,
-        extension: "svg",
+        extension: "png",
       });
       worksheet.addImage(image2Id, {
         tl: { col: 3, row: 1 },
@@ -276,7 +321,7 @@ const SingleUnitComponent = ({
       });
       headerRow.height = 20;
 
-      tableData.forEach((item) => {
+      tableData.filter((row)=>row.unit==="both"||row.unit===unit).forEach((item) => {
         const row = worksheet.addRow([
           item.Department,
           item.Mcs,
@@ -464,7 +509,7 @@ const SingleUnitComponent = ({
               </tr>
             </thead>
             <tbody>
-              {tableData.map((row) => (
+              {tableData.filter((row)=>row.unit==="both"||row.unit===unit).map((row) => (
                 <tr
                   key={row.Department}
                   className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400"

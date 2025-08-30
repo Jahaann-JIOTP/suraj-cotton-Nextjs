@@ -196,6 +196,7 @@ const MainSldOverview = ({ roundedData }) => {
         ))}
         <img
           src="./main-overview.png"
+          // src="./testing-overview.png"
           alt="Main Overview"
           className="w-[1200px] mx-auto"
         />
