@@ -97,7 +97,7 @@ const Page = () => {
 
   return (
     <div className="w-full h-[81vh] bg-white dark:bg-gray-800 rounded-md border-t-4 p-5 border-[#1F5897] overflow-auto">
-      <div className="relative min-w-[1250px] min-h-[500px] mx-auto">
+      <div className="relative min-w-[1100px] min-h-[500px] mx-auto">
         {renderComponent()}
       </div>
     </div>

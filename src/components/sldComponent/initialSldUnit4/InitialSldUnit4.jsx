@@ -7,29 +7,29 @@ const unit4MeterData = [
   {
     link: "U19_PLC",
     title: "Diesel IC",
-    top: 187,
-    left: 110,
+    top: 198,
+    left: 103,
     ltScheme: "LT_1",
   },
   {
     link: "U21_PLC",
     title: "Wapda IC",
-    top: 187,
-    left: 262,
+    top: 198,
+    left: 219,
     ltScheme: "LT_1",
   },
   {
     link: "U7_GW01",
     title: "Power House",
-    top: 187,
-    left: 848,
+    top: 200,
+    left: 640,
     ltScheme: "LT_2",
   },
   {
     link: "U13_GW01",
     title: "Wapda IC",
-    top: 187,
-    left: 1000,
+    top: 200,
+    left: 766,
     ltScheme: "LT_2",
   },
 ];
@@ -42,32 +42,40 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U19_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_PLC_Voltage_Avg,
-      top: 196,
-      left: 116,
+      top: 205,
+      left: 109,
     },
     // wapda IC
     {
       activePowerTotalTag: roundedData?.U21_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U21_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U21_PLC_Voltage_Avg,
-      top: 196,
-      left: 270,
+      top: 205,
+      left: 226,
     },
     // power house
     {
       activePowerTotalTag: roundedData?.U7_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U7_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_GW01_Voltage_Avg,
-      top: 198,
-      left: 857,
+      top: 207.5,
+      left: 647,
     },
     // wapda IC
     {
       activePowerTotalTag: roundedData?.U13_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_PLC_Voltage_Avg,
-      top: 198,
-      left: 1008,
+      top: 207.5,
+      left: 773,
+    },
+    //Solar 352.50kw
+    {
+      activePowerTotalTag: "--.--",
+      activeCurrentAvgTag: "--.--",
+      activeVoltageAvgTag: "--.--",
+      top: 208.5,
+      left: 944,
     },
   ];
 
@@ -95,23 +103,23 @@ const InitialSldUnit4 = ({ roundedData }) => {
           Back
         </span>
       </button>
-      <div className="relative w-[1200px] h-[600px] mx-auto">
+      <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
         {unit4MeterData.map((meter) => (
           <button
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_4&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_4&page-type="sld"&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              width: "91px",
-              height: "80px",
-              // backgroundColor: "transparent",
+              width: "70px",
+              height: "65px",
               zIndex: 100,
+              border: "1px solid red",
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
             }}
@@ -120,40 +128,64 @@ const InitialSldUnit4 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../unit-4-sld.png"
-          className="w-[1200px] h-full"
+          src="../../../sld/unit-4-sld.png"
+          className="h-full"
+          style={{ width: "1100px" }}
           alt="unit 4 sld"
         />
-        {/* lines */}
-        <div className="absolute w-[2.2px] h-[138px] bg-black left-[230.4px] top-[277px]"></div>
-        <div className="absolute w-[2.2px] h-[138px] bg-black left-[970.3px] top-[277px]"></div>
         {/* Buttons */}
         <button
           onClick={() => router.replace("/sld?unit=unit4&area=lt1")}
-          className="absolute top-[414px] left-[76px] w-[311px] h-[45px] cursor-pointer"
+          className="absolute  cursor-pointer"
+          style={{
+            border: "1px solid red",
+            width: "239px",
+            height: "40px",
+            top: "385px",
+            left: "77px",
+          }}
         ></button>
         <button
           onClick={() => router.push("/sld?unit=unit4&area=lt2")}
-          className="absolute top-[414px] left-[818px] w-[310px] h-[45px] cursor-pointer"
+          className="absolute cursor-pointer"
+          style={{
+            border: "1px solid red",
+            width: "239px",
+            height: "40px",
+            top: "385px",
+            left: "642px",
+          }}
         ></button>
 
         {/* Meter Readings */}
         {unit4InitialSldMeterTAgs.map((meter, index) => (
           <div
             key={index}
-            className="absolute flex flex-col items-center z-40 w-[58px] h-[61px]"
+            className="absolute flex flex-col items-center z-40"
             style={{
+              width: "44px",
+              height: "52px",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
+              border: "1px solid red",
             }}
           >
-            <span className="meterReadingUnit4Lt2 mt-[-1px]">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500 }}
+            >
               {meter.activePowerTotalTag || "00.00"}
             </span>
-            <span className="meterReadingUnit4Lt2">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "0.5px" }}
+            >
               {meter.activeCurrentAvgTag || "00.00"}
             </span>
-            <span className="meterReadingUnit4Lt2">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "1px" }}
+            >
               {meter.activeVoltageAvgTag || "00.00"}
             </span>
           </div>

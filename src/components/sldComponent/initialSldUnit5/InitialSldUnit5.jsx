@@ -8,28 +8,28 @@ const unit4MeterData = [
     link: "U6_GW02",
     title: "Solar",
     top: 310,
-    left: 209,
+    left: 226,
     ltScheme: "LT_3",
   },
   {
     link: "U20_GW03",
     title: "T/F 3",
     top: 310,
-    left: 386,
+    left: 388,
     ltScheme: "LT_4",
   },
   {
     link: "U19_GW03",
     title: "T/F 4",
     top: 310,
-    left: 657,
+    left: 637,
     ltScheme: "LT_4",
   },
   {
     link: "U17_GW03",
     title: "Solar 2",
     top: 310,
-    left: 834,
+    left: 798,
     ltScheme: "LT_4",
   },
 ];
@@ -43,23 +43,23 @@ const InitialSldUnit5 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U6_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U6_GW02_Voltage_Avg,
       top: 320,
-      left: 217.3,
+      left: 233.5,
     },
-    // TF #3
+    // TF #1
     {
       activePowerTotalTag: roundedData?.U20_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U20_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U20_GW03_Voltage_Avg,
       top: 320,
-      left: 394.4,
+      left: 395,
     },
-    // TF #4
+    // TF #2
     {
       activePowerTotalTag: roundedData?.U19_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_GW03_Voltage_Avg,
       top: 320,
-      left: 665.5,
+      left: 644,
     },
     // Solar 2
     {
@@ -67,7 +67,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U17_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U17_GW03_Voltage_Avg,
       top: 320,
-      left: 842.2,
+      left: 806,
     },
   ];
 
@@ -95,80 +95,94 @@ const InitialSldUnit5 = ({ roundedData }) => {
           Back
         </span>
       </button>
-      <div className="relative w-[1200px] h-[600px] mx-auto">
+      <div className="relative h-[600px] mx-auto" style={{ width: "1100px" }}>
         {unit4MeterData.map((meter) => (
           <button
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_5&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_5&page-type="sld"&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              width: "91px",
-              height: "80px",
-              // backgroundColor: "transparent",
+              width: "81px",
+              height: "79px",
+              border: "1px solid red",
               zIndex: 100,
               borderRadius: "0.4.2rem", // rounded-md
               cursor: "pointer",
             }}
-            className={``}
+            className={`rounded-md`}
           ></button>
         ))}
         {/* Diagram Image */}
         <img
-          src="./unit-5-sld.png"
-          className="w-[1200px] h-full"
+          src="./sld/unit-5-sld.png"
+          className="h-full"
+          style={{ width: "1100px" }}
           alt="unit 4 sld"
         />
 
-        {/* lines */}
-        <div className="absolute w-[2px] h-[125px] bg-black left-[790px] top-[420px]"></div>
-        <div className="absolute w-[2px] h-[125px] bg-[#181818] left-[340.2px] top-[420px]"></div>
         {/* Buttons */}
         <button
           onClick={() => router.replace("/sld?unit=unit5&area=lt1")}
-          className="absolute text-[30px]  border-1 border-black border-dashed font-bold top-[545px] left-[193px] w-[301px] bg-white h-[45px] cursor-pointer"
-        >
-          To Unit # 05 LT1
-        </button>
+          className="absolute top-[545px] left-[193px] w-[301px] h-[45px] cursor-pointer"
+          style={{
+            border: "1px solid red",
+            left: "210px",
+            top: "545px",
+            height: "45px",
+            width: "276px",
+          }}
+        ></button>
         <button
           onClick={() => router.push("/sld?unit=unit5&area=lt2")}
-          className="absolute text-[30px] bg-white border-1 border-black border-dashed font-bold top-[545px] left-[642px] w-[300px] h-[45px] cursor-pointer"
-        >
-          To Unit # 05 LT2
-        </button>
+          className="absolute cursor-pointer"
+          style={{
+            border: "1px solid red",
+            left: "620px",
+            top: "545px",
+            height: "45px",
+            width: "276px",
+          }}
+        ></button>
 
         {/* Meter Readings */}
         {unit5InitialSldMeterTAgs.map((meter, index) => (
           <div
             key={index}
-            className="absolute flex flex-col items-center z-40 w-[58px] h-[59px]"
+            className="absolute flex flex-col justify-between items-center z-40"
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
+              width: "51px",
+              height: "59px",
+              border: "1px solid red",
             }}
           >
-            <span className="meterReadingUnit4Lt2 mt-[-1px]">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500 }}
+            >
               {meter.activePowerTotalTag || "00.00"}
             </span>
-            <span className="meterReadingUnit4Lt2 mt-[-1px]">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500 }}
+            >
               {meter.activeCurrentAvgTag || "00.00"}
             </span>
-            <span className="meterReadingUnit4Lt2">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500 }}
+            >
               {meter.activeVoltageAvgTag || "00.00"}
             </span>
           </div>
         ))}
-        <div className="absolute top-[394px] left-[490px] text-[14px] font-bold bg-white ">
-          LT-1
-        </div>
-        <div className="absolute top-[394px] left-[620px] text-[14px] font-bold bg-white ">
-          LT-2
-        </div>
       </div>
     </div>
   );

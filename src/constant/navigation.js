@@ -39,7 +39,7 @@ export const privilegeConfig = {
     href: "/sld",
     icon: faProjectDiagram,
     label: "DIAGRAM",
-    matchPaths: ["/sld", "/meter", "/logs", "/log-detail"],
+    matchPaths: ["/sld", "/meter", "/logs", "/log-detail", "/field-meters"],
     tab: "Diagram",
   },
   Trends: {
@@ -80,7 +80,7 @@ export const privilegeConfig = {
     href: "/configuration-meter",
     icon: faGear,
     label: "Configuration",
-    matchPaths: ["/configuration-meter","/data-verification"],
+    matchPaths: ["/configuration-meter", "/data-verification"],
     tab: "Configuration",
   },
   Production: {
@@ -173,6 +173,12 @@ export const sidebarLinksMap = {
           id: 0,
           title: "Oneline",
           href: "/sld",
+          icon: BsFillDiagram3Fill,
+        },
+        {
+          id: 1,
+          title: "Field Meters",
+          href: "/field-meters",
           icon: BsFillDiagram3Fill,
         },
       ],

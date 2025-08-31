@@ -176,18 +176,19 @@
 }
 .meterReadingUnit4,
 .meterReadingUnit4Lt2,
-.meterReadingUnit4Lt1 {
-  color: rgb(5, 248, 5);
+.meterReadingUnit4Lt1,
+.sldMetersReading {
+  color: #05f805;
   font-weight: 500;
   font-family: var(--font-fira-mono), sans-serif;
 }
 
 .meterReadingUnit4Lt1 {
-  font-size: 13px;
+  font-size: 10px;
 }
 
 .meterReadingUnit4Lt2 {
-  font-size: 14px;
+  font-size: 12px;
 }
 .meterDataText {
   font-size: 13px;
@@ -210,7 +211,6 @@
   }
 }
 
-
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -232,5 +232,3 @@
   background: #14406d;
   cursor: pointer;
 }
-
-

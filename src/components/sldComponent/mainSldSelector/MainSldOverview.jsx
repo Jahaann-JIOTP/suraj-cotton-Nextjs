@@ -4,48 +4,48 @@ const mainOverviewMeterData = [
   {
     link: "U27_PLC",
     title: "Wapda 2",
-    top: 187,
-    left: 95,
+    top: 167,
+    left: 179,
     area: "Unit_4",
     lt_scheme: "LT_1",
   },
   {
     link: "U22_PLC",
     title: "HFO 1",
-    top: 187,
-    left: 245,
+    top: 167,
+    left: 313,
     area: "Unit_4",
     lt_scheme: "LT_1",
   },
   {
     link: "U26_PLC",
     title: "I-GG",
-    top: 180,
-    left: 511,
+    top: 154,
+    left: 548,
     area: "Unit_4",
     lt_scheme: "LT_1",
   },
   {
     link: "U23_PLC",
     title: "O/G 2",
-    top: 363,
-    left: 97,
+    top: 322,
+    left: 179,
     area: "Unit_4",
     lt_scheme: "LT_1",
   },
   {
     link: "U24_PLC",
     title: "O/G 1",
-    top: 363,
-    left: 200,
+    top: 322,
+    left: 271,
     area: "Unit_4",
     lt_scheme: "LT_1",
   },
   {
     link: "U25_PLC",
     title: "S/T",
-    top: 363,
-    left: 306,
+    top: 322,
+    left: 366,
     area: "Unit_4",
     lt_scheme: "LT_1",
   },
@@ -53,32 +53,32 @@ const mainOverviewMeterData = [
   {
     link: "U20_GW03",
     title: "T/F 3",
-    top: 599,
-    left: 106,
+    top: 690,
+    left: 183,
     area: "Unit_5",
     lt_scheme: "LT_4",
   },
   {
     link: "U19_GW03",
     title: "T/F 4",
-    top: 599,
-    left: 296,
+    top: 688,
+    left: 357,
     area: "Unit_5",
     lt_scheme: "LT_4",
   },
   {
     link: "U23_GW01",
     title: "Power House IC",
-    top: 595,
-    left: 788,
+    top: 607,
+    left: 795,
     area: "Unit_4",
     lt_scheme: "LT_2",
   },
   {
     link: "U22_GW01",
     title: "Wapda IC",
-    top: 597,
-    left: 975,
+    top: 605,
+    left: 962,
     area: "Unit_4",
     lt_scheme: "LT_2",
   },
@@ -92,144 +92,179 @@ const MainSldOverview = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U27_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U27_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U27_PLC_Voltage_Avg,
-      top: 193,
-      left: 99,
+      top: 173,
+      left: 183,
     },
     // hfo 1
     {
       activePowerTotalTag: roundedData?.U22_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U22_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U22_PLC_Voltage_Avg,
-      top: 193,
-      left: 249,
+      top: 173,
+      left: 317,
     },
     // I-GG
     {
       activePowerTotalTag: roundedData?.U26_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U26_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U26_PLC_Voltage_Avg,
-      top: 185.5,
-      left: 515,
+      top: 161,
+      left: 553,
     },
     // 0/g 2
     {
       activePowerTotalTag: roundedData?.U23_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U23_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U23_PLC_Voltage_Avg,
-      top: 369,
-      left: 101,
+      top: 328.5,
+      left: 183,
     },
     // 0/g 1
     {
       activePowerTotalTag: roundedData?.U24_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U24_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U24_PLC_Voltage_Avg,
-      top: 370,
-      left: 204,
+      top: 329,
+      left: 276,
     },
     // s/t
     {
       activePowerTotalTag: roundedData?.U25_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U25_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U25_PLC_Voltage_Avg,
-      top: 370,
-      left: 310,
+      top: 329,
+      left: 370.5,
     },
     // T/F 3
     {
       activePowerTotalTag: roundedData?.U20_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U20_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U20_GW03_Voltage_Avg,
-      top: 605,
-      left: 110,
+      top: 695,
+      left: 188.5,
     },
     // T/F 4
     {
       activePowerTotalTag: roundedData?.U19_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_GW03_Voltage_Avg,
-      top: 605,
-      left: 300,
+      top: 695,
+      left: 361,
     },
     // p/h ic
     {
       activePowerTotalTag: roundedData?.U23_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U23_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U23_GW01_Voltage_Avg,
-      top: 601,
-      left: 792,
+      top: 614,
+      left: 800,
     },
     // wapda ic
     {
       activePowerTotalTag: roundedData?.U22_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U22_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U22_GW01_Voltage_Avg,
-      top: 603,
-      left: 978.5,
+      top: 611,
+      left: 967,
     },
   ];
 
   return (
     <div className="w-full">
-      <div className="relative w-[1200px] mx-auto">
+      <div className="relative mx-auto" style={{ width: "1200px" }}>
         {mainOverviewMeterData.map((meter) => (
           <button
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=${meter.area}&lt_scheme=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=${meter.area}&page-type="sld"&lt_scheme=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              width: "65px",
-              height: "62px",
+              width: "55px",
+              height: "55px",
               backgroundColor: "transparent",
               zIndex: 21,
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
+              border: "1px solid red",
             }}
             className={``}
           ></button>
         ))}
         <img
-          src="./main-overview.png"
-          // src="./testing-overview.png"
+          src="./sld/main-overview.png"
           alt="Main Overview"
-          className="w-[1200px] mx-auto"
+          className="mx-auto"
+          style={{ width: "1200px" }}
         />
         {mainOverviewMeterTags.map((meter, index) => (
           <div
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
+              border: "1px solid red",
+              width: "36px",
+              height: "42px",
             }}
             key={index}
-            className={`absolute z-20  w-[44.5px] h-[50px] flex flex-col items-center`}
+            className={`absolute z-20 flex flex-col items-center`}
           >
-            <span className="meterReadingUnit4Lt1 mt-[-2px]">
+            <span
+              className="text-[10px] mt-[-1px]"
+              style={{ color: "#05f805", fontWeight: 500 }}
+            >
               {meter.activePowerTotalTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-2px]">
+            <span
+              className="text-[10px] mt-[-1px]"
+              style={{ color: "#05f805", fontWeight: 500 }}
+            >
               {meter.activeCurrentAvgTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-3px]">
+            <span
+              className="text-[10px] mt-[-1px]"
+              style={{ color: "#05f805", fontWeight: 500 }}
+            >
               {meter.activeVoltageAvgTag || "000"}
             </span>
           </div>
         ))}
 
         <button
-          className="absolute top-[944px] left-[94px] w-[314px] h-[37px] cursor-pointer"
+          className="absolute font-inter bg-white cursor-pointer"
           onClick={() => router.push("/sld?unit=unit5")}
-        ></button>
+          style={{
+            border: "1px dotted darkgray",
+            height: "38px",
+            left: "151px",
+            top: "948px",
+            width: "314px",
+            fontSize: "20px",
+            fontWeight: 700,
+          }}
+        >
+          To Unit # 5
+        </button>
 
         <button
-          className="absolute top-[942px] left-[735px] w-[404px] h-[38px] cursor-pointer"
+          className="absolute font-inter bg-white text-[#2e2d2d] cursor-pointer"
           onClick={() => router.push("/sld?unit=unit4")}
-        ></button>
+          style={{
+            border: "1px dotted darkgray",
+            left: "738px",
+            width: "375px",
+            top: "948px",
+            height: "38px",
+            fontSize: "20px",
+            fontWeight: 700,
+          }}
+        >
+          To Unit # 4
+        </button>
       </div>
     </div>
   );

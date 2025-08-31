@@ -17,6 +17,7 @@ const page = () => {
   const ltScheme = searchParams.get("lt_scheme");
   const id = searchParams.get("meter_id");
   const meterName = searchParams.get("meter_name");
+  const pageType = searchParams.get("page-type");
   const getSingleMeterData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -44,7 +45,6 @@ const page = () => {
       console.error(error.message);
     }
   };
-
 
   // get prefixes of keys
   const suffixTags = {};
@@ -256,7 +256,7 @@ const page = () => {
   ];
   const powerData = [
     {
-      tag:suffixTags.Harmonics_I1_THD,
+      tag: suffixTags.Harmonics_I1_THD,
       unit: "",
       top: "178px",
       left: "40px",
@@ -264,7 +264,7 @@ const page = () => {
       height: "39px",
     },
     {
-      tag:suffixTags.Harmonics_I2_THD,
+      tag: suffixTags.Harmonics_I2_THD,
       unit: "",
       top: "257px",
       left: "41px",
@@ -505,7 +505,7 @@ const page = () => {
     getSingleMeterData();
     const interval = setInterval(() => {
       getSingleMeterData();
-}, 5000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
   return (
@@ -693,7 +693,7 @@ const page = () => {
           title="Logs"
           onClick={() =>
             router.push(
-              `/logs?type=${activeTab}&lt_scheme=${ltScheme}&unit=${area}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
+              `/logs?type=${activeTab}&page-type=${pageType}&lt_scheme=${ltScheme}&unit=${area}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
             )
           }
           className={` border-1 border-[#1F5897] text-[#1F5897] dark:bg-gray-500 font-400 rounded text-[12px] flex flex-col items-center justify-center p-[7px] z-30  cursor-pointer`}

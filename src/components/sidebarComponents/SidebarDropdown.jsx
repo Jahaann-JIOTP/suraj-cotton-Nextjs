@@ -3,7 +3,7 @@ import { Tooltip } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 export default function SidebarDropdown({
   item,
   isOpen,
@@ -12,6 +12,9 @@ export default function SidebarDropdown({
 }) {
   const [isClient, setIsClient] = useState(false);
   const path = usePathname();
+  const searchParams = useSearchParams();
+  const pageType = searchParams.get("page-type");
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -67,19 +70,40 @@ export default function SidebarDropdown({
           } gap-2`}
         >
           {item.submenu.map((sub) => {
-            const isSldActive =
-              sub.href === "/sld" &&
-              ["/sld", "/meter", "/logs", "/log-detail"].some((p) => {
-                path.startsWith(p);
-              });
-            const nestedArr = ["/sld", "/meter", "/logs", "/log-detail"].some(
-              (p) => {
-                // path.startsWith(p);
-                return path.startsWith(p);
-              }
-            );
+            // const nestedArr = ["/sld", "/meter", "/logs", "/log-detail"].some(
+            //   (p) => {
+            //     // path.startsWith(p);
+            //     return path.startsWith(p);
+            //   }
+            // );
 
-            const activePath = nestedArr || path === sub.href;
+            // const activePath = nestedArr || path === sub.href;
+            let activePath = false;
+
+            // For SLD routes
+            if (
+              pageType === "sld" &&
+              (sub.href.includes("/sld") ||
+                sub.href.includes("/meter") ||
+                sub.href.includes("/logs") ||
+                sub.href.includes("/log-detail"))
+            ) {
+              activePath = true;
+            }
+            // For Field-Meter routes
+            else if (
+              pageType === "field-meter" &&
+              (sub.href.includes("/field-meters") ||
+                sub.href.includes("/meter") ||
+                sub.href.includes("/logs") ||
+                sub.href.includes("/log-detail"))
+            ) {
+              activePath = true;
+            }
+            // Exact path match (fallback for other menus)
+            else if (path === sub.href) {
+              activePath = true;
+            }
 
             return (
               <Link

@@ -6,116 +6,116 @@ const lt1MeterData = [
   {
     link: "U1_PLC",
     title: "Transport",
-    top: 301,
-    left: 106,
+    top: 278,
+    left: 96,
   },
   {
     link: "U2_PLC",
     title: "Unit 5 aux",
-    top: 370,
-    left: 196,
+    top: 342,
+    left: 179,
   },
   {
     link: "U3_PLC",
     title: "Lighting Outside",
-    top: 296,
-    left: 285,
+    top: 274,
+    left: 261,
   },
   {
     link: "U4_PLC",
     title: "Lighting Inside",
-    top: 370,
-    left: 374,
+    top: 342,
+    left: 343,
   },
   {
     link: "U5_PLC",
     title: "Power House",
-    top: 296,
-    left: 464,
+    top: 274,
+    left: 427,
   },
   {
     link: "U6_PLC",
     title: "Turbine",
-    top: 370,
-    left: 566,
+    top: 342,
+    left: 520,
   },
   {
     link: "U7_PLC",
     title: "Spare",
-    top: 301,
-    left: 652,
+    top: 278,
+    left: 600,
   },
   {
     link: "U8_PLC",
     title: "Drawing 1",
-    top: 370,
-    left: 740,
+    top: 342,
+    left: 680,
   },
   {
     link: "U9_PLC",
     title: "Winding 1",
-    top: 301,
-    left: 838,
+    top: 278,
+    left: 771,
   },
   {
     link: "U10_PLC",
     title: "Ring 1",
-    top: 370,
-    left: 963,
+    top: 342,
+    left: 887,
   },
   {
     link: "U11_PLC",
     title: "Ring 5",
-    top: 655,
-    left: 104,
+    top: 605,
+    left: 95,
   },
   {
     link: "U12_PLC",
     title: "Ring 6",
-    top: 585,
-    left: 195,
+    top: 541,
+    left: 178,
   },
   {
     link: "U13_PLC",
     title: "Comber 1",
-    top: 656,
-    left: 283,
+    top: 605,
+    left: 260,
   },
   {
     link: "U14_PLC",
     title: "Compressor",
-    top: 586,
-    left: 373,
+    top: 541,
+    left: 342,
   },
   {
     link: "U15_PLC",
     title: "Simplex 1",
-    top: 656,
-    left: 462,
+    top: 605,
+    left: 424,
   },
   {
     link: "U16_PLC",
     title: "Compressor 2",
-    top: 585,
-    left: 552,
+    top: 541,
+    left: 507,
   },
   {
     link: "U17_PLC",
     title: "Ring AC",
-    top: 655,
-    left: 641,
+    top: 605,
+    left: 590,
   },
   {
     link: "U18_PLC",
     title: "Ring AC (Byparss)",
-    top: 585,
-    left: 740,
+    top: 541,
+    left: 680,
   },
   {
     link: "U20_PLC",
     title: "Compressor (Bypass)",
-    top: 656,
-    left: 839.5,
+    top: 605,
+    left: 773,
   },
 ];
 
@@ -128,72 +128,72 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U1_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
-      top: 309,
-      left: 112.5,
+      top: 285,
+      left: 102,
     },
     // Unit 5 Aux
     {
       activePowerTotalTag: roundedData?.U2_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U2_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U2_PLC_Voltage_Avg,
-      top: 379,
-      left: 203,
+      top: 350,
+      left: 185,
     },
     // Lighting Outside
     {
       activePowerTotalTag: roundedData?.U3_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U3_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U3_PLC_Voltage_Avg,
-      top: 304,
-      left: 291,
+      top: 281,
+      left: 267,
     },
     // Lighting Inside
     {
       activePowerTotalTag: roundedData?.U4_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U4_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U4_PLC_Voltage_Avg,
-      top: 379,
-      left: 381,
+      top: 350,
+      left: 349,
     },
     // Power House
     {
       activePowerTotalTag: roundedData?.U5_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U5_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U5_PLC_Voltage_Avg,
-      top: 304,
-      left: 470.5,
+      top: 281,
+      left: 433,
     },
     // Turbine
     {
       activePowerTotalTag: roundedData?.U6_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U6_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U6_PLC_Voltage_Avg,
-      top: 379,
-      left: 573,
+      top: 350,
+      left: 527,
     },
     // Spare
     {
       activePowerTotalTag: roundedData?.U7_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U7_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_PLC_Voltage_Avg,
-      top: 309,
-      left: 659,
+      top: 285,
+      left: 605,
     },
     // Drawing 1
     {
       activePowerTotalTag: roundedData?.U8_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U8_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U8_PLC_Voltage_Avg,
-      top: 379,
-      left: 746,
+      top: 350,
+      left: 687,
     },
     // Winding 1
     {
       activePowerTotalTag: roundedData?.U9_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U9_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U9_PLC_Voltage_Avg,
-      top: 309,
-      left: 845,
+      top: 285,
+      left: 777.5,
     },
 
     // Ring 1
@@ -201,85 +201,85 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U10_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U10_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U10_PLC_Voltage_Avg,
-      top: 379,
-      left: 970,
+      top: 350,
+      left: 893,
     },
     // Ring 5
     {
       activePowerTotalTag: roundedData?.U11_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U11_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U11_PLC_Voltage_BC,
-      top: 664,
-      left: 111,
+      top: 612,
+      left: 101,
     },
     // Ring 6
     {
       activePowerTotalTag: roundedData?.U12_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U12_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U12_PLC_Voltage_Avg,
-      top: 594,
-      left: 202,
+      top: 548,
+      left: 185,
     },
     // Comber 1
     {
       activePowerTotalTag: roundedData?.U13_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_PLC_Voltage_Avg,
-      top: 664,
-      left: 290,
+      top: 612,
+      left: 265.5,
     },
     // Compressor
     {
       activePowerTotalTag: roundedData?.U14_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U14_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U14_PLC_Voltage_BC,
-      top: 594,
-      left: 379,
+      top: 548,
+      left: 348,
     },
     // Simplex 1
     {
       activePowerTotalTag: roundedData?.U15_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U15_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U15_PLC_Voltage_Avg,
-      top: 664,
-      left: 468.5,
+      top: 612,
+      left: 430.5,
     },
     // Compressor 2
     {
       activePowerTotalTag: roundedData?.U16_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U16_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U16_PLC_Voltage_Avg,
-      top: 594,
-      left: 558.5,
+      top: 548,
+      left: 513,
     },
     // Ring AC
     {
       activePowerTotalTag: roundedData?.U17_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U17_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U17_PLC_Voltage_Avg,
-      top: 664,
-      left: 647,
+      top: 612,
+      left: 595,
     },
     // Ring AC (Bypass)
     {
       activePowerTotalTag: roundedData?.U18_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U18_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U18_PLC_Voltage_BC,
-      top: 594,
-      left: 747,
+      top: 548,
+      left: 687,
     },
     // Compressor (Bypass)
     {
       activePowerTotalTag: roundedData?.U20_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U20_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U20_PLC_Voltage_Avg,
-      top: 664,
-      left: 846,
+      top: 612,
+      left: 779,
     },
   ];
 
   return (
-    <div className="w-full overflow-auto">
+    <div className="w-full">
       <button
         onClick={() => router.push("/sld?unit=unit4")}
         onMouseEnter={() => setIsHovered(true)}
@@ -303,33 +303,33 @@ const Unit4Lt1 = ({ roundedData }) => {
         </span>
       </button>
 
-      <div className="relative w-[1200px] h-full mx-auto">
+      <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
         {lt1MeterData.map((meter) => (
           <button
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_4&lt_scheme=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_4&page-type="sld"&lt_scheme=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              width: "72px",
-              height: "67px",
-              backgroundColor: "transparent",
+              width: "64.5px",
+              height: "61px",
+              border: "1px solid red",
               zIndex: 21,
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
             }}
-            className={``}
           ></button>
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../Unit-4-lt1-sld.png"
-          className="w-full h-full"
+          src="../../../sld/Unit-4-lt1-sld.png"
+          className=" h-full"
+          style={{ width: "1100px" }}
           alt="unit 4 sld"
         />
         {/* Meter Readings */}
@@ -339,16 +339,28 @@ const Unit4Lt1 = ({ roundedData }) => {
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
+              border: "1px solid red",
+              width: "40px",
+              height: "47px",
             }}
-            className={`absolute z-20 w-[46px] h-[50px] border-1 border-transparent flex flex-col items-center`}
+            className={`absolute z-20 flex flex-col items-center`}
           >
-            <span className="meterReadingUnit4Lt1 mt-[-2.5px]">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "-1.2px" }}
+            >
               {meter.activePowerTotalTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-3.5px]">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "-1.2px" }}
+            >
               {meter.activeCurrentAvgTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-2px]">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "-0.5px" }}
+            >
               {meter.activeVoltageAvgTag || "000"}
             </span>
           </div>

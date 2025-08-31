@@ -6,110 +6,104 @@ const lt1MeterData = [
   {
     link: "U5_GW02",
     title: "PF Panel",
-    top: 224,
-    left: 172,
+    top: 206,
+    left: 95,
   },
   {
     link: "U7_GW02",
     title: "Ring 1-3",
-    top: 330,
-    left: 268,
+    top: 303,
+    left: 183,
   },
   {
     link: "U8_GW02",
     title: "A/C Plant spinning",
-    top: 224,
-    left: 363,
+    top: 206,
+    left: 270,
   },
   {
     link: "U9_GW02",
     title: "Blow Room L1",
-    top: 330,
-    left: 457,
+    top: 303,
+    left: 358,
   },
   {
     link: "U10_GW02",
     title: "Ring Frames 4-6",
-    top: 224,
-    left: 553,
+    top: 206,
+    left: 446,
   },
   {
     link: "U11_GW02",
     title: "A/C Plant Blowing",
-    top: 330,
-    left: 650,
+    top: 303,
+    left: 536,
   },
   {
     link: "U12_GW02",
     title: "MLDB1 Blow Room card",
-    top: 224,
-    left: 744,
+    top: 206,
+    left: 648,
   },
   {
     link: "U13_GW02",
     title: "Transformer 1 LT-1 ACB",
-    top: 330,
-    left: 842,
+    top: 310,
+    left: 769,
   },
   {
     link: "U14_GW02",
     title: "Spare",
-    top: 224,
-    left: 935,
+    top: 210,
+    left: 901,
   },
   {
     link: "U15_GW02",
     title: "AC Plant spinning",
-    top: 543,
-    left: 167,
+    top: 501,
+    left: 95,
   },
   {
     link: "U16_GW02",
     title: "Water Chiller",
-    top: 657.5,
-    left: 269.5,
+    top: 606,
+    left: 183,
   },
   {
     link: "U17_GW02",
     title: "Card M/C 8-14",
-    top: 543,
-    left: 358,
+    top: 501,
+    left: 270,
   },
   {
     link: "U18_GW02",
     title: "Auto Con-linker Conner 1-9",
-    top: 657.5,
-    left: 460,
+    top: 606,
+    left: 358,
   },
   {
     link: "U19_GW02",
     title: "Card M/C 1-7",
-    top: 543,
-    left: 555,
+    top: 501,
+    left: 446,
   },
   {
     link: "U20_GW02",
     title: "AC Plant Winding",
-    top: 657.5,
-    left: 650,
+    top: 606,
+    left: 536,
   },
   {
     link: "U21_GW02",
     title: "Simplex M/C S1-5",
-    top: 543,
-    left: 745,
+    top: 501,
+    left: 623,
   },
   {
     link: "U22_GW02",
     title: "Spare 2",
-    top: 657.5,
-    left: 841,
-  },
-  {
-    link: "U23_GW02",
-    title: "Draw Frame Finish",
-    top: 543,
-    left: 956,
+    top: 606,
+    left: 712,
   },
 ];
 
@@ -122,120 +116,120 @@ const Unit5Lt3 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U5_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U5_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U5_GW02_Voltage_Avg,
-      top: 231,
-      left: 178,
+      top: 213,
+      left: 101,
     },
     // ring 1-3
     {
       activePowerTotalTag: roundedData?.U7_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U7_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_GW02_Voltage_Avg,
-      top: 337,
-      left: 273,
+      top: 310,
+      left: 190,
     },
     // Ac plant spining
     {
       activePowerTotalTag: roundedData?.U8_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U8_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U8_GW02_Voltage_Avg,
-      top: 231,
-      left: 368,
+      top: 213,
+      left: 277,
     },
     // blow room l1
     {
       activePowerTotalTag: roundedData?.U9_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U9_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U9_GW02_Voltage_Avg,
-      top: 337,
-      left: 462,
+      top: 310,
+      left: 365,
     },
     // ring frames 4-6
     {
       activePowerTotalTag: roundedData?.U10_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U10_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U10_GW02_Voltage_Avg,
-      top: 231,
-      left: 558,
+      top: 213,
+      left: 453,
     },
     // a/c plant blowing
     {
       activePowerTotalTag: roundedData?.U11_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U11_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U11_GW02_Voltage_Avg,
-      top: 337,
-      left: 656,
+      top: 310,
+      left: 542,
     },
     // mldb1 blower room card
     {
       activePowerTotalTag: roundedData?.U12_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U12_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U12_GW02_Voltage_Avg,
-      top: 231,
-      left: 750,
+      top: 213,
+      left: 655,
     },
     // transformer 1 lt-1 acb
     {
       activePowerTotalTag: roundedData?.U13_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_GW02_Voltage_Avg,
-      top: 337,
-      left: 847,
+      top: 316,
+      left: 776,
     },
     // spare
     {
       activePowerTotalTag: roundedData?.U14_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U14_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U14_GW02_Voltage_Avg,
-      top: 231,
-      left: 940,
+      top: 218,
+      left: 908,
     },
     // ac plant spinning
     {
       activePowerTotalTag: roundedData?.U15_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U15_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U15_GW02_Voltage_Avg,
-      top: 549,
-      left: 173,
+      top: 508,
+      left: 100,
     },
     // water chiller
     {
       activePowerTotalTag: roundedData?.U16_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U16_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U16_GW02_Voltage_Avg,
-      top: 665,
-      left: 275,
+      top: 612,
+      left: 189,
     },
     // card m/c 8-14
     {
       activePowerTotalTag: roundedData?.U17_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U17_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U17_GW02_Voltage_Avg,
-      top: 549,
-      left: 364,
+      top: 507,
+      left: 277,
     },
     // auto con-link corner 1-9
     {
       activePowerTotalTag: roundedData?.U18_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U18_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U18_GW02_Voltage_Avg,
-      top: 665,
-      left: 465,
+      top: 612,
+      left: 365,
     },
     // card mc 1-7
     {
       activePowerTotalTag: roundedData?.U19_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_GW02_Voltage_Avg,
-      top: 549,
-      left: 561,
+      top: 507,
+      left: 452,
     },
     // AC plant winding
     {
       activePowerTotalTag: roundedData?.U20_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U20_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U20_GW02_Voltage_Avg,
-      top: 665,
-      left: 656,
+      top: 612,
+      left: 542,
     },
 
     // simplex m/c s1-5
@@ -243,29 +237,22 @@ const Unit5Lt3 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U21_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U21_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U21_GW02_Voltage_Avg,
-      top: 549,
-      left: 751,
+      top: 507,
+      left: 630,
     },
     // spare 2
     {
       activePowerTotalTag: roundedData?.U22_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U22_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U22_GW02_Voltage_Avg,
-      top: 665,
-      left: 847,
-    },
-    // draw frame finish
-    {
-      activePowerTotalTag: roundedData?.U23_GW02_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U23_GW02_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U23_GW02_Voltage_Avg,
-      top: 549,
-      left: 961.5,
+      top: 612,
+      left: 718,
     },
   ];
 
   return (
-    <div className="w-full overflow-auto">
+    <div className="w-full">
+      {/* back button */}
       <button
         onClick={() => router.push("/sld?unit=unit5")}
         onMouseEnter={() => setIsHovered(true)}
@@ -289,52 +276,65 @@ const Unit5Lt3 = ({ roundedData }) => {
         </span>
       </button>
 
-      <div className="relative w-[1200px] h-full mx-auto">
+      <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
         {lt1MeterData.map((meter) => (
           <button
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_5&lt_scheme=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_5&page-type="sld"&lt_scheme=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              width: "72px",
-              height: "67px",
+              width: "69px",
+              height: "63px",
               backgroundColor: "transparent",
               zIndex: 21,
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
+              border: "1px solid red",
             }}
-            className={``}
           ></button>
         ))}
         {/* Diagram Image */}
         <img
-          src="./unit-5-lt3-sld.png"
-          className="w-full h-full"
+          src="./sld/unit-5-lt1-sld.png"
+          className=" h-full"
+          style={{ width: "1100px" }}
           alt="unit 5 lt3 sld"
         />
         {/* Meter Readings */}
         {unitl5Lt3MeterTags.map((meter, index) => (
           <div
             key={index}
-            className="absolute flex flex-col items-center  w-[47px] h-[54px]"
+            className="absolute flex flex-col items-center"
             style={{
               left: meter.left,
               top: meter.top,
+              border: "1px solid red",
+              height: "51px",
+              width: "43px",
             }}
           >
-            <span className="meterReadingUnit4Lt1 mt-[-1.5px]">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500 }}
+            >
               {meter.activePowerTotalTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-1px]">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500 }}
+            >
               {meter.activeCurrentAvgTag || "000"}
             </span>
-            <span className="meterReadingUnit4Lt1 mt-[-1px]">
+            <span
+              className="text-[11px]"
+              style={{ color: "#05f805", fontWeight: 500 }}
+            >
               {meter.activeVoltageAvgTag || "000"}
             </span>
           </div>

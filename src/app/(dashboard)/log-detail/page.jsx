@@ -22,8 +22,6 @@ const LogDetails = () => {
   const ltScheme = searchParams.get("lt-scheme");
   const unit = searchParams.get("unit");
   const router = useRouter();
-  console.log("....................", ltScheme);
-  console.log("===================", unit);
   const getMeterLogsData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -254,7 +252,7 @@ const LogDetails = () => {
             onClick={() => router.back()}
             className="px-3 py-2 rounded-sm bg-[#1D5999] text-white text-[16px] font-400 font-inter hover:scale-103 transition-all duration-500 cursor-pointer"
           >
-             <span className="flex md:hidden">
+            <span className="flex md:hidden">
               <IoIosArrowBack size={20} />
             </span>
             <span className="hidden md:flex">Back</span>
@@ -288,8 +286,8 @@ const LogDetails = () => {
             />
           </div>
         </div>
-       
-       <div className="flex gap-3 items-center justify-end">
+
+        <div className="flex gap-3 items-center justify-end">
           <span className="font-semibold">
             Unit:{" "}
             <span className="font-normal text-[#1D5999]">
