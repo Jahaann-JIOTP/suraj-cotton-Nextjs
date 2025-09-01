@@ -35,13 +35,13 @@ const lt1MeterData = [
   },
   {
     link: "U6_GW03",
-    title: "Comber MCS 1-14",
+    title: "Spare 3",
     top: 290,
     left: 600,
   },
   {
     link: "U7_GW03",
-    title: "Spare",
+    title: "Spare 1",
     top: 203,
     left: 698,
   },
@@ -94,8 +94,8 @@ const lt1MeterData = [
     left: 610,
   },
   {
-    link: "U16_GW03",
-    title: "Transformer 2 LT-2 ACB",
+    link: "U18_GW03",
+    title: "PF Panel",
     top: 514,
     left: 710,
   },
@@ -266,7 +266,7 @@ const Unit5Lt4 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_5&page-type="sld"&lt_scheme=LT_4&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_5&page-type=sld&lt_scheme=LT_4&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -275,7 +275,6 @@ const Unit5Lt4 = ({ roundedData }) => {
               left: `${meter.left}px`,
               width: "68px",
               height: "65px",
-              border: "1px solid red",
               zIndex: 21,
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
@@ -297,7 +296,6 @@ const Unit5Lt4 = ({ roundedData }) => {
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              border: "1px solid red",
               width: "42.5px",
               height: "51px",
             }}

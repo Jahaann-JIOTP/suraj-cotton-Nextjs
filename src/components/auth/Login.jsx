@@ -76,7 +76,7 @@ const Login = () => {
         const data = await res.json();
         const privileges = data?.role?.privelleges?.map((p) => p.name) || [];
         setUserPrivileges(privileges);
-        console.log("User privileges:", privileges);
+       
         
         if (!token) {
           redirectBasedOnPrivileges(privileges);

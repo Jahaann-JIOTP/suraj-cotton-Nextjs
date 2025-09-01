@@ -5,12 +5,12 @@ import Swal from "sweetalert2";
 
 // Meters with display name and ID
 const meters = [
-  { name: "Autocone 10-18", id: "U22_GW03" },
-  { name: "Autoconde 1-9", id: "U23_GW03" },
-  { name: "Carding DB 1~14", id: "U3_GW02" },
-  { name: "Card DB 01", id: "U1_GW02" },
-  { name: "Card DB 02", id: "U2_GW02" },
-  { name: "Comber 1-14", id: "U4_GW02" },
+  { name: "PDB1 CD1", id: "U1_GW02" },
+  { name: "PDB2 CD2", id: "U2_GW02" },
+  { name: "Card PDB 01", id: "U3_GW02" },
+  { name: "PDB 08", id: "U4_GW02" },
+  { name: "PDB 07", id: "U22_GW03" },
+  { name: "PDB 010", id: "U23_GW03" },
 ];
 
 const Settings = () => {

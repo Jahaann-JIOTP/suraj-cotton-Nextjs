@@ -32,7 +32,7 @@ const SingleUnitComponent = ({
       : unit === "Unit_5"
       ? unit5CleanData
       : "";
-console.log("......................",unit4CleanData)
+
   let totalConsumption = 0;
 
   for (const key in finalData) {
@@ -182,7 +182,7 @@ console.log("......................",unit4CleanData)
       unit: "Unit_5",
     },
     {
-      Department: "HFO",
+      Department: "HFO 2nd Source",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.HFO2ndSource_consumption || 0,
@@ -196,7 +196,7 @@ console.log("......................",unit4CleanData)
       unit: "Unit_4",
     },
     {
-      Department: "Aux",
+      Department: "Aux Unit # 05",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.AuxUnit5_consumption || 0,
@@ -207,7 +207,7 @@ console.log("......................",unit4CleanData)
       Mcs: "",
       InstalledLoad: "30.0",
       ConsumedUnits: finalData?.Residentialcolony_consumption || 0,
-      unit: "Unit_4",
+      unit: "both",
 
     },
     {
@@ -215,7 +215,14 @@ console.log("......................",unit4CleanData)
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.Packing_consumption || 0,
-      unit: "Unit_4",
+      unit: "both",
+    },
+    {
+      Department: "Capacitor Bank",
+      Mcs: "",
+      InstalledLoad: "",
+      ConsumedUnits: finalData?.Capacitorbank_consumption || 0,
+      unit: "Unit_5",
     },
   ];
 

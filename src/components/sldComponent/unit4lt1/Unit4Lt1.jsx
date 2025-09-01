@@ -11,13 +11,13 @@ const lt1MeterData = [
   },
   {
     link: "U2_PLC",
-    title: "Unit 5 aux",
+    title: "Unit 5 Lightning",
     top: 342,
     left: 179,
   },
   {
     link: "U3_PLC",
-    title: "Lighting Outside",
+    title: "Lightning Outside",
     top: 274,
     left: 261,
   },
@@ -41,43 +41,43 @@ const lt1MeterData = [
   },
   {
     link: "U7_PLC",
-    title: "Spare",
+    title: "Main Meter",
     top: 278,
     left: 600,
   },
   {
     link: "U8_PLC",
-    title: "Drawing 1",
+    title: "Drawing 1~6+2 Breaker",
     top: 342,
     left: 680,
   },
   {
     link: "U9_PLC",
-    title: "Winding 1",
+    title: "Winding 7~9",
     top: 278,
     left: 771,
   },
   {
     link: "U10_PLC",
-    title: "Ring 1",
+    title: "Ring 1~4",
     top: 342,
     left: 887,
   },
   {
     link: "U11_PLC",
-    title: "Ring 5",
+    title: "Ring 16~20",
     top: 605,
     left: 95,
   },
   {
     link: "U12_PLC",
-    title: "Ring 6",
+    title: "Ring 21~24",
     top: 541,
     left: 178,
   },
   {
     link: "U13_PLC",
-    title: "Comber 1",
+    title: "Comber 1-10 +Uni-Lap 1-2",
     top: 605,
     left: 260,
   },
@@ -89,7 +89,7 @@ const lt1MeterData = [
   },
   {
     link: "U15_PLC",
-    title: "Simplex 1",
+    title: "Simplex 1-6",
     top: 605,
     left: 424,
   },
@@ -107,7 +107,7 @@ const lt1MeterData = [
   },
   {
     link: "U18_PLC",
-    title: "Ring AC (Byparss)",
+    title: "Ring AC (Bypass)",
     top: 541,
     left: 680,
   },
@@ -309,7 +309,7 @@ const Unit4Lt1 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_4&page-type="sld"&lt_scheme=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_4&page-type=sld&lt_scheme=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -318,7 +318,6 @@ const Unit4Lt1 = ({ roundedData }) => {
               left: `${meter.left}px`,
               width: "64.5px",
               height: "61px",
-              border: "1px solid red",
               zIndex: 21,
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
@@ -339,7 +338,6 @@ const Unit4Lt1 = ({ roundedData }) => {
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              border: "1px solid red",
               width: "40px",
               height: "47px",
             }}

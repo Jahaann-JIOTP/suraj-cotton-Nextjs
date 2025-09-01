@@ -1,33 +1,33 @@
 "use client";
 import React, { useState } from "react";
 
-import { ImArrowDown, ImArrowLeft2 } from "react-icons/im";
+import { ImArrowLeft2 } from "react-icons/im";
 import { useRouter } from "next/navigation";
 const unit4MeterData = [
   {
     link: "U6_GW02",
-    title: "Solar",
+    title: "Solar 1236.39 Kw",
     top: 310,
     left: 226,
     ltScheme: "LT_3",
   },
   {
-    link: "U20_GW03",
-    title: "T/F 3",
+    link: "U13_GW02",
+    title: "T/F 1",
     top: 310,
     left: 388,
-    ltScheme: "LT_4",
+    ltScheme: "LT_3",
   },
   {
-    link: "U19_GW03",
-    title: "T/F 4",
+    link: "U16_GW03",
+    title: "T/F 2",
     top: 310,
     left: 637,
     ltScheme: "LT_4",
   },
   {
     link: "U17_GW03",
-    title: "Solar 2",
+    title: "Solar 1017 Kw",
     top: 310,
     left: 798,
     ltScheme: "LT_4",
@@ -47,17 +47,17 @@ const InitialSldUnit5 = ({ roundedData }) => {
     },
     // TF #1
     {
-      activePowerTotalTag: roundedData?.U20_GW03_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U20_GW03_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U20_GW03_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U13_GW02_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U13_GW02_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U13_GW02_Voltage_Avg,
       top: 320,
       left: 395,
     },
     // TF #2
     {
-      activePowerTotalTag: roundedData?.U19_GW03_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U19_GW03_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U19_GW03_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U16_GW03_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U16_GW03_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U16_GW03_Voltage_Avg,
       top: 320,
       left: 644,
     },
@@ -101,7 +101,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_5&page-type="sld"&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_5&page-type=sld&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -110,7 +110,6 @@ const InitialSldUnit5 = ({ roundedData }) => {
               left: `${meter.left}px`,
               width: "81px",
               height: "79px",
-              border: "1px solid red",
               zIndex: 100,
               borderRadius: "0.4.2rem", // rounded-md
               cursor: "pointer",
@@ -131,7 +130,6 @@ const InitialSldUnit5 = ({ roundedData }) => {
           onClick={() => router.replace("/sld?unit=unit5&area=lt1")}
           className="absolute top-[545px] left-[193px] w-[301px] h-[45px] cursor-pointer"
           style={{
-            border: "1px solid red",
             left: "210px",
             top: "545px",
             height: "45px",
@@ -142,7 +140,6 @@ const InitialSldUnit5 = ({ roundedData }) => {
           onClick={() => router.push("/sld?unit=unit5&area=lt2")}
           className="absolute cursor-pointer"
           style={{
-            border: "1px solid red",
             left: "620px",
             top: "545px",
             height: "45px",
@@ -160,7 +157,6 @@ const InitialSldUnit5 = ({ roundedData }) => {
               left: `${meter.left}px`,
               width: "51px",
               height: "59px",
-              border: "1px solid red",
             }}
           >
             <span

@@ -94,7 +94,37 @@ const FieldMeters = () => {
     return newObj;
   }
   const roundedData = roundNumbersInJson(realtime);
-  console.log(roundedData?.U1_GW02_Power_Phase_A);
+  // fetch meter area status
+  const fetchMeterAreaStatus = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.METER_CONFIG.GET_METER_TOGGLE_STATUS}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const resResult = await response.json();
+
+      if (response.ok) {
+        // setMeterToggleStatus(resResult);
+        // Map meter status to selectedUnits
+        const initialUnits = {};
+        resResult.forEach((item) => {
+          initialUnits[item.meterId] = item.area === "unit4" ? 4 : 5;
+        });
+        // setSelectedUnits(initialUnits);
+      
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   const fieldMetersTags = [
     {
       activePowerTotalTag: roundedData?.U1_GW02_ActivePower_Total,
@@ -190,6 +220,7 @@ const FieldMeters = () => {
     },
   ];
   useEffect(() => {
+    fetchMeterAreaStatus();
     getRealTimeData();
     const interval = setInterval(getRealTimeData, 5000);
     return () => clearInterval(interval);
@@ -202,7 +233,7 @@ const FieldMeters = () => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_5&page-type="field-meter"&lt_scheme=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_5&page-type=field-meter&lt_scheme=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -211,7 +242,6 @@ const FieldMeters = () => {
               left: `${meter.left}px`,
               width: "49px",
               height: "46px",
-              border: "1px solid red",
               zIndex: 100,
               borderRadius: "0.4.2rem", // rounded-md
               cursor: "pointer",
@@ -233,7 +263,6 @@ const FieldMeters = () => {
             <div
               className="absolute flex items-center justify-center text-[10px]"
               style={{
-                border: "1px solid red",
                 color: "#05f805",
                 fontWeight: 500,
                 left: unit.unit4Left,
@@ -247,7 +276,6 @@ const FieldMeters = () => {
             <div
               className="absolute flex items-center justify-center text-[10px]"
               style={{
-                border: "1px solid red",
                 color: "#05f805",
                 fontWeight: 500,
                 left: unit.unit5Left,

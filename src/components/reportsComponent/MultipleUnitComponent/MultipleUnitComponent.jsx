@@ -259,7 +259,7 @@ const MultipleUnitComponent = ({
       unit: "Unit_5",
     },
     {
-      dept: "HFO",
+      dept: "HFO 2nd Source",
       u4Mcs: 9,
       u5Mcs: 9,
       u4Load: 6.2,
@@ -281,7 +281,7 @@ const MultipleUnitComponent = ({
       unit: "Unit_4",
     },
     {
-      dept: "aux",
+      dept: "aux Unit # 05",
       u4Mcs: 0,
       u5Mcs: 0,
       u4Load: 0,
@@ -300,7 +300,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Residentialcolony_consumption,
       u5Consumption: data.unit_5Residentialcolony_consumption,
       u4andU5TotalConsumption: u4U5Total.residentialcolony,
-      unit: "Unit_4",
+      unit: "both",
     },
     {
       dept: "packing",
@@ -311,7 +311,18 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4Packing_consumption,
       u5Consumption: data.unit_5Packing_consumption,
       u4andU5TotalConsumption: u4U5Total.packing,
-      unit: "Unit_4",
+      unit: "both",
+    },
+    {
+      dept: "Capacitor Bank",
+      u4Mcs: 0,
+      u5Mcs: 0,
+      u4Load: 0,
+      u5Load: 0,
+      u4Consumption: data.unit_4Capacitorbank_consumption,
+      u5Consumption: data.unit_5Capacitorbank_consumption,
+      u4andU5TotalConsumption: u4U5Total.packing,
+      unit: "Unit_5",
     },
   ];
  

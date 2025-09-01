@@ -29,7 +29,7 @@ const lt2MeterData = [
   },
   {
     link: "U5_GW01",
-    title: "Card 1",
+    title: "Card 1-8",
     top: 203,
     left: 440,
   },
@@ -47,19 +47,19 @@ const lt2MeterData = [
   },
   {
     link: "U9_GW01",
-    title: "Cart 2",
+    title: "Comber 9-14+1 Breaker",
     top: 306,
     left: 719,
   },
   {
     link: "U10_GW01",
-    title: "Winding 1",
+    title: "Winding 1-6",
     top: 203,
     left: 812,
   },
   {
     link: "U11_GW01",
-    title: "Gas LT Pannel",
+    title: "Power House 2nd Source",
     top: 306,
     left: 905,
   },
@@ -77,19 +77,19 @@ const lt2MeterData = [
   },
   {
     link: "U15_GW01",
-    title: "Ring 2",
+    title: "Ring 5-8",
     top: 492,
     left: 262,
   },
   {
     link: "U16_GW01",
-    title: "Ring 4",
+    title: "Ring 13-16",
     top: 600,
     left: 358,
   },
   {
     link: "U17_GW01",
-    title: "Ring 3",
+    title: "Ring 9-12",
     top: 492,
     left: 449,
   },
@@ -306,7 +306,7 @@ const Unit4Lt2 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_4&lt_scheme=LT_2&page-type="sld"&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_4&lt_scheme=LT_2&page-type=sld&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -319,7 +319,6 @@ const Unit4Lt2 = ({ roundedData }) => {
               zIndex: 60,
               borderRadius: "0.375rem",
               cursor: "pointer",
-              border: "1px solid red",
             }}
           ></button>
         ))}
@@ -338,7 +337,6 @@ const Unit4Lt2 = ({ roundedData }) => {
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              border: "1px solid red",
               width: "46px",
               height: "53px",
             }}

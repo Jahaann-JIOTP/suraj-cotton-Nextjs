@@ -43,16 +43,24 @@ const mainOverviewMeterData = [
   },
   {
     link: "U25_PLC",
-    title: "S/T",
+    title: "HFO Aux",
     top: 322,
     left: 366,
     area: "Unit_4",
     lt_scheme: "LT_1",
   },
+  {
+    link: "U21_GW03",
+    title: "Main Incomming",
+    top: 449,
+    left: 181,
+    area: "Unit_5",
+    lt_scheme: "LT_4",
+  },
 
   {
     link: "U20_GW03",
-    title: "T/F 3",
+    title: "T/F 1",
     top: 690,
     left: 183,
     area: "Unit_5",
@@ -60,7 +68,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U19_GW03",
-    title: "T/F 4",
+    title: "T/F 2",
     top: 688,
     left: 357,
     area: "Unit_5",
@@ -127,13 +135,21 @@ const MainSldOverview = ({ roundedData }) => {
       top: 329,
       left: 276,
     },
-    // s/t
+    // HFO Aux
     {
       activePowerTotalTag: roundedData?.U25_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U25_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U25_PLC_Voltage_Avg,
       top: 329,
       left: 370.5,
+    },
+    // Main incomming
+    {
+      activePowerTotalTag: roundedData?.U21_GW03_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U21_GW03_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U21_GW03_Voltage_Avg,
+      top: 455,
+      left: 185.3,
     },
     // T/F 3
     {
@@ -177,7 +193,7 @@ const MainSldOverview = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=${meter.area}&page-type="sld"&lt_scheme=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=${meter.area}&page-type=sld&lt_scheme=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -190,7 +206,6 @@ const MainSldOverview = ({ roundedData }) => {
               zIndex: 21,
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
-              border: "1px solid red",
             }}
             className={``}
           ></button>
@@ -206,7 +221,6 @@ const MainSldOverview = ({ roundedData }) => {
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              border: "1px solid red",
               width: "36px",
               height: "42px",
             }}

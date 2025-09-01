@@ -37,7 +37,7 @@ const PowerSummaryTable = ({
       dgTarif) /
     8;
   const { theme } = useTheme();
-  // console.log(themetheme);
+ 
 
   // generation cost
   const wapda1Cost = resData.wapda1 * wapda1Tarif;

@@ -18,7 +18,7 @@ const TranformersPage = () => {
     useState("thisweek");
   const [loading, setLoading] = useState(false);
   const [transformerTotalValTag, setTransformerTotalValTag] = useState({});
-  console.log("..............................",transformerTotalValTag)
+  
   const [data, setData] = useState([]);
   const { startDate, endDate } = getDateRangeFromString(transformerTimePeriod);
 

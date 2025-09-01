@@ -1,33 +1,33 @@
 "use client";
 import React, { useState } from "react";
 
-import { ImArrowDown, ImArrowLeft2 } from "react-icons/im";
+import { ImArrowLeft2 } from "react-icons/im";
 import { useRouter } from "next/navigation";
 const unit4MeterData = [
   {
     link: "U19_PLC",
-    title: "Diesel IC",
+    title: "Diesel_JGS Incomming",
     top: 198,
     left: 103,
     ltScheme: "LT_1",
   },
   {
     link: "U21_PLC",
-    title: "Wapda IC",
+    title: "Wapda + HFO + JMS IC",
     top: 198,
     left: 219,
     ltScheme: "LT_1",
   },
   {
     link: "U7_GW01",
-    title: "Power House",
+    title: "Diesel JGS Incomming",
     top: 200,
     left: 640,
     ltScheme: "LT_2",
   },
   {
     link: "U13_GW01",
-    title: "Wapda IC",
+    title: "WAPDA + HFO + JMS Inomming",
     top: 200,
     left: 766,
     ltScheme: "LT_2",
@@ -63,9 +63,9 @@ const InitialSldUnit4 = ({ roundedData }) => {
     },
     // wapda IC
     {
-      activePowerTotalTag: roundedData?.U13_PLC_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U13_PLC_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U13_PLC_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U13_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U13_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U13_GW01_Voltage_Avg,
       top: 207.5,
       left: 773,
     },
@@ -109,7 +109,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_4&page-type="sld"&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_4&page-type=sld&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -119,7 +119,6 @@ const InitialSldUnit4 = ({ roundedData }) => {
               width: "70px",
               height: "65px",
               zIndex: 100,
-              border: "1px solid red",
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
             }}
@@ -138,7 +137,6 @@ const InitialSldUnit4 = ({ roundedData }) => {
           onClick={() => router.replace("/sld?unit=unit4&area=lt1")}
           className="absolute  cursor-pointer"
           style={{
-            border: "1px solid red",
             width: "239px",
             height: "40px",
             top: "385px",
@@ -149,7 +147,6 @@ const InitialSldUnit4 = ({ roundedData }) => {
           onClick={() => router.push("/sld?unit=unit4&area=lt2")}
           className="absolute cursor-pointer"
           style={{
-            border: "1px solid red",
             width: "239px",
             height: "40px",
             top: "385px",
@@ -167,7 +164,6 @@ const InitialSldUnit4 = ({ roundedData }) => {
               height: "52px",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              border: "1px solid red",
             }}
           >
             <span

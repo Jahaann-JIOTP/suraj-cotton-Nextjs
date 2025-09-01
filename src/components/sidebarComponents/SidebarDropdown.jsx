@@ -70,38 +70,28 @@ export default function SidebarDropdown({
           } gap-2`}
         >
           {item.submenu.map((sub) => {
-            // const nestedArr = ["/sld", "/meter", "/logs", "/log-detail"].some(
-            //   (p) => {
-            //     // path.startsWith(p);
-            //     return path.startsWith(p);
-            //   }
-            // );
+           
+            const nestedArr = ["/meter", "/logs", "/log-detail"];
 
-            // const activePath = nestedArr || path === sub.href;
             let activePath = false;
-
-            // For SLD routes
-            if (
-              pageType === "sld" &&
-              (sub.href.includes("/sld") ||
-                sub.href.includes("/meter") ||
-                sub.href.includes("/logs") ||
-                sub.href.includes("/log-detail"))
+            
+            if (path.startsWith("/sld") && sub.href.startsWith("/sld")) {
+              activePath = true;
+            } else if (
+              path.startsWith("/field-meters") &&
+              sub.href.startsWith("/field-meters")
             ) {
               activePath = true;
-            }
-            // For Field-Meter routes
-            else if (
-              pageType === "field-meter" &&
-              (sub.href.includes("/field-meters") ||
-                sub.href.includes("/meter") ||
-                sub.href.includes("/logs") ||
-                sub.href.includes("/log-detail"))
-            ) {
-              activePath = true;
-            }
-            // Exact path match (fallback for other menus)
-            else if (path === sub.href) {
+            } else if (nestedArr.some((r) => path.startsWith(r))) {
+              if (pageType === "sld" && sub.href.startsWith("/sld")) {
+                activePath = true;
+              } else if (
+                pageType === "field-meter" &&
+                sub.href.startsWith("/field-meters")
+              ) {
+                activePath = true;
+              }
+            } else if (path === sub.href) {
               activePath = true;
             }
 
