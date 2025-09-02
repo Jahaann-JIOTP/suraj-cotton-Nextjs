@@ -2,6 +2,7 @@
 import config from "@/constant/apiRouteList";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { BiSolidDownArrowSquare } from "react-icons/bi";
 const fieldMetersBtn = [
   {
     link: "U1_GW02",
@@ -48,6 +49,8 @@ const fieldMetersBtn = [
 ];
 const FieldMeters = () => {
   const [realtime, setRealtime] = useState([]);
+  const [currentArea, setCurrentArea] = useState({});
+  console.log("Areas of meter", currentArea.U1_GW02);
   const router = useRouter();
   // fetch real time values
   const getRealTimeData = async () => {
@@ -117,8 +120,8 @@ const FieldMeters = () => {
         resResult.forEach((item) => {
           initialUnits[item.meterId] = item.area === "unit4" ? 4 : 5;
         });
-        // setSelectedUnits(initialUnits);
-      
+
+        setCurrentArea(initialUnits);
       }
     } catch (error) {
       console.error(error.message);
@@ -256,7 +259,22 @@ const FieldMeters = () => {
           style={{ width: "1100px" }}
           alt="unit 4 sld"
         />
-
+        {/* indicators */}
+        {/* pdb cd1 indicator */}
+        {/* {currentArea.U1_GW02 === 4 ? (
+          <div className="absolute top-[127px] left-[50px]">
+            <img src="./onMeter1.png" className="w-[26px]" alt="" />
+          </div>
+        ) : (
+          ""
+        )}
+        {currentArea.U1_GW02 !== 5 ? (
+          <div className="absolute top-[104px] left-[115.5px]">
+            <BiSolidDownArrowSquare className="text-red-500  text-[36.5px]" />
+          </div>
+        ) : (
+          ""
+        )} */}
         {/* per unit reading */}
         {unitConsumption.map((unit, index) => (
           <div key={index}>

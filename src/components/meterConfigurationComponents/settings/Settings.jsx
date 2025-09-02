@@ -117,12 +117,8 @@ const Settings = () => {
       This meter is already assigned to <b>${targetAreaName|| "N/A"}</b>
     `,
       })
-
       return;
     }
-    
-
-    // Show confirmation popup
     const result = await Swal.fire({
       title: "Confirm Switch",
       html: `
@@ -141,7 +137,6 @@ const Settings = () => {
       return; // User cancelled
     }
 
-   
     setSelectedUnits((prev) => ({
       ...prev,
       [meterId]: unit,
@@ -215,7 +210,7 @@ const Settings = () => {
                   handleToggle(meter.id, 4)
                 postMeterWithrealTimeValues(meter.id,4)
                 }}
-                className={`px-4 py-2 rounded-xl transition-all duration-300 ${
+                className={`px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 ${
                   selectedUnits[meter.id] === 4
                     ? "bg-[#1A68B2] text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-[#cae5ff]"
@@ -228,7 +223,7 @@ const Settings = () => {
                    handleToggle(meter.id, 5)
                    postMeterWithrealTimeValues(meter.id,5)
                 }}
-                className={`px-4 py-2 rounded-xl transition-all duration-300 ${
+                className={`px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 ${
                   selectedUnits[meter.id] === 5
                     ? "bg-[#1A68B2] text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-[#cae5ff]"

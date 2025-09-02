@@ -95,7 +95,7 @@ const PowerSummaryPage = () => {
         </div>
         <div className="w-full lg:w-[49.6%]">
           <TrafoCard
-            mainTitle="Unit 4 Trafo 1+2"
+            mainTitle="Unit 4 Transformer 1+2"
             icomingValue={Number(
               powerSummaryData.T1andT2incoming || 0
             ).toLocaleString("en-US")}

@@ -326,7 +326,14 @@ const MultipleUnitComponent = ({
     },
   ];
  
-
+// ---------------------------
+const originalString = "javascript is easy";
+const capitalizedSentence = originalString
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+console.log(capitalizedSentence);
+// ---------------------------
 
   const getImageBuffer = async (imageUrl) => {
     const res = await fetch(imageUrl);
@@ -459,7 +466,7 @@ const MultipleUnitComponent = ({
 
       tableData.forEach((item) => {
         const row = worksheet.addRow([
-          item.dept,
+          item.dept.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
           item.unit!=="Unit_5"?item.u4Mcs:"",
           item.unit!=="Unit_5"?item.u4Load:"",
           item.unit!=="Unit_5"?item.u4Consumption || 0:"--",
@@ -667,11 +674,11 @@ const MultipleUnitComponent = ({
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] right-0"></div>
                 </div>
               </div>
-              <div className="w-[23.5rem] lg:w-[29.9%] flex items-center gap-2">
+              <div className="w-[24rem] lg:w-[29.9%] flex items-center gap-2">
                 <div className="w-[47.5%] h-[1px] bg-black dark:bg-gray-500 relative">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] left-0"></div>
                 </div>
-                <div className="w-[10%] font-500 font-inter text-[12px] text-center">
+                <div className="w-[12%] font-500 font-inter text-[12px] text-center">
                   Unti 5
                 </div>
                 <div className="w-[45%] h-[1px] bg-black dark:bg-gray-500 relative">
@@ -679,13 +686,13 @@ const MultipleUnitComponent = ({
                 </div>
               </div>
               <div className="w-[7.5rem] lg:w-[16.5%] flex items-center">
-                <div className="w-[30%] h-[1px] bg-black dark:bg-gray-500 relative">
+                <div className="w-[27%] h-[1px] bg-black dark:bg-gray-500 relative">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] left-0"></div>
                 </div>
-                <div className="w-[40%] font-500 font-inter text-[12px] text-center">
+                <div className="w-[46%] font-500 font-inter text-[12px] text-center">
                   Unti 4 + Unit 5
                 </div>
-                <div className="w-[28%] h-[1px] bg-black dark:bg-gray-500 relative">
+                <div className="w-[27%] h-[1px] bg-black dark:bg-gray-500 relative">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] right-0"></div>
                 </div>
               </div>
@@ -730,7 +737,7 @@ const MultipleUnitComponent = ({
                         key={index}
                         className="h-[27px] text-[12px] font-inter font-400"
                       >
-                        <td className="px-2 py-1 border border-gray-300 dark:border-gray-500   text-[12px] font-inter font-400">
+                        <td className="capitalize px-2 py-1 border border-gray-300 dark:border-gray-500   text-[12px] font-inter font-400">
                           {row.dept}
                         </td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 text-center">

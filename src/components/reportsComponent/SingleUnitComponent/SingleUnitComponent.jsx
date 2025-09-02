@@ -330,7 +330,7 @@ const SingleUnitComponent = ({
 
       tableData.filter((row)=>row.unit==="both"||row.unit===unit).forEach((item) => {
         const row = worksheet.addRow([
-          item.Department,
+          item.Department.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
           item.Mcs,
           item.InstalledLoad,
           item.ConsumedUnits,
@@ -521,16 +521,16 @@ const SingleUnitComponent = ({
                   key={row.Department}
                   className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400"
                 >
-                  <td className="px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
+                  <td className="capitalize px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
                     {row.Department}
                   </td>
-                  <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
+                  <td className="capitalize px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
                     {row.Mcs}
                   </td>
-                  <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
+                  <td className="capitalize px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
                     {row.InstalledLoad}
                   </td>
-                  <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
+                  <td className="capitalize px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
                     {row.ConsumedUnits}
                   </td>
                 </tr>
