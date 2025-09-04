@@ -412,6 +412,12 @@ function CustomTrend() {
     valueAxis.renderer.grid.template.stroke = am4core.color(gridColor);
     valueAxis.renderer.labels.template.fill = am4core.color(textColor);
     const colorMap = {
+      "HFO 1": am4core.color("#E62222"),
+      "O/G 2": am4core.color("#39E66C"),
+      "O/G 1": am4core.color("#A345E6"),
+      "S/T": am4core.color("#E6CF2E"),
+      "I-GG": am4core.color("#50CDE6"),
+      "Wapda 2": am4core.color("#CC1F7C"),
       Transport: am4core.color("#FF9933"),
       "Unit 05 Aux": am4core.color("#A569BD"),
       "Light External": am4core.color("#F7DC6F"),
@@ -1030,11 +1036,12 @@ function CustomTrend() {
             )}
           </div>
         </div>
-        {filteredMeters.length<=0 ?
-        <div className="w-full flex flex-col items-center justify-center h-full">
-          <img src="../../../trend_icon.svg" alt="" />
-          <span>Select Desired Filters to view Trend!</span>
-        </div>:
+        {filteredMeters.length <= 0 ? (
+          <div className="w-full flex flex-col items-center justify-center h-full">
+            <img src="../../../trend_icon.png" className="w-90" alt="" />
+            <span>Select Desired Filters to view Trend!</span>
+          </div>
+        ) : (
           <div className="flex-1 w-full">
             {loading === true ? (
               <CustomLoader />
@@ -1104,7 +1111,7 @@ function CustomTrend() {
               </div>
             )}
           </div>
-        }
+        )}
       </div>
     </div>
   );

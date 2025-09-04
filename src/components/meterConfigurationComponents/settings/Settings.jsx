@@ -105,72 +105,78 @@ const Settings = () => {
     }
   };
   // Toggle handler
+
   const handleToggle = async (meterId, unit) => {
-    const currentUnit = selectedUnits[meterId];
-    const targetAreaName = unit === 4 ? "Unit 4" : "Unit 5";
-    const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
-    // If already in the selected unit, no need to confirm
-    if (currentUnit === unit) {
-      Swal.fire({
-        icon: "question",
-        html: `
-      This meter is already assigned to <b>${targetAreaName|| "N/A"}</b>
-    `,
-      })
-      return;
-    }
-    const result = await Swal.fire({
-      title: "Confirm Switch",
-      html: `
+  const currentUnit = selectedUnits[meterId];
+  const targetAreaName = unit === 4 ? "Unit 4" : "Unit 5";
+  const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
+
+  if (currentUnit === unit) {
+    Swal.fire({
+      icon: "question",
+      html: `This meter is already assigned to <b>${targetAreaName || "N/A"}</b>`,
+    });
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: "Confirm Switch",
+    html: `
       Currently you are in <b>${currentAreaName || "N/A"}</b>.<br/>
       Are you sure you want to switch to <b>${targetAreaName}</b>?
     `,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Switch",
-      cancelButtonText: "Cancel",
-      confirmButtonColor: "#1A68B2",
-      cancelButtonColor: "#d33",
-    });
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Switch",
+    cancelButtonText: "Cancel",
+    confirmButtonColor: "#1A68B2",
+    cancelButtonColor: "#d33",
+  });
 
-    if (!result.isConfirmed) {
-      return; // User cancelled
-    }
+  if (!result.isConfirmed) {
+    return; // User cancelled
+  }
 
-    setSelectedUnits((prev) => ({
-      ...prev,
-      [meterId]: unit,
-    }));
-
-    try {
-      const response = await fetch(
-        `${config.BASE_URL}${config.METER_CONFIG.ADD_METER_TOGGLE}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            area: unit === 4 ? "unit4" : "unit5",
-            meterId: meterId,
-            email: userData.email,
-            username: userData.name,
-          }),
-        }
-      );
-
-      const resResult = await response.json();
-      if (response.ok) {
-        toast.success(resResult.message);
-        fetchMeterToggleStatus();
-      } else {
-        toast.error(resResult.message);
+  // ✅ First update DB toggle
+  try {
+    const response = await fetch(
+      `${config.BASE_URL}${config.METER_CONFIG.ADD_METER_TOGGLE}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          area: unit === 4 ? "unit4" : "unit5",
+          meterId: meterId,
+          email: userData.email,
+          username: userData.name,
+        }),
       }
-    } catch (error) {
-      console.error(error.message);
+    );
+
+    const resResult = await response.json();
+    if (response.ok) {
+      toast.success(resResult.message);
+
+      // ✅ Only after confirmation + success → update state
+      setSelectedUnits((prev) => ({
+        ...prev,
+        [meterId]: unit,
+      }));
+
+      // ✅ Call real-time values API here
+      await postMeterWithrealTimeValues(meterId, unit);
+
+      fetchMeterToggleStatus();
+    } else {
+      toast.error(resResult.message);
     }
-  };
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
   useEffect(() => {
     fetchUserDetails();
@@ -208,7 +214,7 @@ const Settings = () => {
               <button
                 onClick={() => {
                   handleToggle(meter.id, 4)
-                postMeterWithrealTimeValues(meter.id,4)
+             
                 }}
                 className={`px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 ${
                   selectedUnits[meter.id] === 4
@@ -221,7 +227,7 @@ const Settings = () => {
               <button
                 onClick={() =>{
                    handleToggle(meter.id, 5)
-                   postMeterWithrealTimeValues(meter.id,5)
+                 
                 }}
                 className={`px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 ${
                   selectedUnits[meter.id] === 5

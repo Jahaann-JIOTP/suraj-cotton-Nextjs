@@ -109,7 +109,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_4&page-type=sld&lt_scheme=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_4&page-type=sld&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{
@@ -134,7 +134,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
         />
         {/* Buttons */}
         <button
-          onClick={() => router.replace("/sld?unit=unit4&area=lt1")}
+          onClick={() => router.replace("/sld?area=Unit_4&LT_selections=LT_1")}
           className="absolute  cursor-pointer"
           style={{
             width: "239px",
@@ -144,7 +144,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
           }}
         ></button>
         <button
-          onClick={() => router.push("/sld?unit=unit4&area=lt2")}
+          onClick={() => router.push("/sld?area=Unit_4&LT_selections=LT_2")}
           className="absolute cursor-pointer"
           style={{
             width: "239px",

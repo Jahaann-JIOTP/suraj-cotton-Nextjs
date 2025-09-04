@@ -6,13 +6,13 @@ import { ImArrowLeft2 } from "react-icons/im";
 const page = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const ltScheme = searchParams.get("lt_scheme");
+  const ltScheme = searchParams.get("LT_selections");
   const pageType = searchParams.get("page-type");
   const [isHovered, setIsHovered] = useState(false);
   const meterId = searchParams.get("meter_id");
   const type = searchParams.get("type");
-  const unit = searchParams.get("unit");
-  const meterName = searchParams.get("meter-name");
+  const area = searchParams.get("area");
+  const meterName = searchParams.get("meter_name");
 
   return (
     <div className="w-full bg-white p-5 h-[81vh] rounded-md border-t-3 border-[#1F5897] overflow-auto">
@@ -60,7 +60,7 @@ const page = () => {
               className="absolute w-[57px] h-[59px]  top-[105px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
-                  `/log-detail?val=voltage&page-type=${pageType}&meter_id=${meterId}&unit=${unit}&lt-scheme=${ltScheme}&meter-name=${meterName}`
+                  `/log-detail?paramtype=voltage&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
                 )
               }
             ></button>
@@ -68,7 +68,7 @@ const page = () => {
               className="absolute w-[57px] h-[59px] top-[197px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
-                  `/log-detail?val=current&page-type=${pageType}&meter_id=${meterId}&unit=${unit}&lt-scheme=${ltScheme}&meter-name=${meterName}`
+                  `/log-detail?paramtype=current&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
                 )
               }
             ></button>
@@ -76,7 +76,7 @@ const page = () => {
               className="absolute w-[57px] h-[59px] top-[290px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
-                  `/log-detail?val=power_factor&page-type=${pageType}&meter_id=${meterId}&unit=${unit}&lt-scheme=${ltScheme}&meter-name=${meterName}`
+                  `/log-detail?paramtype=power_factor&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
                 )
               }
             ></button>
@@ -87,7 +87,7 @@ const page = () => {
               className="absolute w-[57px] h-[59px]  top-[104px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
-                  `/log-detail?val=active_power&page-type=${pageType}&meter_id=${meterId}&unit=${unit}&lt-scheme=${ltScheme}&meter-name=${meterName}`
+                  `/log-detail?paramtype=active_power&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
                 )
               }
             ></button>
@@ -95,7 +95,7 @@ const page = () => {
               className="absolute w-[57px] h-[59px]  top-[197px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
-                  `/log-detail?val=reactive_power&page-type=${pageType}&meter_id=${meterId}&unit=${unit}&lt-scheme=${ltScheme}&meter-name=${meterName}`
+                  `/log-detail?paramtype=reactive_power&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
                 )
               }
             ></button>
@@ -103,7 +103,7 @@ const page = () => {
               className="absolute w-[57px] h-[59px]  top-[290px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
-                  `/log-detail?val=apparent_power&page-type=${pageType}&meter_id=${meterId}&unit=${unit}&lt-scheme=${ltScheme}&meter-name=${meterName}`
+                  `/log-detail?paramtype=apparent_power&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
                 )
               }
             ></button>
@@ -111,7 +111,7 @@ const page = () => {
               className="absolute w-[57px] h-[59px]  top-[382px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
-                  `/log-detail?val=harmonics&page-type=${pageType}&meter_id=${meterId}&unit=${unit}&lt-scheme=${ltScheme}&meter-name=${meterName}`
+                  `/log-detail?paramtype=harmonics&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
                 )
               }
             ></button>
@@ -122,7 +122,7 @@ const page = () => {
               className="absolute w-[57px] h-[59px] top-[122px] cursor-pointer left-[754px]"
               onClick={() =>
                 router.push(
-                  `/log-detail?val=active_energy&page-type=${pageType}&meter_id=${meterId}&unit=${unit}&lt-scheme=${ltScheme}&meter-name=${meterName}`
+                  `/log-detail?paramtype=active_energy&page-type=${pageType}&meter_id=${meterId}&area=${area}&lt-scheme=${ltScheme}&meter_name=${meterName}`
                 )
               }
             ></button>

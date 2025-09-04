@@ -254,7 +254,7 @@ const Unit5Lt3 = ({ roundedData }) => {
     <div className="w-full">
       {/* back button */}
       <button
-        onClick={() => router.push("/sld?unit=unit5")}
+        onClick={() => router.push("/sld?area=Unit_5")}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={`absolute top-0 right-0 z-30 flex items-center ${
@@ -282,7 +282,7 @@ const Unit5Lt3 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_5&page-type=sld&lt_scheme=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_5&page-type=sld&LT_selections=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{

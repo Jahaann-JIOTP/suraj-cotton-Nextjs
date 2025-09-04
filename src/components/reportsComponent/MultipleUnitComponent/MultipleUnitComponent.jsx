@@ -61,7 +61,7 @@ const MultipleUnitComponent = ({
       unit: "both",
     },
     {
-      dept: "Comber + Unitlap",
+      dept: "Comber + Unilap",
       u4Mcs: 9,
       u5Mcs: 9,
       u4Load: 6.2,
@@ -138,7 +138,7 @@ const MultipleUnitComponent = ({
       unit: "Unit_4",
     },
     {
-      dept: "Deep well turbine",
+      dept: "Deep Velve Turbine",
       u4Mcs: 1,
       u5Mcs: 1,
       u4Load: 22.0,
@@ -160,7 +160,7 @@ const MultipleUnitComponent = ({
       unit: "both",
     },
     {
-      dept: "spare",
+      dept: "Main Meter",
       u4Mcs: 0,
       u5Mcs: 0,
       u4Load: 0,
@@ -212,7 +212,7 @@ const MultipleUnitComponent = ({
       u4Consumption: data.unit_4FrameFinisher_consumption,
       u5Consumption: data.unit_5FrameFinisher_consumption,
       u4andU5TotalConsumption: u4U5Total.framefinisher,
-      unit: "Unit_4",
+      unit: "Unit_5",
     },
      {
       dept: "AC plant",
@@ -358,7 +358,7 @@ console.log(capitalizedSentence);
       });
       worksheet.addImage(image1Id, {
         tl: { col: 0, row: 0 },
-        ext: { width: 150, height: 70 },
+        ext: { width: 120, height: 60 },
       });
 
       const image2Buffer = await getImageBuffer("../../../jahaann-light.png");
@@ -367,8 +367,8 @@ console.log(capitalizedSentence);
         extension: "png",
       });
       worksheet.addImage(image2Id, {
-        tl: { col: 9, row: 1 },
-        ext: { width: 170, height: 40 },
+        tl: { col: 7.8, row: 1 },
+        ext: { width: 140, height: 35 },
       });
 
       const borderRow = worksheet.getRow(4);
@@ -379,40 +379,35 @@ console.log(capitalizedSentence);
         };
       }
 
+
       let currentRowIndex = 5;
 
       worksheet.columns = [
-        { width: 35 },
+        { width: 15 },
+        { width: 6 },
         { width: 8 },
-        { width: 20 },
-        { width: 25 },
-        { width: 3 },
+        { width: 13 },
+        { width: 1 },
+        { width: 6 },
         { width: 8 },
-        { width: 20 },
-        { width: 25 },
-        { width: 3 },
-        { width: 25 },
+        { width: 13 },
+        { width: 1 },
+        { width: 13 },
       ];
 
-      worksheet.mergeCells(`C${currentRowIndex}:G${currentRowIndex}`);
-      const mainHeadingCell = worksheet.getCell(`C${currentRowIndex}`);
-      mainHeadingCell.value = `Energy Usage report of ${
-        unit === "Unit_4"
-          ? "Unit 4"
-          : unit === "Unit_5"
-          ? "Unit 5"
-          : "Unit 4 and Unit 5"
-      }`;
+      worksheet.mergeCells(`A${currentRowIndex}:J${currentRowIndex}`);
+      const mainHeadingCell = worksheet.getCell(`A${currentRowIndex}`);
+      mainHeadingCell.value = `Energy Usage Report`;
       mainHeadingCell.font = { size: 16, bold: true };
       mainHeadingCell.alignment = { vertical: "middle", horizontal: "center" };
-
-      worksheet.mergeCells(`H${currentRowIndex - 1}:I${currentRowIndex - 1}`);
-      const startDateCell = worksheet.getCell(`H${currentRowIndex - 1}`);
+worksheet.addRow();
+      worksheet.mergeCells(`A${currentRowIndex - 1}:B${currentRowIndex - 1}`);
+      const startDateCell = worksheet.getCell(`A${currentRowIndex - 1}`);
       startDateCell.value = `Start Date: ${startDate}`;
       startDateCell.font = { size: 12 };
-      startDateCell.alignment = { horizontal: "right", vertical: "middle" };
+      startDateCell.alignment = { horizontal: "left", vertical: "middle" };
 
-      worksheet.mergeCells(`J${currentRowIndex - 1}:J${currentRowIndex - 1}`);
+      worksheet.mergeCells(`H${currentRowIndex - 1}:J${currentRowIndex - 1}`);
       const endDateCell = worksheet.getCell(`J${currentRowIndex - 1}`);
       endDateCell.value = `End Date: ${endDate}`;
       endDateCell.font = { size: 12 };
@@ -453,7 +448,7 @@ console.log(capitalizedSentence);
             fgColor: { argb: "FF0070C0" },
           };
           cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-          cell.alignment = { vertical: "middle", horizontal: "center" };
+          cell.alignment = { vertical: "middle", horizontal: "center", wrapText:true };
           cell.border = {
             top: { style: "thin" },
             left: { style: "thin" },
@@ -462,18 +457,18 @@ console.log(capitalizedSentence);
           };
         }
       });
-      headerRow.height = 30;
+      headerRow.height = 45;
 
       tableData.forEach((item) => {
         const row = worksheet.addRow([
           item.dept.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
           item.unit!=="Unit_5"?item.u4Mcs:"",
           item.unit!=="Unit_5"?item.u4Load:"",
-          item.unit!=="Unit_5"?item.u4Consumption || 0:"--",
+          item.unit!=="Unit_5"?item.u4Consumption || 0:"N/A",
           "",
           item.unit!=="Unit_4"?item.u5Mcs:"",
           item.unit!=="Unit_4"?item.u5Load:"",
-          item.unit!=="Unit_4"?item.u5Consumption || 0:"--",
+          item.unit!=="Unit_4"?item.u5Consumption || 0:"N/A",
           "",
           item.u4andU5TotalConsumption || 0,
         ]);
@@ -499,8 +494,12 @@ console.log(capitalizedSentence);
           if (colNumber !== 1 && colNumber !== 5 && colNumber !== 9) {
             cell.alignment = { horizontal: "center" };
           }
+         if(colNumber===1){
+          cell.alignment = {wrapText:true}
+         }
         });
       });
+
 
       const totalRow = worksheet.addRow([
         "Total Load",
@@ -569,7 +568,7 @@ console.log(capitalizedSentence);
       });
 
       // Format numeric cells
-      for (let i = 5; i <= worksheet.rowCount; i++) {
+      for (let i = 9; i <= worksheet.rowCount; i++) {
         [4, 8, 10].forEach((col) => {
           const cell = worksheet.getCell(
             `${String.fromCharCode(64 + col)}${i}`
@@ -577,6 +576,8 @@ console.log(capitalizedSentence);
           if (typeof cell.value === "number") {
             cell.numFmt = "0.00";
           }
+          
+          cell.alignment={horizontal:"left"}
         });
       }
 
@@ -668,7 +669,7 @@ console.log(capitalizedSentence);
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] left-0"></div>
                 </div>
                 <div className="w-[15%] font-500 font-inter text-[12px] text-center">
-                  Unti 4
+                  Unit 4
                 </div>
                 <div className="w-[45%] h-[1px] relative bg-black dark:bg-gray-500">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] right-0"></div>
@@ -679,7 +680,7 @@ console.log(capitalizedSentence);
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] left-0"></div>
                 </div>
                 <div className="w-[12%] font-500 font-inter text-[12px] text-center">
-                  Unti 5
+                  Unit 5
                 </div>
                 <div className="w-[45%] h-[1px] bg-black dark:bg-gray-500 relative">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] right-0"></div>
@@ -746,8 +747,8 @@ console.log(capitalizedSentence);
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 text-center">
                           {row.unit!=="Unit_5"?row.u4Load:""}
                         </td>
-                        <td className="px-[5px] py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                          {row.unit!=="Unit_5"?row?.u4Consumption?.toFixed(2) || 0:"--"}
+                        <td className="px-[5px] py-1 text-left pl-2 border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
+                          {row.unit!=="Unit_5"?row?.u4Consumption?.toFixed(2) || 0:"N/A"}
                         </td>
                         <td className="px-[5px] py-1 border-r-1 border-gray-300 dark:border-gray-500 text-center text-[12px] font-inter font-400"></td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500  text-center">
@@ -756,11 +757,11 @@ console.log(capitalizedSentence);
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500  text-center">
                           {row.unit!=="Unit_4" ? row.u5Load:""}
                         </td>
-                        <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500  text-[12px] font-inter font-400">
-                          {row.unit!=="Unit_4"?row.u5Consumption || 0:"--"}
+                        <td className="px-2 py-1 text-left pl-2 border border-gray-300 dark:border-gray-500  text-[12px] font-inter font-400">
+                          {row.unit!=="Unit_4"?row.u5Consumption || 0:"N/A"}
                         </td>
                         <td className="px-[5px] py-1 text-center border-r-1 text-[12px] font-inter font-400"></td>
-                        <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
+                        <td className="px-2 py-1 text-left pl-2 border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
                           {row?.u4andU5TotalConsumption?.toFixed(2) || 0}
                         </td>
                       </tr>

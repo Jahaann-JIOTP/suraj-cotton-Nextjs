@@ -21,8 +21,8 @@ const Page = () => {
   const [meterData, setMeterData] = useState([]);
   const searchParams = useSearchParams();
 
-  const unit = searchParams.get("unit");
   const area = searchParams.get("area");
+  const ltSelections = searchParams.get("LT_selections");
 
   const getMeterData = async () => {
     const token = localStorage.getItem("token");
@@ -78,17 +78,17 @@ const Page = () => {
   }, []);
 
   const renderComponent = () => {
-    if (!unit) return <MainSldOverview roundedData={roundedData} />;
+    if (!area) return <MainSldOverview roundedData={roundedData} />;
 
-    if (unit === "unit4") {
-      if (area === "lt1") return <Unit4Lt1 roundedData={roundedData} />;
-      if (area === "lt2") return <Unit4Lt2 roundedData={roundedData} />;
+    if (area === "Unit_4") {
+      if (ltSelections === "LT_1") return <Unit4Lt1 roundedData={roundedData} />;
+      if (ltSelections === "LT_2") return <Unit4Lt2 roundedData={roundedData} />;
       return <InitialSldUnit4 roundedData={roundedData} />;
     }
 
-    if (unit === "unit5") {
-      if (area === "lt1") return <Unit5Lt3 roundedData={roundedData} />;
-      if (area === "lt2") return <Unit5Lt4 roundedData={roundedData} />;
+    if (area === "Unit_5") {
+      if (ltSelections === "LT_3") return <Unit5Lt3 roundedData={roundedData} />;
+      if (ltSelections === "LT_4") return <Unit5Lt4 roundedData={roundedData} />;
       return <InitialSldUnit5 roundedData={roundedData} />;
     }
 

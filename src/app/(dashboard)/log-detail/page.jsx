@@ -8,6 +8,9 @@ import CustomLoader from "@/components/customLoader/CustomLoader";
 import Swal from "sweetalert2";
 import { BiExport } from "react-icons/bi";
 import { IoIosArrowBack } from "react-icons/io";
+import useBreadcrumb from "@/components/hooks/useBreadcrumb";
+import { useSelector } from "react-redux";
+import Breadcrumbs from "@/components/hooks/Breadcrumb";
 
 const LogDetails = () => {
   const [meterLogsData, setMeterLogsData] = useState([]);
@@ -16,12 +19,13 @@ const LogDetails = () => {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const searchParams = useSearchParams();
-  const type = searchParams.get("val");
+  const type = searchParams.get("type");
   const meter_id = searchParams.get("meter_id");
   const meterName = searchParams.get("meter-name");
-  const ltScheme = searchParams.get("lt-scheme");
-  const unit = searchParams.get("unit");
+  const ltScheme = searchParams.get("LT_selections");
+  const area = searchParams.get("area");
   const router = useRouter();
+  const finalLt = ltScheme ==="LT_3"? "LT_1":ltScheme==="LT_4"?"LT_2":ltScheme;
   const getMeterLogsData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -55,6 +59,9 @@ const LogDetails = () => {
       console.error("Error:", error.message);
     }
   };
+  useBreadcrumb();
+   const crumbs = useSelector((state) => state.breadcrumb.crumbs)
+  
 
   useEffect(() => {
     getMeterLogsData();
@@ -235,9 +242,24 @@ const LogDetails = () => {
   return (
     <div className="h-[81vh] overflow-hidden custom-scrollbar-report overflow-y-auto bg-white dark:bg-gray-800 border-t-3 border-[#1D5999] rounded-md px-5 py-2">
       <div className="flex flex-col-reverse md:flex-row items-center justify-between">
-        <h1 className="font-700 font-inter text-[24px]">
-          Meter Logs - <span className="uppercase text-[#1D5999]">{type}</span>
-        </h1>
+     <div className="flex flex-col">
+
+        <div className="flex gap-3 items-center justify-end">
+          <span className="text-[20px] font-semibold">
+           Meter:{" "}
+            <span className="font-normal text-[#1D5999]">
+              {meterName}
+            </span>
+          </span>
+          <span className="text-[20px] font-semibold">
+           Logs:{" "}
+            <span className="font-normal text-[#1D5999]">
+              {type}
+            </span>
+          </span>
+        </div>
+        <Breadcrumbs/>
+     </div>
         <div className="flex flex-row-reverse md:flex w-full md:w-auto  items-center justify-between md:justify-end gap-3">
           <button
             onClick={exportToExcel}
@@ -291,13 +313,13 @@ const LogDetails = () => {
           <span className="font-semibold">
             Unit:{" "}
             <span className="font-normal text-[#1D5999]">
-              {unit.replace("_", " ")}
+              {area.replace("_", " ")}
             </span>
           </span>
           <span className="font-semibold">
             LT Panel:{" "}
             <span className="font-normal text-[#1D5999]">
-              {ltScheme.replace("_", " ")}
+              {finalLt.replace("_", " ")}
             </span>
           </span>
         </div>

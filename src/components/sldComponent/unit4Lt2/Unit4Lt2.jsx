@@ -306,7 +306,7 @@ const Unit4Lt2 = ({ roundedData }) => {
             key={meter.link}
             onClick={() =>
               router.push(
-                `/meter?area=Unit_4&lt_scheme=LT_2&page-type=sld&meter_id=${meter.link}&meter_name=${meter.title}`
+                `/meter?area=Unit_4&LT_selections=LT_2&page-type=sld&meter_id=${meter.link}&meter_name=${meter.title}`
               )
             }
             style={{

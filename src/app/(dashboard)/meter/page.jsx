@@ -5,6 +5,7 @@ import config from "@/constant/apiRouteList";
 import { ImArrowLeft2 } from "react-icons/im";
 import { useTheme } from "next-themes";
 import { FaRegFileAlt } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const page = () => {
   const [activeTab, setActiveTab] = useState("voltage");
@@ -14,9 +15,11 @@ const page = () => {
   const { theme } = useTheme();
   const searchParams = useSearchParams();
   const area = searchParams.get("area");
-  const ltScheme = searchParams.get("lt_scheme");
+  const ltScheme = searchParams.get("LT_selections");
   const id = searchParams.get("meter_id");
   const meterName = searchParams.get("meter_name");
+useBreadcrumb();
+   const crumbs = useSelector((state) => state.breadcrumb.crumbs)
   const pageType = searchParams.get("page-type");
   const getSingleMeterData = async () => {
     const token = localStorage.getItem("token");
@@ -693,7 +696,7 @@ const page = () => {
           title="Logs"
           onClick={() =>
             router.push(
-              `/logs?type=${activeTab}&page-type=${pageType}&lt_scheme=${ltScheme}&unit=${area}&val=${activeTab}&meter_id=${id}&meter-name=${meterName}`
+              `/logs?type=${activeTab}&page-type=${pageType}&LT_selections=${ltScheme}&area=${area}&val=${activeTab}&meter_id=${id}&meter_name=${meterName}`
             )
           }
           className={` border-1 border-[#1F5897] text-[#1F5897] dark:bg-gray-500 font-400 rounded text-[12px] flex flex-col items-center justify-center p-[7px] z-30  cursor-pointer`}

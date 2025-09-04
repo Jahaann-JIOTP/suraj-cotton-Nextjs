@@ -239,7 +239,7 @@ export default function GenerationEnergy() {
     >
       <div className="relative flex items-center flex-col md:flex-row gap-3 md:gap-[0.7vw] justify-between">
         <span className="text-[15px] text-[#1A68B2] font-raleway font-600">
-          Generation Energy
+          Total Energy Input
         </span>
         <div className="flex gap-4">
           <select

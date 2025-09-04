@@ -9,6 +9,7 @@ import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 const UnitLt41Page = () => {
   const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);
+  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>",data)
   const [loading, setLoading] = useState(false);
 
   // time period selector

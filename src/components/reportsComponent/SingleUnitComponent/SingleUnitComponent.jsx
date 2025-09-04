@@ -56,7 +56,7 @@ const SingleUnitComponent = ({
       unit: "both",
     },
     {
-      Department: "Comber + Unitlap",
+      Department: "Comber + Unilap",
       Mcs: "9",
       InstalledLoad: "6.2",
       ConsumedUnits: finalData?.Comber_consumption || 0,
@@ -105,7 +105,7 @@ const SingleUnitComponent = ({
       unit: "Unit_4",
     },
     {
-      Department: "Deep Well Turbine",
+      Department: "Deep Velve Turbine",
       Mcs: "1",
       InstalledLoad: "22.0",
       ConsumedUnits: finalData?.Turbine_consumption || 0,
@@ -119,7 +119,7 @@ const SingleUnitComponent = ({
       unit: "both",
     },
     {
-      Department: "spare",
+      Department: "Main Meter",
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.Spare_consumption || 0,
@@ -151,7 +151,7 @@ const SingleUnitComponent = ({
       Mcs: "",
       InstalledLoad: "",
       ConsumedUnits: finalData?.FrameFinisher_consumption || 0,
-      unit: "Unit_4",
+      unit: "Unit_5",
     },
     {
       Department: "AC Plant",
@@ -249,7 +249,7 @@ const SingleUnitComponent = ({
       });
       worksheet.addImage(image1Id, {
         tl: { col: 0, row: 0 },
-        ext: { width: 150, height: 70 },
+        ext: { width: 120, height: 60 },
       });
 
       const image2Buffer = await getImageBuffer("../../../jahaann-light.png");
@@ -259,7 +259,7 @@ const SingleUnitComponent = ({
       });
       worksheet.addImage(image2Id, {
         tl: { col: 3, row: 1 },
-        ext: { width: 170, height: 40 },
+        ext: { width: 130, height: 35 },
       });
       const borderRow = worksheet.getRow(4);
       for (let i = 1; i <= 4; i++) {
@@ -269,10 +269,10 @@ const SingleUnitComponent = ({
         };
       }
       worksheet.columns = [
-        { width: 35 },
-        { width: 15 },
-        { width: 25 },
-        { width: 25 },
+        { width: 30 },
+        { width: 10 },
+        { width: 20 },
+        { width: 20 },
       ];
       worksheet.mergeCells("A5:D6");
       const mainHeadingCell = worksheet.getCell("A5");
@@ -286,11 +286,11 @@ const SingleUnitComponent = ({
         wrapText: true,
       };
 
-      worksheet.mergeCells("C4:C4");
-      const startDateCell = worksheet.getCell("C4");
+      worksheet.mergeCells("A4:A4");
+      const startDateCell = worksheet.getCell("A4");
       startDateCell.value = `Start Date: ${startDate}`;
       startDateCell.font = { size: 12 };
-      startDateCell.alignment = { vertical: "middle", horizontal: "right" };
+      startDateCell.alignment = { vertical: "middle", horizontal: "left" };
 
       worksheet.mergeCells("D4:D4");
       const endDateCell = worksheet.getCell("D4");
@@ -347,6 +347,9 @@ const SingleUnitComponent = ({
           if (colNumber !== 1) {
             cell.alignment = { horizontal: "center" };
           }
+           if(colNumber===4){
+          cell.alignment={horizontal:"left"}
+        }
         });
       });
 
@@ -357,7 +360,7 @@ const SingleUnitComponent = ({
         totalConsumption,
       ]);
       totalRow.font = { bold: true };
-      totalRow.alignment = { vertical: "middle" };
+      totalRow.alignment = {horizontal:"left", vertical: "middle" };
       totalRow.cell = {
         type: "pattern",
         pattern: "solid",
@@ -379,6 +382,7 @@ const SingleUnitComponent = ({
           bold: true,
           color: { argb: "FFFFFFFF" },
         };
+       
       });
 
       const spindleRow = worksheet.addRow([
@@ -392,7 +396,7 @@ const SingleUnitComponent = ({
           : "",
       ]);
       spindleRow.font = { bold: true };
-      spindleRow.alignment = { vertical: "middle" };
+      spindleRow.alignment = {horizontal:"left", vertical: "middle" };
       spindleRow.eachCell((cell) => {
         cell.fill = {
           type: "pattern",
@@ -445,7 +449,7 @@ const SingleUnitComponent = ({
   return (
     <>
       <div className="flex  flex-col gap-3">
-        <div className="flex flex-col md:flex-row items-center justify-between  w-full flex-wrap  gap-1">
+        <div className="flex  items-center justify-between  w-full flex-wrap  gap-1">
           <div className="flex flex-col items-start justify-start md:w-[49%]">
             <img
               src={
@@ -471,7 +475,7 @@ const SingleUnitComponent = ({
         </div>
       </div>
       <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
-      <div className="flex flex-col gap-2 md:flex-row px-3 md:px-6 items-start justify-between pt-5">
+      <div className="flex  gap-2 px-3 md:px-6 items-start justify-between pt-5">
         <div>
           <button
             onClick={() => exportEnergyReportToExcel()}

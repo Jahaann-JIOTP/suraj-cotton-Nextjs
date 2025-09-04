@@ -50,7 +50,8 @@ const fieldMetersBtn = [
 const FieldMeters = () => {
   const [realtime, setRealtime] = useState([]);
   const [currentArea, setCurrentArea] = useState({});
-  console.log("Areas of meter", currentArea.U1_GW02);
+  const [consumptionPerArea, setConumptionPerArea] = useState({})
+console.log("..................", consumptionPerArea);
   const router = useRouter();
   // fetch real time values
   const getRealTimeData = async () => {
@@ -158,23 +159,24 @@ const FieldMeters = () => {
       left: 606,
     },
     {
-      activePowerTotalTag: roundedData?.U22_GW02_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U22_GW02_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U22_GW02_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U22_GW03_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U22_GW03_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U22_GW03_Voltage_Avg,
       top: 315,
       left: 784,
     },
     {
-      activePowerTotalTag: roundedData?.U23_GW02_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U23_GW02_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U23_GW02_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U23_GW03_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U23_GW03_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U23_GW03_Voltage_Avg,
       top: 315,
       left: 963,
     },
   ];
   const unitConsumption = [
     {
-      unit4Consumption: "--.--",
+      unit4Consumption: consumptionPerArea.U4_U1_GW02_Del_ActiveEnergy.CONS,
+      unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 238,
       unit4Left: 44,
@@ -182,7 +184,8 @@ const FieldMeters = () => {
       unit5Left: 117,
     },
     {
-      unit4Consumption: "--.--",
+      unit4Consumption: consumptionPerArea.U4_U2_GW02_Del_ActiveEnergy.CONS,
+      unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 237,
       unit4Left: 213,
@@ -190,7 +193,8 @@ const FieldMeters = () => {
       unit5Left: 286,
     },
     {
-      unit4Consumption: "--.--",
+      unit4Consumption: consumptionPerArea.U4_U3_GW02_Del_ActiveEnergy.CONS,
+      unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 236.5,
       unit4Left: 391,
@@ -198,7 +202,8 @@ const FieldMeters = () => {
       unit5Left: 464,
     },
     {
-      unit4Consumption: "--.--",
+      unit4Consumption: consumptionPerArea.U4_U4_GW02_Del_ActiveEnergy.CONS,
+      unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 236.5,
       unit4Left: 570,
@@ -206,7 +211,8 @@ const FieldMeters = () => {
       unit5Left: 642,
     },
     {
-      unit4Consumption: "--.--",
+      unit4Consumption: consumptionPerArea.U4_U22_GW03_Del_ActiveEnergy.CONS,
+      unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 236.5,
       unit4Left: 748,
@@ -214,7 +220,8 @@ const FieldMeters = () => {
       unit5Left: 820,
     },
     {
-      unit4Consumption: "--.--",
+      unit4Consumption: consumptionPerArea.U4_U23_GW03_Del_ActiveEnergy.CONS,
+      unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 236.5,
       unit4Left: 926,
@@ -222,7 +229,30 @@ const FieldMeters = () => {
       unit5Left: 999,
     },
   ];
+  // fetch meter consumption per area
+  const fetchMConsumptionPerArea = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return;
+    }
+    try {
+      const response = await fetch(`${config.BASE_URL}/meter/consumption`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const resResult = await response.json();
+      if (response.ok) {
+        setConumptionPerArea(resResult.data)
+        
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
+    fetchMConsumptionPerArea();
     fetchMeterAreaStatus();
     getRealTimeData();
     const interval = setInterval(getRealTimeData, 5000);
@@ -260,21 +290,107 @@ const FieldMeters = () => {
           alt="unit 4 sld"
         />
         {/* indicators */}
-        {/* pdb cd1 indicator */}
-        {/* {currentArea.U1_GW02 === 4 ? (
-          <div className="absolute top-[127px] left-[50px]">
-            <img src="./onMeter1.png" className="w-[26px]" alt="" />
-          </div>
-        ) : (
-          ""
+        {/* /////////////////////////////// */}
+        {[
+          {
+            key: "U1_GW02",
+            on: [
+              { top: 108.5, left: 50.5, img: "onmeter1.png", w: 27 },
+              { top: 260, left: 63.5, img: "onmeter2.png", w: 36 },
+            ],
+            off: [
+              { top: 108.5, left: 120.5, img: "offmeter1.png", w: 27 },
+              { top: 259, left: 99, img: "offmeter2.png", w: 36 },
+            ],
+          },
+          {
+            key: "U2_GW02",
+            on: [
+              { top: 108.5, left: 220.5, img: "onmeter1.png", w: 27 },
+              { top: 259.5, left: 233.5, img: "onmeter2.png", w: 36 },
+            ],
+            off: [
+              { top: 108.5, left: 289.7, img: "offmeter1.png", w: 27 },
+              { top: 259, left: 268.7, img: "offmeter2.png", w: 36 },
+            ],
+          },
+          {
+            key: "U3_GW02",
+            on: [
+              { top: 108.5, left: 398.5, img: "onmeter1.png", w: 27 },
+              { top: 259.2, left: 411.5, img: "onmeter2.png", w: 36 },
+            ],
+            off: [
+              { top: 108.5, left: 468.5, img: "offmeter1.png", w: 27 },
+              { top: 259, left: 446.7, img: "offmeter2.png", w: 36 },
+            ],
+          },
+          {
+            key: "U4_GW02",
+            on: [
+              { top: 108.5, left: 576.1, img: "onmeter1.png", w: 27 },
+              { top: 259.2, left: 589, img: "onmeter2.png", w: 36 },
+            ],
+            off: [
+              { top: 108.5, left: 646, img: "offmeter1.png", w: 27 },
+              { top: 259, left: 624.7, img: "offmeter2.png", w: 36 },
+            ],
+          },
+          {
+            key: "U22_GW03",
+            on: [
+              { top: 108.5, left: 754.4, img: "onmeter1.png", w: 27 },
+              { top: 259.2, left: 767.4, img: "onmeter2.png", w: 36 },
+            ],
+            off: [
+              { top: 108.5, left: 824, img: "offmeter1.png", w: 27 },
+              { top: 259, left: 802.5, img: "offmeter2.png", w: 36 },
+            ],
+          },
+          {
+            key: "U23_GW03",
+            on: [
+              { top: 108.5, left: 932.5, img: "onmeter1.png", w: 27 },
+              { top: 259.2, left: 945, img: "onmeter2.png", w: 36 },
+            ],
+            off: [
+              { top: 108.5, left: 1002, img: "offmeter1.png", w: 27 },
+              { top: 259, left: 981, img: "offmeter2.png", w: 36 },
+            ],
+          },
+        ].map(({ key, on, off }) =>
+          currentArea[key] === 4 ? (
+            <React.Fragment key={key}>
+              {on.map(({ top, left, img, w }, i) => (
+                <div
+                  key={`${key}-on-${i}`}
+                  className="absolute bg-white"
+                  style={{ top: `${top}px`, left: `${left}px` }}
+                >
+                  <img
+                    src={`./fieldMeterStatus/${img}`}
+                    className={`w-[${w}px]`}
+                    alt=""
+                  />
+                </div>
+              ))}
+              {off.map(({ top, left, img, w }, i) => (
+                <div
+                  key={`${key}-off-${i}`}
+                  className="absolute bg-white"
+                  style={{ top: `${top}px`, left: `${left}px` }}
+                >
+                  <img
+                    src={`./fieldMeterStatus/${img}`}
+                    className={`w-[${w}px]`}
+                    alt=""
+                  />
+                </div>
+              ))}
+            </React.Fragment>
+          ) : null
         )}
-        {currentArea.U1_GW02 !== 5 ? (
-          <div className="absolute top-[104px] left-[115.5px]">
-            <BiSolidDownArrowSquare className="text-red-500  text-[36.5px]" />
-          </div>
-        ) : (
-          ""
-        )} */}
+        {/* //============================= */}
         {/* per unit reading */}
         {unitConsumption.map((unit, index) => (
           <div key={index}>
@@ -289,6 +405,7 @@ const FieldMeters = () => {
                 height: "14px",
               }}
             >
+              {/* {unit.unit4Consumption.toFixed(2)} */}
               {unit.unit4Consumption}
             </div>
             <div
