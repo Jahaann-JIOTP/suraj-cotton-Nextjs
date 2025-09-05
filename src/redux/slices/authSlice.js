@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 const initialState = {
   isAuthenticated: false,
   token: null,
+  role: null,
 };
 
 const isValidateToken = (token) => {
@@ -25,23 +26,29 @@ const authSlice = createSlice({
       if (typeof window === "undefined") return;
       const token = localStorage.getItem("token");
       if (isValidateToken(token)) {
+        const decoded = jwtDecode(token);
         state.token = token;
         state.isAuthenticated = true;
+        state.role = decoded.role || null;
       } else {
         localStorage.removeItem("token");
         state.token = null;
         state.isAuthenticated = false;
+        state.role = null;
       }
     },
     login: (state, action) => {
       localStorage.setItem("token", action.payload);
+      const decoded = jwtDecode(action.payload);
       state.token = action.payload;
       state.isAuthenticated = true;
+      state.role = decoded.role || null;
     },
     logout: (state) => {
       localStorage.removeItem("token");
       state.token = null;
       state.isAuthenticated = false;
+      state.role = null;
     },
   },
 });

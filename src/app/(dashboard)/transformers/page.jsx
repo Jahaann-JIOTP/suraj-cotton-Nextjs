@@ -143,6 +143,7 @@ const TranformersPage = () => {
     console.warn(`Unknown transformerName: ${transformerName}`);
   }
 };
+
 useEffect(() => {
   // Initial load for all transformers
   ["T1", "T2", "T3", "T4"].forEach(loadMaintenanceHrs);

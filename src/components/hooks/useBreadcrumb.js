@@ -11,31 +11,40 @@ export default function useBreadcrumb() {
 
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
-    const url = `${pathname}${searchParams.toString() ? "?" + searchParams.toString() : ""}`;
-
     let parts = [];
 
-    // Always start with sld
-    parts.push("sld");
+    // ✅ Always start with "home"
+    parts.push("home");
 
-    // ✅ Add unit if present
-    if (params["area"]) parts.push(params["area"]); // e.g. Unit_5
+    const isFieldMeter = params["page-type"] === "field-meter";
 
-    // ✅ Add LT selection if present
-    if (params["LT_selections"]) parts.push(params["LT_selections"]); // e.g. LT_3
+    if (isFieldMeter) {
+      // ✅ Field-meters flow
+      parts.push("field-meters");
 
-    // ✅ Add meter if we detect meter_id or pathname contains /meter
-    if (params["meter_id"] || pathname.includes("meter")) {
-      parts.push("meter");
+      // ❌ Do not add unit or LT here
+      if (pathname.includes("/meter") || pathname.includes("/logs") || pathname.includes("/log-detail")) {
+        parts.push("meter");
+      }
+    } else {
+      // ✅ SLD flow
+      parts.push("sld");
+
+      if (params["area"]) parts.push(params["area"]); // e.g. Unit_4
+      if (params["LT_selections"]) parts.push(params["LT_selections"]); // e.g. LT_2
+
+      if (pathname.includes("/meter") || pathname.includes("/logs") || pathname.includes("/log-detail")) {
+        parts.push("meter");
+      }
     }
 
-    // ✅ Add logs if query indicates log context OR pathname contains /logs
-    if (params["type"] || params["page-type"] || pathname.includes("logs")) {
+    // ✅ Add logs if pathname includes logs or log-detail
+    if (pathname.includes("/logs") || pathname.includes("/log-detail")) {
       parts.push("logs");
     }
 
-    // ✅ log-detail always if in pathname
-    if (pathname.includes("log-detail")) {
+    // ✅ log-detail always last
+    if (pathname.includes("/log-detail")) {
       parts.push("log-detail");
     }
 

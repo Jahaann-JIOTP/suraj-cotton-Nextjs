@@ -221,7 +221,7 @@ const Dashboard = () => {
           />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="Aux. Consumption" value="000" unit="kWh" />
+          <SingleValueDiv title="Misc. Consumption" value="000" unit="kWh" />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv

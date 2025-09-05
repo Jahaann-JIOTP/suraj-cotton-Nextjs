@@ -19,9 +19,9 @@ const LogDetails = () => {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
+  const type = searchParams.get("paramtype");
   const meter_id = searchParams.get("meter_id");
-  const meterName = searchParams.get("meter-name");
+  const meterName = searchParams.get("meter_name");
   const ltScheme = searchParams.get("LT_selections");
   const area = searchParams.get("area");
   const router = useRouter();
@@ -242,7 +242,7 @@ const LogDetails = () => {
   return (
     <div className="h-[81vh] overflow-hidden custom-scrollbar-report overflow-y-auto bg-white dark:bg-gray-800 border-t-3 border-[#1D5999] rounded-md px-5 py-2">
       <div className="flex flex-col-reverse md:flex-row items-center justify-between">
-     <div className="flex flex-col">
+     <div className="flex flex-col items-start justify-start">
 
         <div className="flex gap-3 items-center justify-end">
           <span className="text-[20px] font-semibold">
@@ -313,13 +313,13 @@ const LogDetails = () => {
           <span className="font-semibold">
             Unit:{" "}
             <span className="font-normal text-[#1D5999]">
-              {area.replace("_", " ")}
+              {area.replace("_", " ") ||""}
             </span>
           </span>
           <span className="font-semibold">
             LT Panel:{" "}
             <span className="font-normal text-[#1D5999]">
-              {finalLt.replace("_", " ")}
+              {finalLt.replace("_", " ")||""}
             </span>
           </span>
         </div>

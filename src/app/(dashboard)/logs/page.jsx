@@ -1,7 +1,10 @@
 "use client";
+import Breadcrumbs from "@/components/hooks/Breadcrumb";
+import useBreadcrumb from "@/components/hooks/useBreadcrumb";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { ImArrowLeft2 } from "react-icons/im";
+
 
 const page = () => {
   const router = useRouter();
@@ -13,11 +16,31 @@ const page = () => {
   const type = searchParams.get("type");
   const area = searchParams.get("area");
   const meterName = searchParams.get("meter_name");
+  useBreadcrumb();
 
+  const buttonConfigs = {
+    voltage: [
+      { paramtype: "voltage", top: 105 },
+      { paramtype: "current", top: 197 },
+      { paramtype: "power_factor", top: 290 },
+    ],
+    power: [
+      { paramtype: "active_power", top: 104 },
+      { paramtype: "reactive_power", top: 197 },
+      { paramtype: "apparent_power", top: 290 },
+      { paramtype: "harmonics", top: 382 },
+    ],
+    energy: [{ paramtype: "active_energy", top: 122 }],
+  };
+  const selectedButtons = buttonConfigs[type] || [];
+ 
   return (
     <div className="w-full bg-white p-5 h-[81vh] rounded-md border-t-3 border-[#1F5897] overflow-auto">
       <div className="w-full flex items-center justify-between">
-        <h1 className="font-semibold text-2xl font-inter pb-4">Logs</h1>
+        <div className="flex flex-col items-start pb-4">
+        <h1 className="font-semibold text-2xl font-inter">Logs</h1>
+        <Breadcrumbs />
+        </div>
         <button
           onClick={() => router.back()}
           onMouseEnter={() => setIsHovered(true)}
@@ -41,95 +64,25 @@ const page = () => {
           </span>
         </button>
       </div>
+      
       <div className="relative w-[1200px] flex items-start justify-center flex-col mx-auto">
         <div className="w-full flex items-center justify-center">
-          {type === "voltage" ? (
-            <img src="../../../voltage-logs.png" alt="Voltage logs" />
-          ) : type === "energy" ? (
-            <img src="/energy-logs.png" alt="energy logs" />
-          ) : type === "power" ? (
-            <img src="power-logs.png" alt="energy logs" />
-          ) : (
-            ""
-          )}
+          <img src={`../../../${type}-logs.png`} alt="Voltage logs" />
         </div>
         {/* voltage logs buttons */}
-        {type === "voltage" ? (
-          <>
-            <button
-              className="absolute w-[57px] h-[59px]  top-[105px] cursor-pointer left-[754px]"
-              onClick={() =>
-                router.push(
-                  `/log-detail?paramtype=voltage&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
-                )
-              }
-            ></button>
-            <button
-              className="absolute w-[57px] h-[59px] top-[197px] cursor-pointer left-[754px]"
-              onClick={() =>
-                router.push(
-                  `/log-detail?paramtype=current&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
-                )
-              }
-            ></button>
-            <button
-              className="absolute w-[57px] h-[59px] top-[290px] cursor-pointer left-[754px]"
-              onClick={() =>
-                router.push(
-                  `/log-detail?paramtype=power_factor&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
-                )
-              }
-            ></button>
-          </>
-        ) : type === "power" ? (
-          <>
-            <button
-              className="absolute w-[57px] h-[59px]  top-[104px] cursor-pointer left-[754px]"
-              onClick={() =>
-                router.push(
-                  `/log-detail?paramtype=active_power&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
-                )
-              }
-            ></button>
-            <button
-              className="absolute w-[57px] h-[59px]  top-[197px] cursor-pointer left-[754px]"
-              onClick={() =>
-                router.push(
-                  `/log-detail?paramtype=reactive_power&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
-                )
-              }
-            ></button>
-            <button
-              className="absolute w-[57px] h-[59px]  top-[290px] cursor-pointer left-[754px]"
-              onClick={() =>
-                router.push(
-                  `/log-detail?paramtype=apparent_power&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
-                )
-              }
-            ></button>
-            <button
-              className="absolute w-[57px] h-[59px]  top-[382px] cursor-pointer left-[754px]"
-              onClick={() =>
-                router.push(
-                  `/log-detail?paramtype=harmonics&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
-                )
-              }
-            ></button>
-          </>
-        ) : type === "energy" ? (
-          <>
-            <button
-              className="absolute w-[57px] h-[59px] top-[122px] cursor-pointer left-[754px]"
-              onClick={() =>
-                router.push(
-                  `/log-detail?paramtype=active_energy&page-type=${pageType}&meter_id=${meterId}&area=${area}&lt-scheme=${ltScheme}&meter_name=${meterName}`
-                )
-              }
-            ></button>
-          </>
-        ) : (
-          ""
-        )}
+
+        {selectedButtons.map((btn, index) => (
+          <button
+            key={index}
+            className={`absolute w-[57px] h-[59px] cursor-pointer left-[754px]`}
+            style={{ top: `${btn.top}px` }}
+            onClick={() =>
+              router.push(
+                `/log-detail?paramtype=${btn.paramtype}&type=${type}&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
+              )
+            }
+          />
+        ))}
       </div>
     </div>
   );

@@ -411,6 +411,51 @@ function CustomTrend() {
     valueAxis.title.fill = am4core.color(textColor);
     valueAxis.renderer.grid.template.stroke = am4core.color(gridColor);
     valueAxis.renderer.labels.template.fill = am4core.color(textColor);
+  // /////////////////////
+   let minValue = Infinity;
+  let maxValue = -Infinity;
+  
+  chartData.forEach(item => {
+    selectedMeter.forEach(meter => {
+      if (item[meter] !== null && !isNaN(item[meter])) {
+        const value = parseFloat(item[meter]);
+        if (value < minValue) minValue = value;
+        if (value > maxValue) maxValue = value;
+      }
+    });
+  });
+     // Add minimum line (green)
+  const minRange = valueAxis.axisRanges.create();
+  minRange.value = minValue;
+  minRange.grid.stroke = am4core.color("#00FF00"); // Green color
+  minRange.grid.strokeWidth = 2;
+  minRange.grid.strokeOpacity = 0.8;
+  minRange.grid.strokeDasharray = "3,3";
+
+  // Add label for minimum line
+  const minLabel = minRange.label;
+  minLabel.text = `Min: ${minValue.toFixed(2)}`;
+  minLabel.fill = am4core.color("#00FF00");
+  minLabel.fontWeight = "bold";
+  minLabel.dy = 0; // Position above the line
+  
+  // Add maximum line (red)
+  const maxRange = valueAxis.axisRanges.create();
+  maxRange.value = maxValue;
+  maxRange.grid.stroke = am4core.color("#FF0000"); // Red color
+  maxRange.grid.strokeWidth = 2;
+  maxRange.grid.strokeOpacity = 0.8;
+  maxRange.grid.strokeDasharray = "3,3";
+  
+  // Add label for maximum line
+  const maxLabel = maxRange.label;
+  maxLabel.text = `Max: ${maxValue.toFixed(2)}`;
+  maxLabel.fill = am4core.color("#FF0000");
+  maxLabel.fontWeight = "bold";
+  maxLabel.dy =0; // Position below the line
+
+
+
     const colorMap = {
       "HFO 1": am4core.color("#E62222"),
       "O/G 2": am4core.color("#39E66C"),
@@ -508,6 +553,7 @@ function CustomTrend() {
       "PDB 10": am4core.color("#D35400"),
       "PF Panel 2": am4core.color("#27AE60"),
     };
+   
 
     if (selectedMeter.length > 0) {
       selectedMeter.forEach((meter) => {

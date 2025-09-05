@@ -6,13 +6,14 @@ import { useEffect, useState } from "react";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
+import SankeyTotalValues from "@/components/sakeyTotalValue/SankeyTotalValues";
 
 const UnitLt42Page = () => {
   const [Unit4Lt2TimePeriod, setUnit4Lt2TimePeriod] = useState("today");
   const [data, setDAta] = useState([]);
   const [loading, setLoading] = useState(false);
   const { startDate, endDate } = getDateRangeFromString(Unit4Lt2TimePeriod);
-
+console.log(data)
   const fetchUnit4Lt2Data = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -42,12 +43,14 @@ const UnitLt42Page = () => {
       setLoading(false);
     }
   };
+  
+
   useEffect(() => {
     fetchUnit4Lt2Data();
   }, [Unit4Lt2TimePeriod]);
 
   return (
-    <div className="w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
+    <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-center flex justify-between">
         <h2 className="text-[20px] font-600 font-inter">Unit 4 LT 2</h2>
         <TimePeriodSelector
@@ -64,6 +67,7 @@ const UnitLt42Page = () => {
           )}
         </div>
       </div>
+      <SankeyTotalValues data={data} lt="TotalLT2"/>
     </div>
   );
 };

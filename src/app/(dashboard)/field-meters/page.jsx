@@ -175,7 +175,7 @@ console.log("..................", consumptionPerArea);
   ];
   const unitConsumption = [
     {
-      unit4Consumption: consumptionPerArea.U4_U1_GW02_Del_ActiveEnergy.CONS,
+      // unit4Consumption: consumptionPerArea.U4_U1_GW02_Del_ActiveEnergy.CONS,
       unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 238,
@@ -184,7 +184,7 @@ console.log("..................", consumptionPerArea);
       unit5Left: 117,
     },
     {
-      unit4Consumption: consumptionPerArea.U4_U2_GW02_Del_ActiveEnergy.CONS,
+      // unit4Consumption: consumptionPerArea.U4_U2_GW02_Del_ActiveEnergy.CONS,
       unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 237,
@@ -193,7 +193,7 @@ console.log("..................", consumptionPerArea);
       unit5Left: 286,
     },
     {
-      unit4Consumption: consumptionPerArea.U4_U3_GW02_Del_ActiveEnergy.CONS,
+      // unit4Consumption: consumptionPerArea.U4_U3_GW02_Del_ActiveEnergy.CONS,
       unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 236.5,
@@ -202,7 +202,7 @@ console.log("..................", consumptionPerArea);
       unit5Left: 464,
     },
     {
-      unit4Consumption: consumptionPerArea.U4_U4_GW02_Del_ActiveEnergy.CONS,
+      // unit4Consumption: consumptionPerArea.U4_U4_GW02_Del_ActiveEnergy.CONS,
       unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 236.5,
@@ -211,7 +211,7 @@ console.log("..................", consumptionPerArea);
       unit5Left: 642,
     },
     {
-      unit4Consumption: consumptionPerArea.U4_U22_GW03_Del_ActiveEnergy.CONS,
+      // unit4Consumption: consumptionPerArea.U4_U22_GW03_Del_ActiveEnergy.CONS,
       unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 236.5,
@@ -220,7 +220,7 @@ console.log("..................", consumptionPerArea);
       unit5Left: 820,
     },
     {
-      unit4Consumption: consumptionPerArea.U4_U23_GW03_Del_ActiveEnergy.CONS,
+      // unit4Consumption: consumptionPerArea.U4_U23_GW03_Del_ActiveEnergy.CONS,
       unit4Consumption: "00.00",
       unit5Consumption: "--.--",
       unit4Top: 236.5,
@@ -317,7 +317,7 @@ console.log("..................", consumptionPerArea);
           {
             key: "U3_GW02",
             on: [
-              { top: 108.5, left: 398.5, img: "onmeter1.png", w: 27 },
+              { top: 108.5, left: 398, img: "onmeter1.png", w: 27 },
               { top: 259.2, left: 411.5, img: "onmeter2.png", w: 36 },
             ],
             off: [
@@ -369,7 +369,8 @@ console.log("..................", consumptionPerArea);
                 >
                   <img
                     src={`./fieldMeterStatus/${img}`}
-                    className={`w-[${w}px]`}
+                    // className={`w-[${w}px]`}
+                    style={{width:`${w}px`}}
                     alt=""
                   />
                 </div>
@@ -383,6 +384,7 @@ console.log("..................", consumptionPerArea);
                   <img
                     src={`./fieldMeterStatus/${img}`}
                     className={`w-[${w}px]`}
+                    style={{width:`${w}px`}}
                     alt=""
                   />
                 </div>

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
+import SankeyTotalValues from "@/components/sakeyTotalValue/SankeyTotalValues";
 
 const UnitLt41Page = () => {
   const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
@@ -49,7 +50,7 @@ const UnitLt41Page = () => {
   }, [unit4Lt1TimePeriod]);
 
   return (
-    <div className="w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
+    <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-center flex justify-between">
         <h2 className="text-[20px] font-600 font-inter">Unit 4 LT-1</h2>
         <TimePeriodSelector
@@ -66,6 +67,7 @@ const UnitLt41Page = () => {
           )}
         </div>
       </div>
+      <SankeyTotalValues data={data} lt="TotalLT1"/>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { FaEdit as Edit, FaSave as Save } from "react-icons/fa";
 import CustomLoader from "../customLoader/CustomLoader";
 import config from "@/constant/apiRouteList";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const statusOptions = ["Verified", "Not Verified", "Not Sure", "Not Used"];
 
@@ -32,7 +33,12 @@ const MeterParameterList = ({
   const [meterComment, setMeterComment] = useState("");
   const [updatedAt, setUpdateAT] = useState("")
   const updateTimeToLocal = new Date(updatedAt).toLocaleString("en-US")
+  const { role } = useSelector((state) => state.auth);
+  const allowedUser = role ==="6865092b321bfce1f635d40e"?true:false;
+  
+ 
   const updateMeterData = async (updates) => {
+    if(!allowedUser)return
     try {
       const response = await fetch(`/api/meters/${uniqueKey}/update-status`, {
         method: "PATCH",
@@ -89,6 +95,7 @@ const MeterParameterList = ({
   }, []);
 
   const fetchParameters = async () => {
+    
     if (!uniqueKey) return;
     setIsLoading(true);
     try {
@@ -369,7 +376,7 @@ const MeterParameterList = ({
                                 handleStatusChange(param.param, option)
                               }
                               className="hidden"
-                              disabled={updatingStatus[param.param]}
+                              disabled={!allowedUser || updatingStatus[param.param]}
                             />
                             <span className="text-xs sm:text-sm font-medium">
                               {option}
