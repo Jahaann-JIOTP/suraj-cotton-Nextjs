@@ -104,7 +104,7 @@ const AllAlarmPage = () => {
   };
 
   return (
-    <div className="relative w-full h-[81vh] bg-white dark:bg-gray-800 rounded-md border-t-3 border-t-[#1F5897]">
+    <div className="relative w-full dark:bg-gray-800 h-[81vh] bg-white dark:bg-gray-800 rounded-md border-t-3 border-t-[#1F5897]">
       <div className="flex justify-between items-center px-6 py-4 border-b dark:border-b-gray-500 border-gray-200 z-10 relative">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
           All Alarms

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 import { usePathname, useSearchParams } from "next/navigation";
+
 export default function SidebarDropdown({
   item,
   isOpen,
@@ -18,6 +19,7 @@ export default function SidebarDropdown({
   useEffect(() => {
     setIsClient(true);
   }, []);
+
   return (
     <div className="w-full flex items-center flex-col">
       <button
@@ -48,7 +50,7 @@ export default function SidebarDropdown({
               }}
             >
               <span>
-                <item.icon className="w-4 h-4 text-black dark:text-white  group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]" />
+                <item.icon className="w-4 h-4 text-black dark:text-white group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]" />
               </span>
             </Tooltip>
           )
@@ -70,11 +72,10 @@ export default function SidebarDropdown({
           } gap-2`}
         >
           {item.submenu.map((sub) => {
-           
             const nestedArr = ["/meter", "/logs", "/log-detail"];
-
             let activePath = false;
-            
+
+            // Check active path for /sld and /field-meters
             if (path.startsWith("/sld") && sub.href.startsWith("/sld")) {
               activePath = true;
             } else if (
@@ -105,7 +106,7 @@ export default function SidebarDropdown({
                 style={{ fontWeight: 500 }}
               >
                 {iscollapese ? (
-                  <div className=" relative flex items-center justify-center">
+                  <div className="relative flex items-center justify-center">
                     {isClient && (
                       <Tooltip
                         title={sub.title}

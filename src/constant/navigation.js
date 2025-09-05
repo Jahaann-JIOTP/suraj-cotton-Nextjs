@@ -8,6 +8,9 @@ import {
   faRotate,
   faUsersGear,
 } from "@fortawesome/free-solid-svg-icons";
+import AlarmBellIcon from "../../public/sidebarIcons/AlarmBell";
+import ListIcon from "../../public/sidebarIcons/ListIcon";
+import AlarmSubMenuIcon from "../../public/sidebarIcons/AlarmSubmenu";
 
 import PowerIcon from "../../public/sidebarIcons/PowerIcon";
 import TransformerIcon from "../../public/sidebarIcons/Transformer";
@@ -50,11 +53,11 @@ export const privilegeConfig = {
     tab: "Trends",
   },
   Alarms: {
-    href: "/all-alarms",
+    href: "/alarm_type_config",
     icon: faBell,
-    label: "ALARMS",
-    matchPaths: ["/all-alarms", "/Recent_Alarms"],
+    label: "Alarms",
     tab: "Alarms",
+    matchPaths: ["/alarm_config", "/alarm_type_config", "/alarm_config_type", "/alarms", "/active_alarms", "/alarm","/alarms_details"],
   },
   Reports: {
     href: "/energy-usage-report",
@@ -195,15 +198,22 @@ export const sidebarLinksMap = {
   Alarms: [
     {
       id: 0,
-      title: "Alarms",
-      icon: TransformerIcon,
+      title: "Alarm Setup",
+      icon: AlarmBellIcon,
+      matchPaths: ["/alarm_config", "/alarm_type_config", "/alarm_config_type", "/alarms"],
       submenu: [
-        {
-          id: 0,
-          title: "All Alarms",
-          href: "/all-alarms",
-          icon: TransformerIcon,
-        },
+        { id: 0, title: "Alarm Config.", href: "/alarm_type_config", icon: AlarmSubMenuIcon },
+      ],
+    },
+    {
+      id: 1,
+      title: "Alarm Details",
+      icon: AlarmBellIcon,
+      submenu: [
+        { id: 0, title: "Active Alarms", href: "/active_alarms", icon: AlarmSubMenuIcon },
+        { id: 1, title: "All Alarms", href: "/alarms_details?type=All", icon: AlarmSubMenuIcon },
+        { id: 2, title: "Recent Alarms", href: "/alarms_details?type=Recent", icon: AlarmSubMenuIcon },
+        { id: 3, title: "Unacknowledged Alarms", href: "/alarms_details?type=Unacknowledged", icon: AlarmSubMenuIcon }
       ],
     },
   ],

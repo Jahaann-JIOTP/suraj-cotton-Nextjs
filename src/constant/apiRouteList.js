@@ -1,6 +1,6 @@
 const config = {
   BASE_URL: process.env.NEXT_PUBLIC_SURAJ_COTTON_BASE_URL,
-
+  BASE_URL1: process.env.NEXT_PUBLIC_BASE_URL,
   AUTH: {
     LOGIN: "/auth/login",
   },
