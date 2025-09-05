@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { toZonedTime } from "date-fns-tz";
 import { format } from "date-fns";
-import { usePathname } from "next/navigation";
+import { usePathname,useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark, faTimes } from "@fortawesome/free-solid-svg-icons";
 import config from "@/constant/apiRouteList";
@@ -21,6 +21,7 @@ import { useTheme } from "next-themes";
 const SEEN_KEY = "seenAlarmIds_v1";
 const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
+  const router = useRouter();
   
   const notificationDropdownRef = useRef(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -48,7 +49,6 @@ const updateBellIcon = (fetchedAlarms) => {
   // Update bell icon and new alarm count based on alarm statuses
   const hasNew = enrichedAll.some((a) => a.status === "new");
   const hasOld = enrichedAll.some((a) => a.status === "old");
-
   // Set bell icon color based on new/old alarms
   setBellIcon(hasNew ? "red" : hasOld ? "yellow" : "none");
 

@@ -16,8 +16,8 @@ const columns = [
   { key: 'location', label: 'Location', sortable: true },
   { key: 'actions', label: 'Actions', sortable: false }
 ];
- const FIXED_ROWS = 10;
- const ROW_HEIGHT = 32; // matches your h-[32px] per row
+const FIXED_ROWS = 10;
+const ROW_HEIGHT = 32; // matches your h-[32px] per row
 
 
 // Add a useState hook to store the fetched alarms.
@@ -100,8 +100,8 @@ export default function ActiveAlarmsPage() {
   };
 
 
-  const handleOptionSelect = async (id, option) => {
-    console.log('handleOptionselect', id)
+  const handleOptionSelect = async (id, option, alarmId) => {
+    console.log('handleOptionSelect', alarmId);
     const duration = getSnoozeDuration(option);
     const snoozeAt = new Date().toISOString(); // current time
 
@@ -112,9 +112,9 @@ export default function ActiveAlarmsPage() {
         snoozeDuration: duration / 60000, // convert ms → minutes
         snoozeAt
       });
-      console.log('passing id to stop eep', id)
+      console.log('passing id to stop beep', id);
       stopBeep(id);  // immediately stop local beep until fetch refresh
-      toast.success(`Snoozed ${id} for ${option}`);
+      toast.success(`${alarmId} has been snoozed for ${option}`);  // Display the success message with the alarm ID
       setOpenActionId(null);
       fetchAlarms(); // refresh UI with new snooze state
     } catch (error) {
@@ -122,6 +122,7 @@ export default function ActiveAlarmsPage() {
       toast.error("Failed to snooze alarm");
     }
   };
+
 
 
   const toggleDropdown = (id) => {
@@ -178,7 +179,7 @@ export default function ActiveAlarmsPage() {
           snoozeDuration: alarm.alarmSnoozeDuration,
           snoozeAt: alarm.alarmSnoozeAt,
           isSnoozeExpired,
-         color: alarm.color || '#000000',
+          color: alarm.color || '#000000',
         };
       });
       setAlarms(fetchedAlarms);
@@ -199,23 +200,23 @@ export default function ActiveAlarmsPage() {
   }, []);  // Empty dependency array means this effect runs only once on mount.
 
   useEffect(() => {
-  if (alarms.length === 0) {
-    // no alarms → stop all sounds
-    Object.keys(beepSounds).forEach((id) => stopBeep(id));
-    return;
-  }
-
-  alarms.forEach((alarm) => {
-    const id = alarm.alarmOccurenceId;
-    if (!id) return;
-
-    if (alarm.snoozeStatus && !alarm.isSnoozeExpired) {
-      stopBeep(id);
-    } else {
-      startBeep(id);
+    if (alarms.length === 0) {
+      // no alarms → stop all sounds
+      Object.keys(beepSounds).forEach((id) => stopBeep(id));
+      return;
     }
-  });
-}, [alarms]);
+
+    alarms.forEach((alarm) => {
+      const id = alarm.alarmOccurenceId;
+      if (!id) return;
+
+      if (alarm.snoozeStatus && !alarm.isSnoozeExpired) {
+        stopBeep(id);
+      } else {
+        startBeep(id);
+      }
+    });
+  }, [alarms]);
 
 
   useEffect(() => {
@@ -261,29 +262,29 @@ export default function ActiveAlarmsPage() {
   }, [alarmTypeFilter, locationFilter, alarmNameFilter, alarms]);
 
   const sortedAlarms = useMemo(() => {
-  if (!sort.key) return filteredAlarms;
+    if (!sort.key) return filteredAlarms;
 
-  const arr = [...filteredAlarms].sort((a, b) => {
-    const va = a[sort.key];
-    const vb = b[sort.key];
+    const arr = [...filteredAlarms].sort((a, b) => {
+      const va = a[sort.key];
+      const vb = b[sort.key];
 
-    if (typeof va === "number" && typeof vb === "number") return va - vb;
-    return String(va ?? "").localeCompare(String(vb ?? ""), undefined, {
-      numeric: true,
-      sensitivity: "base",
+      if (typeof va === "number" && typeof vb === "number") return va - vb;
+      return String(va ?? "").localeCompare(String(vb ?? ""), undefined, {
+        numeric: true,
+        sensitivity: "base",
+      });
     });
-  });
 
-  return sort.dir === "asc" ? arr : arr.reverse();
-}, [filteredAlarms, sort]);
+    return sort.dir === "asc" ? arr : arr.reverse();
+  }, [filteredAlarms, sort]);
 
 
   const totalItems = sortedAlarms.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
   const startIdx = (currentPage - 1) * pageSize;
   const endIdx = Math.min(startIdx + pageSize, totalItems);
-   const pageAlarms = sortedAlarms.slice(startIdx, endIdx);
- const fillerCount = Math.max(0, FIXED_ROWS - pageAlarms.length);
+  const pageAlarms = sortedAlarms.slice(startIdx, endIdx);
+  const fillerCount = Math.max(0, FIXED_ROWS - pageAlarms.length);
 
   const onSort = useCallback((key) => {
     setSort((prev) => (prev.key === key ? { key, dir: prev.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: 'asc' }));
@@ -366,35 +367,36 @@ export default function ActiveAlarmsPage() {
               })}
             </div>
           </div>
-         <div className="relative">
-  <div
-    className="divide-y divide-[#EBEBEB] dark:divide-gray-700 overflow-y-auto"
-    style={{ maxHeight: `${ROW_HEIGHT * FIXED_ROWS}px`, minHeight: `${ROW_HEIGHT * FIXED_ROWS}px` }}
-    ref={actionMenuRef}
-  >
-    {pageAlarms.map((alarm) => (
-      <div key={alarm.id} className="flex items-center h-[32px] hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-        <div className="flex-1 px-2 lg:px-4 text-center text-black/73 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.id}</div>
-        <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.activeSince}</div>
-        <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px] capitalize">{alarm.alarmType}</div>
-        <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.alarmAge}</div>
-        <div className="flex-1 px-2 lg:px-4 flex items-center justify-center gap-2">
-          <div className="w-[9px] h-[9px] rounded-sm" style={{ backgroundColor: alarm.color }} />
-          <span className="text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.alarmName}</span>
-        </div>
-        <div className="flex-1 px-2 lg:px-4 text-center text-black dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.pvThreshold}</div>
-        <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.location}</div>
-        <div className="flex-1 px-2 lg:px-4 flex justify-center relative">
-          <button
-            type="button"
-            onClick={() => handleDropdownToggle(alarm.alarmOccurenceId)}
-            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-white"
-            aria-haspopup="listbox"
-            aria-expanded={openActionId === alarm.alarmOccurenceId}
-            aria-label="Open actions"
-          >
-            {/* your SVG icon here (unchanged) */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <div className="relative">
+            <div
+              className="divide-y divide-[#EBEBEB] dark:divide-gray-700 overflow-y-auto"
+              style={{ maxHeight: `${ROW_HEIGHT * FIXED_ROWS}px`, minHeight: `${ROW_HEIGHT * FIXED_ROWS}px` }}
+              ref={actionMenuRef}
+            >
+              {pageAlarms.map((alarm) => (
+                <div key={alarm.id} className="flex items-center h-[32px] hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                  <div className="flex-1 px-2 lg:px-4 text-center text-black/73 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.id}</div>
+                  <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.activeSince}</div>
+                  <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px] capitalize">{alarm.alarmType}</div>
+                  <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.alarmAge}</div>
+                  <div className="flex-1 px-2 lg:px-4 flex items-center justify-center gap-2">
+                    <div className="w-[9px] h-[9px] rounded-sm" style={{ backgroundColor: alarm.color }} />
+                    <span className="text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.alarmName}</span>
+                  </div>
+                  <div className="flex-1 px-2 lg:px-4 text-center text-black dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.pvThreshold}</div>
+                  <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.location}</div>
+                  <div className="flex-1 px-2 lg:px-4 flex justify-center relative">
+                    <button
+                      type="button"
+                      onClick={() => handleDropdownToggle(alarm.alarmOccurenceId)}
+                      className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-white"
+                      aria-haspopup="listbox"
+                      aria-expanded={openActionId === alarm.alarmOccurenceId}
+                      aria-label="Open actions"
+                      disabled={alarm.snoozeStatus && !alarm.isSnoozeExpired} // Disable button if snoozed
+                      style={alarm.snoozeStatus && !alarm.isSnoozeExpired ? { cursor: 'not-allowed' } : {}}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path
                           fillRule="evenodd"
                           clipRule="evenodd"
@@ -402,49 +404,49 @@ export default function ActiveAlarmsPage() {
                           fill={getActionIconColor(alarm)}  // Change color based on snooze
                         />
                       </svg>
-          </button>
+                    </button>
+                    {openActionId === alarm.alarmOccurenceId && (
+                      <div className="absolute right-0 top-[100%] z-50 bg-white dark:bg-gray-600 shadow-lg rounded w-40">
+                        {['15 mins', '30 mins', '1 hour', '2 hours'].map((option) => (
+                          <button
+                            key={option}
+                            className="w-full px-4 py-2 text-left text-sm text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                            onClick={() => handleOptionSelect(alarm.alarmOccurenceId, option, alarm.id)}  // Handle option selection
+                            disabled={alarm.snoozeStatus && !alarm.isSnoozeExpired}  // Disable button if snoozed
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
 
-          {openActionId === alarm.alarmOccurenceId && (
-            <div className="absolute right-0 top-[100%] z-50 bg-white dark:bg-gray-600 shadow-lg rounded w-40">
-              {['15 mins', '30 mins', '1 hour', '2 hours'].map((option) => (
-                <button
-                  key={option}
-                  className="w-full px-4 py-2 text-left text-sm text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
-                  onClick={() => handleOptionSelect(alarm.alarmOccurenceId, option)}
-                >
-                  {option}
-                </button>
+              {/* Filler rows to maintain fixed height when < 10 rows */}
+              {Array.from({ length: fillerCount }).map((_, i) => (
+                <div key={`filler-${i}`} className="flex items-center h-[32px] text-[12px] !font-[Inter] bg-white dark:bg-gray-800" aria-hidden>
+                  {columns.map((c) => (
+                    <div key={c.key} className="flex-1 px-2 lg:px-4 text-transparent">&nbsp;</div>
+                  ))}
+                </div>
               ))}
             </div>
-          )}
-        </div>
-      </div>
-    ))}
 
-    {/* Filler rows to maintain fixed height when < 10 rows */}
-    {Array.from({ length: fillerCount }).map((_, i) => (
-      <div key={`filler-${i}`} className="flex items-center h-[32px] text-[12px] !font-[Inter] bg-white dark:bg-gray-800" aria-hidden>
-        {columns.map((c) => (
-          <div key={c.key} className="flex-1 px-2 lg:px-4 text-transparent">&nbsp;</div>
-        ))}
-      </div>
-    ))}
-  </div>
+            {/* Empty state centered inside fixed body */}
+            {totalItems === 0 && !isUpdating && (
+              <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-500 dark:text-gray-300">
+                No alarms to display.
+              </div>
+            )}
 
-  {/* Empty state centered inside fixed body */}
-  {totalItems === 0 && !isUpdating && (
-    <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-500 dark:text-gray-300">
-      No alarms to display.
-    </div>
-  )}
-
-  {/* Loader overlay (does not shift layout) */}
-  {isUpdating && (
-    <div className="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-gray-800/60 pointer-events-none">
-      <div className="loader" />
-    </div>
-  )}
-</div>
+            {/* Loader overlay (does not shift layout) */}
+            {isUpdating && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-gray-800/60 pointer-events-none">
+                <div className="loader" />
+              </div>
+            )}
+          </div>
 
         </div>
 
@@ -471,11 +473,13 @@ export default function ActiveAlarmsPage() {
                   <div className="relative ml-auto">
                     <button
                       type="button"
-                      onClick={() => handleDropdownToggle(alarm.alarmOccurenceId)}  // Open/close the dropdown for this row
+                      onClick={() => handleDropdownToggle(alarm.alarmOccurenceId)}
                       className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-white"
                       aria-haspopup="listbox"
-                      aria-expanded={openActionId === alarm.alarmOccurenceId}  // Show if the dropdown is open for this row
+                      aria-expanded={openActionId === alarm.alarmOccurenceId}
                       aria-label="Open actions"
+                      disabled={alarm.snoozeStatus && !alarm.isSnoozeExpired} // Disable button if snoozed
+                      style={alarm.snoozeStatus && !alarm.isSnoozeExpired ? { cursor: 'not-allowed' } : {}}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path
@@ -492,7 +496,7 @@ export default function ActiveAlarmsPage() {
                           <button
                             key={option}
                             className="w-full px-4 py-2 text-left text-sm text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
-                            onClick={() => handleOptionSelect(alarm.alarmOccurenceId, option)}  // Handle option selection
+                            onClick={() => handleOptionSelect(alarm.alarmOccurenceId, option, alarm.id)}  // Handle option selection
                           >
                             {option}
                           </button>
