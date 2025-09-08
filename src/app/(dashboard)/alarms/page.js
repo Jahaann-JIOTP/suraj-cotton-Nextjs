@@ -102,16 +102,16 @@ export default function Index() {
   const rowDataString = searchParams.get("rowData");
   const rowData = rowDataString ? JSON.parse(rowDataString) : null;
 
-  const [locations, setLocations] = useState([]);
   const [location, setLocation] = useState("");
-  const [subLocations, setSubLocations] = useState({});
   const [subLocation, setSubLocation] = useState("");
-
-  const [devices, setDevices] = useState([]);
-  const [parameters, setParameters] = useState([]);
   const [device, setDevice] = useState("");
   const [parameter, setParameter] = useState("");
   const [actions, setActions] = useState([""]);
+const [mappedData, setMappedData] = useState({});
+const [locations, setLocations] = useState([]);
+const [subLocations, setSubLocations] = useState([]);
+const [devices, setDevices] = useState([]);
+const [parameters, setParameters] = useState([]);
 
   const priorityLabels = {
     1: "Priority 1",
@@ -133,44 +133,22 @@ export default function Index() {
   // Store the initial comparable snapshot for update mode
   const initialComparableRef = useRef(null);
 
-  /* =========================
-     Fetch locations & sublocations
-     ========================= */
-  useEffect(() => {
-    const fetchMappedLocations = async () => {
-      try {
-        const response = await fetch(`${config.BASE_URL}/alarms/mapped-location`);
-        const data = await response.json();
-        const locationsData = Object.keys(data || {});
-        setLocations(locationsData);
+useEffect(() => {
+  const fetchMappedData = async () => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/alarms/mapped-location`);
+      const data = await response.json();
 
-        const subLocs = {};
-        locationsData.forEach((loc) => {
-          subLocs[loc] = data[loc];
-        });
-        setSubLocations(subLocs);
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-      }
-    };
-    fetchMappedLocations();
-  }, []);
-
-  /* =========================
-     Fetch devices (+suffixes)
-     ========================= */
-  useEffect(() => {
-    const fetchDevices = async () => {
-      try {
-        const response = await fetch(`${config.BASE_URL}/trends/getlist`);
-        const data = await response.json();
-        setDevices(data || []);
-      } catch (error) {
-        console.error("Error fetching devices:", error);
-      }
-    };
-    fetchDevices();
-  }, []);
+      setMappedData(data || {});
+      // ✅ Only keep keys without a dot
+      const topLevelLocations = Object.keys(data || {}).filter(key => !key.includes("."));
+      setLocations(topLevelLocations);
+    } catch (error) {
+      console.error("Error fetching mapped location data:", error);
+    }
+  };
+  fetchMappedData();
+}, []);
 
   /* =========================
      Fetch persist seconds options
@@ -203,38 +181,6 @@ export default function Index() {
     };
     fetchOccurTimes();
   }, []);
-// When devices arrive OR device changes, populate parameters list accordingly.
-// Also keep/repair the selected `parameter` if it's valid; otherwise pick first/empty.
-useEffect(() => {
-  if (!device || !Array.isArray(devices) || devices.length === 0) {
-    setParameters([]);
-    return;
-  }
-
-  const selectedDeviceData = devices.find(d => d.meterId === device);
-  const suffixes = selectedDeviceData?.suffixes || [];
-
-  setParameters(suffixes);
-
-  // If current parameter is not in the new suffix list, fix it.
-  if (parameter) {
-    if (!suffixes.includes(parameter)) {
-      setParameter(suffixes[0] || "");
-    }
-  } else {
-    // If nothing selected yet (e.g., update mode), auto-select first if available
-    if (suffixes.length > 0) {
-      setParameter(suffixes[0]);
-    }
-  }
-}, [devices, device, parameter]);  // <-- important
-
-  const handleDeviceChange = (selectedDevice) => {
-    setDevice(selectedDevice);
-    const selectedDeviceData = devices.find((d) => d.meterId === selectedDevice);
-    setParameters(selectedDeviceData ? selectedDeviceData.suffixes || [] : []);
-    setParameter("");
-  };
 
   /* =========================
      Initialize from rowData (update mode)
@@ -326,18 +272,36 @@ useEffect(() => {
     setActions(newActions);
   };
 
-  const handleLocationChange = (selectedLocation) => {
-    setLocation(selectedLocation);
-    setSubLocation("");
-    setDevice("");
-    setParameter("");
-  };
+const handleLocationChange = (selectedLocation) => {
+  setLocation(selectedLocation);
+  setSubLocation("");
+  setDevice("");
+  setParameter("");
 
-  const handleSubLocationChange = (selectedSubLocation) => {
-    setSubLocation(selectedSubLocation);
-    setDevice("");
-    setParameter("");
-  };
+  const subLocs = mappedData[selectedLocation] || []; // ✅ use array directly
+  setSubLocations(subLocs);
+  setDevices([]);
+  setParameters([]);
+};
+
+const handleSubLocationChange = (selectedSubLocation) => {
+  setSubLocation(selectedSubLocation);
+  setDevice("");
+  setParameter("");
+
+  const devs = mappedData[`${location}.${selectedSubLocation}`] || []; // ✅ correct path
+  setDevices(devs);
+  setParameters([]);
+};
+
+const handleDeviceChange = (selectedDevice) => {
+  setDevice(selectedDevice);
+  setParameter("");
+
+  const params = mappedData[`${location}.${subLocation}.${selectedDevice}`] || []; // ✅ correct path
+  setParameters(params);
+};
+
 
   const handleSubmit = async () => {
     if ((isUpdateMode && !isChanged) || loading) return;
@@ -579,7 +543,7 @@ useEffect(() => {
           <div>
             <SelectDropdown
               label="Sub-Location"
-              options={subLocations[location] || []}
+              options={subLocations}
               selectedValue={subLocation}
               onChange={handleSubLocationChange}
               className={`!font-[Inter] ${formErrors.subLocation ? "border-red-500" : ""}`}
@@ -594,7 +558,7 @@ useEffect(() => {
           <div>
             <SelectDropdown
               label="Device"
-              options={(devices || []).map((d) => d.meterId)}
+  options={devices}
               selectedValue={device}
               onChange={handleDeviceChange}
               className={`!font-[Inter] ${formErrors.device ? "border-red-500" : ""}`}

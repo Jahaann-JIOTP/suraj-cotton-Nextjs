@@ -30,19 +30,19 @@ export default function Dashboard() {
 
   return (
     // Let the document scroll; no fixed height or overflow here
-    <div className="w-full min-h-screen overflow-auto">
+   <div className="h-[81vh] overflow-y-auto bg-none relative">
+
       <div className="grid gap-6 md:grid-cols-1">
         {/* 1) Energy Usage */}
         <div className="relative w-full px-4 py-4 h-[40vh] bg-white dark:bg-gray-800 border-t-4 border-[#1F5897] rounded-[12px] shadow-md">
           <GenericAmChart
-            height={320}
             title="PLANT - ENERGY USAGE"
             data={hours}
             xKey="time"
             xType="date"
             series={[
               { type: "column", yKey: "energyInterval", name: "Energy Usage Interval", color: "#4682B4" },
-              { type: "line", yKey: "energy", name: "Active Energy (kWh)", color: "#008D23", yAxis: "right", strokeWidth: 2.5 },
+              { type: "line", yKey: "energy", name: "Active Energy (kWh)", color: "#008D23", yAxis: "right", strokeWidth: 3 },
             ]}
             yLeftTitle="kWh (Δ)"
             yRightTitle="kWh (Cum.)"
@@ -61,12 +61,11 @@ export default function Dashboard() {
         {/* 2) Real Power */}
         <div className="relative w-full px-4 py-4 h-[40vh] bg-white dark:bg-gray-800 border-t-4 border-[#1F5897] rounded-[12px] shadow-md">
           <GenericAmChart
-            height={300}
             title="PLANT - ACTIVE DEMAND (HISTORICAL)"
             data={hours}
             xKey="time"
             xType="date"
-            series={[{ type: "line", yKey: "power", name: "Real Power", color: "#249FFF" }]}
+            series={[{ type: "line", yKey: "power", name: "Real Power", color: "#249FFF",strokeWidth: 3 }]}
             yLeftTitle="kW"
             legend
             cursor
@@ -82,12 +81,11 @@ export default function Dashboard() {
         {/* 3) Voltage */}
         <div className="relative w-full px-4 py-4 h-[40vh] bg-white dark:bg-gray-800 border-t-4 border-[#1F5897] rounded-[12px] shadow-md">
           <GenericAmChart
-            height={300}
             title="PLANT - MAIN VOLTAGE"
             data={hours}
             xKey="time"
             xType="date"
-            series={[{ type: "line", yKey: "voltage", name: "Avg Voltage", color: "#3D5AFE" }]}
+            series={[{ type: "line", yKey: "voltage", name: "Avg Voltage", color: "#3D5AFE",strokeWidth: 3 }]}
             yLeftTitle="Volts"
             legend={false}
             cursor
@@ -103,13 +101,51 @@ export default function Dashboard() {
         {/* 4) Current */}
         <div className="relative w-full px-4 py-4 h-[40vh] bg-white dark:bg-gray-800 border-t-4 border-[#1F5897] rounded-[12px] shadow-md">
           <GenericAmChart
-            height={300}
             title="PLANT - MAIN CURRENT"
             data={hours}
             xKey="time"
             xType="date"
-            series={[{ type: "line", yKey: "current", name: "Avg Current", color: "#FF9500" }]}
+            series={[{ type: "line", yKey: "current", name: "Avg Current", color: "#FF9500", strokeWidth: 3 }]}
             yLeftTitle="Amps"
+            legend
+            cursor
+            startDate={startDate}
+            endDate={endDate}
+            onIntervalChange={onIntervalChange}
+            showToolbar
+            showInterval
+            showFullscreen
+          />
+        </div>
+        <div className="relative w-full px-4 py-4 h-[40vh] bg-white dark:bg-gray-800 border-t-4 border-[#1F5897] rounded-[12px] shadow-md">
+          <GenericAmChart
+            title="PLANT - REACTIVE POWER AND PF"
+            data={hours}
+            xKey="time"
+            xType="date"
+            series={[{ type: "line", yKey: "current", name: "Reactive Power", color: "#FC9C03", strokeWidth: 3 },
+              { type: "line", yKey: "power", name: "Power Factor", color: "#986BC5", strokeWidth: 3 }
+            ]}
+            yLeftTitle="VAR"
+             yRightTitle="PF"
+            legend
+            cursor
+            startDate={startDate}
+            endDate={endDate}
+            onIntervalChange={onIntervalChange}
+            showToolbar
+            showInterval
+            showFullscreen
+          />
+        </div>
+         <div className="relative w-full px-4 py-4 h-[40vh] bg-white dark:bg-gray-800 border-t-4 border-[#1F5897] rounded-[12px] shadow-md">
+          <GenericAmChart
+            title="PLANT - VOLTAGE HARMONIC REDUCTION"
+            data={hours}
+            xKey="time"
+            xType="date"
+            series={[{ type: "line", yKey: "current", name: "THD Voltage", color: "#009826", strokeWidth: 3 }]}
+            yLeftTitle="THD V"
             legend
             cursor
             startDate={startDate}
