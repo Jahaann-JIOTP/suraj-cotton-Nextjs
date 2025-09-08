@@ -14,7 +14,12 @@ export default function SidebarDropdown({
   const [isClient, setIsClient] = useState(false);
   const path = usePathname();
   const searchParams = useSearchParams();
+
+  // existing: used for /meter,/logs,/log-detail routing context
   const pageType = searchParams.get("page-type");
+
+  // NEW: used for /daily_consumption and /alarms_details
+  const typeParam = searchParams.get("type");
 
   useEffect(() => {
     setIsClient(true);
@@ -43,9 +48,7 @@ export default function SidebarDropdown({
                   },
                 },
                 arrow: {
-                  sx: {
-                    color: "#025697",
-                  },
+                  sx: { color: "#025697" },
                 },
               }}
             >
@@ -65,44 +68,69 @@ export default function SidebarDropdown({
 
       {isOpen && (
         <div
-          className={`w-full flex flex-col  ${
-            iscollapese
-              ? "p-auto justify-center items-center px-1"
-              : "pr-2 pl-4"
-          } gap-2`}
+          className={`w-full flex flex-col  ${iscollapese ? "p-auto justify-center items-center px-1" : "pr-2 pl-4"
+            } gap-2`}
         >
           {item.submenu.map((sub) => {
             const nestedArr = ["/meter", "/logs", "/log-detail"];
             let activePath = false;
+            if (
+              item.title === "Alarm Setup" &&
+              sub.title === "Alarm Config." &&
+              Array.isArray(item.matchPaths) &&
+              item.matchPaths.some((base) => path.startsWith(base))
+            ) {
+              activePath = true;
+            }
+            // Parse the sub href (to read its pathname and ?type=… when present)
+            const subUrl = new URL(sub.href, "http://localhost"); // base is ignored for path parsing
+            const subPathname = subUrl.pathname;
+            const subType = subUrl.searchParams.get("type");
 
-            // Check active path for /sld and /field-meters
-            if (path.startsWith("/sld") && sub.href.startsWith("/sld")) {
+            // ---- Existing rules for SLD + Field Meters + nested pages ----
+            if (path.startsWith("/sld") && subPathname.startsWith("/sld")) {
               activePath = true;
             } else if (
               path.startsWith("/field-meters") &&
-              sub.href.startsWith("/field-meters")
+              subPathname.startsWith("/field-meters")
             ) {
               activePath = true;
             } else if (nestedArr.some((r) => path.startsWith(r))) {
-              if (pageType === "sld" && sub.href.startsWith("/sld")) {
+              if (pageType === "sld" && subPathname.startsWith("/sld")) {
                 activePath = true;
               } else if (
                 pageType === "field-meter" &&
-                sub.href.startsWith("/field-meters")
+                subPathname.startsWith("/field-meters")
               ) {
                 activePath = true;
               }
-            } else if (path === sub.href) {
+            }
+            // ---- NEW rules for Daily Consumption (match pathname + type) ----
+            else if (
+              path.startsWith("/daily_consumption") &&
+              subPathname.startsWith("/daily_consumption")
+            ) {
+              // If sub item has a type, require it to match; otherwise consider it active on any type
+              activePath = subType ? subType === typeParam : true;
+            }
+            // ---- NEW rules for Alarms Details (match pathname + type) ----
+            else if (
+              path.startsWith("/alarms_details") &&
+              subPathname.startsWith("/alarms_details")
+            ) {
+              activePath = subType ? subType === typeParam : true;
+            }
+            // ---- Fallback: exact href match (for simple links without query) ----
+            else if (path === subPathname) {
               activePath = true;
             }
 
             return (
               <Link
-                key={sub.id}
+                key={sub.id ?? sub.href}
                 href={sub.href}
-                className={`group flex hover:text-[#1A68B2] w-full py-[7px] text-[13.216px] rounded-md ${
-                  iscollapese ? "items-center justify-center" : ""
-                }`}
+                className={`group flex hover:text-[#1A68B2] w-full py-[7px] text-[13.216px] rounded-md ${iscollapese ? "items-center justify-center" : ""
+                  }`}
                 style={{ fontWeight: 500 }}
               >
                 {iscollapese ? (
@@ -122,19 +150,16 @@ export default function SidebarDropdown({
                             },
                           },
                           arrow: {
-                            sx: {
-                              color: "#025697",
-                            },
+                            sx: { color: "#025697" },
                           },
                         }}
                       >
                         <span>
                           <sub.icon
-                            className={`w-5 h-5 ${
-                              activePath
+                            className={`w-5 h-5 ${activePath
                                 ? "text-[#1A68B2]"
                                 : "text-black dark:text-white"
-                            } group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
+                              } group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
                           />
                         </span>
                       </Tooltip>
@@ -142,18 +167,12 @@ export default function SidebarDropdown({
                   </div>
                 ) : (
                   <div
-                    className={`text-[13px] ${
-                      activePath
-                        ? "text-[#1A68B2]"
-                        : "text-black dark:text-white"
-                    } w-full flex items-center justify-start pl-4 gap-2 group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
+                    className={`text-[13px] ${activePath ? "text-[#1A68B2]" : "text-black dark:text-white"
+                      } w-full flex items-center justify-start pl-4 gap-2 group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
                   >
                     <sub.icon
-                      className={`w-5 h-5 ${
-                        activePath
-                          ? "text-[#1A68B2]"
-                          : "text-black dark:text-white"
-                      } group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
+                      className={`w-5 h-5 ${activePath ? "text-[#1A68B2]" : "text-black dark:text-white"
+                        } group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
                     />
                     {sub.title}
                   </div>

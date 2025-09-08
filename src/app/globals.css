@@ -297,3 +297,45 @@
   background: #14406d;
   cursor: pointer;
 }
+@font-face {
+  font-family: "digital-7";
+  src: url("../app/fonts/Digital Numbers 400.ttf");
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("../app/fonts/Raleway-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Farro";
+  src: url("../app/fonts/Farro-Regular.ttf");
+}
+.Farro{
+  font-family: "Farro";
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../app/fonts/Inter-Light-BETA.otf");
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("../app/fonts/Poppins-Regular.ttf");
+}
+.raleway{
+  font-family: "Raleway";
+}
+.Inter {
+  font-family: "Inter";
+}
+.inter{
+   font-family: "Inter";
+}
+.firaMono{
+  font-family: "Inter";
+}
+.Raleway {
+  font-family: "Raleway";
+}
+* {
+   font-family: "Raleway";
+}

@@ -49,7 +49,7 @@ export const privilegeConfig = {
     href: "/custom_trend",
     icon: faArrowTrendUp,
     label: "TRENDS",
-    matchPaths: ["/custom_trend", "/comparison_trends"],
+    matchPaths: ["/custom_trend", "/trends"],
     tab: "Trends",
   },
   Alarms: {
@@ -172,6 +172,37 @@ export const sidebarLinksMap = {
         },
       ],
     },
+    {
+      id: 2,
+      title: "Daily Consumption",
+      icon: EnergySankey,
+      submenu: [
+        {
+          id: 7,
+          title: "Unit 4 LT-1",
+          href: "/daily_consumption?type=lt1",
+          icon: Unit4Lt1,
+        },
+        {
+          id: 8,
+          title: "Unit 4 LT-2",
+          href: "/daily_consumption?type=lt2",
+          icon: Unit4Lt1,
+        },
+        {
+          id: 9,
+          title: "Unit 5 LT-1",
+          href: "/daily_consumption?type=lt3",
+          icon: Unit4Lt1,
+        },
+        {
+          id: 10,
+          title: "Unit 5 LT-2",
+          href: "/daily_consumption?type=lt4",
+          icon: Unit4Lt1,
+        },
+      ],
+    },
   ],
 
   Diagram: [
@@ -195,14 +226,27 @@ export const sidebarLinksMap = {
       ],
     },
   ],
-  Trends: [
-    {
-      title: "Customized Trend",
+ Trends: [
+   {
+      id: 0,
+      title: "Trends",
       icon: TransformerIcon,
-      href: "/custom_trend",
+      submenu: [
+        {
+          id: 0,
+          title: "Custom Trend",
+          href: "/custom_trend",
+          icon: AlarmSubMenuIcon,
+        },
+        {
+          id: 1,
+          title: "Trends",
+          href: "/trends",
+          icon: AlarmSubMenuIcon,
+        }
+      ],
     },
   ],
-
   Alarms: [
     {
       id: 0,

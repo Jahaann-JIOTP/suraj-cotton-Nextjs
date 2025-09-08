@@ -1,7 +1,7 @@
 'use client';
 import { IoChevronUp } from "react-icons/io5";
 import { HiMiniChevronDown } from "react-icons/hi2";
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect,useCallback } from 'react';
 
 const SelectDropdown = ({
   label,
