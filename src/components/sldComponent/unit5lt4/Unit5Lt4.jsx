@@ -225,11 +225,11 @@ const Unit5Lt4 = ({ roundedData }) => {
       top: 613,
       left: 616,
     },
-    // transformer 2 lt-2 acb
+    // PF Panel
     {
-      activePowerTotalTag: roundedData?.U16_GW03_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U16_GW03_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U16_GW03_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U18_GW03_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U18_GW03_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U18_GW03_Voltage_Avg,
       top: 522,
       left: 717,
     },

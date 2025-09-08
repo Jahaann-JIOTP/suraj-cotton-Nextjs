@@ -562,7 +562,7 @@ useBreadcrumb();
               activeTab === "voltage"
                 ? "bg-[#1f5897] text-white"
                 : "bg-[#EFF3F5] dark:bg-[#eff3f58a] text-black"
-            } cursor-pointer px-3 w-[12rem] rounded py-1`}
+            } cursor-pointer px-3 w-[12.5rem] rounded py-1`}
           >
             Volts / Amps
           </button>
@@ -572,7 +572,7 @@ useBreadcrumb();
               activeTab === "power"
                 ? "bg-[#1f5897] text-white"
                 : "bg-[#EFF3F5] dark:bg-[#eff3f58a] text-black"
-            } cursor-pointer px-3 w-[12rem] rounded py-1`}
+            } cursor-pointer px-3 w-[12.5rem] rounded py-1`}
           >
             Power & Power Quality
           </button>
@@ -582,7 +582,7 @@ useBreadcrumb();
               activeTab === "energy"
                 ? "bg-[#1f5897] text-white"
                 : "bg-[#EFF3F5] dark:bg-[#eff3f58a] text-black"
-            } cursor-pointer px-3 w-[12rem] rounded py-1`}
+            } cursor-pointer px-3 w-[12.5rem] rounded py-1`}
           >
             Energy
           </button>

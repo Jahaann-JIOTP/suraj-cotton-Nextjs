@@ -201,6 +201,7 @@ const GenericAmChart = ({
     yLeftTitle,
     yRightTitle,
     minGridDistance,
+    filteredData,
   ]);
 
   // --- Update dataset on interval or data change (no full rebuild)
