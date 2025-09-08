@@ -128,7 +128,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
         {/* Buttons */}
         <button
           onClick={() => router.replace("/sld?area=Unit_5&LT_selections=LT_3")}
-          className="absolute top-[545px] left-[193px] w-[301px] h-[45px] cursor-pointer"
+          className="absolute top-[548px] left-[193px] w-[301px] h-[44px] cursor-pointer"
           style={{
             left: "210px",
             top: "545px",
@@ -160,19 +160,19 @@ const InitialSldUnit5 = ({ roundedData }) => {
             }}
           >
             <span
-              className="text-[11px]"
+              className="text-[12px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activePowerTotalTag || "00.00"}
             </span>
             <span
-              className="text-[11px]"
+              className="text-[12px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeCurrentAvgTag || "00.00"}
             </span>
             <span
-              className="text-[11px]"
+              className="text-[12px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeVoltageAvgTag || "00.00"}

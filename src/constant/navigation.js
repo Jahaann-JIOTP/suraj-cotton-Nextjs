@@ -57,7 +57,15 @@ export const privilegeConfig = {
     icon: faBell,
     label: "Alarms",
     tab: "Alarms",
-    matchPaths: ["/alarm_config", "/alarm_type_config", "/alarm_config_type", "/alarms", "/active_alarms", "/alarm","/alarms_details"],
+    matchPaths: [
+      "/alarm_config",
+      "/alarm_type_config",
+      "/alarm_config_type",
+      "/alarms",
+      "/active_alarms",
+      "/alarm",
+      "/alarms_details",
+    ],
   },
   Reports: {
     href: "/energy-usage-report",
@@ -200,9 +208,19 @@ export const sidebarLinksMap = {
       id: 0,
       title: "Alarm Setup",
       icon: AlarmBellIcon,
-      matchPaths: ["/alarm_config", "/alarm_type_config", "/alarm_config_type", "/alarms"],
+      matchPaths: [
+        "/alarm_config",
+        "/alarm_type_config",
+        "/alarm_config_type",
+        "/alarms",
+      ],
       submenu: [
-        { id: 0, title: "Alarm Config.", href: "/alarm_type_config", icon: AlarmSubMenuIcon },
+        {
+          id: 0,
+          title: "Alarm Config.",
+          href: "/alarm_type_config",
+          icon: AlarmSubMenuIcon,
+        },
       ],
     },
     {
@@ -210,10 +228,30 @@ export const sidebarLinksMap = {
       title: "Alarm Details",
       icon: AlarmBellIcon,
       submenu: [
-        { id: 0, title: "Active Alarms", href: "/active_alarms", icon: AlarmSubMenuIcon },
-        { id: 1, title: "All Alarms", href: "/alarms_details?type=All", icon: AlarmSubMenuIcon },
-        { id: 2, title: "Recent Alarms", href: "/alarms_details?type=Recent", icon: AlarmSubMenuIcon },
-        { id: 3, title: "Unacknowledged Alarms", href: "/alarms_details?type=Unacknowledged", icon: AlarmSubMenuIcon }
+        {
+          id: 0,
+          title: "Active Alarms",
+          href: "/active_alarms",
+          icon: AlarmSubMenuIcon,
+        },
+        {
+          id: 1,
+          title: "All Alarms",
+          href: "/alarms_details?type=All",
+          icon: AlarmSubMenuIcon,
+        },
+        {
+          id: 2,
+          title: "Recent Alarms",
+          href: "/alarms_details?type=Recent",
+          icon: AlarmSubMenuIcon,
+        },
+        {
+          id: 3,
+          title: "Unacknowledged Alarms",
+          href: "/alarms_details?type=Unacknowledged",
+          icon: AlarmSubMenuIcon,
+        },
       ],
     },
   ],

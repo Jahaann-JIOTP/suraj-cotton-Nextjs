@@ -24,9 +24,9 @@ const SelectDropdown = ({
   const isControlled = typeof open === 'boolean';
   const actualOpen = isControlled ? open : showDropdown;
 
-  const setOpen = (v) => (isControlled ? onOpenChange?.(v) : setShowDropdown(v));
-  const toggleDropdown = () => setOpen(!actualOpen);
-  const closeDropdown = () => setOpen(false);
+const setOpen = useCallback((v) => (isControlled ? onOpenChange?.(v) : setShowDropdown(v)), [isControlled, onOpenChange]);
+  const toggleDropdown = useCallback(() => setOpen(!actualOpen), [setOpen, actualOpen]);
+  const closeDropdown = useCallback(() => setOpen(false), [setOpen]);
 
   useEffect(() => {
     if (actualOpen) {
@@ -60,11 +60,11 @@ const SelectDropdown = ({
       document.removeEventListener('touchstart', handlePointerDown);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [actualOpen]);
+  }, [actualOpen, closeDropdown]);
 
   return (
     <div ref={containerRef} className={`space-y-1 relative ${width}`}>
-      {labelshow && <label className="text-[14px] font-medium text-black dark:text-white !font-[Inter] block font-semibold">{label}</label>}
+      {labelshow && <label className="text-[14px] text-black dark:text-white !font-[Inter] block font-semibold">{label}</label>}
 
       {showToggle && (
         <button
@@ -81,7 +81,7 @@ const SelectDropdown = ({
 
       {actualOpen && (
         <div
-          className="custom-scrollbar text-[12px] absolute bg-white border shadow z-20 w-full max-h-48 overflow-y-auto dark:bg-gray-700 dark:border-gray-600 border-2"
+          className="custom-scrollbar text-[12px] absolute bg-white shadow z-20 w-full max-h-48 overflow-y-auto dark:bg-gray-700 dark:border-gray-600 border-2"
           style={dropUp ? { bottom: showToggle ? '100%' : '0', marginBottom: '0.25rem' } : { top: showToggle ? '100%' : 'auto', marginTop: '0.25rem' }}
         >
           {/* Default Option */}

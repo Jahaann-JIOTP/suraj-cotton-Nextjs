@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState,useMemo } from 'react';
-import AlarmTypeModal from '@/components/AlarmsComponents/Alarm_Type_Modal';
+import AlarmTypeModal from '@/components/alarmsComponents/Alarm_Type_Modal';
 import DeleteModal from '@/components/AlarmsComponents/Delete_Modal';
 import { useRouter } from 'next/navigation';
 import config from "../../../config";
@@ -123,7 +123,7 @@ useEffect(() => {
 
   return (
     <>
-      <div className="w-full p-4 min-h-[81vh] rounded-[8px] dark:bg-gray-800 bg-white dark:bg-gray-800 !border-t-4 !border-t-[#1d5999] overflow-x-auto custom-scrollbar">
+      <div className="w-full p-4 min-h-[81vh] rounded-[8px] bg-white dark:bg-gray-800 !border-t-4 !border-t-[#1d5999] overflow-x-auto custom-scrollbar">
         <div className="w-full flex justify-between items-start flex-wrap mb-3">
           <div className="text-left">
             <span className="text-2xl text-[#626469] dark:text-white font-semibold">
@@ -216,10 +216,10 @@ useEffect(() => {
                           type="text"
                           value={alarm.color}
                           readOnly
-                          className="!font-[Inter] text-xs !font-[Inter] text-black dark:text-white bg-transparent border-none outline-none w-full"
+                          className="text-xs !font-[Inter] text-black dark:text-white bg-transparent border-none outline-none w-full"
                         />
                       </div>
-                      <div className="!font-[Inter] w-[30%] flex items-center justify-center text-xs !font-[Inter] text-black dark:text-white px-1 py-1 rounded-[2.003px] bg-[rgba(217,217,217,0.49)] dark:bg-gray-600">
+                      <div className="w-[30%] flex items-center justify-center text-xs !font-[Inter] text-black dark:text-white px-1 py-1 rounded-[2.003px] bg-[rgba(217,217,217,0.49)] dark:bg-gray-600">
                         100%
                       </div>
                     </div>
@@ -228,7 +228,7 @@ useEffect(() => {
                     <label className="!font-[Inter] block text-sm font-semibold text-black dark:text-white mb-1">
                       Acknowledgement Type:
                     </label>
-                    <div className="dark:text-white flex !font-[Inter] items-center gap-2 text-[#025697] font-[Inter] text-[12px] not-italic font-normal leading-[174%]">
+                    <div className="dark:text-white flex items-center gap-2 text-[#025697] font-[Inter] text-[12px] not-italic font-normal leading-[174%]">
                       {alarm.acknowledgeType === 'Both'
                         ? 'Single + Mass Acknowledgement'
                         : 'Single Acknowledgement'}

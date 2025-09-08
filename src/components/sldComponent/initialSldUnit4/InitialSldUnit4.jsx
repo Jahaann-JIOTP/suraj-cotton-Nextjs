@@ -167,19 +167,19 @@ const InitialSldUnit4 = ({ roundedData }) => {
             }}
           >
             <span
-              className="text-[11px]"
-              style={{ color: "#05f805", fontWeight: 500 }}
+              className="text-[11.5px] font-fira-mono"
+              style={{ color: "#05f805", fontWeight: 500, top:"1px" }}
             >
               {meter.activePowerTotalTag || "00.00"}
             </span>
             <span
-              className="text-[11px]"
-              style={{ color: "#05f805", fontWeight: 500, marginTop: "0.5px" }}
+              className="text-[11.5px] font-fira-mono"
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "1px" }}
             >
               {meter.activeCurrentAvgTag || "00.00"}
             </span>
             <span
-              className="text-[11px]"
+              className="text-[11.5px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500, marginTop: "1px" }}
             >
               {meter.activeVoltageAvgTag || "00.00"}

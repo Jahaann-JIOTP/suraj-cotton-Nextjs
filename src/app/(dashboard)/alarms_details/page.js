@@ -5,8 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import { FaCalendarAlt } from 'react-icons/fa';
 import axios from 'axios';
 import SelectDropdown from '../../../components/ui/SelectDropdown';
-import ViewDetailsModal from '../../../components/AlarmsComponents/Alarm_Detail_View';
-import TimerComponent from '../../../components/AlarmsComponents/timer';
+import ViewDetailsModal from '../../../components/alarmsComponents/Alarm_Detail_View';
+import TimerComponent from '../../../components/alarmsComponents/timer';
 import { toZonedTime } from 'date-fns-tz';
 import { format } from 'date-fns';
 import config from '../../../config';
@@ -167,7 +167,7 @@ export default function AllAlarmsLikeImage() {
     }
   };
 
-  const fetchAlarms = async () => {
+  const fetchAlarms = useCallback(async () => {
     setIsUpdating(true);
     const payload = generatePayload(type);
     try {
@@ -179,15 +179,15 @@ export default function AllAlarmsLikeImage() {
     } finally {
       setIsUpdating(false);
     }
-  };
+  }, [type]);
 
   const handleTimerFinish = useCallback(() => {
     fetchAlarms();
-  }, []);
+  }, [fetchAlarms]);
 
-  const onAcknowledge = () => {
+  const onAcknowledge = useCallback(() => {
     fetchAlarms();
-  };
+  }, [fetchAlarms]);
 
   // 1) Define column accessors (used for sorting)
   const columns = useMemo(() => {
@@ -246,7 +246,7 @@ export default function AllAlarmsLikeImage() {
   // initial fetch + refetch on tab change
   useEffect(() => {
     fetchAlarms();
-  }, [type]);
+  }, [fetchAlarms]);
 
   // Reset filters when page type (tab) changes
   useEffect(() => {

@@ -302,19 +302,19 @@ const Unit5Lt4 = ({ roundedData }) => {
             className={`absolute z-20 flex flex-col items-center`}
           >
             <span
-              className="text-[11px]"
+              className="text-[11.5px] mt-[-0.5px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activePowerTotalTag || "000"}
             </span>
             <span
-              className="text-[11px]"
+              className="text-[11.5px] mt-[-0.5px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeCurrentAvgTag || "000"}
             </span>
             <span
-              className="text-[11px]"
+              className="text-[11.5px] mt-[-0.5px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeVoltageAvgTag || "000"}

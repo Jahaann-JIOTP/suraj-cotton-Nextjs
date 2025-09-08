@@ -228,19 +228,19 @@ const MainSldOverview = ({ roundedData }) => {
             className={`absolute z-20 flex flex-col items-center`}
           >
             <span
-              className="text-[10px] mt-[-1px]"
+              className="text-[10.2px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activePowerTotalTag || "000"}
             </span>
             <span
-              className="text-[10px] mt-[-1px]"
+              className="text-[10.2px] font-fira-mono mt-[-1.2px]"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeCurrentAvgTag || "000"}
             </span>
             <span
-              className="text-[10px] mt-[-1px]"
+              className="text-[10.2px] font-fira-mono mt-[-1px]"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeVoltageAvgTag || "000"}

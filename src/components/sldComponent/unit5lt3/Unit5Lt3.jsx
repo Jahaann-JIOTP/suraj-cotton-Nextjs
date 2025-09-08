@@ -318,19 +318,19 @@ const Unit5Lt3 = ({ roundedData }) => {
             }}
           >
             <span
-              className="text-[11px]"
+              className="text-[11.5px] mt-[0px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activePowerTotalTag || "000"}
             </span>
             <span
-              className="text-[11px]"
+              className="text-[11.5px] mt-[0px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeCurrentAvgTag || "000"}
             </span>
             <span
-              className="text-[11px]"
+              className="text-[11.5px] mt-[0px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeVoltageAvgTag || "000"}

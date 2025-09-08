@@ -6,6 +6,17 @@ import { format, toZonedTime } from 'date-fns-tz';
 import { toast } from "react-toastify";
 import config from "../../../config";
 
+// new added
+const useBeepSound = () => {
+  const beepSoundRef = useRef(null);
+  
+  if (!beepSoundRef.current) {
+    beepSoundRef.current = new Audio('/alarm.mp3');
+  }
+  
+  return beepSoundRef.current;
+};
+
 const columns = [
   { key: 'id', label: 'ID', sortable: true },
   { key: 'activeSince', label: 'Active Since', sortable: true },
@@ -25,7 +36,8 @@ export default function ActiveAlarmsPage() {
 
   const [alarms, setAlarms] = useState([]);  // To store alarms fetched from API
   const [timer, setTimer] = useState(41);
-  const beepSound = new Audio('/alarm.mp3');
+  // const beepSound = new Audio('/alarm.mp3');
+  const beepSound = useBeepSound();
   const [beepSounds, setBeepSounds] = useState({});
   const [sort, setSort] = useState({ key: '', dir: 'asc' });
   const [alarmTypeFilter, setAlarmTypeFilter] = useState('');
@@ -40,6 +52,8 @@ export default function ActiveAlarmsPage() {
   const [isBeeping, setIsBeeping] = useState({});
   const [selectedActions, setSelectedActions] = useState({});  // Store selected action per row
   const [isUpdating, setIsUpdating] = useState(false);
+  // Create a ref for the beep sound to avoid recreating it on every render
+  const beepSoundRef = useRef(null);
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTimer((prev) => (prev === 0 ? 40 : prev - 1));  // Timer counts down to 0 and resets to 40
@@ -54,7 +68,7 @@ export default function ActiveAlarmsPage() {
     // Cleanup the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, [timer]);  // Effect will run when 'timer' changes
-  const startBeep = (id) => {
+  const startBeep = useCallback((id) => {
     console.log(id)
     const occurrenceId = id; // always this
     console.log('startBeep', occurrenceId, 'beepSounds keys:', Object.keys(beepSounds));
@@ -75,13 +89,12 @@ export default function ActiveAlarmsPage() {
     }
 
     setIsBeeping(prev => ({ ...prev, [occurrenceId]: true }));
-  };
+  },[beepSounds]);
 
 
 
 
-  const stopBeep = (occurrenceId) => {
-    console.log("stopBeep called for", occurrenceId, "beepSounds keys:", Object.keys(beepSounds));
+  const stopBeep = useCallback((occurrenceId) => {
     if (beepSounds[occurrenceId]) {
       beepSounds[occurrenceId].pause();
       beepSounds[occurrenceId].currentTime = 0;
@@ -97,7 +110,7 @@ export default function ActiveAlarmsPage() {
     } else {
       console.log("No beep sound found for", occurrenceId);
     }
-  };
+  }, [beepSounds]);
 
 
   const handleOptionSelect = async (id, option, alarmId) => {
@@ -216,7 +229,7 @@ export default function ActiveAlarmsPage() {
         startBeep(id);
       }
     });
-  }, [alarms]);
+  }, [alarms, beepSounds, startBeep, stopBeep]);
 
 
   useEffect(() => {
@@ -244,7 +257,7 @@ export default function ActiveAlarmsPage() {
       beepSound.pause();  // Stop beep sound on unmount
       beepSound.currentTime = 0;  // Reset sound to start
     };
-  }, []);
+  }, [beepSound]);
 
   useEffect(() => {
     if (timer === 0) {
