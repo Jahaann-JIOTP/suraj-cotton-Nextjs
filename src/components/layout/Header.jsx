@@ -1,210 +1,139 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import { toZonedTime } from "date-fns-tz";
 import { format } from "date-fns";
-import { usePathname,useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark, faTimes } from "@fortawesome/free-solid-svg-icons";
 import config from "@/constant/apiRouteList";
-import { privilegeConfig } from "@/constant/navigation";
-import { privilegeOrder } from "@/constant/navigation";
-import { AiFillBell } from "react-icons/ai";
+import { privilegeConfig, privilegeOrder } from "@/constant/navigation";
 import MobileSidebar from "./MobileSidebar";
 import ThemeSwitcher from "@/themeSwitcher/ThemeSwitcher";
 import { getActiveTabFromPathname } from "@/utils/navigation-utils";
-import { RxCross1 } from "react-icons/rx";
-import { Badge } from "../ui/badge";
 import { useTheme } from "next-themes";
+
 const SEEN_KEY = "seenAlarmIds_v1";
+const SNOOZE_OPTIONS = ["15 mins", "30 mins", "1 hour", "2 hours"];
+
+/* ===========================
+   Snooze helpers (inline)
+=========================== */
+function getSnoozeDuration(option) {
+  switch (option) {
+    case "15 mins": return 15 * 60 * 1000;
+    case "30 mins": return 30 * 60 * 1000;
+    case "1 hour":  return 60 * 60 * 1000;
+    case "2 hours": return 2 * 60 * 60 * 1000;
+    default:        return 0;
+  }
+}
+
+async function snoozeOccurrences(occurrenceIds, option) {
+  const durationMs = getSnoozeDuration(option);
+  const snoozeAtISO = new Date().toISOString();
+  return axios.patch(`${config.BASE_URL}/alarms/snooze`, {
+    ids: occurrenceIds,
+    alarmSnooze: true,
+    snoozeDuration: durationMs / 60000, // minutes
+    snoozeAt: snoozeAtISO,
+  });
+}
+
+function computeSnoozeFlags(alarm) {
+  const snoozeStatus = Boolean(alarm.alarmSnoozeStatus);
+  const snoozeDurationMin = Number(alarm.alarmSnoozeDuration || 0);
+  const snoozeAt = alarm.alarmSnoozeAt ? new Date(alarm.alarmSnoozeAt) : null;
+  let isSnoozeExpired = false;
+  if (snoozeStatus && snoozeAt && snoozeDurationMin > 0) {
+    const end = snoozeAt.getTime() + snoozeDurationMin * 60000;
+    isSnoozeExpired = Date.now() > end;
+  }
+  return {
+    snoozeStatus,
+    snoozeDuration: snoozeDurationMin,
+    snoozeAt: alarm.alarmSnoozeAt || null,
+    isSnoozeExpired,
+  };
+}
+
+/* ======================================
+   🔊 Inline audio manager (ref-based)
+====================================== */
+function useAlarmAudioManager(src = "/alarm.mp3") {
+  const soundsRef = useRef(new Map()); // Map<occurrenceId, HTMLAudioElement>
+
+  const play = useCallback(async (id) => {
+    if (!id) return;
+    let audio = soundsRef.current.get(id);
+    if (!audio) {
+      audio = new Audio(src);
+      audio.loop = true;
+      soundsRef.current.set(id, audio);
+    }
+    try {
+      await audio.play();
+    } catch {
+      // Autoplay may be blocked until first user gesture.
+    }
+  }, [src]);
+
+  const stop = useCallback((id) => {
+    const audio = soundsRef.current.get(id);
+    if (!audio) return;
+    audio.pause();
+    audio.currentTime = 0;
+    soundsRef.current.delete(id);
+  }, []);
+
+  const stopAll = useCallback(() => {
+    soundsRef.current.forEach((a) => {
+      a.pause();
+      a.currentTime = 0;
+    });
+    soundsRef.current.clear();
+  }, []);
+
+  useEffect(() => stopAll, [stopAll]); // cleanup on unmount
+  return { play, stop, stopAll };
+}
+
 const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
   const router = useRouter();
-  
+  const { theme } = useTheme();
+
   const notificationDropdownRef = useRef(null);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userPrivileges, setUserPrivileges] = useState([]);
-  const [alarms, setAlarms] = useState([]);
+  const [alarms, setAlarms] = useState([]);        // top 5 shown in panel
   const [isNotificationVisible, setNotificationVisible] = useState(false);
-  const [realTimeData, setRealTimeData] = useState([]);
-
+  const [realTimeData, setRealTimeData] = useState({});
   const [error, setError] = useState(null);
-  const acknowledgedAlarms = useRef([]);
-  const { theme } = useTheme();
-// State variables to manage bell icon and new alarm count
-const [bellIcon, setBellIcon] = useState("none"); // "none" | "yellow" | "red"
-const [newAlarmCount, setNewAlarmCount] = useState(0);
-const seenAlarms = useRef(new Set()); // Stores IDs of alarms that have been seen
-const lastFetchedIdsRef = useRef([]); // Stores the IDs of alarms fetched in the current session
+  const [openSnoozeFor, setOpenSnoozeFor] = useState(null); // occurrenceId for which snooze menu is open
 
-// Function to update bell icon and new alarm count based on fetched alarms
-const updateBellIcon = (fetchedAlarms) => {
-  const enrichedAll = fetchedAlarms.map((a) => ({
-    ...a,
-    status: seenAlarms.current.has(a.alarmOccurenceId) ? "old" : "new",
-  }));
+  // 🔔 Bell indicator state
+  const [bellIcon, setBellIcon] = useState("none"); // "none" | "yellow" | "red"
+  const [newAlarmCount, setNewAlarmCount] = useState(0);
 
-  // Update bell icon and new alarm count based on alarm statuses
-  const hasNew = enrichedAll.some((a) => a.status === "new");
-  const hasOld = enrichedAll.some((a) => a.status === "old");
-  // Set bell icon color based on new/old alarms
-  setBellIcon(hasNew ? "red" : hasOld ? "yellow" : "none");
+  // Seen/new bookkeeping & full list cache
+  const seenAlarms = useRef(new Set());
+  const lastFetchedIdsRef = useRef([]); // all occurrence IDs from the last fetch
+  const lastFullFetchRef = useRef([]);  // full enriched list (for beep control)
 
-  // Set the number of new alarms
-  setNewAlarmCount(enrichedAll.filter((a) => a.status === "new").length);
+  // 🔊 Audio manager
+  const { play, stop, stopAll } = useAlarmAudioManager("/alarm.mp3");
 
-  // Only show top 5 alarms in the UI
-  setAlarms(enrichedAll.slice(0, 5));
-};
-
-// Function to fetch alarms
-const fetchAlarms = async () => {
-  try {
-    const res = await axios.get(`${config.BASE_URL}/alarms/active-alarms`);
-    const fetched = res.data || [];
-
-    // Store alarm IDs for later marking as seen
-    const allIds = fetched.map((a) => a.alarmOccurenceId);
-    lastFetchedIdsRef.current = allIds;
-
-    // Call the function to update bell icon and alarm count
-    updateBellIcon(fetched);
-
-    setError(null);
-  } catch (err) {
-    console.error("Alarm error:", err);
-    setError("Failed to fetch alarms.");
-  }
-};
-
-// Whenever the notifications panel is opened, mark all fetched alarms as seen
-useEffect(() => {
-  if (isNotificationVisible && lastFetchedIdsRef.current.length) {
-    let added = false;
-    for (const id of lastFetchedIdsRef.current) {
-      if (!seenAlarms.current.has(id)) {
-        seenAlarms.current.add(id);
-        added = true;
-      }
-    }
-    if (added) {
-      saveSeen(); // Persist seen alarms in localStorage
-
-      // Recompute bell icon after marking alarms as seen
-      setBellIcon("yellow");
-      setNewAlarmCount(0);
-    }
-  }
-}, [isNotificationVisible]);
-
-  useEffect(() => {
-    const currentTab = getActiveTabFromPathname(pathname);
-    if (currentTab !== activeTab) {
-      handleTabClick(currentTab);
-    }
-  }, [pathname]);
-  // Get meter status
-  const getMeterData = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const response = await fetch(
-        `${config.BASE_URL}${config.DIAGRAM.NODE_RED_REAL_TIME_STATUS}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const resData = await response.json();
-      if (response.ok) {
-        setRealTimeData(resData);
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-  // fetch user details
-  const fetchUserDetails = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const res = await fetch(`${config.BASE_URL}${config.USER.PROFILE}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        const privileges = data?.role?.privelleges?.map((p) => p.name) || [];
-
-        setUserPrivileges(privileges);
-      } else {
-        console.error("Failed to fetch user profile");
-      }
-    } catch (err) {
-      console.error("Error fetching profile:", err);
-    }
-  };
-
-  // fetch acknowldge
-  const acknowledgeAlarms = async () => {
-    try {
-      const res = await axios.post(
-        `${config.BASE_URL}${config.ALARMS.ACKNOWLEDGE}`
-      );
-      if (res.data.success) {
-        setBellIcon("basil_notification-solid.png");
-        setNewAlarmCount(0);
-        acknowledgedAlarms.current = [
-          ...acknowledgedAlarms.current,
-          ...alarms.map((a) => a._id),
-        ];
-        setAlarms([]);
-        setNotificationVisible(false);
-      }
-    } catch (err) {
-      console.error("Acknowledge error:", err);
-    }
-  };
-  const toggleNotificationVisibility = () =>
-    setNotificationVisible(!isNotificationVisible);
-
-  useEffect(() => {
-    fetchUserDetails();
-    getMeterData();
-    const interval = setInterval(() => {
-      getMeterData();
-    }, 5000);
-    const handleClickOutside = (event) => {
-      if (
-        notificationDropdownRef.current &&
-        !notificationDropdownRef.current.contains(event.target)
-      ) {
-        setNotificationVisible(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      clearInterval(interval);
-    };
-
-   
-  }, []);
-    // Format date in Asia/Karachi
+  // Format date in Asia/Karachi
   const formatAlarmDate = (triggeredAt) => {
     const zonedDate = toZonedTime(new Date(triggeredAt), "Asia/Karachi");
     return format(zonedDate, "dd-MM-yyyy HH:mm");
   };
 
-  // Helpers to persist/load seen IDs
+  // Persist seen set
   const loadSeen = () => {
     try {
       const raw = localStorage.getItem(SEEN_KEY);
@@ -218,43 +147,212 @@ useEffect(() => {
   const saveSeen = () => {
     try {
       localStorage.setItem(SEEN_KEY, JSON.stringify(Array.from(seenAlarms.current)));
-    } catch {
-      /* ignore */
+    } catch {}
+  };
+
+  // Sync header tab with route
+  useEffect(() => {
+    const currentTab = getActiveTabFromPathname(pathname);
+    if (currentTab !== activeTab) handleTabClick(currentTab);
+  }, [pathname, activeTab, handleTabClick]);
+
+  // Fetch user privileges
+  const fetchUserDetails = async () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (!token) return;
+    try {
+      const res = await fetch(`${config.BASE_URL}${config.USER.PROFILE}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const privileges = data?.role?.privelleges?.map((p) => p.name) || [];
+        setUserPrivileges(privileges);
+      }
+    } catch (err) {
+      console.error("Error fetching profile:", err);
     }
   };
+
+  // Link status (Node-RED)
+  const getMeterData = async () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (!token) return;
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.DIAGRAM.NODE_RED_REAL_TIME_STATUS}`,
+        { method: "GET", headers: { Authorization: `Bearer ${token}` } }
+      );
+      const resData = await response.json();
+      if (response.ok) setRealTimeData(resData);
+    } catch (e) {
+      console.error(e?.message);
+    }
+  };
+
+  // Update bell & UI (and cache FULL list for audio logic)
+  const updateBellIcon = (fetchedAlarms) => {
+    const enrichedAll = fetchedAlarms.map((a) => {
+      const snooze = computeSnoozeFlags(a);
+      const baseStatus = seenAlarms.current.has(a.alarmOccurenceId) ? "old" : "new";
+      const status = snooze.snoozeStatus && !snooze.isSnoozeExpired ? "old" : baseStatus;
+      return { ...a, ...snooze, status };
+    });
+
+    // Cache full list for beep control
+    lastFullFetchRef.current = enrichedAll;
+
+    const hasNew = enrichedAll.some((a) => a.status === "new");
+    const hasOld = enrichedAll.some((a) => a.status === "old");
+    setBellIcon(hasNew ? "red" : hasOld ? "yellow" : "none");
+    setNewAlarmCount(enrichedAll.filter((a) => a.status === "new").length);
+
+    // Only show top 5 rows in the panel
+    setAlarms(enrichedAll.slice(0, 5));
+  };
+
+  // Fetch alarms
+  const fetchAlarms = async () => {
+    try {
+      const res = await axios.get(`${config.BASE_URL}/alarms/active-alarms`);
+      const fetched = res.data || [];
+      lastFetchedIdsRef.current = fetched.map((a) => a.alarmOccurenceId);
+      updateBellIcon(fetched);
+      setError(null);
+    } catch (err) {
+      console.error("Alarm error:", err);
+      setError("Failed to fetch alarms.");
+    }
+  };
+
+  // Initial load & polling
   useEffect(() => {
-    // Load seen IDs from localStorage before first fetch
     if (typeof window !== "undefined") {
       seenAlarms.current = loadSeen();
     }
-    // fetchUserDetails();
+    fetchUserDetails();
     fetchAlarms();
-    const interval = setInterval(fetchAlarms, 40000);
-    return () => clearInterval(interval);
+    getMeterData();
+
+    const meterIv = setInterval(getMeterData, 5000);
+    const alarmIv = setInterval(fetchAlarms, 40000);
+
+    const handleClickOutside = (event) => {
+      if (notificationDropdownRef.current &&
+          !notificationDropdownRef.current.contains(event.target)) {
+        setNotificationVisible(false);
+        setOpenSnoozeFor(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      clearInterval(meterIv);
+      clearInterval(alarmIv);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
+  // When the panel opens, mark all fetched ids as seen
+  useEffect(() => {
+    if (isNotificationVisible && lastFetchedIdsRef.current.length) {
+      let added = false;
+      for (const id of lastFetchedIdsRef.current) {
+        if (!seenAlarms.current.has(id)) {
+          seenAlarms.current.add(id);
+          added = true;
+        }
+      }
+      if (added) {
+        saveSeen();
+        // Flip the visible list to "old"
+        setAlarms((prev) => prev.map((a) => ({ ...a, status: "old" })));
+        // Recompute bell state from full cache
+        const enrichedAllOld = lastFullFetchRef.current.map((a) => ({ ...a, status: "old" }));
+        lastFullFetchRef.current = enrichedAllOld;
+        const hasAny = enrichedAllOld.length > 0;
+        setBellIcon(hasAny ? "yellow" : "none");
+        setNewAlarmCount(0);
+      }
+    }
+  }, [isNotificationVisible]);
+
+  // 🔊 Beep control — uses FULL list (not just top-5)
+  useEffect(() => {
+    const full = lastFullFetchRef.current || [];
+    if (full.length === 0) {
+      stopAll();
+      return;
+    }
+    for (const a of full) {
+      const id = a.alarmOccurenceId;
+      if (!id) continue;
+      const snoozedActive = a.snoozeStatus && !a.isSnoozeExpired;
+      if (snoozedActive) {
+        stop(id);
+      } else {
+        play(id);
+      }
+    }
+  }, [alarms, play, stop, stopAll]);
+
+  // Snooze from the bell panel
+  const handleSnoozePick = async (occurrenceId, option) => {
+    try {
+      await snoozeOccurrences([occurrenceId], option);
+      stop(occurrenceId); // silence immediately
+
+      // Optimistic updates (visible list)
+      setAlarms((prev) =>
+        prev.map((a) =>
+          a.alarmOccurenceId === occurrenceId
+            ? { ...a, snoozeStatus: true, isSnoozeExpired: false, status: "old" }
+            : a
+        )
+      );
+
+      // Update full cache
+      lastFullFetchRef.current = lastFullFetchRef.current.map((a) =>
+        a.alarmOccurenceId === occurrenceId
+          ? { ...a, snoozeStatus: true, isSnoozeExpired: false, status: "old" }
+          : a
+      );
+
+      // Recompute bell state
+      const hasNew = lastFullFetchRef.current.some((a) => a.status === "new");
+      const hasOld = lastFullFetchRef.current.some((a) => a.status === "old");
+      setBellIcon(hasNew ? "red" : hasOld ? "yellow" : "none");
+      setNewAlarmCount(lastFullFetchRef.current.filter((a) => a.status === "new").length);
+
+      setOpenSnoozeFor(null);
+    } catch (e) {
+      console.error("Snooze failed", e);
+    }
+  };
+
+  const toggleNotificationVisibility = () => {
+    setNotificationVisible((s) => !s);
+    setOpenSnoozeFor(null);
+  };
+
   const renderLink = (key) => {
-    const config = privilegeConfig[key];
-    if (!config) return null;
-
-    const isActive = config.matchPaths.some((p) => pathname.startsWith(p));
-
+    const cfg = privilegeConfig[key];
+    if (!cfg) return null;
+    const isActive = cfg.matchPaths.some((p) => pathname.startsWith(p));
     return (
       <Link
         key={key}
-        href={config.href}
-        className="py-[8px]  px-4"
-        onClick={() => handleTabClick(config.tab)}
+        href={cfg.href}
+        className="py-[8px] px-4"
+        onClick={() => handleTabClick(cfg.tab)}
       >
         <p
-          className={`px-3 py-1 cursor-pointer rounded-sm flex gap-1 ${
-            isActive
-              ? "bg-white text-black dark:bg-gray-700 dark:text-white"
-              : ""
+          className={`px-3 py-1 cursor-pointer rounded-sm flex gap-1 items-center ${
+            isActive ? "bg-white text-black dark:bg-gray-700 dark:text-white" : ""
           }`}
         >
-          <FontAwesomeIcon icon={config.icon} style={{ fontSize: "1.1em" }} />
-          {config.label}
+          <FontAwesomeIcon icon={cfg.icon} style={{ fontSize: "1.1em" }} />
+          &nbsp;{cfg.label}
         </p>
       </Link>
     );
@@ -265,36 +363,35 @@ useEffect(() => {
       className="text-white mx-0 my-2 mt-0 h-[44px] flex text-sm items-center justify-between w-full"
       style={{ background: "linear-gradient(to top, #183A5C, #1F5897)" }}
     >
-      {/* Dropdown menu for small screens */}
-
+      {/* Burger (<= 2xl) */}
       <div className="2xl:hidden flex justify-between items-center px-4 py-2 z-40 relative">
-        {!isDropdownOpen && (
+        {!isDropdownOpen ? (
           <button
             onClick={() => setIsDropdownOpen(true)}
             className="cursor-pointer relative z-[10001]"
-            aria-label="Toggle menu"
+            aria-label="Open menu"
           >
             <FontAwesomeIcon icon={faBars} style={{ fontSize: "1.5em" }} />
           </button>
-        )}
-        {isDropdownOpen && (
+        ) : (
           <button
-            onClick={() => setIsDropdownOpen(true)}
+            onClick={() => setIsDropdownOpen(false)}
             className="cursor-pointer relative z-[10001]"
-            aria-label="Toggle menu"
+            aria-label="Close menu"
           >
             <FontAwesomeIcon icon={faXmark} style={{ fontSize: "1.5em" }} />
           </button>
         )}
       </div>
 
-      {/* <nav className={`bg-[#1F5897] hidden  xl:flex w-full`}> */}
-      <nav className={`hidden  2xl:flex w-full`}>
+      {/* Desktop nav */}
+      <nav className="hidden 2xl:flex w-full">
         {privilegeOrder
           .filter((key) => userPrivileges.includes(key))
           .map((key) => renderLink(key))}
       </nav>
-      {/* mobile menu */}
+
+      {/* Mobile menu */}
       <div className="flex 2xl:hidden">
         <div
           className={`fixed top-[44px] left-0 w-full z-[999] transition-all duration-500 ${
@@ -308,25 +405,25 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* Bell Icon */}
+      {/* Right: link status + bell + theme */}
       <div className="flex items-center justify-center">
+        {/* Link status */}
         <div className="mr-4 w-[60px]">
-          {realTimeData.message === "Link is up" ? (
+          {realTimeData?.message === "Link is up" ? (
             <div className="flex flex-col items-center justify-center">
-              <img src={"../../../green_bl.gif"} className="w-[20px]" />
+              <img src={"../../../green_bl.gif"} className="w-[20px]"/>
               <span className="text-[10px]">Link Up</span>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center">
-              <img src={"../../../red_bl.gif"} className="w-[20px]" />
-              <span className="text-[10px] animate-pulse duration-300">
-                Link Down
-              </span>
+              <img src={"../../../red_bl.gif"} className="w-[20px]"/>
+              <span className="text-[10px] animate-pulse duration-300">Link Down</span>
             </div>
           )}
         </div>
-        {/* link status */}
-        <div className="relative mr-4 mt-1">
+
+        {/* Bell */}
+        <div className="relative mr-4 mt-1" ref={notificationDropdownRef}>
           <div className="relative inline-block cursor-pointer" onClick={toggleNotificationVisibility}>
             {/* Inline SVG bell with dynamic fill */}
             <svg
@@ -362,7 +459,7 @@ useEffect(() => {
                 <span className="text-black dark:text-white">Alarms</span>
                 <button
                   className="absolute top-2 right-2 text-white text-2xl hover:text-red-500 transition-all mr-2 mt-2"
-                  onClick={() => setNotificationVisible(false)}
+                  onClick={() => { setNotificationVisible(false); setOpenSnoozeFor(null); }}
                   aria-label="Close alarms"
                 >
                   <FontAwesomeIcon icon={faTimes} className="text-[20px] text-black dark:text-white cursor-pointer" />
@@ -374,23 +471,68 @@ useEffect(() => {
 
                 {alarms.length > 0 ? (
                   alarms.map((alarm) => (
-                    <li key={alarm.alarmOccurenceId} className="py-2 border-b flex items-center">
-                      <Image
-                        src="/yellowbell.gif"
-                        alt={alarm.status === "new" ? "New alarm" : "Seen alarm"}
-                        width={24}
-                        height={24}
-                        className="w-6 h-6 mr-2"
-                        priority 
-                      />
-                      <div className="flex flex-col text-[12px]">
-                        <div className="text-black dark:text-white">{alarm.alarmName}</div>
-                        <div className="text-black dark:text-white">
-                          {alarm.Location} - {alarm.subLocation}
+                    <li key={alarm.alarmOccurenceId} className="py-2 border-b flex items-start justify-between relative">
+                      {/* Left: icon + details */}
+                      <div className="flex items-start">
+                        <Image
+                          src={alarm.status === "new" ? "/alert_red.gif" : "/yellowbell.gif"}
+                          alt={alarm.status === "new" ? "New alarm" : "Seen alarm"}
+                          width={24}
+                          height={24}
+                          className="w-6 h-6 mr-2"
+                          priority
+                        />
+                        <div className="flex flex-col text-[12px]">
+                          <div className="text-black dark:text-white font-semibold">
+                            {alarm.alarmName}
+                            {alarm.snoozeStatus && !alarm.isSnoozeExpired && (
+                              <span className="ml-2 inline-block px-2 py-[2px] text-[10px] rounded bg-gray-300 text-gray-800 dark:bg-gray-600 dark:text-gray-100">
+                                Snoozed
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-black dark:text-white">
+                            {alarm.Location} - {alarm.subLocation}
+                          </div>
+                          <div className="text-black dark:text-white">
+                            {formatAlarmDate(alarm.triggeredAt)}
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right text-[12px] ml-auto">
-                        <div className="text-black dark:text-white">{formatAlarmDate(alarm.triggeredAt)}</div>
+
+                      {/* Right: Snooze button + dropdown */}
+                      <div className="relative">
+                        <button
+                          type="button"
+                          className={`px-2 py-1 text-[12px] rounded border ${
+                            alarm.snoozeStatus && !alarm.isSnoozeExpired
+                              ? "opacity-50 cursor-not-allowed dark:border-gray-600"
+                              : "cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600"
+                          }`}
+                          disabled={alarm.snoozeStatus && !alarm.isSnoozeExpired}
+                          onClick={() => {
+                            if (alarm.snoozeStatus && !alarm.isSnoozeExpired) return;
+                            setOpenSnoozeFor((prev) =>
+                              prev === alarm.alarmOccurenceId ? null : alarm.alarmOccurenceId
+                            );
+                          }}
+                        >
+                          Snooze
+                        </button>
+
+                        {openSnoozeFor === alarm.alarmOccurenceId && (
+                          <div className="absolute right-0 top-[100%] z-50 mt-1 bg-white dark:bg-gray-600 shadow-lg rounded w-40">
+                            {SNOOZE_OPTIONS.map((opt) => (
+                              <button
+                                key={opt}
+                                className="w-full px-4 py-2 text-left text-sm text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                                onClick={() => handleSnoozePick(alarm.alarmOccurenceId, opt)}
+                              >
+                                {opt}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </li>
                   ))
@@ -417,7 +559,8 @@ useEffect(() => {
             </div>
           )}
         </div>
-        <div className=" flex items-center pr-4">
+
+        <div className="flex items-center pr-4">
           <ThemeSwitcher />
         </div>
       </div>
