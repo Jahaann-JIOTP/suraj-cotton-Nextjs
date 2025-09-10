@@ -173,37 +173,37 @@ export const sidebarLinksMap = {
         },
       ],
     },
-    {
-      id: 2,
-      title: "Daily Consumption",
-      icon: EnergySankey,
-      submenu: [
-        {
-          id: 7,
-          title: "Unit 4 LT-1",
-          href: "/daily_consumption?type=lt1",
-          icon: Unit4Lt1,
-        },
-        {
-          id: 8,
-          title: "Unit 4 LT-2",
-          href: "/daily_consumption?type=lt2",
-          icon: Unit4Lt1,
-        },
-        {
-          id: 9,
-          title: "Unit 5 LT-1",
-          href: "/daily_consumption?type=lt3",
-          icon: Unit4Lt1,
-        },
-        {
-          id: 10,
-          title: "Unit 5 LT-2",
-          href: "/daily_consumption?type=lt4",
-          icon: Unit4Lt1,
-        },
-      ],
-    },
+    // {
+    //   id: 2,
+    //   title: "Daily Consumption",
+    //   icon: EnergySankey,
+    //   submenu: [
+    //     {
+    //       id: 7,
+    //       title: "Unit 4 LT-1",
+    //       href: "/daily_consumption?type=lt1",
+    //       icon: Unit4Lt1,
+    //     },
+    //     {
+    //       id: 8,
+    //       title: "Unit 4 LT-2",
+    //       href: "/daily_consumption?type=lt2",
+    //       icon: Unit4Lt1,
+    //     },
+    //     {
+    //       id: 9,
+    //       title: "Unit 5 LT-1",
+    //       href: "/daily_consumption?type=lt3",
+    //       icon: Unit4Lt1,
+    //     },
+    //     {
+    //       id: 10,
+    //       title: "Unit 5 LT-2",
+    //       href: "/daily_consumption?type=lt4",
+    //       icon: Unit4Lt1,
+    //     },
+    //   ],
+    // },
   ],
 
   Diagram: [
