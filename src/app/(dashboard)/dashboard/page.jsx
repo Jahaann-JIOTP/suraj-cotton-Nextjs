@@ -8,6 +8,7 @@ import GenerationEnergy from "@/components/dashboardComponents/generationEnergy/
 import PowerComparison from "@/components/dashboardComponents/powerComparison/PowerComparison";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import config from "@/constant/apiRouteList";
+import { jwtDecode } from "jwt-decode";
 
 const Dashboard = () => {
   const [dashboardTimePeriod, setDashboardTimePeriod] = useState("today");
@@ -19,6 +20,7 @@ const Dashboard = () => {
 
   const fetchSingleValueData = async () => {
     const token = localStorage.getItem("token");
+    
     if (!token) return;
     setLoading(true);
     try {

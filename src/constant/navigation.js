@@ -35,6 +35,7 @@ export const privilegeConfig = {
       "/unit-4-lt-2",
       "/unit-5-lt-1",
       "/unit-5-lt-2",
+      "/daily_consumption?type=lt1",
     ],
     tab: "Home",
   },

@@ -148,6 +148,7 @@ const Dashboard = () => {
 const searchParams = useSearchParams();
   const type = (searchParams.get("type") || "lt1").toLowerCase();
   const typeInfo = TYPE_CONFIG[type] || TYPE_CONFIG.lt1;
+  
   // filters
   const [department, setDepartment] = useState(DEPT_OPTIONS[0].value);
   const [timePeriod, setTimePeriod] = useState("last30days");
