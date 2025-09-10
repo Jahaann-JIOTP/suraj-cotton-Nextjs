@@ -36,7 +36,8 @@ export default function ViewDetailsModal({ isOpen, onClose, alarmData, hideAckno
   const [showInfoHint, setShowInfoHint] = useState(false);
   const isSingleAcknowledgment = alarmData?.alarmConfigure?.alarmType?.acknowledgeType === 'Single';
   const [userId, setUserId] = useState(null);
-const [currentAlarm, setCurrentAlarm] = useState(alarmData);
+  const [currentAlarm, setCurrentAlarm] = useState(alarmData);
+
 
   // NEW: map each row to a stable key once
   const rowKeyOf = (r, idx) => `${r.id}-${idx}`;
@@ -57,31 +58,31 @@ const [currentAlarm, setCurrentAlarm] = useState(alarmData);
     });
   };
   const clearChecks = () => setCheckedKeys(new Set());
- const acknowledgeSelected = async () => {
-  if (!checkedKeys.size) return;
+  const acknowledgeSelected = async () => {
+    if (!checkedKeys.size) return;
 
-  const selectedRows = historyRows.filter((row, idx) => checkedKeys.has(rowKeyOf(row, idx)));
-  const payload = {
-    ids: selectedRows.map(row => row.occid),
-    acknowledgedBy: userId,
-  };
+    const selectedRows = historyRows.filter((row, idx) => checkedKeys.has(rowKeyOf(row, idx)));
+    const payload = {
+      ids: selectedRows.map(row => row.occid),
+      acknowledgedBy: userId,
+    };
 
-  try {
-    const response = await axios.post(`${config.BASE_URL}/alarms/bulk-acknowledge`, payload);
-    if (response.status >= 200 && response.status < 300) {
-      toast.success('Bulk Acknowledgment Successful');
-      // 🔄 refresh modal history & parent list
-      await refreshCurrentAlarm();
-      onAcknowledge?.();
-      clearChecks();
-    } else {
-      toast.error('Error occurred during bulk acknowledgment');
+    try {
+      const response = await axios.post(`${config.BASE_URL}/alarms/bulk-acknowledge`, payload);
+      if (response.status >= 200 && response.status < 300) {
+        toast.success('Bulk Acknowledgment Successful');
+        // 🔄 refresh modal history & parent list
+        await refreshCurrentAlarm();
+        onAcknowledge?.();
+        clearChecks();
+      } else {
+        toast.error('Error occurred during bulk acknowledgment');
+      }
+    } catch (error) {
+      console.error('Error acknowledging alarms:', error);
+      toast.error('Error acknowledging alarms');
     }
-  } catch (error) {
-    console.error('Error acknowledging alarms:', error);
-    toast.error('Error acknowledging alarms');
-  }
-};
+  };
 
 
   const formatAlarmDate = (triggeredAt) => {
@@ -122,27 +123,27 @@ const [currentAlarm, setCurrentAlarm] = useState(alarmData);
   };
 
 
- const historyRows = useMemo(() => {
-  if (Array.isArray(currentAlarm?.alarmOccurrences) && currentAlarm.alarmOccurrences.length > 0) {
-    return currentAlarm.alarmOccurrences.map((occurrence) => ({
-      id: occurrence.alarmID,
-      alarmName: occurrence.alarmName ?? name,
-      timeAge: AlarmHourAge(occurrence.date),
-      timeStamp: formatAlarmDate(occurrence.date),
-      duration: AlarmAge(occurrence.date) ?? 'N/A',
-      threshold: `${Number(occurrence.alarmPresentValue).toFixed(2)} / ${Number(occurrence.alarmThresholdValue).toFixed(2)}`,
-      occid: occurrence._id,
-      accby: occurrence?.alarmAcknowledgedBy?.name,
-      ack: occurrence.alarmAcknowledgeStatus ?? 'No',
-      action: occurrence.alarmAcknowledgmentAction ?? ''
-    }));
-  }
-  return [{
-    id: 'No history available', alarmName: 'N/A', timeAge: 'N/A',
-    timeStamp: 'N/A', duration: 'N/A', threshold: 'N/A', ack: 'N/A',
-    action: 'N/A', occid: 'N/A'
-  }];
-}, [currentAlarm?.alarmOccurrences, name]);
+  const historyRows = useMemo(() => {
+    if (Array.isArray(currentAlarm?.alarmOccurrences) && currentAlarm.alarmOccurrences.length > 0) {
+      return currentAlarm.alarmOccurrences.map((occurrence) => ({
+        id: occurrence.alarmID,
+        alarmName: occurrence.alarmName ?? name,
+        timeAge: AlarmHourAge(occurrence.date),
+        timeStamp: formatAlarmDate(occurrence.date),
+        duration: AlarmAge(occurrence.date) ?? 'N/A',
+        threshold: `${Number(occurrence.alarmPresentValue).toFixed(2)} / ${Number(occurrence.alarmThresholdValue).toFixed(2)}`,
+        occid: occurrence._id,
+        accby: occurrence?.alarmAcknowledgedBy?.name,
+        ack: occurrence.alarmAcknowledgeStatus ?? 'No',
+        action: occurrence.alarmAcknowledgmentAction ?? ''
+      }));
+    }
+    return [{
+      id: 'No history available', alarmName: 'N/A', timeAge: 'N/A',
+      timeStamp: 'N/A', duration: 'N/A', threshold: 'N/A', ack: 'N/A',
+      action: 'N/A', occid: 'N/A'
+    }];
+  }, [currentAlarm?.alarmOccurrences, name]);
 
 
   const historyCols = useMemo(() => {
@@ -220,65 +221,79 @@ const [currentAlarm, setCurrentAlarm] = useState(alarmData);
     });
     setAckOpen(true);
   };
-// below your other state:
+  // below your other state:
 
-// keep local copy in sync with prop
-useEffect(() => {
-  setCurrentAlarm(alarmData);
-}, [alarmData]);
+  // keep local copy in sync with prop
+  useEffect(() => {
+    setCurrentAlarm(alarmData);
+  }, [alarmData]);
 
-// GET re-fetcher for THIS alarm (swap to your real per-alarm GET if available)
-const refreshCurrentAlarm = async () => {
-  try {
-    // If you have a dedicated endpoint, e.g.:
-    // const { data } = await axios.get(`${config.BASE_URL}/alarms/${alarmData._id}`);
-    // setCurrentAlarm(data);
-    // return;
+  // GET re-fetcher for THIS alarm (swap to your real per-alarm GET if available)
+  const refreshCurrentAlarm = async () => {
+    try {
+      // If you have a dedicated endpoint, e.g.:
+      // const { data } = await axios.get(`${config.BASE_URL}/alarms/${alarmData._id}`);
+      // setCurrentAlarm(data);
+      // return;
 
-    // Fallback: call get-all and pick the current one by _id
-    const payload = { alarmStatus: false }; // same as your page fetch
-    const resp = await axios.post(`${config.BASE_URL}/alarms/get-all-Alarms`, payload);
-    const list = Array.isArray(resp?.data?.data) ? resp.data.data : [];
-    const found = list.find(a => String(a?._id) === String(alarmData?._id));
-    if (found) setCurrentAlarm(found);
-  } catch (e) {
-    console.error('Failed to refresh alarm:', e);
-  }
-};
+      // Fallback: call get-all and pick the current one by _id
+      const payload = { alarmStatus: false }; // same as your page fetch
+      const resp = await axios.post(`${config.BASE_URL}/alarms/get-all-Alarms`, payload);
+      const list = Array.isArray(resp?.data?.data) ? resp.data.data : [];
+      const found = list.find(a => String(a?._id) === String(alarmData?._id));
+      if (found) setCurrentAlarm(found);
+    } catch (e) {
+      console.error('Failed to refresh alarm:', e);
+    }
+  };
 
- const submitAck = async () => {
-  const { action, custom, occid } = ackForm;   // <-- use ackForm (not 'form')
-  const acknowledgedBy = userId;
+  const submitAck = async () => {
+    const { action, custom, occid } = ackForm;
+    const acknowledgedBy = userId;
 
-  let errors = { action: '', custom: '' };
-  if (!action) errors.action = 'Action is required.';
-  if (!custom) errors.custom = 'Custom action is required.';
-  if (errors.action || errors.custom) { setValidationErrors(errors); return; }
+    let errors = {};
 
-  const payload = { action, id: occid, acknowledgedBy, custom };
+    // Only enforce action required if NOT single acknowledgment
+    if (!isSingleAcknowledgment && !action) {
+      errors.action = 'Action is required.';
+    }
 
-  try {
-    const response = await axios.post(`${config.BASE_URL}/alarms/single-acknowledge`, payload);
-    if (response.status >= 200 && response.status < 300) {
-      toast.success('Acknowledgment Successful');
-      // 🔄 refresh modal history & parent list
-      await refreshCurrentAlarm();
-      onAcknowledge?.();
-      setAckOpen(false);
-    } else {
+    // (Custom should always be optional, so we don’t check it)
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
+    const payload = { action, id: occid, acknowledgedBy, custom };
+
+    try {
+      const response = await axios.post(
+        `${config.BASE_URL}/alarms/single-acknowledge`,
+        payload
+      );
+      if (response.status >= 200 && response.status < 300) {
+        toast.success('Acknowledgment Successful');
+        await refreshCurrentAlarm(); // refresh modal history
+        onAcknowledge?.();
+        setAckOpen(false);
+      } else {
+        toast.error('Error acknowledging alarm');
+      }
+    } catch (error) {
+      console.error('Error acknowledging alarm:', error);
       toast.error('Error acknowledging alarm');
     }
-  } catch (error) {
-    console.error('Error acknowledging alarm:', error);
-    toast.error('Error acknowledging alarm');
-  }
-};
+  };
+
   const getDiagramUrl = (location) => {
     // Check if location is 'Chiller' or 'Process', and pass it as a query parameter
     const type = location === 'Chiller' ? 'Chillers' : 'Processor';
     return `/diagram_sld?type=${location}`;
   };
-
+  const allAcknowledged = useMemo(() => {
+    if (!historyRows || historyRows.length === 0) return false;
+    return historyRows.every(r => r.ack === 'Acknowledged');
+  }, [historyRows]);
 
 
   return (
@@ -336,56 +351,46 @@ const refreshCurrentAlarm = async () => {
                   <div className="flex flex-col gap-8">
                     {/* Where */}
                     <div className="flex flex-col">
-                      <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">Where</h4>
+                      <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">
+                        Where
+                      </h4>
                       <div className="gap-4 text-[#17282FCF] dark:text-white">
-                        <div className="grid grid-cols-2 gap-1 mt-2">
-                          <div className="flex items-center">
-                            <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Source</p>
-                            <span className="font-semibold !font-[Inter]">{source}</span>
-                          </div>
+                        <div className="grid grid-cols-[30%_70%] gap-1 mt-2">
+                          <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Source</p>
+                          <span className="font-semibold !font-[Inter]">{source}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* What */}
                     <div className="flex flex-col">
-                      <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">What</h4>
+                      <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">
+                        What
+                      </h4>
                       <div className="gap-4 text-[#17282FCF] dark:text-white">
-                        <div className="grid grid-cols-2 gap-1 mt-2">
-                          <div className="flex items-center">
-                            <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Name</p>
-                            <span className="font-semibold !font-[Inter]">{name}</span>
-                          </div>
+                        <div className="grid grid-cols-[30%_70%] gap-1 mt-2">
+                          <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Name</p>
+                          <span className="font-semibold !font-[Inter]">{name}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-1 mt-5">
-                          <div className="flex items-center">
-                            <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Location</p>
-                            <span className="font-semibold !font-[Inter]">{alarmLocation}</span>
-                          </div>
+                        <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+                          <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Location</p>
+                          <span className="font-semibold !font-[Inter]">{alarmLocation}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-1 mt-5">
-                          <div className="flex items-center">
-                            <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Sub Location</p>
-                            <span className="font-semibold !font-[Inter]">{alarmSubLocation}</span>
-                          </div>
+                        <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+                          <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Sub Location</p>
+                          <span className="font-semibold !font-[Inter]">{alarmSubLocation}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-1 mt-5">
-                          <div className="flex items-center">
-                            <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Parameter</p>
-                            <span className="font-semibold !font-[Inter]">{parameter}</span>
-                          </div>
+                        <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+                          <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Parameter</p>
+                          <span className="font-semibold !font-[Inter]">{parameter}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-1 mt-5">
-                          <div className="flex items-center">
-                            <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Alarm Type</p>
-                            <span className="font-semibold !font-[Inter]">{alarmType}</span>
-                          </div>
+                        <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+                          <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Alarm Type</p>
+                          <span className="font-semibold !font-[Inter]">{alarmType}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-1 mt-5">
-                          <div className="flex items-center">
-                            <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">State</p>
-                            <span className="font-semibold !font-[Inter]">{state}</span>
-                          </div>
+                        <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+                          <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">State</p>
+                          <span className="font-semibold !font-[Inter]">{state}</span>
                         </div>
                       </div>
                     </div>
@@ -395,34 +400,32 @@ const refreshCurrentAlarm = async () => {
                   <div className="flex flex-col gap-8">
                     {/* Occurrence Counter */}
                     <div className="flex flex-col">
-                      <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">Occurrence Counter</h4>
+                      <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">
+                        Occurrence Counter
+                      </h4>
                       <div className="gap-4 text-[#17282FCF] dark:text-white">
                         {!hideAcknowledged && (
-                          <div className="grid grid-cols-2 gap-1 mt-2">
-                            <div className="flex items-center">
-                              <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Acknowledged</p>
-                              <span className="font-semibold !font-[Inter]">{acknowledged}</span>
-                            </div>
+                          <div className="grid grid-cols-[30%_70%] gap-1 mt-2">
+                            <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Acknowledged</p>
+                            <span className="font-semibold !font-[Inter]">{acknowledged}</span>
                           </div>
                         )}
-                        <div className="grid grid-cols-2 gap-1 mt-5">
-                          <div className="flex items-center">
-                            <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Unacknowledged</p>
-                            <span className="font-semibold !font-[Inter]">{unacknowledged}</span>
-                          </div>
+                        <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+                          <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Unacknowledged</p>
+                          <span className="font-semibold !font-[Inter]">{unacknowledged}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-1 mt-5">
-                          <div className="flex items-center">
-                            <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Total</p>
-                            <span className="font-semibold !font-[Inter]">{total}</span>
-                          </div>
+                        <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+                          <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Total</p>
+                          <span className="font-semibold !font-[Inter]">{total}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Actions */}
                     <div className="flex flex-col">
-                      <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">Actions</h4>
+                      <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">
+                        Actions
+                      </h4>
                       <button
                         type="button"
                         className="text-left underline text-[#025697] dark:text-white !font-[Inter] w-fit"
@@ -430,15 +433,15 @@ const refreshCurrentAlarm = async () => {
                       >
                         <ul>
                           <li>
-                            <a href={getDiagramUrl(alarmLocation)} target="_blank" className="dark:text-white underline">
+                            <a
+                              href={getDiagramUrl(alarmLocation)}
+                              target="_blank"
+                              className="dark:text-white underline"
+                            >
                               Open Meter Diagram
                             </a>
                           </li>
-                          {acknowledgementActions?.map((action, index) => (
-                            <li key={index}>{action}</li>
-                          ))}
                         </ul>
-
                       </button>
                     </div>
                   </div>
@@ -446,18 +449,21 @@ const refreshCurrentAlarm = async () => {
 
                 {/* WHEN */}
                 <div className="mt-10">
-                  <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">When</h4>
+                  <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">
+                    When
+                  </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-1 text-[#17282FCF] dark:text-white">
-                    <div className="grid grid-cols-2 gap-1 mt-5">
-                      <div className="flex items-center">
-                        <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Last Occurrences</p>
-                        <span className="font-semibold !font-[Inter]">{formatAlarmDate(lastOccurrence)}</span>
-                      </div>
+                    <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+                      <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Last Occurrences</p>
+                      <span className="font-semibold !font-[Inter]">
+                        {formatAlarmDate(lastOccurrence)}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
             )}
+
 
             {activeTab === 'history' && (
               <div className="px-6 pb-6">
@@ -470,28 +476,30 @@ const refreshCurrentAlarm = async () => {
                   </div>
 
                   {/* Top-right action: Info (!) or Acknowledge */}
-                  {!isSingleAcknowledgment ? (
-                    <button
-                      type="button"
-                      onClick={acknowledgeSelected}  // Trigger bulk acknowledgment
-                      className="h-9 px-4 rounded bg-[#0B5DAA] text-white text-sm !font-[Inter] hover:bg-[#084a87]"
-                      disabled={checkedKeys.size === 0}  // Disable if no checkboxes are selected
-                    >
-                      Acknowledge
-                    </button>
-
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setShowInfoHint(v => !v)}
-                      className="h-9 px-3 rounded-full text-white text-sm !font-[Inter] flex items-center gap-2"
-                      title="Show hint"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
-                        <path d="M15.125 23.375H17.875V15.125H15.125V23.375ZM16.5 12.375C16.8896 12.375 17.2164 12.243 17.4804 11.979C17.7444 11.715 17.8759 11.3887 17.875 11C17.8741 10.6113 17.7421 10.285 17.479 10.021C17.2159 9.757 16.8896 9.625 16.5 9.625C16.1104 9.625 15.7841 9.757 15.521 10.021C15.2579 10.285 15.1259 10.6113 15.125 11C15.1241 11.3887 15.2561 11.7155 15.521 11.9804C15.7859 12.2453 16.1123 12.3768 16.5 12.375ZM16.5 30.25C14.5979 30.25 12.8104 29.8888 11.1375 29.1665C9.46459 28.4442 8.00938 27.4647 6.77188 26.2281C5.53438 24.9915 4.55492 23.5363 3.8335 21.8625C3.11209 20.1887 2.75092 18.4012 2.75 16.5C2.74909 14.5988 3.11025 12.8113 3.8335 11.1375C4.55675 9.46367 5.53621 8.00846 6.77188 6.77188C8.00754 5.53529 9.46275 4.55583 11.1375 3.8335C12.8123 3.11117 14.5998 2.75 16.5 2.75C18.4003 2.75 20.1877 3.11117 21.8625 3.8335C23.5373 4.55583 24.9925 5.53529 26.2281 6.77188C27.4638 8.00846 28.4437 9.46367 29.1679 11.1375C29.892 12.8113 30.2528 14.5988 30.25 16.5C30.2473 18.4012 29.8861 20.1887 29.1665 21.8625C28.4469 23.5363 27.4675 24.9915 26.2281 26.2281C24.9888 27.4647 23.5336 28.4446 21.8625 29.1679C20.1914 29.8911 18.4039 30.2518 16.5 30.25Z" fill="#025697" />
-                      </svg>
-                    </button>
+                  {!allAcknowledged && (
+                    !isSingleAcknowledgment ? (
+                      <button
+                        type="button"
+                        onClick={acknowledgeSelected}  // Trigger bulk acknowledgment
+                        className="h-9 px-4 rounded bg-[#0B5DAA] text-white text-sm !font-[Inter] hover:bg-[#084a87]"
+                        disabled={checkedKeys.size === 0}  // Disable if no checkboxes are selected
+                      >
+                        Acknowledge
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setShowInfoHint(v => !v)}
+                        className="h-9 px-3 rounded-full text-white text-sm !font-[Inter] flex items-center gap-2"
+                        title="Show hint"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
+                          <path d="M15.125 23.375H17.875V15.125H15.125V23.375ZM16.5 12.375C16.8896 12.375 17.2164 12.243 17.4804 11.979C17.7444 11.715 17.8759 11.3887 17.875 11C17.8741 10.6113 17.7421 10.285 17.479 10.021C17.2159 9.757 16.8896 9.625 16.5 9.625C16.1104 9.625 15.7841 9.757 15.521 10.021C15.2579 10.285 15.1259 10.6113 15.125 11C15.1241 11.3887 15.2561 11.7155 15.521 11.9804C15.7859 12.2453 16.1123 12.3768 16.5 12.375ZM16.5 30.25C14.5979 30.25 12.8104 29.8888 11.1375 29.1665C9.46459 28.4442 8.00938 27.4647 6.77188 26.2281C5.53438 24.9915 4.55492 23.5363 3.8335 21.8625C3.11209 20.1887 2.75092 18.4012 2.75 16.5C2.74909 14.5988 3.11025 12.8113 3.8335 11.1375C4.55675 9.46367 5.53621 8.00846 6.77188 6.77188C8.00754 5.53529 9.46275 4.55583 11.1375 3.8335C12.8123 3.11117 14.5998 2.75 16.5 2.75C18.4003 2.75 20.1877 3.11117 21.8625 3.8335C23.5373 4.55583 24.9925 5.53529 26.2281 6.77188C27.4638 8.00846 28.4437 9.46367 29.1679 11.1375C29.892 12.8113 30.2528 14.5988 30.25 16.5C30.2473 18.4012 29.8861 20.1887 29.1665 21.8625C28.4469 23.5363 27.4675 24.9915 26.2281 26.2281C24.9888 27.4647 23.5336 28.4446 21.8625 29.1679C20.1914 29.8911 18.4039 30.2518 16.5 30.25Z" fill="#025697" />
+                        </svg>
+                      </button>
+                    )
                   )}
+
 
                 </div>
 
@@ -616,32 +624,33 @@ const refreshCurrentAlarm = async () => {
                 </div>
               </div>
             )}
-           
+
           </div>
 
-        <AckModal
-  open={ackOpen}
-  onClose={() => setAckOpen(false)}
-  form={ackForm}
-  setForm={setAckForm}
-  onSubmit={submitAck}         // <-- pass the parent submit
-  actions={actions}
-  validationErrors={validationErrors}
-  setValidationErrors={setValidationErrors}
-  userId={userId}
-/>
+          <AckModal
+            open={ackOpen}
+            onClose={() => setAckOpen(false)}
+            form={ackForm}
+            setForm={setAckForm}
+            onSubmit={submitAck}         // <-- pass the parent submit
+            actions={actions}
+            validationErrors={validationErrors}
+            setValidationErrors={setValidationErrors}
+            userId={userId}
+          />
         </div>
       )}
     </>
   );
 }
 
-function AckModal({ open, onClose, form, setForm, actions, validationErrors, setValidationErrors, userId,onSubmit }) {
+function AckModal({ open, onClose, form, setForm, actions, validationErrors, setValidationErrors, userId, onSubmit }) {
   if (!open) return null;
 
   // Function to handle changes in the action dropdown
   const handleActionChange = (e) => {
     setForm((f) => ({ ...f, action: e.target.value }));
+    setValidationErrors((errors) => ({ ...errors, action: '' }));
   };
 
 
@@ -718,7 +727,11 @@ function AckModal({ open, onClose, form, setForm, actions, validationErrors, set
 
         {/* Action Buttons */}
         <div className="flex items-center justify-end gap-3">
-          <button onClick={onClose} className="rounded px-4 py-2 text-sm !font-[Inter] border border-gray-300 dark:border-gray-600 dark:text-white">Cancel</button>
+          <button onClick={() => {
+            // clear validation errors when closing
+            setValidationErrors((errors) => ({ ...errors, action: '' }));
+            onClose();
+          }} className="rounded px-4 py-2 text-sm !font-[Inter] border border-gray-300 dark:border-gray-600 dark:text-white">Cancel</button>
           <button onClick={onSubmit} className="rounded bg-[#0B5DAA] px-4 py-2 text-white text-sm !font-[Inter] hover:bg-[#084a87]">
             Acknowledge
           </button>

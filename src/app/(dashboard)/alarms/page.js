@@ -627,51 +627,54 @@ const handleDeviceChange = (selectedDevice) => {
 
         {/* Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 mt-2">
-          <div className="w-full">
-            <label className="text-[14px]  text-black dark:text-white !font-[Inter] font-semibold">
-              Actions on Acknowledgement
-            </label>
-            <div className="flex flex-col space-y-2 w-full">
-              {actions.map((action, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-[86%_9%] gap-2 w-full items-center"
-                >
-                  <input
-                    type="text"
-                    placeholder="Enter Recommended Action"
-                    className="dark:bg-gray-700 w-full border border-gray-300 dark:border-gray-600 pl-1 rounded-md text-[13px] text-[#025697] dark:text-white placeholder-[#025697] resize-none !font-[Inter] flex items-center justify-center min-h-[40px] py-2"
-                    value={action}
-                    onChange={(e) => handleChange(index, e.target.value)}
-                  />
-                  {index === actions.length - 1 && (
-                    <button
-                      type="button"
-                      className="flex items-center justify-center w-10 h-10 bg-[#025697] rounded-md text-white !font-[Inter]"
-                      onClick={handleAddAction}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                      >
-                        <path
-                          d="M19 12.998H13V18.998H11V12.998H5V10.998H11V4.99805H13V10.998H19V12.998Z"
-                          fill="white"
-                        />
-                      </svg>
-                    </button>
-                  )}
-                  {formErrors.actions && (
-                    <p className="text-red-500 text-xs mt-1">{formErrors.actions}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+  <div className="w-full">
+    <label className="text-[14px] font-medium text-black dark:text-white !font-[Inter] font-semibold">
+      Actions on Acknowledgement
+    </label>
+    <div className="flex flex-col space-y-2 w-full">
+      {actions.map((action, index) => (
+        <div
+          key={index}
+          className="grid grid-cols-[86%_9%] gap-2 w-full items-center"
+        >
+          <input
+            type="text"
+            placeholder="Enter Recommended Action"
+            className="dark:bg-gray-700 w-full border border-gray-300 dark:border-gray-600 pl-1 rounded-md text-[13px] text-[#025697] dark:text-white placeholder-[#025697] resize-none !font-[Inter] flex items-center justify-center min-h-[40px] py-2"
+            value={action}
+            onChange={(e) => handleChange(index, e.target.value)}
+          />
+
+          {/* If last field → show + button */}
+          {index === actions.length - 1 ? (
+            <button
+              type="button"
+              className="flex items-center justify-center w-10 h-10 bg-[#025697] rounded-md text-white !font-[Inter]"
+              onClick={handleAddAction}
+            >
+              +
+            </button>
+          ) : (
+            // For other fields → show cancel button
+            <button
+              type="button"
+              className="flex items-center justify-center w-10 h-10 bg-[#C40233] rounded-md text-white !font-[Inter]"
+              onClick={() => {
+                const newActions = actions.filter((_, i) => i !== index);
+                setActions(newActions);
+              }}
+            >
+              ✕
+            </button>
+          )}
         </div>
+      ))}
+      {formErrors.actions && (
+        <p className="text-red-500 text-xs mt-1">{formErrors.actions}</p>
+      )}
+    </div>
+  </div>
+</div>
 
         {/* Trigger Configuration */}
         <div className="space-y-4">

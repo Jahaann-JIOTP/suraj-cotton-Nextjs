@@ -9,6 +9,12 @@ export default function ViewDetailsModal({ isOpen, onClose, alarmData }) {
     const device = alarmData?.device ?? 'Turbine';
     const name = alarmData?.name ?? 'Device Settings';
     const parameter = alarmData?.parameter ?? 'Current';
+    const persistenceTime = alarmData.raw.alarmTriggerConfig.persistenceTime;
+    const occursCount = alarmData.raw.alarmTriggerConfig.occursCount;
+    const operator = alarmData.raw.alarmTriggerConfig.thresholds[0]?.operator;
+    const value = alarmData.raw.alarmTriggerConfig.thresholds[0]?.value;
+    console.log(alarmData.raw.alarmTriggerConfig.thresholds,'=');
+    
     const acknowledgement = alarmData?.acknowledgement ?? 'Single Acknowledgement';
     const state = alarmData?.state ?? 'Inactive';
 
@@ -33,61 +39,73 @@ export default function ViewDetailsModal({ isOpen, onClose, alarmData }) {
 
                 <div className="px-6 py-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Where Section */}
-                        <div className="flex flex-col">
-                            <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 border-b-1 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">Where</h4>
-                            <div className="gap-4 text-[#17282FCF] dark:text-white">
-                                <div className="grid grid-cols-2 gap-1 mt-5">
-                                    <div className="flex items-center">
-                                        <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Location:</p>
-                                        <span className="font-semibold !font-[Inter]">{location}</span>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-1 mt-5">
-                                    <div className="flex items-center">
-                                        <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Sub Location:</p>
-                                        <span className="font-semibold !font-[Inter]">{subLocation}</span>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-1 mt-5">
-                                    <div className="flex items-center">
-                                        <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Device:</p>
-                                        <span className="font-semibold !font-[Inter]">{device}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       {/* Where Section */}
+<div className="flex flex-col">
+  <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 border-b-1 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">
+    Where
+  </h4>
+  <div className="gap-4 text-[#17282FCF] dark:text-white">
+    <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+      <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Location:</p>
+      <span className="font-semibold !font-[Inter]">{location}</span>
+    </div>
+    <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+      <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Sub Location:</p>
+      <span className="font-semibold !font-[Inter]">{subLocation}</span>
+    </div>
+    <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+      <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Device:</p>
+      <span className="font-semibold !font-[Inter]">{device}</span>
+    </div>
+  </div>
+</div>
 
-                        {/* What Section */}
-                        <div className="flex flex-col">
-                            <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 border-b-1 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">What</h4>
-                            <div className="gap-4 text-[#17282FCF] dark:text-white">
-                                <div className="grid grid-cols-2 gap-1 mt-5">
-                                    <div className="flex items-center">
-                                        <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Name:</p>
-                                        <span className="font-semibold !font-[Inter]">{name}</span>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-1 mt-5">
-                                    <div className="flex items-center">
-                                        <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Parameter:</p>
-                                        <span className="font-semibold !font-[Inter]">{parameter}</span>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-1 mt-5">
-                                    <div className="flex items-center">
-                                        <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">Acknowledgement Type:</p>
-                                        <span className="font-semibold !font-[Inter]">{acknowledgement}</span>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-1 mt-5">
-                                    <div className="flex items-center">
-                                        <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter] w-[50%]">State:</p>
-                                        <span className="font-semibold !font-[Inter]">{state}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+{/* What Section */}
+<div className="flex flex-col">
+  <h4 className="text-[#025697] dark:text-white text-[20px] font-bold mb-4 border-b-1 !font-[Inter] border-b border-[rgba(0,0,0,0.06)]">
+    What
+  </h4>
+  <div className="gap-4 text-[#17282FCF] dark:text-white">
+    <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+      <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Name:</p>
+      <span className="font-semibold !font-[Inter]">{name}</span>
+    </div>
+    <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+      <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Parameter:</p>
+      <span className="font-semibold !font-[Inter]">{parameter}</span>
+    </div>
+    <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+      <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Acknowledgement Type:</p>
+      <span className="font-semibold !font-[Inter]">{acknowledgement}</span>
+    </div>
+    <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+      <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">Threshold Value:</p>
+      <span className="font-semibold !font-[Inter]">{operator} {value}</span>
+    </div>
+
+    {/* Trigger Configuration */}
+    {(persistenceTime > 0 || occursCount > 0) && (
+      <div className="grid grid-cols-[30%_70%] gap-1 mt-5">
+        <p className="text-[#6D6D6D] dark:text-gray-400 !font-[Inter]">
+          Trigger Configuration:
+        </p>
+        <div className="flex flex-col items-start">
+          {persistenceTime > 0 && (
+            <span className="font-semibold !font-[Inter]">
+              Trigger if condition persists for {persistenceTime} sec
+            </span>
+          )}
+          {occursCount > 0 && (
+            <span className="font-semibold !font-[Inter]">
+              Trigger if conditions occur for {occursCount} times
+            </span>
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
                     </div>
                 </div>
 

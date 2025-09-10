@@ -398,8 +398,8 @@ export default function ActiveAlarmsPage() {
                   <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.activeSince}</div>
                   <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px] capitalize">{alarm.alarmType}</div>
                   <div className="flex-1 px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.alarmAge}</div>
-                  <div className="flex-1 px-2 lg:px-4 flex items-center justify-center gap-2">
-                    <div className="w-[9px] h-[9px] rounded-sm" style={{ backgroundColor: alarm.color }} />
+                  <div className="flex-1 px-2 lg:px-4 flex items-center justify-left gap-2">
+                    <div className="w-[9px] h-[9px] rounded-sm ml-[20%]" style={{ backgroundColor: alarm.color }} />
                     <span className="text-black/88 dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.alarmName}</span>
                   </div>
                   <div className="flex-1 px-2 lg:px-4 text-center text-black dark:text-gray-100 !font-[Inter] text-[12px]">{alarm.pvThreshold}</div>

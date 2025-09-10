@@ -5,8 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import { FaCalendarAlt } from 'react-icons/fa';
 import axios from 'axios';
 import SelectDropdown from '../../../components/ui/SelectDropdown';
-import ViewDetailsModal from '../../../components/alarmsComponents/Alarm_Detail_View';
-import TimerComponent from '../../../components/alarmsComponents/timer';
+import ViewDetailsModal from '../../../components/AlarmsComponents/Alarm_Detail_View';
+import TimerComponent from '../../../components/AlarmsComponents/timer';
 import { toZonedTime } from 'date-fns-tz';
 import { format } from 'date-fns';
 import config from '../../../config';
@@ -167,7 +167,7 @@ export default function AllAlarmsLikeImage() {
     }
   };
 
-  const fetchAlarms = useCallback(async () => {
+  const fetchAlarms = async () => {
     setIsUpdating(true);
     const payload = generatePayload(type);
     try {
@@ -179,15 +179,15 @@ export default function AllAlarmsLikeImage() {
     } finally {
       setIsUpdating(false);
     }
-  }, [type]);
+  };
 
   const handleTimerFinish = useCallback(() => {
     fetchAlarms();
-  }, [fetchAlarms]);
+  }, []);
 
-  const onAcknowledge = useCallback(() => {
+  const onAcknowledge = () => {
     fetchAlarms();
-  }, [fetchAlarms]);
+  };
 
   // 1) Define column accessors (used for sorting)
   const columns = useMemo(() => {
@@ -246,7 +246,7 @@ export default function AllAlarmsLikeImage() {
   // initial fetch + refetch on tab change
   useEffect(() => {
     fetchAlarms();
-  }, [fetchAlarms]);
+  }, [type]);
 
   // Reset filters when page type (tab) changes
   useEffect(() => {
@@ -370,7 +370,7 @@ export default function AllAlarmsLikeImage() {
   const basisCls = columns.length === 6 ? 'basis-[16.66%]' : 'basis-[20%]';
 
   return (
-    <div className="w-full dark:bg-gray-800 p-4 min-h-[81vh] rounded-[8px] bg-white !border-t-4 !border-t-[#1d5999] overflow-x-auto custom-scrollbar">
+    <div className="w-full p-4 min-h-[81vh] rounded-[8px] bg-white dark:bg-gray-800 dark:border-gray-600 border-2 border-gray-400 !border-t-4 !border-t-[#1d5999] overflow-x-auto custom-scrollbar">
       {/* Header + Filters */}
       <div className="w-full flex flex-wrap items-start mb-3">
         <div className="w-full sm:flex-1 sm:pr-4 text-left">
@@ -533,12 +533,16 @@ export default function AllAlarmsLikeImage() {
                   <div className={`${basisCls} px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter]`}>
                     {alarm?.alarmLastOccurrence ? formatAlarmDate(alarm.alarmLastOccurrence) : '—'}
                   </div>
-                  <div className={`${basisCls} px-2 lg:px-4 flex items-center justify-center gap-2`}>
-                    <div className="w-[9px] h-[9px] rounded-sm" style={{ backgroundColor: getAlarmColor(alarm) }} />
-                    <span className="text-black/88 dark:text-gray-100 !font-[Inter]">
-                      {alarm?.alarmConfigure?.alarmName ?? '—'}
-                    </span>
-                  </div>
+                 <div className={`${basisCls} px-2 lg:px-4 flex items-center gap-2 mx-auto`}>
+  <div
+    className="w-[9px] h-[9px] rounded-sm  ml-[30%]"
+    style={{ backgroundColor: getAlarmColor(alarm) }}
+  />
+  <span className="text-black/88 dark:text-gray-100 !font-[Inter]">
+    {alarm?.alarmConfigure?.alarmName ?? '—'}
+  </span>
+</div>
+
                   <div className={`${basisCls} px-2 lg:px-4 text-center text-black/88 dark:text-gray-100 !font-[Inter]`}>
                     {alarm?.alarmConfigure?.alarmLocation ?? '—'}
                   </div>

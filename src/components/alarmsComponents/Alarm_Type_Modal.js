@@ -127,7 +127,14 @@ export default function AlarmTypeModal({
 
       if (!response.ok) {
         const text = await response.text();
-        toast.error(text || "Failed to save alarm type");
+        // toast.error(text || "Failed to save alarm type");
+        toast.error(text, {
+  autoClose: false,     // stay until user closes
+  closeOnClick: true,   // allow user to click to close
+  closeButton: true,    // show close (x) button
+  draggable: true,      // optional, allow drag to dismiss
+  style: { zIndex: 9999 },
+});
         throw new Error(`Request failed (${response.status}): ${text}`);
       }
 
@@ -138,7 +145,7 @@ export default function AlarmTypeModal({
       onClose(); // parent should also clear selectedAlarm for perfect reset
     } catch (err) {
       console.error("Error saving alarm type:", err);
-      toast.error("Error saving alarm type");
+      // toast.error("Error saving alarm type");
     }
   };
 

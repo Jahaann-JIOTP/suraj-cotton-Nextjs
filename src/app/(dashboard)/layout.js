@@ -21,7 +21,9 @@ export default function DashboardLayout({ children }) {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const token = useSelector((state) => state.auth.token);
-
+useEffect(() => {
+    dispatch(initializeAuth());
+  }, [pathname, dispatch]);
   // fetch use details
   const fetchUserDetails = async () => {
     const token = localStorage.getItem("token");

@@ -48,10 +48,14 @@ if (!response.ok) {
     const text = await response.text();
     errorMessage = text || errorMessage;
   }
+toast.error(errorMessage, {
+  autoClose: false,     // stay until user closes
+  closeOnClick: true,   // allow user to click to close
+  closeButton: true,    // show close (x) button
+  draggable: true,      // optional, allow drag to dismiss
+  style: { zIndex: 9999 },
+});
 
-  toast.error(errorMessage, {
-    style: { zIndex: 9999 },
-  });
   throw new Error(errorMessage);
 }
 

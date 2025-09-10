@@ -62,7 +62,7 @@ const updateBellIcon = (fetchedAlarms) => {
 // Function to fetch alarms
 const fetchAlarms = async () => {
   try {
-    const res = await axios.get(`http://localhost:5001/alarms/active-alarms`);
+    const res = await axios.get(`${config.BASE_URL}/alarms/active-alarms`);
     const fetched = res.data || [];
 
     // Store alarm IDs for later marking as seen
