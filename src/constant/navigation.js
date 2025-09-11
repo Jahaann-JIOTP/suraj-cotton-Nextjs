@@ -35,7 +35,10 @@ export const privilegeConfig = {
       "/unit-4-lt-2",
       "/unit-5-lt-1",
       "/unit-5-lt-2",
-      "/daily_consumption?type=lt1",
+      "/dailyconsumption-u4-lt1",
+      "/dailyconsumption-u4-lt2",
+      "/dailyconsumption-u5-lt1",
+      "/dailyconsumption-u5-lt2",
     ],
     tab: "Home",
   },
@@ -173,37 +176,37 @@ export const sidebarLinksMap = {
         },
       ],
     },
-    // {
-    //   id: 2,
-    //   title: "Daily Consumption",
-    //   icon: EnergySankey,
-    //   submenu: [
-    //     {
-    //       id: 7,
-    //       title: "Unit 4 LT-1",
-    //       href: "/daily_consumption?type=lt1",
-    //       icon: Unit4Lt1,
-    //     },
-    //     {
-    //       id: 8,
-    //       title: "Unit 4 LT-2",
-    //       href: "/daily_consumption?type=lt2",
-    //       icon: Unit4Lt1,
-    //     },
-    //     {
-    //       id: 9,
-    //       title: "Unit 5 LT-1",
-    //       href: "/daily_consumption?type=lt3",
-    //       icon: Unit4Lt1,
-    //     },
-    //     {
-    //       id: 10,
-    //       title: "Unit 5 LT-2",
-    //       href: "/daily_consumption?type=lt4",
-    //       icon: Unit4Lt1,
-    //     },
-    //   ],
-    // },
+    {
+      id: 2,
+      title: "Daily Consumption",
+      icon: EnergySankey,
+      submenu: [
+        {
+          id: 7,
+          title: "Unit 4 LT-1",
+          href: "/dailyconsumption-u4-lt1",
+          icon: Unit4Lt1,
+        },
+        {
+          id: 8,
+          title: "Unit 4 LT-2",
+          href: "/dailyconsumption-u4-lt2",
+          icon: Unit4Lt1,
+        },
+        {
+          id: 9,
+          title: "Unit 5 LT-1",
+          href: "/dailyconsumption-u5-lt1",
+          icon: Unit4Lt1,
+        },
+        {
+          id: 10,
+          title: "Unit 5 LT-2",
+          href: "/dailyconsumption-u5-lt2",
+          icon: Unit4Lt1,
+        },
+      ],
+    },
   ],
 
   Diagram: [

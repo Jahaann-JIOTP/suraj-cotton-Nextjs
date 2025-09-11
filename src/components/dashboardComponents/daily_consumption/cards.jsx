@@ -17,7 +17,7 @@ const Card = ({
     <div className="w-full bg-white shadow-md rounded-lg border dark:bg-gray-800 border-gray-200 overflow-hidden !border-t-4 !border-t-[#1d5999]">
       {/* Title */}
       <div className="text-center p-3">
-        <h2 className="inline-block text-[#025697] font-semibold text-lg tracking-wide relative">
+        <h2 className="inline-block font-inter text-[#025697] font-semibold text-lg tracking-wide relative">
           {title}
           <span
             className="block h-[0.2vh] mt-1 rounded-full"
@@ -32,12 +32,12 @@ const Card = ({
       {/* Top section */}
       <div className="flex justify-between items-center text-sm text-gray-700 px-4 py-3">
         <div>
-          <div className="font-medium text-[#545454] dark:text-white">No. of machines</div>
-          <div className="text-[#025697] font-semibold text-center">{pad2(machines)}</div>
+          <div className="font-medium  font-inter text-[#545454] dark:text-white">No. of machines</div>
+          <div className="text-[#025697]  font-inter font-semibold text-center">{pad2(machines)}</div>
         </div>
         <div>
-          <div className="font-medium text-[#545454] dark:text-white">Load Connected</div>
-          <div className="text-[#025697] font-semibold text-center">{fmt2(loadConnected)} kWh</div>
+          <div className="font-medium font-inter text-[#545454] dark:text-white">Load Connected</div>
+          <div className="text-[#025697] font-inter font-semibold text-center">{fmt2(loadConnected)} kWh</div>
         </div>
       </div>
 
@@ -46,37 +46,37 @@ const Card = ({
         {/* Consumption */}
         <div className="flex justify-between items-center text-sm text-gray-700">
           <div className="flex items-center space-x-2">
-            <Image src="/consumption.png" width={16} height={16} alt="Consumption" />
-            <div className="font-medium text-[#000000]">Consumption</div>
+            <img src="/consumption.png" width={16} height={16} alt="Consumption" />
+            <div className="font-medium font-inter text-[#000000]">Consumption</div>
           </div>
-          <div className="text-[#025697]">{fmt2(consumption)} kWh</div>
+          <div className="text-[#025697] font-inter">{fmt2(consumption)} kWh</div>
         </div>
 
         {/* Average Power */}
         <div className="flex justify-between items-center text-sm text-gray-700">
           <div className="flex items-center space-x-2">
-            <Image src="/averagepower.png" width={16} height={16} alt="Average Power" />
-            <div className="font-medium text-[#000000]">Average Power</div>
+            <img src="/averagepower.png" width={16} height={16} alt="Average Power" />
+            <div className="font-medium font-inter text-[#000000]">Average Power</div>
           </div>
-          <div className="text-[#025697]">{fmt2(averagePower)} kW</div>
+          <div className="text-[#025697] font-inter">{fmt2(averagePower)} kW</div>
         </div>
 
         {/* Average Power Factor */}
         <div className="flex justify-between items-center text-sm text-gray-700">
           <div className="flex items-center space-x-2">
-            <Image src="/powerfactor.png" width={16} height={16} alt="Power Factor" />
-            <div className="font-medium text-[#000000]">Average Power Factor</div>
+            <img src="/powerfactor.png" width={16} height={16} alt="Power Factor" />
+            <div className="font-medium font-inter text-[#000000]">Average Power Factor</div>
           </div>
-          <div className="text-[#025697]">{fmt2(averagePowerFactor)}</div>
+          <div className="text-[#025697] font-inter">{fmt2(averagePowerFactor)}</div>
         </div>
 
         {/* Average Voltage */}
         <div className="flex justify-between items-center text-sm text-gray-700">
           <div className="flex items-center space-x-2">
-            <Image src="/highvoltage.png" width={16} height={16} alt="Voltage" />
-            <div className="font-medium text-[#000000]">Average Voltage</div>
+            <img src="/highvoltage.png" width={16} height={16} alt="Voltage" />
+            <div className="font-medium  font-inter text-[#000000]">Average Voltage</div>
           </div>
-          <div className="text-[#025697]">{fmt2(averageVoltage)} V</div>
+          <div className="text-[#025697]  font-inter">{fmt2(averageVoltage)} V</div>
         </div>
       </div>
     </div>

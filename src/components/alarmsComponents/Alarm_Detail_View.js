@@ -6,10 +6,8 @@ import axios from 'axios';
 import { toast } from "react-toastify";
 import config from "../../config";
 export default function ViewDetailsModal({ isOpen, onClose, alarmData, hideAcknowledged, onAcknowledge }) {
-
   // === Tab state (unchanged tabs UI) ===
   const [activeTab, setActiveTab] = useState('details');
-  console.log('+++', alarmData);
   const alarm_data = alarmData?.alarmConfigure;
   // === Your original fallbacks (unchanged) ===
   const source = alarm_data?.alarmDevice ?? 'Transformer';
@@ -17,6 +15,7 @@ export default function ViewDetailsModal({ isOpen, onClose, alarmData, hideAckno
   const parameter = alarm_data?.alarmParameter ?? 'Current';
   const alarmLocation = alarm_data?.alarmLocation ?? 'Current';
   const alarmSubLocation = alarm_data?.alarmSubLocation ?? 'Current';
+  
   const alarmType = alarm_data?.alarmType?.type ?? 'Critical (100)';
   const state = 'Inactive';
   const [validationErrors, setValidationErrors] = useState({
@@ -37,6 +36,13 @@ export default function ViewDetailsModal({ isOpen, onClose, alarmData, hideAckno
   const isSingleAcknowledgment = alarmData?.alarmConfigure?.alarmType?.acknowledgeType === 'Single';
   const [userId, setUserId] = useState(null);
   const [currentAlarm, setCurrentAlarm] = useState(alarmData);
+
+// get meter id
+const splitTag = parameter.split("_");
+const getMeterId = [splitTag[0], splitTag[1]].join("_")
+const splitLtLocation = alarmSubLocation.split("");
+const getLtLocation = `${splitLtLocation[0]}${splitLtLocation[1]}_${splitLtLocation[2]}`
+
 
 
   // NEW: map each row to a stable key once
@@ -303,7 +309,7 @@ const historyRows = useMemo(() => {
   const getDiagramUrl = (location) => {
     // Check if location is 'Chiller' or 'Process', and pass it as a query parameter
     const type = location === 'Chiller' ? 'Chillers' : 'Processor';
-    return `/diagram_sld?type=${location}`;
+    return `/meter?area=${location}&meter_name=${source}&LT_selections=${getLtLocation}&meter_id=${getMeterId}`;
   };
   const allAcknowledged = useMemo(() => {
     if (!historyRows || historyRows.length === 0) return false;
@@ -315,7 +321,7 @@ const historyRows = useMemo(() => {
     <>
       {isOpen && (
         <div className="fixed inset-0 bg-[rgba(0,0,0,0.45)] backdrop-blur-[1px] flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-700 h-[80vh] mt-[9%] dark:border-gray-600 !border !border-t-4 !border-t-[#1d5999] border-black/10 dark:border-white/10 rounded-[10px] w-full max-w-[100%] !overflow-auto custom-scrollbar relative">
+          <div className="bg-white dark:bg-gray-700 h-[80vh] mt-[9%] !border !border-t-4 !border-t-[#1d5999] border-black/10 dark:border-white/10 rounded-[10px] w-full max-w-[100%] !overflow-auto custom-scrollbar relative">
 
             {checkedKeys.size == 0 && (
               <div className="flex justify-end p-4 !pb-0">

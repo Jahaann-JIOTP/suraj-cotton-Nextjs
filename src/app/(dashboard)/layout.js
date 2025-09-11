@@ -93,7 +93,7 @@ useEffect(() => {
 
   return (
     <div
-      className={` flex flex-col bg-[#f7f7f7] dark:bg-gray-900 overflow-hidden`}
+      className={` flex flex-col font-inter bg-[#f7f7f7] dark:bg-gray-900 overflow-hidden`}
     >
       <TopHeader />
       <Header handleTabClick={handleTabClick} />

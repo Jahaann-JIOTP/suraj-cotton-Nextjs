@@ -347,7 +347,7 @@ const Header = ({ handleTabClick, activeTab }) => {
         onClick={() => handleTabClick(cfg.tab)}
       >
         <p
-          className={`px-3 py-1 cursor-pointer rounded-sm flex gap-1 items-center ${
+          className={`px-2 py-1 uppercase font-inter cursor-pointer rounded-sm flex gap-1 items-center ${
             isActive ? "bg-white text-black dark:bg-gray-700 dark:text-white" : ""
           }`}
         >
