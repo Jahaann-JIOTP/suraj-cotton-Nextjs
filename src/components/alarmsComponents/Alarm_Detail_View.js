@@ -123,27 +123,42 @@ export default function ViewDetailsModal({ isOpen, onClose, alarmData, hideAckno
   };
 
 
-  const historyRows = useMemo(() => {
-    if (Array.isArray(currentAlarm?.alarmOccurrences) && currentAlarm.alarmOccurrences.length > 0) {
-      return currentAlarm.alarmOccurrences.map((occurrence) => ({
-        id: occurrence.alarmID,
-        alarmName: occurrence.alarmName ?? name,
-        timeAge: AlarmHourAge(occurrence.date),
-        timeStamp: formatAlarmDate(occurrence.date),
-        duration: AlarmAge(occurrence.date) ?? 'N/A',
-        threshold: `${Number(occurrence.alarmPresentValue).toFixed(2)} / ${Number(occurrence.alarmThresholdValue).toFixed(2)}`,
-        occid: occurrence._id,
-        accby: occurrence?.alarmAcknowledgedBy?.name,
-        ack: occurrence.alarmAcknowledgeStatus ?? 'No',
-        action: occurrence.alarmAcknowledgmentAction ?? ''
-      }));
-    }
+const historyRows = useMemo(() => {
+  const occs = Array.isArray(currentAlarm?.alarmOccurrences)
+    ? currentAlarm.alarmOccurrences
+    : [];
+
+  if (occs.length === 0) {
     return [{
       id: 'No history available', alarmName: 'N/A', timeAge: 'N/A',
       timeStamp: 'N/A', duration: 'N/A', threshold: 'N/A', ack: 'N/A',
       action: 'N/A', occid: 'N/A'
     }];
-  }, [currentAlarm?.alarmOccurrences, name]);
+  }
+
+  const rows = occs.map((occurrence) => ({
+    id: occurrence.alarmID,
+    alarmName: occurrence.alarmName ?? name,
+    timeAge: AlarmHourAge(occurrence.date),
+    timeStamp: formatAlarmDate(occurrence.date),
+    duration: AlarmAge(occurrence.date) ?? 'N/A',
+    threshold: `${Number(occurrence.alarmPresentValue).toFixed(2)} / ${Number(occurrence.alarmThresholdValue).toFixed(2)}`,
+    occid: occurrence._id,
+    accby: occurrence?.alarmAcknowledgedBy?.name,
+    ack: occurrence.alarmAcknowledgeStatus ?? 'No',
+    action: occurrence.alarmAcknowledgmentAction ?? ''
+  }));
+
+  // ✅ Hide acknowledged rows when requested
+  const filtered = hideAcknowledged
+    ? rows.filter(r => r.ack !== 'Acknowledged')
+    : rows;
+
+  return filtered.length > 0
+    ? filtered
+    : [];
+}, [currentAlarm?.alarmOccurrences, name, hideAcknowledged]);
+
 
 
   const historyCols = useMemo(() => {

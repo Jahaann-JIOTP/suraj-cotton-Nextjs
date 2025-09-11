@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState,useMemo } from 'react';
-import AlarmTypeModal from '@/components/AlarmsComponents/Alarm_Type_Modal';
-import DeleteModal from '@/components/AlarmsComponents/Delete_Modal';
+import AlarmTypeModal from '@/components/alarmsComponents/Alarm_Type_Modal';
+import DeleteModal from '@/components/alarmsComponents/Delete_Modal';
 import { useRouter } from 'next/navigation';
 import config from "../../../config";
 import Image from 'next/image';

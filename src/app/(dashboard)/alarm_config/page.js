@@ -1,8 +1,8 @@
 "use client";
 import { ArrowLeft, Edit, Eye, Trash } from "lucide-react";
 import { useCallback, useEffect, useState, useMemo } from "react";
-import ViewDetailsModal from "@/components/AlarmsComponents/Alarm_View";
-import DeleteModal from "@/components/AlarmsComponents/Delete_Modal";
+import ViewDetailsModal from "@/components/alarmsComponents/Alarm_View";
+import DeleteModal from "@/components/alarmsComponents/Delete_Modal";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import config from "../../../config";

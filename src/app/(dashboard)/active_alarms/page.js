@@ -86,11 +86,11 @@ export default function ActiveAlarmsPage() {
 
     if (beepSounds[occurrenceId]) {
       beepSounds[occurrenceId].loop = true;
-      beepSounds[occurrenceId].play();
+      // beepSounds[occurrenceId].play();
     } else {
       const audio = new Audio('/alarm.mp3');
       audio.loop = true;
-      audio.play();
+      // audio.play();
       setBeepSounds(prev => ({ ...prev, [occurrenceId]: audio }));
     }
 
