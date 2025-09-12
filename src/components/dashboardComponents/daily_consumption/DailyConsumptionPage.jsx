@@ -4,42 +4,80 @@ import DailyConsumptionTimePeriod from "../timePeriodSelector/DailyConsumptionTi
 import { HiChevronDown } from "react-icons/hi2";
 import Card from "./cards";
 import { MdOutlineChevronLeft, MdOutlineChevronRight } from "react-icons/md";
+import CustomLoader from "@/components/customLoader/CustomLoader";
+import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 
-const options = [
-  { label: "BLOW", value: "BLOW" },
-  { label: "CARD", value: "CARD" },
-  { label: "COMBER", value: "COMBER" },
-  { label: "UNI", value: "UNI" },
-  { label: "DRAWING", value: "DRAWING" },
-  { label: "DRAWING", value: "DRAWING" },
-  { label: "SPEED", value: "SPEED" },
-  { label: "RING", value: "RING" },
-];
+
 
 const ITEMS_PER_PAGE = 8;
 
-const DailyConsumptionPage = ({ pageTitle, data,actualData }) => {
-  const [dashboardTimePeriod, setDashboardTimePeriod] = useState("today");
+const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
+  const [dailyConsumptionTimePeriod, setDailyConsumptionTimePeriod] = useState("today");
   const [isOpenDptDropdonw, setIsOpenDptDropdonw] = useState(false);
-  const [selectDpt, setSelectDpt] = useState("");
+  const [selectDpt, setSelectDpt] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const today = new Date();
+  const formateDate = (date)=>{
+    return date.toISOString().split("T")[0];
+  }
   const [intervalPeriod, setIntervalPeriod] = useState({
-    startDate: "",
-    endDate: "",
-    startTime: "",
-    endTime: "",
+    startDate:formateDate(today),
+    endDate: formateDate(today),
+    startTime: "06:00",
+    endTime: "06:00",
   });
+
   const dropdownRef = useRef(null);
-  console.log(selectDpt)
+
+ let startDate = null;
+let endDate = null;
+
+if (dailyConsumptionTimePeriod !== "custom") {
+  ({ startDate, endDate } = getDateRangeFromString(dailyConsumptionTimePeriod));
+}
+
+  // 👉 build unified range
+const finalRange = dailyConsumptionTimePeriod === "custom"
+  ? intervalPeriod
+  : { startDate, endDate };
+
   
-  const metersData = actualData.meters??[]
- 
+
+  const metersData = data.meters ?? [];
+
+  // filter arra on the basis of dept
+  const filteredData =
+    selectDpt === "All"
+      ? metersData
+      : metersData.filter((dept) => dept.deptname === selectDpt);
+
+  // get param name from tag
+  const normalizeData = filteredData.map((item) => {
+    const newObj = {};
+    Object.entries(item).forEach(([key, value]) => {
+      if (key.includes("_")) {
+        const parts = key.split("_");
+        if (parts.length > 2) {
+          const newKey = parts.slice(2).join("_");
+          newObj[newKey] = value;
+        } else {
+          newObj[key] = value;
+        }
+      } else {
+        newObj[key] = value;
+      }
+    });
+    return newObj;
+  });
 
   // --- Pagination ---
-  const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(normalizeData.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentData = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
+  const currentData = normalizeData.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
+  // ---------handle input field change---------
   const handleChange = (e) => {
     const { name, value } = e.target;
     setIntervalPeriod((prev) => ({
@@ -49,8 +87,8 @@ const DailyConsumptionPage = ({ pageTitle, data,actualData }) => {
   };
   // remove duplicate dept names
   const uniqueDepartments = Array.from(
-  new Set(metersData?.map((item) => item.deptname))
-);
+    new Set(metersData?.map((item) => item.deptname))
+  );
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -63,6 +101,9 @@ const DailyConsumptionPage = ({ pageTitle, data,actualData }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    onRangeChange(finalRange);
+  }, [dailyConsumptionTimePeriod, intervalPeriod, startDate, endDate]);
 
   return (
     <div>
@@ -77,6 +118,7 @@ const DailyConsumptionPage = ({ pageTitle, data,actualData }) => {
         <div className="flex w-full items-center flex-col lg:flex-row gap-5">
           {/* Dropdown */}
           <div className="flex flex-col gap-2 md:flex-row">
+            {/* select dept dropdown start */}
             <div
               ref={dropdownRef}
               className="relative inline-block text-left md:w-auto"
@@ -90,28 +132,32 @@ const DailyConsumptionPage = ({ pageTitle, data,actualData }) => {
                   className="text-[14px] flex items-center cursor-pointer justify-evenly gap-2 py-[3px] rounded border-1 border-gray-300 dark:border-gray-500 bg-white text-black dark:bg-gray-700 dark:text-white"
                   style={{ width: "7rem" }}
                 >
-                  {uniqueDepartments.find((o) => o === selectDpt)}
-                  <HiChevronDown
-                    className={`transition-transform ${
-                      isOpenDptDropdonw ? "rotate-180" : ""
-                    }`}
-                  />
+                  {loading ? (
+                    "Loading..."
+                  ) : (
+                    <>
+                      {selectDpt}
+                      <HiChevronDown
+                        className={`transition-transform ${
+                          isOpenDptDropdonw ? "rotate-180" : ""
+                        }`}
+                      />
+                    </>
+                  )}
                 </button>
               </div>
 
               {isOpenDptDropdonw && (
                 <div className="absolute right-0 z-50 mt-1 w-35 rounded shadow-lg border-1 border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700">
                   <div className="py-1">
-                    {uniqueDepartments.map((option) => {
-                      return(
-                        // <h1>{option.deptName}</h1>
+                    {["All", ...uniqueDepartments].map((option) => (
                       <label
                         key={option}
                         className="text-[14px] flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
                       >
                         <input
                           type="radio"
-                          name="theme"
+                          name="department"
                           value={option}
                           checked={selectDpt === option}
                           onChange={() => {
@@ -122,7 +168,7 @@ const DailyConsumptionPage = ({ pageTitle, data,actualData }) => {
                         />
                         {option}
                       </label>
-                    )})}
+                    ))}
                   </div>
                 </div>
               )}
@@ -130,13 +176,13 @@ const DailyConsumptionPage = ({ pageTitle, data,actualData }) => {
 
             {/* Time Period Selector */}
             <DailyConsumptionTimePeriod
-              selected={dashboardTimePeriod}
-              setSelected={setDashboardTimePeriod}
+              selected={dailyConsumptionTimePeriod}
+              setSelected={setDailyConsumptionTimePeriod}
             />
           </div>
 
           {/* Custom Date/Time Inputs */}
-          {dashboardTimePeriod === "custom" && (
+          {dailyConsumptionTimePeriod === "custom" && (
             <div className="flex items-start lg:items-center flex-col md:flex-row justify-center gap-5">
               <div className="flex items-start md:items-center flex-col md:flex-row gap-2">
                 <div className="flex items-center gap-2">
@@ -217,63 +263,68 @@ const DailyConsumptionPage = ({ pageTitle, data,actualData }) => {
           )}
         </div>
       </div>
+      {loading ? (
+        <CustomLoader />
+      ) : (
+        <>
+          {/* Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+            {currentData.map((meter, index) => (
+              <Card
+                key={meter.metername + index}
+                title={meter.metername}
+                machines={meter.MCS}
+                loadConnected={meter.installedLoad}
+                consumption={meter.energy_consumption}
+                averagePower={meter.avgPower}
+                averagePowerFactor={meter.avgPowerFactor}
+                averageVoltage={meter.avgVoltage}
+              />
+            ))}
+          </div>
 
-      {/* Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
-        {currentData.map((meter, index) => (
-          <Card
-            key={meter.title + index}
-            title={meter.title}
-            machines={meter.machines}
-            loadConnected={meter.loadConnected}
-            consumption={meter.consumption}
-            averagePower={meter.averagePower}
-            averagePowerFactor={meter.averagePowerFactor}
-            averageVoltage={meter.averageVoltage}
-          />
-        ))}
-      </div>
+          {/* Pagination Controls */}
+          <div className="flex justify-center items-center mt-6 gap-3">
+            {/* Prev */}
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              //   className={`px-3 py-1 ${currentPage === 1 ? "cursor-default" : "cursor-pointer"} rounded cursor-pointer bg-gray-200 dark:bg-gray-600 disabled:opacity-50`}
+              className={`px-3 py-2 disabled:cursor-default !disabled:cursor-pointer rounded bg-gray-200 dark:bg-gray-600 disabled:opacity-50`}
+            >
+              <MdOutlineChevronLeft />
+            </button>
 
-      {/* Pagination Controls */}
-      <div className="flex justify-center items-center mt-6 gap-3">
-        {/* Prev */}
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          //   className={`px-3 py-1 ${currentPage === 1 ? "cursor-default" : "cursor-pointer"} rounded cursor-pointer bg-gray-200 dark:bg-gray-600 disabled:opacity-50`}
-          className={`px-3 py-2 disabled:cursor-default !disabled:cursor-pointer rounded bg-gray-200 dark:bg-gray-600 disabled:opacity-50`}
-        >
-          <MdOutlineChevronLeft />
-        </button>
+            {/* Page numbers */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-3 py-1 cursor-pointer rounded ${
+                  currentPage === page
+                    ? "bg-[#025697] text-white font-semibold"
+                    : "bg-gray-200 dark:bg-gray-600"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
 
-        {/* Page numbers */}
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-          <button
-            key={page}
-            onClick={() => setCurrentPage(page)}
-            className={`px-3 py-1 cursor-pointer rounded ${
-              currentPage === page
-                ? "bg-[#025697] text-white font-semibold"
-                : "bg-gray-200 dark:bg-gray-600"
-            }`}
-          >
-            {page}
-          </button>
-        ))}
-
-        {/* Next */}
-        <button
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-          className={`px-3 py-2 rounded ${
-            currentPage === totalPages ? "cursor-default" : "cursor-pointer"
-          } bg-gray-200 dark:bg-gray-600 disabled:opacity-50`}
-        >
-          <MdOutlineChevronRight />
-        </button>
-      </div>
+            {/* Next */}
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className={`px-3 py-2 rounded ${
+                currentPage === totalPages ? "cursor-default" : "cursor-pointer"
+              } bg-gray-200 dark:bg-gray-600 disabled:opacity-50`}
+            >
+              <MdOutlineChevronRight />
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

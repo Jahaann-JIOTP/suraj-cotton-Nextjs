@@ -1,138 +1,57 @@
 "use client";
 import DailyConsumptionPage from "@/components/dashboardComponents/daily_consumption/DailyConsumptionPage";
-import config from "@/config";
+import config from "@/constant/apiRouteList";
+
+import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import React, { useEffect, useState } from "react";
-const getCardsDataFor = [
-  {
-    title: "BLOW ROOM",
-    machines: 4,
-    loadConnected: 0,
-    consumption: 0,
-    averagePower: 0,
-    averagePowerFactor: 0,
-    averageVoltage: 0,
-    updatedAt: "2025-09-05",
-  },
-  {
-    title: "CARD",
-    machines: 5,
-    loadConnected: 0,
-    consumption: 0,
-    averagePower: 0,
-    averagePowerFactor: 0,
-    averageVoltage: 0,
-    updatedAt: "2025-09-04",
-  },
-  {
-    title: "COMBER",
-    machines: 2,
-    loadConnected: 0,
-    consumption: 0,
-    averagePower: 0,
-    averagePowerFactor: 0,
-    averageVoltage: 0,
-    updatedAt: "2025-09-03",
-  },
-  {
-    title: "UNI-LAP",
-    machines: 1,
-    loadConnected: 0,
-    consumption: 0,
-    averagePower: 0,
-    averagePowerFactor: 0,
-    averageVoltage: 0,
-    updatedAt: "2025-08-30",
-  },
-  {
-    title: "DRAWING FINISHER",
-    machines: 4,
-    loadConnected: 0,
-    consumption: 0,
-    averagePower: 0,
-    averagePowerFactor: 0,
-    averageVoltage: 0,
-    updatedAt: "2025-09-01",
-  },
-  {
-    title: "DRAWING BREAKER",
-    machines: 3,
-    loadConnected: 0,
-    consumption: 0,
-    averagePower: 0,
-    averagePowerFactor: 0,
-    averageVoltage: 0,
-    updatedAt: "2025-08-28",
-  },
-  {
-    title: "SPEED FRAME",
-    machines: 6,
-    loadConnected: 0,
-    consumption: 0,
-    averagePower: 0,
-    averagePowerFactor: 0,
-    averageVoltage: 0,
-    updatedAt: "2025-09-02",
-  },
-  {
-    title: "RING FRAME",
-    machines: 7,
-    loadConnected: 0,
-    consumption: 0,
-    averagePower: 0,
-    averagePowerFactor: 0,
-    averageVoltage: 0,
-    updatedAt: "2025-08-20",
-  },
-  {
-    title: "AUTO CONER",
-    machines: 3,
-    loadConnected: 0,
-    consumption: 0,
-    averagePower: 0,
-    averagePowerFactor: 0,
-    averageVoltage: 0,
-    updatedAt: "2025-09-06",
-  },
-];
+
 const U4Lt1Dailyconsumption = () => {
+  const { startDate, endDate } = getDateRangeFromString("today");
+
   const [lt1Data, setLt1Data] = useState({});
-
-
+  const [loading, setLoading] = useState(false)
+  const [range, setRange] = useState({ startDate, endDate });
+          
+  const handleRangeChange = (newRange) => {
+    setRange(newRange);
+  };
   // fetch daily consumption for unit 4 lt 1
   const fetchDailyConsumption = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}/Unit4-LT1-daily-consumption`,
+        `${config.BASE_URL}${config.DAILY_CONSUMPTION.UNIT4_LT1_CONS}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            startDate: "2025-09-11",
-            endDate: "2025-09-11",
-          }),
+          body: JSON.stringify(range),
         }
         
       );
       const resResult = await response.json();
       if(response.ok){
         setLt1Data(resResult)
+        setLoading(false)
       }
     } catch (error) {
       console.error(error);
+    }finally{
+      setLoading(false);
     }
   };
   useEffect(()=>{
     fetchDailyConsumption();
-  },[])
+  },[range])
   return (
     <div className="bg-white shadow dark:bg-gray-800 rounded-md border-t-3 border-[#025697] overflow-y-auto h-full md:h-[81vh] px-4 py-3">
       <div className="">
         <DailyConsumptionPage
           pageTitle="Unit 4 - LT 1"
-          data={getCardsDataFor}
-          actualData={lt1Data}
+          data={lt1Data}
+          loading={loading}
+          onRangeChange={handleRangeChange}
         />
       </div>
     </div>

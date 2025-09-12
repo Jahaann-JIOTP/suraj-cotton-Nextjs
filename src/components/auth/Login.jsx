@@ -17,7 +17,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [userPrivileges, setUserPrivileges] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
-  console.log(">................", showPassword);
+
   const router = useRouter();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

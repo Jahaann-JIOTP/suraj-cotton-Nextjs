@@ -242,12 +242,12 @@ export const sidebarLinksMap = {
           href: "/custom_trend",
           icon: AlarmSubMenuIcon,
         },
-        {
-          id: 1,
-          title: "Trends",
-          href: "/trends",
-          icon: AlarmSubMenuIcon,
-        }
+        // {
+        //   id: 1,
+        //   title: "Trends",
+        //   href: "/trends",
+        //   icon: AlarmSubMenuIcon,
+        // }
       ],
     },
   ],

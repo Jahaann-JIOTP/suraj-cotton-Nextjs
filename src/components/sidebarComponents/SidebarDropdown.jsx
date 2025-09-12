@@ -58,7 +58,7 @@ export default function SidebarDropdown({
             </Tooltip>
           )
         ) : (
-          <span className="flex items-center justify-center gap-2">
+          <span className="flex font-inter items-center justify-center gap-2">
             <item.icon className="w-4 h-4 text-black dark:text-white group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]" />
             {item.title}
           </span>
@@ -167,7 +167,7 @@ export default function SidebarDropdown({
                   </div>
                 ) : (
                   <div
-                    className={`text-[13px] ${activePath ? "text-[#1A68B2]" : "text-black dark:text-white"
+                    className={`text-[13px] font-inter ${activePath ? "text-[#1A68B2]" : "text-black dark:text-white"
                       } w-full flex items-center justify-start pl-4 gap-2 group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
                   >
                     <sub.icon

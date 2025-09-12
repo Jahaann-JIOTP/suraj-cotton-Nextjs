@@ -43,6 +43,12 @@ const config = {
     UNIT5_LT3: "/unit5-lt3",
     UNIT5_LT4: "/unit5-lt4",
   },
+  DAILY_CONSUMPTION: {
+    UNIT4_LT1_CONS: "/Unit4-LT1-daily-consumption",
+    UNIT4_LT2_CONS: "/Unit4-LT2-daily-consumption",
+    UNIT5_LT1_CONS: "/Unit5-LT1-daily-consumption",
+    UNIT5_LT2_CONS: "/Unit5-LT2-daily-consumption",
+  },
   DIAGRAM: {
     MAIN_METER_TAGS_LINK: "/node-red-link",
     METER_DATA: "/meter-data",

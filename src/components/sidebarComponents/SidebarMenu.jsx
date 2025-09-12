@@ -79,7 +79,7 @@ export default function SidebarMenu({ tab, iscollapese }) {
               )
             ) : (
               <span
-                className={`flex items-center justify-center gap-2 ${
+                className={`flex font-inter items-center justify-center gap-2 ${
                   activePath
                     ? "text-[#1A68B2] dark:text-[#1A68B2]"
                     : "text-black dark:text-white"
