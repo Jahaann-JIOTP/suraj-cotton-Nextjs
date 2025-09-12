@@ -53,7 +53,7 @@ export const privilegeConfig = {
     href: "/custom_trend",
     icon: faArrowTrendUp,
     label: "TRENDS",
-    matchPaths: ["/custom_trend", "/trends"],
+    matchPaths: ["/custom_trend", "/trends","/trend-u4-lt1"],
     tab: "Trends",
   },
   Alarms: {
@@ -242,12 +242,18 @@ export const sidebarLinksMap = {
           href: "/custom_trend",
           icon: AlarmSubMenuIcon,
         },
-        // {
-        //   id: 1,
-        //   title: "Trends",
-        //   href: "/trends",
-        //   icon: AlarmSubMenuIcon,
-        // }
+        {
+          id: 1,
+          title: "Trends",
+          href: "/trends",
+          icon: AlarmSubMenuIcon,
+        },
+        {
+          id: 1,
+          title: "Unit 4 LT 1",
+          href: "/trend-u4-lt1",
+          icon: AlarmSubMenuIcon,
+        }
       ],
     },
   ],
