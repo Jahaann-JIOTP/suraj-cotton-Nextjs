@@ -41,9 +41,9 @@ const MultipleUnitComponent = ({
     {
       dept: "Blow Room",
       u4Mcs: 1,
-      u5Mcs: 1,
+      u5Mcs: 2,
       u4Load: 151.0,
-      u5Load: 151.0,
+      u5Load: 144.0,
       u4Consumption: data.unit_4BlowRoom_consumption,
       u5Consumption: data.unit_5BlowRoom_consumption,
       u4andU5TotalConsumption: u4U5Total.blowroom,
@@ -54,7 +54,7 @@ const MultipleUnitComponent = ({
       u4Mcs: 14,
       u5Mcs: 14,
       u4Load: 19.0,
-      u5Load: 19.0,
+      u5Load: 20,
       u4Consumption: data.unit_4Carding_consumption,
       u5Consumption: data.unit_5Carding_consumption,
       u4andU5TotalConsumption: u4U5Total.carding,
@@ -63,9 +63,9 @@ const MultipleUnitComponent = ({
     {
       dept: "Comber + Unilap",
       u4Mcs: 9,
-      u5Mcs: 9,
+      u5Mcs: 14,
       u4Load: 6.2,
-      u5Load: 6.2,
+      u5Load: 19.9,
       u4Consumption: data.unit_4Comber_consumption,
       u5Consumption: data.unit_5Comber_consumption,
       u4andU5TotalConsumption: u4U5Total.comber,
@@ -74,7 +74,7 @@ const MultipleUnitComponent = ({
     {
       dept: "Drawing",
       u4Mcs: 6,
-      u5Mcs: 6,
+      u5Mcs: 8,
       u4Load: 13.6,
       u5Load: 13.6,
       u4Consumption: data.unit_4Drawing_consumption,
@@ -85,9 +85,9 @@ const MultipleUnitComponent = ({
     {
       dept: "simplex",
       u4Mcs: 6,
-      u5Mcs: 6,
+      u5Mcs: 5,
       u4Load: 16.5,
-      u5Load: 16.5,
+      u5Load: 34,
       u4Consumption: data.unit_4Simplex_consumption,
       u5Consumption: data.unit_5Simplex_consumption,
       u4andU5TotalConsumption: u4U5Total.simplex,
@@ -96,9 +96,9 @@ const MultipleUnitComponent = ({
     {
       dept: "Transport",
       u4Mcs: 0,
-      u5Mcs: 0,
+      u5Mcs: 1,
       u4Load: 0,
-      u5Load: 0,
+      u5Load: 30,
       u4Consumption: data.unit_4RTransportSystem_consumption,
       u5Consumption: data.unit_5RTransportSystem_consumption,
       u4andU5TotalConsumption: u4U5Total.rtransportsystem,
@@ -107,9 +107,9 @@ const MultipleUnitComponent = ({
     {
       dept: "Ring",
       u4Mcs: 24,
-      u5Mcs: 24,
+      u5Mcs: 18,
       u4Load: 80.0,
-      u5Load: 80.0,
+      u5Load: 141,
       u4Consumption: data.unit_4Ring_consumption,
       u5Consumption: data.unit_5Ring_consumption,
       u4andU5TotalConsumption: u4U5Total.ring,
@@ -118,9 +118,9 @@ const MultipleUnitComponent = ({
     {
       dept: "Auto Cone",
       u4Mcs: 8,
-      u5Mcs: 8,
+      u5Mcs: 18,
       u4Load: 30.0,
-      u5Load: 30.0,
+      u5Load: 26.2,
       u4Consumption: data.unit_4AutoCone_consumption,
       u5Consumption: data.unit_5AutoCone_consumption,
       u4andU5TotalConsumption: u4U5Total.autocone,
@@ -131,14 +131,14 @@ const MultipleUnitComponent = ({
       u4Mcs: 3,
       u5Mcs: 3,
       u4Load: 119.0,
-      u5Load: 119.0,
+      u5Load: 303,
       u4Consumption: data.unit_4AirCompressor_consumption,
       u5Consumption: data.unit_5AirCompressor_consumption,
       u4andU5TotalConsumption: u4U5Total.aircompressor,
       unit: "Unit_4",
     },
     {
-      dept: "Deep Velve Turbine",
+      dept: "Deep Well Turbine",
       u4Mcs: 1,
       u5Mcs: 1,
       u4Load: 22.0,
@@ -153,7 +153,7 @@ const MultipleUnitComponent = ({
       u4Mcs: 1,
       u5Mcs: 1,
       u4Load: 15.0,
-      u5Load: 15.0,
+      u5Load: 22.5,
       u4Consumption: data.unit_4BailingPress_consumption,
       u5Consumption: data.unit_5BailingPress_consumption,
       u4andU5TotalConsumption: u4U5Total.bailingpress,
@@ -294,7 +294,7 @@ const MultipleUnitComponent = ({
     {
       dept: "Residential Colony + workshop",
       u4Mcs: 0,
-      u5Mcs: 0,
+      u5Mcs: 1,
       u4Load: 30.0,
       u5Load: 30.0,
       u4Consumption: data.unit_4Residentialcolony_consumption,
@@ -691,7 +691,7 @@ worksheet.addRow();
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] left-0"></div>
                 </div>
                 <div className="w-[46%] font-500 font-inter text-[12px] text-center">
-                  Unti 4 + Unit 5
+                  Unit 4 + Unit 5
                 </div>
                 <div className="w-[27%] h-[1px] bg-black dark:bg-gray-500 relative">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] right-0"></div>

@@ -52,6 +52,7 @@ const FieldMeters = () => {
   const [currentArea, setCurrentArea] = useState({});
   const [consumptionPerArea, setConumptionPerArea] = useState({})
 
+//  console.log(">>>>>>>>>>>>>>>",consumptionPerArea.totals.total_U5_U3_GW02_Del_ActiveEnergy)
   const router = useRouter();
   // fetch real time values
   const getRealTimeData = async () => {
@@ -129,7 +130,7 @@ const FieldMeters = () => {
     }
   };
 // helper function to fix to 2 decimals
-const fix2decimals = (meter)=> Number(meter.toFixed(2))
+const fix2decimals = (meter)=> Number(meter.toFixed(0))
 
   const fieldMetersTags = [
     {
@@ -177,48 +178,50 @@ const fix2decimals = (meter)=> Number(meter.toFixed(2))
   ];
   const unitConsumption = [
     {
-      unit4Consumption: consumptionPerArea?.U4_U1_GW02_Del_ActiveEnergy?.CONS ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U1_GW02_Del_ActiveEnergy?.CONS ?? 0,
+      unit4Consumption: consumptionPerArea?.total_U4_U1_GW02_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.total_U5_U1_GW02_Del_ActiveEnergy ?? 0,
       unit4Top: 238,
       unit4Left: 44,
       unit5Top: 238,
       unit5Left: 117,
     },
     {
-      unit4Consumption: consumptionPerArea?.U4_U2_GW02_Del_ActiveEnergy?.CONS ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U2_GW02_Del_ActiveEnergy?.CONS ?? 0,
+      unit4Consumption: consumptionPerArea?.total_U4_U2_GW02_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.total_U5_U2_GW02_Del_ActiveEnergy ?? 0,
       unit4Top: 237,
       unit4Left: 213,
       unit5Top: 236.5,
       unit5Left: 286,
     },
     {
-      unit4Consumption: consumptionPerArea?.U4_U3_GW02_Del_ActiveEnergy?.CONS ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U3_GW02_Del_ActiveEnergy?.CONS ?? 0,
+      unit4Consumption: consumptionPerArea?.total_U4_U3_GW02_Del_ActiveEnergy ?? 0,
+   
+      unit5Consumption: consumptionPerArea?.total_U5_U3_GW02_Del_ActiveEnergy ?? 0,
+ 
       unit4Top: 236.5,
       unit4Left: 391,
       unit5Top: 236.5,
       unit5Left: 464,
     },
     {
-      unit4Consumption: consumptionPerArea?.U4_U4_GW02_Del_ActiveEnergy?.CONS ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U4_GW02_Del_ActiveEnergy?.CONS ?? 0,
+      unit4Consumption: consumptionPerArea?.total_U4_U4_GW02_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.total_U5_U4_GW02_Del_ActiveEnergy ?? 0,
       unit4Top: 236.5,
       unit4Left: 570,
       unit5Top: 236.5,
       unit5Left: 642,
     },
     {
-      unit4Consumption: consumptionPerArea?.U4_U22_GW03_Del_ActiveEnergy?.CONS ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U22_GW03_Del_ActiveEnergy?.CONS ?? 0,
+      unit4Consumption: consumptionPerArea?.total_U4_U22_GW03_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.total_U5_U22_GW03_Del_ActiveEnergy ?? 0,
       unit4Top: 236.5,
       unit4Left: 748,
       unit5Top: 236.5,
       unit5Left: 820,
     },
     {
-      unit4Consumption: consumptionPerArea?.U4_U23_GW03_Del_ActiveEnergy?.CONS ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U23_GW03_Del_ActiveEnergy?.CONS ?? 0,
+      unit4Consumption: consumptionPerArea?.total_U4_U23_GW03_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.total_U5_U23_GW03_Del_ActiveEnergy ?? 0,
       unit4Top: 236.5,
       unit4Left: 926,
       unit5Top: 236.5,
@@ -310,7 +313,8 @@ const fix2decimals = (meter)=> Number(meter.toFixed(2))
       });
       const resResult = await response.json();
       if (response.ok) {
-        setConumptionPerArea(resResult.data)
+         
+        setConumptionPerArea(resResult.totals)
         
       }
     } catch (error) {
@@ -399,9 +403,9 @@ const fix2decimals = (meter)=> Number(meter.toFixed(2))
         {unitConsumption.map((unit, index) => (
           <div key={index}>
             <div
-              className="absolute font-fira-mono flex items-center justify-center"
+              className="absolute font-fira-mono mt-[0.5px] flex items-center justify-center"
               style={{
-                fontSize:"9px",
+                fontSize:"8px",
                 color: "#05f805",
                 fontWeight: 500,
                 left: unit.unit4Left,
@@ -411,12 +415,12 @@ const fix2decimals = (meter)=> Number(meter.toFixed(2))
               }}
             >
               {/* {unit.unit4Consumption.toFixed(2)} */}
-              {fix2decimals(unit.unit4Consumption)||"00.00"}
+              {fix2decimals(unit.unit4Consumption??0)||"00.00"}
             </div>
             <div
-              className="absolute font-fira-mono flex items-center justify-center"
+              className="absolute font-fira-mono mt-[0.8px] flex items-center justify-center"
               style={{
-                fontSize:"9px",
+                fontSize:"8px",
                 color: "#05f805",
                 fontWeight: 500,
                 left: unit.unit5Left,
@@ -447,7 +451,7 @@ const fix2decimals = (meter)=> Number(meter.toFixed(2))
                 fontSize: "8px",
                 color: "#05f805",
                 fontWeight: 500,
-                marginTop: "-0.5px",
+                marginTop: "",
               }}
             >
               {meter.activePowerTotalTag || "00.00"}

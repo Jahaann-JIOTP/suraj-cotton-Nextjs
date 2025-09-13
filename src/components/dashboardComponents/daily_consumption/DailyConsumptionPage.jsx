@@ -148,7 +148,7 @@ const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
                     "Loading..."
                   ) : (
                     <>
-                      {selectDpt}
+                      {selectDpt.replace(/_/g," ")}
                       <HiChevronDown
                         className={`transition-transform ${
                           isOpenDptDropdonw ? "rotate-180" : ""
@@ -179,7 +179,7 @@ const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
                             }}
                             className="mr-2"
                           />
-                          {option}
+                          {option.replace(/_/g," ")}
                         </label>
                       );
                     })}

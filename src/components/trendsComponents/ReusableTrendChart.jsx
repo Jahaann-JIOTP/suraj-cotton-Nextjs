@@ -2,7 +2,9 @@ import React from 'react'
 
 const ReusableTrendChart = () => {
   return (
-    <div>ReusableTrendChart</div>
+    <div>
+      <h1>Rusable component of trends</h1>
+    </div>
   )
 }
 

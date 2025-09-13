@@ -38,194 +38,193 @@ const SingleUnitComponent = ({
   for (const key in finalData) {
     totalConsumption += finalData[key];
   }
-  
+
   // /////-------------------------export to excel
+ 
   const tableData = [
     {
       Department: "Blow Room",
-      Mcs: "1",
-      InstalledLoad: "151.0",
+      Mcs: { Unit_4: "1", Unit_5: "2" },
+      InstalledLoad: { Unit_4: "151.0", Unit_5: "144.0" },
       ConsumedUnits: finalData?.BlowRoom_consumption || 0,
       unit: "both",
     },
     {
       Department: "Card",
-      Mcs: "14",
-      InstalledLoad: "19.0",
+      Mcs: { Unit_4: "14", Unit_5: "14" },
+      InstalledLoad: { Unit_4: "19.0", Unit_5: "20.9" },
       ConsumedUnits: finalData?.Carding_consumption || 0,
       unit: "both",
     },
     {
       Department: "Comber + Unilap",
-      Mcs: "9",
-      InstalledLoad: "6.2",
+      Mcs: { Unit_4: "9", Unit_5: "14" },
+      InstalledLoad: { Unit_4: "6.2", Unit_5: "19.9" },
       ConsumedUnits: finalData?.Comber_consumption || 0,
       unit: "both",
     },
     {
       Department: "Drawing",
-      Mcs: "6",
-      InstalledLoad: "13.6",
+      Mcs: { Unit_4: "6", Unit_5: "" },
+      InstalledLoad: { Unit_4: "13.6", Unit_5: "" },
       ConsumedUnits: finalData?.Drawing_consumption || 0,
       unit: "Unit_4",
     },
     {
       Department: "Simplex",
-      Mcs: "6",
-      InstalledLoad: "16.5",
+      Mcs: { Unit_4: "6", Unit_5: "5" },
+      InstalledLoad: { Unit_4: "16.5", Unit_5: "34" },
       ConsumedUnits: finalData?.Simplex_consumption || 0,
       unit: "both",
     },
     {
       Department: "Transport",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "1" },
+      InstalledLoad: { Unit_4: "", Unit_5: "30" },
       ConsumedUnits: finalData?.RTransportSystem_consumption || 0,
       unit: "both",
     },
     {
       Department: "Ring",
-      Mcs: "24",
-      InstalledLoad: "80.0",
+      Mcs: { Unit_4: "24", Unit_5: "18" },
+      InstalledLoad: { Unit_4: "80.0", Unit_5: "141" },
       ConsumedUnits: finalData?.Ring_consumption || 0,
       unit: "both",
     },
     {
       Department: "Auto Cone",
-      Mcs: "8",
-      InstalledLoad: "30.0",
+      Mcs: { Unit_4: "8", Unit_5: "18" },
+      InstalledLoad: { Unit_4: "30.0", Unit_5: "26.2" },
       ConsumedUnits: finalData?.AutoCone_consumption || 0,
       unit: "both",
     },
     {
       Department: "Air Compressor",
-      Mcs: "3",
-      InstalledLoad: "119.0",
+      Mcs: { Unit_4: "3", Unit_5: "" },
+      InstalledLoad: { Unit_4: "119.0", Unit_5: "" },
       ConsumedUnits: finalData?.AirCompressor_consumption || 0,
       unit: "Unit_4",
     },
     {
-      Department: "Deep Velve Turbine",
-      Mcs: "1",
-      InstalledLoad: "22.0",
+      Department: "Deep Well Turbine",
+      Mcs: { Unit_4: "1", Unit_5: "1" },
+      InstalledLoad: { Unit_4: "22.0", Unit_5: "22.0" },
       ConsumedUnits: finalData?.Turbine_consumption || 0,
       unit: "both",
     },
     {
       Department: "Bailing",
-      Mcs: "1",
-      InstalledLoad: "15.0",
+      Mcs: { Unit_4: "1", Unit_5: "1" },
+      InstalledLoad: { Unit_4: "15.0", Unit_5: "15.0" },
       ConsumedUnits: finalData?.BailingPress_consumption || 0,
       unit: "both",
     },
     {
       Department: "Main Meter",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "" },
       ConsumedUnits: finalData?.Spare_consumption || 0,
       unit: "both",
     },
     {
       Department: "Winding",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "" },
       ConsumedUnits: finalData?.Winding_consumption || 0,
       unit: "both",
     },
     {
       Department: "Bypass",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "" },
       ConsumedUnits: finalData?.Bypass_consumption || 0,
       unit: "Unit_4",
     },
     {
       Department: "Lab",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "" },
       ConsumedUnits: finalData?.Lab_consumption || 0,
       unit: "Unit_4",
     },
     {
       Department: "Frame Finisher",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "2" },
+      InstalledLoad: { Unit_4: "", Unit_5: "10.0" },
       ConsumedUnits: finalData?.FrameFinisher_consumption || 0,
       unit: "Unit_5",
     },
     {
       Department: "AC Plant",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "3" },
+      InstalledLoad: { Unit_4: "", Unit_5: "50.0" },
       ConsumedUnits: finalData?.ACPlant_consumption || 0,
       unit: "Unit_5",
     },
     {
       Department: "Fiber Deposit",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "5.0" },
       ConsumedUnits: finalData?.Fiberdeposit_consumption || 0,
       unit: "Unit_5",
     },
     {
       Department: "Yarn",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "" },
       ConsumedUnits: finalData?.Yarn_consumption || 0,
       unit: "Unit_5",
     },
     {
       Department: "Water Chilller",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "2" },
+      InstalledLoad: { Unit_4: "", Unit_5: "40.0" },
       ConsumedUnits: finalData?.WaterChiller_consumption || 0,
       unit: "Unit_5",
     },
     {
       Department: "HFO 2nd Source",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "" },
       ConsumedUnits: finalData?.HFO2ndSource_consumption || 0,
       unit: "Unit_4",
     },
     {
       Department: "Mills Lighting",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "" },
       ConsumedUnits: finalData?.Lightning_consumption || 0,
       unit: "Unit_4",
     },
     {
       Department: "Aux Unit # 05",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "" },
       ConsumedUnits: finalData?.AuxUnit5_consumption || 0,
       unit: "Unit_4",
     },
     {
       Department: "Residential Colony + Workshop",
-      Mcs: "",
-      InstalledLoad: "30.0",
+      Mcs: { Unit_4: "", Unit_5: "1" },
+      InstalledLoad: { Unit_4: "30.0", Unit_5: "30" },
       ConsumedUnits: finalData?.Residentialcolony_consumption || 0,
       unit: "both",
-
     },
     {
       Department: "Packing",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "" },
       ConsumedUnits: finalData?.Packing_consumption || 0,
       unit: "both",
     },
     {
       Department: "Capacitor Bank",
-      Mcs: "",
-      InstalledLoad: "",
+      Mcs: { Unit_4: "", Unit_5: "" },
+      InstalledLoad: { Unit_4: "", Unit_5: "12.0" },
       ConsumedUnits: finalData?.Capacitorbank_consumption || 0,
       unit: "Unit_5",
     },
   ];
-
 
   // /////-------------------------export to excel
   const getImageBuffer = async (imageUrl) => {
@@ -328,30 +327,39 @@ const SingleUnitComponent = ({
       });
       headerRow.height = 20;
 
-      tableData.filter((row)=>row.unit==="both"||row.unit===unit).forEach((item) => {
-        const row = worksheet.addRow([
-          item.Department.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-          item.Mcs,
-          item.InstalledLoad,
-          item.ConsumedUnits,
-        ]);
-        row.alignment = { vertical: "middle" };
+      tableData
+        .filter((row) => row.unit === "both" || row.unit === unit)
+        .forEach((item) => {
+          const mcs =
+            typeof item.Mcs === "object" ? item.Mcs[unit] || "" : item.Mcs;
+          const installedLoad =
+            typeof item.InstalledLoad === "object"
+              ? item.InstalledLoad[unit] || ""
+              : item.InstalledLoad;
 
-        row.eachCell((cell, colNumber) => {
-          cell.border = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" },
-          };
-          if (colNumber !== 1) {
-            cell.alignment = { horizontal: "center" };
-          }
-           if(colNumber===4){
-          cell.alignment={horizontal:"left"}
-        }
+          const row = worksheet.addRow([
+            item.Department,
+            mcs,
+            installedLoad,
+            item.ConsumedUnits,
+          ]);
+          row.alignment = { vertical: "middle" };
+
+          row.eachCell((cell, colNumber) => {
+            cell.border = {
+              top: { style: "thin" },
+              left: { style: "thin" },
+              bottom: { style: "thin" },
+              right: { style: "thin" },
+            };
+            if (colNumber !== 1) {
+              cell.alignment = { horizontal: "center" };
+            }
+            if (colNumber === 4) {
+              cell.alignment = { horizontal: "left" };
+            }
+          });
         });
-      });
 
       const totalRow = worksheet.addRow([
         "Total Load",
@@ -360,7 +368,7 @@ const SingleUnitComponent = ({
         totalConsumption,
       ]);
       totalRow.font = { bold: true };
-      totalRow.alignment = {horizontal:"left", vertical: "middle" };
+      totalRow.alignment = { horizontal: "left", vertical: "middle" };
       totalRow.cell = {
         type: "pattern",
         pattern: "solid",
@@ -382,7 +390,6 @@ const SingleUnitComponent = ({
           bold: true,
           color: { argb: "FFFFFFFF" },
         };
-       
       });
 
       const spindleRow = worksheet.addRow([
@@ -396,7 +403,7 @@ const SingleUnitComponent = ({
           : "",
       ]);
       spindleRow.font = { bold: true };
-      spindleRow.alignment = {horizontal:"left", vertical: "middle" };
+      spindleRow.alignment = { horizontal: "left", vertical: "middle" };
       spindleRow.eachCell((cell) => {
         cell.fill = {
           type: "pattern",
@@ -479,7 +486,7 @@ const SingleUnitComponent = ({
         <div>
           <button
             onClick={() => exportEnergyReportToExcel()}
-            className="bg-[#1A68B2] cursor-pointer text-white py-1 px-5 rounded text-[14.22px] font-500 font-inter"
+            className="bg-[#1A68B2] font-inter cursor-pointer text-white py-1 px-5 rounded text-[14.22px] font-500 font-inter"
           >
             Export
           </button>
@@ -520,25 +527,36 @@ const SingleUnitComponent = ({
               </tr>
             </thead>
             <tbody>
-              {tableData.filter((row)=>row.unit==="both"||row.unit===unit).map((row) => (
-                <tr
-                  key={row.Department}
-                  className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400"
-                >
-                  <td className="capitalize px-2 py-1 border border-gray-300 dark:border-gray-500  md:w-[30%] text-[12px] font-inter font-400">
-                    {row.Department}
-                  </td>
-                  <td className="capitalize px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                    {row.Mcs}
-                  </td>
-                  <td className="capitalize px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 w-[20%] text-center">
-                    {row.InstalledLoad}
-                  </td>
-                  <td className="capitalize px-2 py-1 text-center border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-400">
-                    {row.ConsumedUnits}
-                  </td>
-                </tr>
-              ))}
+              {tableData
+                .filter((row) => row.unit === "both" || row.unit === unit)
+                .map((row) => {
+                  const mcs =
+                    typeof row.Mcs === "object" ? row.Mcs[unit] || "" : row.Mcs;
+                  const installedLoad =
+                    typeof row.InstalledLoad === "object"
+                      ? row.InstalledLoad[unit] || ""
+                      : row.InstalledLoad;
+
+                  return (
+                    <tr
+                      key={row.Department}
+                      className="border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400"
+                    >
+                      <td className="capitalize px-2 py-1 border font-inter">
+                        {row.Department}
+                      </td>
+                      <td className="capitalize px-2 py-1 text-center font-inter border">
+                        {mcs}
+                      </td>
+                      <td className="capitalize px-2 py-1 text-center font-inter border">
+                        {installedLoad}
+                      </td>
+                      <td className="capitalize px-2 py-1 text-center font-inter border">
+                        {row.ConsumedUnits}
+                      </td>
+                    </tr>
+                  );
+                })}
 
               <tr className="border border-gray-300 dark:border-gray-500">
                 <td className="px-2 py-1 border border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
@@ -567,8 +585,6 @@ const SingleUnitComponent = ({
             </tbody>
           </table>
         </div>
-
-       
       </div>
     </>
   );

@@ -1,9 +1,10 @@
+import ReusableTrendChart from "@/components/trendsComponents/ReusableTrendChart";
 import React from "react";
 
 const TrendU4Lt1 = () => {
   return (
     <div>
-      <h1>Trends of unit 4 lt 1</h1>
+      <ReusableTrendChart/>
     </div>
   );
 };
