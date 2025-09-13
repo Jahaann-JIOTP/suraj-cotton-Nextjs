@@ -321,13 +321,15 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
       console.error(error);
     }
   };
-  useEffect(() => {
+  useEffect(()=>{
     fetchMConsumptionPerArea();
+  },[])
+  useEffect(() => {
     fetchMeterAreaStatus();
     getRealTimeData();
     const interval = setInterval(()=>{
       getRealTimeData();
-      fetchMConsumptionPerArea();
+      // fetchMConsumptionPerArea();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
