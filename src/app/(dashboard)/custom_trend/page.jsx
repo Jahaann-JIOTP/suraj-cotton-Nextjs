@@ -506,7 +506,7 @@ function CustomTrend() {
       "Spare 01 (GW01)": am4core.color("#AAB7B8"),
       "Spare 02 (GW01)": am4core.color("#D5DBDB"),
       "HFO Incoming": am4core.color("#943126"),
-      "Wapda 1 Incoming": am4core.color("#B03A2E"),
+      "Wapda 1 Incoming": am4core.color("#51F549"),
       "PDB CD1": am4core.color("#8E44AD"),
       "PDB CD2": am4core.color("#2980B9"),
       "Card PDB 01": am4core.color("#B03A2E"),
