@@ -38,7 +38,7 @@ const DailyConsumptionTimePeriod = ({ selected, setSelected }) => {
         className="relative inline-block text-left md:w-auto"
       >
         <div className="flex items-center justify-center md:justify-start gap-2">
-          <span className="text-[15.49px] font-raleway font-600">
+          <span className="flex md:hidden text-[15.49px] font-raleway font-600">
             Select Date Range:
           </span>
           <button

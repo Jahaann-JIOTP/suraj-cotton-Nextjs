@@ -375,7 +375,9 @@ const Header = ({ handleTabClick, activeTab }) => {
           </button>
         ) : (
           <button
-            onClick={() => setIsDropdownOpen(false)}
+            onClick={() => {
+              console.log("Close button clicked")
+              setIsDropdownOpen(false)}}
             className="cursor-pointer relative z-[10001]"
             aria-label="Close menu"
           >
