@@ -411,50 +411,48 @@ function CustomTrend() {
     valueAxis.title.fill = am4core.color(textColor);
     valueAxis.renderer.grid.template.stroke = am4core.color(gridColor);
     valueAxis.renderer.labels.template.fill = am4core.color(textColor);
-  // /////////////////////
-   let minValue = Infinity;
-  let maxValue = -Infinity;
-  
-  chartData.forEach(item => {
-    selectedMeter.forEach(meter => {
-      if (item[meter] !== null && !isNaN(item[meter])) {
-        const value = parseFloat(item[meter]);
-        if (value < minValue) minValue = value;
-        if (value > maxValue) maxValue = value;
-      }
+    // /////////////////////
+    let minValue = Infinity;
+    let maxValue = -Infinity;
+
+    chartData.forEach((item) => {
+      selectedMeter.forEach((meter) => {
+        if (item[meter] !== null && !isNaN(item[meter])) {
+          const value = parseFloat(item[meter]);
+          if (value < minValue) minValue = value;
+          if (value > maxValue) maxValue = value;
+        }
+      });
     });
-  });
-     // Add minimum line (green)
-  const minRange = valueAxis.axisRanges.create();
-  minRange.value = minValue;
-  minRange.grid.stroke = am4core.color("#00FF00"); // Green color
-  minRange.grid.strokeWidth = 2;
-  minRange.grid.strokeOpacity = 0.8;
-  minRange.grid.strokeDasharray = "3,3";
+    // Add minimum line (green)
+    const minRange = valueAxis.axisRanges.create();
+    minRange.value = minValue;
+    minRange.grid.stroke = am4core.color("#00FF00"); // Green color
+    minRange.grid.strokeWidth = 2;
+    minRange.grid.strokeOpacity = 0.8;
+    minRange.grid.strokeDasharray = "3,3";
 
-  // Add label for minimum line
-  const minLabel = minRange.label;
-  minLabel.text = `Min: ${minValue.toFixed(2)}`;
-  minLabel.fill = am4core.color("#00FF00");
-  minLabel.fontWeight = "bold";
-  minLabel.dy = 0; // Position above the line
-  
-  // Add maximum line (red)
-  const maxRange = valueAxis.axisRanges.create();
-  maxRange.value = maxValue;
-  maxRange.grid.stroke = am4core.color("#FF0000"); // Red color
-  maxRange.grid.strokeWidth = 2;
-  maxRange.grid.strokeOpacity = 0.8;
-  maxRange.grid.strokeDasharray = "3,3";
-  
-  // Add label for maximum line
-  const maxLabel = maxRange.label;
-  maxLabel.text = `Max: ${maxValue.toFixed(2)}`;
-  maxLabel.fill = am4core.color("#FF0000");
-  maxLabel.fontWeight = "bold";
-  maxLabel.dy =0; // Position below the line
+    // Add label for minimum line
+    const minLabel = minRange.label;
+    minLabel.text = `Min: ${minValue.toFixed(2)}`;
+    minLabel.fill = am4core.color("#00FF00");
+    minLabel.fontWeight = "bold";
+    minLabel.dy = 0; // Position above the line
 
+    // Add maximum line (red)
+    const maxRange = valueAxis.axisRanges.create();
+    maxRange.value = maxValue;
+    maxRange.grid.stroke = am4core.color("#FF0000"); // Red color
+    maxRange.grid.strokeWidth = 2;
+    maxRange.grid.strokeOpacity = 0.8;
+    maxRange.grid.strokeDasharray = "3,3";
 
+    // Add label for maximum line
+    const maxLabel = maxRange.label;
+    maxLabel.text = `Max: ${maxValue.toFixed(2)}`;
+    maxLabel.fill = am4core.color("#FF0000");
+    maxLabel.fontWeight = "bold";
+    maxLabel.dy = 0; // Position below the line
 
     const colorMap = {
       "HFO 1": am4core.color("#E62222"),
@@ -553,7 +551,6 @@ function CustomTrend() {
       "PDB 10": am4core.color("#D35400"),
       "PF Panel 2": am4core.color("#27AE60"),
     };
-   
 
     if (selectedMeter.length > 0) {
       selectedMeter.forEach((meter) => {
@@ -887,7 +884,7 @@ function CustomTrend() {
   };
 
   return (
-    <div className="relative flex-shrink-0 w-full px-2 py-2 overflow-auto sm:px-4 sm:py-4 md:px-6 md:py-6 h-max lg:h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1F5897] rounded-[8px] shadow-md">
+    <div className="relative flex-shrink-0 overflow-y-auto w-full px-2 py-2 overflow-auto sm:px-4 sm:py-4 md:px-6 md:py-6 h-max lg:h-[81vh] bg-white dark:bg-gray-800 border-t-3 border-[#1F5897] rounded-[8px] shadow-md">
       <div className="relative z-10 h-full flex flex-col">
         <h1 className="text-lg font-bold mb-4 font-raleway text-[#1F5897] dark:text-[#D1D5DB]">
           Customized Trend

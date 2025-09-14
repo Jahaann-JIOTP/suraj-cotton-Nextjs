@@ -10,7 +10,6 @@ import SankeyTotalValues from "@/components/sakeyTotalValue/SankeyTotalValues";
 const UnitLt41Page = () => {
   const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);
-  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>",data)
   const [loading, setLoading] = useState(false);
 
   // time period selector
@@ -67,7 +66,7 @@ const UnitLt41Page = () => {
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="TotalLT1"/>
+      <SankeyTotalValues data={data} lt="TotalLT1" />
     </div>
   );
 };

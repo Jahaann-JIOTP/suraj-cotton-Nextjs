@@ -70,7 +70,7 @@ const Breadcrumbs = () => {
     <nav className="flex items-center gap-2 text-[18px]">
       {labelParts.map((part, idx) => {
         const isLast = idx === labelParts.length - 1;
-console.log(buildHref(part))
+
         return (
           <span key={idx} className="flex capitalize items-center gap-2">
             {isLast ? (
@@ -85,7 +85,11 @@ console.log(buildHref(part))
                 {getDisplayLabel(part)}
               </Link>
             )}
-            {idx < labelParts.length - 1 && <span className="text-gray-400"><IoChevronForward /></span>}
+            {idx < labelParts.length - 1 && (
+              <span className="text-gray-400">
+                <IoChevronForward />
+              </span>
+            )}
           </span>
         );
       })}

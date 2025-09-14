@@ -13,7 +13,6 @@ const UnitLt42Page = () => {
   const [data, setDAta] = useState([]);
   const [loading, setLoading] = useState(false);
   const { startDate, endDate } = getDateRangeFromString(Unit4Lt2TimePeriod);
-console.log(data)
   const fetchUnit4Lt2Data = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -43,7 +42,6 @@ console.log(data)
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchUnit4Lt2Data();
@@ -67,7 +65,7 @@ console.log(data)
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="TotalLT2"/>
+      <SankeyTotalValues data={data} lt="TotalLT2" />
     </div>
   );
 };

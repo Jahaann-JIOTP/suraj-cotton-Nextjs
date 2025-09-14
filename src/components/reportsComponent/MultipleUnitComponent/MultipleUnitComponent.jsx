@@ -11,8 +11,7 @@ const MultipleUnitComponent = ({
   resData,
 }) => {
   const { theme } = useTheme();
-  const data = resData[0]||{};
-  
+  const data = resData[0] || {};
 
   const u4U5Total = {};
   for (const key in data) {
@@ -214,7 +213,7 @@ const MultipleUnitComponent = ({
       u4andU5TotalConsumption: u4U5Total.framefinisher,
       unit: "Unit_5",
     },
-     {
+    {
       dept: "AC plant",
       u4Mcs: 0,
       u5Mcs: 0,
@@ -236,7 +235,7 @@ const MultipleUnitComponent = ({
       u4andU5TotalConsumption: u4U5Total.fiberdeposit,
       unit: "Unit_5",
     },
-     {
+    {
       dept: "yarn",
       u4Mcs: 0,
       u5Mcs: 0,
@@ -325,15 +324,14 @@ const MultipleUnitComponent = ({
       unit: "Unit_5",
     },
   ];
- 
-// ---------------------------
-const originalString = "javascript is easy";
-const capitalizedSentence = originalString
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-console.log(capitalizedSentence);
-// ---------------------------
+
+  // ---------------------------
+  const originalString = "javascript is easy";
+  const capitalizedSentence = originalString
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  // ---------------------------
 
   const getImageBuffer = async (imageUrl) => {
     const res = await fetch(imageUrl);
@@ -379,7 +377,6 @@ console.log(capitalizedSentence);
         };
       }
 
-
       let currentRowIndex = 5;
 
       worksheet.columns = [
@@ -400,7 +397,7 @@ console.log(capitalizedSentence);
       mainHeadingCell.value = `Energy Usage Report`;
       mainHeadingCell.font = { size: 16, bold: true };
       mainHeadingCell.alignment = { vertical: "middle", horizontal: "center" };
-worksheet.addRow();
+      worksheet.addRow();
       worksheet.mergeCells(`A${currentRowIndex - 1}:B${currentRowIndex - 1}`);
       const startDateCell = worksheet.getCell(`A${currentRowIndex - 1}`);
       startDateCell.value = `Start Date: ${startDate}`;
@@ -448,7 +445,11 @@ worksheet.addRow();
             fgColor: { argb: "FF0070C0" },
           };
           cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-          cell.alignment = { vertical: "middle", horizontal: "center", wrapText:true };
+          cell.alignment = {
+            vertical: "middle",
+            horizontal: "center",
+            wrapText: true,
+          };
           cell.border = {
             top: { style: "thin" },
             left: { style: "thin" },
@@ -461,14 +462,17 @@ worksheet.addRow();
 
       tableData.forEach((item) => {
         const row = worksheet.addRow([
-          item.dept.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-          item.unit!=="Unit_5"?item.u4Mcs:"",
-          item.unit!=="Unit_5"?item.u4Load:"",
-          item.unit!=="Unit_5"?item.u4Consumption || 0:"N/A",
+          item.dept
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" "),
+          item.unit !== "Unit_5" ? item.u4Mcs : "",
+          item.unit !== "Unit_5" ? item.u4Load : "",
+          item.unit !== "Unit_5" ? item.u4Consumption || 0 : "N/A",
           "",
-          item.unit!=="Unit_4"?item.u5Mcs:"",
-          item.unit!=="Unit_4"?item.u5Load:"",
-          item.unit!=="Unit_4"?item.u5Consumption || 0:"N/A",
+          item.unit !== "Unit_4" ? item.u5Mcs : "",
+          item.unit !== "Unit_4" ? item.u5Load : "",
+          item.unit !== "Unit_4" ? item.u5Consumption || 0 : "N/A",
           "",
           item.u4andU5TotalConsumption || 0,
         ]);
@@ -483,7 +487,7 @@ worksheet.addRow();
             };
           }
 
-          if ([2, 3, 6, 7,].includes(colNumber)) {
+          if ([2, 3, 6, 7].includes(colNumber)) {
             cell.fill = {
               type: "pattern",
               pattern: "solid",
@@ -494,12 +498,11 @@ worksheet.addRow();
           if (colNumber !== 1 && colNumber !== 5 && colNumber !== 9) {
             cell.alignment = { horizontal: "center" };
           }
-         if(colNumber===1){
-          cell.alignment = {wrapText:true}
-         }
+          if (colNumber === 1) {
+            cell.alignment = { wrapText: true };
+          }
         });
       });
-
 
       const totalRow = worksheet.addRow([
         "Total Load",
@@ -555,7 +558,7 @@ worksheet.addRow();
           };
         }
         cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-       
+
         if ([1, 2, 3, 4, 6, 7, 8, 10].includes(colNumber)) {
           cell.border = {
             top: { style: "thin" },
@@ -576,8 +579,8 @@ worksheet.addRow();
           if (typeof cell.value === "number") {
             cell.numFmt = "0.00";
           }
-          
-          cell.alignment={horizontal:"left"}
+
+          cell.alignment = { horizontal: "left" };
         });
       }
 
@@ -742,23 +745,27 @@ worksheet.addRow();
                           {row.dept}
                         </td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 text-center">
-                          {row.unit!=="Unit_5"?row.u4Mcs:""}
+                          {row.unit !== "Unit_5" ? row.u4Mcs : ""}
                         </td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500 text-center">
-                          {row.unit!=="Unit_5"?row.u4Load:""}
+                          {row.unit !== "Unit_5" ? row.u4Load : ""}
                         </td>
                         <td className="px-[5px] py-1 text-left pl-2 border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">
-                          {row.unit!=="Unit_5"?row?.u4Consumption?.toFixed(2) || 0:"N/A"}
+                          {row.unit !== "Unit_5"
+                            ? row?.u4Consumption?.toFixed(2) || 0
+                            : "N/A"}
                         </td>
                         <td className="px-[5px] py-1 border-r-1 border-gray-300 dark:border-gray-500 text-center text-[12px] font-inter font-400"></td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500  text-center">
-                          {row.unit!=="Unit_4"?row.u5Mcs:""}
+                          {row.unit !== "Unit_4" ? row.u5Mcs : ""}
                         </td>
                         <td className="px-2 py-1 bg-[#E5F3FD] dark:bg-[#e5f3fd4f] border border-gray-300 text-[12px] font-inter font-400 dark:border-gray-500  text-center">
-                          {row.unit!=="Unit_4" ? row.u5Load:""}
+                          {row.unit !== "Unit_4" ? row.u5Load : ""}
                         </td>
                         <td className="px-2 py-1 text-left pl-2 border border-gray-300 dark:border-gray-500  text-[12px] font-inter font-400">
-                          {row.unit!=="Unit_4"?row.u5Consumption || 0:"N/A"}
+                          {row.unit !== "Unit_4"
+                            ? row.u5Consumption || 0
+                            : "N/A"}
                         </td>
                         <td className="px-[5px] py-1 text-center border-r-1 text-[12px] font-inter font-400"></td>
                         <td className="px-2 py-1 text-left pl-2 border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-400">

@@ -2,11 +2,10 @@
 import config from "@/constant/apiRouteList";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { BiSolidDownArrowSquare } from "react-icons/bi";
 const fieldMetersBtn = [
   {
     link: "U1_GW02",
-    title: "PDB2 CD1 (Field)",
+    title: "PDB1 CD1 (Field)",
     top: 310,
     left: 76,
     ltScheme: "LT_3",
@@ -33,26 +32,24 @@ const fieldMetersBtn = [
     ltScheme: "LT_3",
   },
   {
-    link: "U22_GW02",
+    link: "U22_GW03",
     title: "PDB 07 (Field)",
     top: 310,
     left: 780,
-    ltScheme: "LT_3",
+    ltScheme: "LT_4",
   },
   {
-    link: "U23_GW02",
-    title: "PDB 07 (Field",
+    link: "U23_GW03",
+    title: "PDB 010 (Field)",
     top: 310,
     left: 959,
-    ltScheme: "LT_3",
+    ltScheme: "LT_4",
   },
 ];
 const FieldMeters = () => {
   const [realtime, setRealtime] = useState([]);
   const [currentArea, setCurrentArea] = useState({});
-  const [consumptionPerArea, setConumptionPerArea] = useState({})
-
-//  console.log(">>>>>>>>>>>>>>>",consumptionPerArea.totals.total_U5_U3_GW02_Del_ActiveEnergy)
+  const [consumptionPerArea, setConumptionPerArea] = useState({});
   const router = useRouter();
   // fetch real time values
   const getRealTimeData = async () => {
@@ -129,8 +126,8 @@ const FieldMeters = () => {
       console.error(error.message);
     }
   };
-// helper function to fix to 2 decimals
-const fix2decimals = (meter)=> Number(meter.toFixed(0))
+  // helper function to fix to 2 decimals
+  const fix2decimals = (meter) => Number(meter.toFixed(0));
 
   const fieldMetersTags = [
     {
@@ -178,50 +175,48 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
   ];
   const unitConsumption = [
     {
-      unit4Consumption: consumptionPerArea?.total_U4_U1_GW02_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.total_U5_U1_GW02_Del_ActiveEnergy ?? 0,
+      unit4Consumption: consumptionPerArea?.U4_U1_GW02_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.U5_U1_GW02_Del_ActiveEnergy ?? 0,
       unit4Top: 238,
       unit4Left: 44,
       unit5Top: 238,
       unit5Left: 117,
     },
     {
-      unit4Consumption: consumptionPerArea?.total_U4_U2_GW02_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.total_U5_U2_GW02_Del_ActiveEnergy ?? 0,
+      unit4Consumption: consumptionPerArea?.U4_U2_GW02_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.U5_U2_GW02_Del_ActiveEnergy ?? 0,
       unit4Top: 237,
       unit4Left: 213,
       unit5Top: 236.5,
       unit5Left: 286,
     },
     {
-      unit4Consumption: consumptionPerArea?.total_U4_U3_GW02_Del_ActiveEnergy ?? 0,
-   
-      unit5Consumption: consumptionPerArea?.total_U5_U3_GW02_Del_ActiveEnergy ?? 0,
- 
+      unit4Consumption: consumptionPerArea?.U4_U3_GW02_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.U5_U3_GW02_Del_ActiveEnergy ?? 0,
       unit4Top: 236.5,
       unit4Left: 391,
       unit5Top: 236.5,
       unit5Left: 464,
     },
     {
-      unit4Consumption: consumptionPerArea?.total_U4_U4_GW02_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.total_U5_U4_GW02_Del_ActiveEnergy ?? 0,
+      unit4Consumption: consumptionPerArea?.U4_U4_GW02_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.U5_U4_GW02_Del_ActiveEnergy ?? 0,
       unit4Top: 236.5,
       unit4Left: 570,
       unit5Top: 236.5,
       unit5Left: 642,
     },
     {
-      unit4Consumption: consumptionPerArea?.total_U4_U22_GW03_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.total_U5_U22_GW03_Del_ActiveEnergy ?? 0,
+      unit4Consumption: consumptionPerArea?.U4_U22_GW03_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.U5_U22_GW03_Del_ActiveEnergy ?? 0,
       unit4Top: 236.5,
       unit4Left: 748,
       unit5Top: 236.5,
       unit5Left: 820,
     },
     {
-      unit4Consumption: consumptionPerArea?.total_U4_U23_GW03_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.total_U5_U23_GW03_Del_ActiveEnergy ?? 0,
+      unit4Consumption: consumptionPerArea?.U4_U23_GW03_Del_ActiveEnergy ?? 0,
+      unit5Consumption: consumptionPerArea?.U5_U23_GW03_Del_ActiveEnergy ?? 0,
       unit4Top: 236.5,
       unit4Left: 926,
       unit5Top: 236.5,
@@ -229,75 +224,74 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
     },
   ];
   const areaOnOffStatusLabels = [
-          {
-            key: "U1_GW02",
-            on: [
-              { top: 109.5, left: 50.5, img: "onmeter1.png", w: 27 },
-              { top: 260, left: 63.5, img: "onmeter2.png", w: 36 },
-            ],
-            off: [
-              { top: 109.5, left: 120.5, img: "offmeter1.png", w: 27 },
-              { top: 259, left: 99, img: "offmeter2.png", w: 36 },
-            ],
-          },
-          {
-            key: "U2_GW02",
-            on: [
-              { top: 109.5, left: 220.5, img: "onmeter1.png", w: 27 },
-              { top: 259.5, left: 233.5, img: "onmeter2.png", w: 36 },
-            ],
-            off: [
-              { top: 108.5, left: 289.7, img: "offmeter1.png", w: 27 },
-              { top: 259, left: 268.7, img: "offmeter2.png", w: 36 },
-            ],
-          },
-          {
-            key: "U3_GW02",
-            on: [
-              { top: 108.5, left: 398.5, img: "onmeter1.png", w: 27 },
-              { top: 259.2, left: 411.5, img: "onmeter2.png", w: 36 },
-            ],
-            off: [
-              { top: 108.5, left: 468.5, img: "offmeter1.png", w: 27 },
-              { top: 259, left: 446.7, img: "offmeter2.png", w: 36 },
-            ],
-          },
-          {
-            key: "U4_GW02",
-            on: [
-              { top: 109.5, left: 576.1, img: "onmeter1.png", w: 27 },
-              { top: 259.2, left: 589, img: "onmeter2.png", w: 36 },
-            ],
-            off: [
-              { top: 109.5, left: 646, img: "offmeter1.png", w: 27 },
-              { top: 259, left: 624.7, img: "offmeter2.png", w: 36 },
-            ],
-          },
-          {
-            key: "U22_GW03",
-            on: [
-              { top: 108.5, left: 754.4, img: "onmeter1.png", w: 27 },
-              { top: 259.2, left: 767.4, img: "onmeter2.png", w: 36 },
-            ],
-            off: [
-              { top: 108.5, left: 824, img: "offmeter1.png", w: 27 },
-              { top: 259, left: 802.5, img: "offmeter2.png", w: 36 },
-            ],
-          },
-          {
-            key: "U23_GW03",
-            on: [
-              { top: 108.5, left: 932.5, img: "onmeter1.png", w: 27 },
-              { top: 259.2, left: 945, img: "onmeter2.png", w: 36 },
-            ],
-            off: [
-              { top: 108.5, left: 1002, img: "offmeter1.png", w: 27 },
-              { top: 259, left: 981, img: "offmeter2.png", w: 36 },
-            ],
-          },
-        ]
- 
-  
+    {
+      key: "U1_GW02",
+      on: [
+        { top: 109.5, left: 50.5, img: "onmeter1.png", w: 27 },
+        { top: 260, left: 63.5, img: "onmeter2.png", w: 36 },
+      ],
+      off: [
+        { top: 109.5, left: 120.5, img: "offmeter1.png", w: 27 },
+        { top: 259, left: 99, img: "offmeter2.png", w: 36 },
+      ],
+    },
+    {
+      key: "U2_GW02",
+      on: [
+        { top: 109.5, left: 220.5, img: "onmeter1.png", w: 27 },
+        { top: 259.5, left: 233.5, img: "onmeter2.png", w: 36 },
+      ],
+      off: [
+        { top: 108.5, left: 289.7, img: "offmeter1.png", w: 27 },
+        { top: 259, left: 268.7, img: "offmeter2.png", w: 36 },
+      ],
+    },
+    {
+      key: "U3_GW02",
+      on: [
+        { top: 108.5, left: 398.5, img: "onmeter1.png", w: 27 },
+        { top: 259.2, left: 411.5, img: "onmeter2.png", w: 36 },
+      ],
+      off: [
+        { top: 108.5, left: 468.5, img: "offmeter1.png", w: 27 },
+        { top: 259, left: 446.7, img: "offmeter2.png", w: 36 },
+      ],
+    },
+    {
+      key: "U4_GW02",
+      on: [
+        { top: 109.5, left: 576.1, img: "onmeter1.png", w: 27 },
+        { top: 259.2, left: 589, img: "onmeter2.png", w: 36 },
+      ],
+      off: [
+        { top: 109.5, left: 646, img: "offmeter1.png", w: 27 },
+        { top: 259, left: 624.7, img: "offmeter2.png", w: 36 },
+      ],
+    },
+    {
+      key: "U22_GW03",
+      on: [
+        { top: 108.5, left: 754.4, img: "onmeter1.png", w: 27 },
+        { top: 259.2, left: 767.4, img: "onmeter2.png", w: 36 },
+      ],
+      off: [
+        { top: 108.5, left: 824, img: "offmeter1.png", w: 27 },
+        { top: 259, left: 802.5, img: "offmeter2.png", w: 36 },
+      ],
+    },
+    {
+      key: "U23_GW03",
+      on: [
+        { top: 108.5, left: 932.5, img: "onmeter1.png", w: 27 },
+        { top: 259.2, left: 945, img: "onmeter2.png", w: 36 },
+      ],
+      off: [
+        { top: 108.5, left: 1002, img: "offmeter1.png", w: 27 },
+        { top: 259, left: 981, img: "offmeter2.png", w: 36 },
+      ],
+    },
+  ];
+
   // fetch meter consumption per area
   const fetchMConsumptionPerArea = async () => {
     const token = localStorage.getItem("token");
@@ -305,58 +299,59 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
       return;
     }
     try {
-      const response = await fetch(`${config.BASE_URL}/meter/consumption`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${config.BASE_URL}/meter/meter-wise-consumption`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const resResult = await response.json();
       if (response.ok) {
-         
-        setConumptionPerArea(resResult.totals)
-        
+        setConumptionPerArea(resResult);
       }
     } catch (error) {
       console.error(error);
     }
   };
-  useEffect(()=>{
-    fetchMConsumptionPerArea();
-  },[])
   useEffect(() => {
+    fetchMConsumptionPerArea();
     fetchMeterAreaStatus();
     getRealTimeData();
-    const interval = setInterval(()=>{
+    const interval = setInterval(() => {
       getRealTimeData();
-      // fetchMConsumptionPerArea();
+      fetchMConsumptionPerArea();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
   return (
     <div className="w-full h-[81vh] bg-white dark:bg-gray-800 rounded-md border-t-3 p-5 border-[#1F5897] overflow-auto ">
       <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
-        {fieldMetersBtn.map((meter) => (
-          <button
-            key={meter.link}
-            onClick={() =>
-              router.push(
-                `/meter?area=Unit_5&page-type=field-meter&lt_scheme=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`
-              )
-            }
-            style={{
-              position: "absolute",
-              top: `${meter.top}px`,
-              left: `${meter.left}px`,
-              width: "49px",
-              height: "46px",
-              zIndex: 100,
-              borderRadius: "0.4.2rem", // rounded-md
-              cursor: "pointer",
-            }}
-            className={`rounded-md`}
-          ></button>
-        ))}
+        {fieldMetersBtn.map((meter) => {
+          return (
+            <button
+              key={meter.link}
+              onClick={() =>
+                router.push(
+                  `/meter?area=Unit_5&page-type=field-meter&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+                )
+              }
+              style={{
+                position: "absolute",
+                top: `${meter.top}px`,
+                left: `${meter.left}px`,
+                width: "49px",
+                height: "46px",
+                zIndex: 100,
+                borderRadius: "0.4.2rem", // rounded-md
+                cursor: "pointer",
+              }}
+              className={`rounded-md`}
+            ></button>
+          );
+        })}
         {/* Diagram Image */}
         <img
           src="./sld/field-meters.png"
@@ -378,7 +373,7 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
                   <img
                     src={`./fieldMeterStatus/${img}`}
                     // className={`w-[${w}px]`}
-                    style={{width:`${w}px`}}
+                    style={{ width: `${w}px` }}
                     alt=""
                   />
                 </div>
@@ -392,7 +387,7 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
                   <img
                     src={`./fieldMeterStatus/${img}`}
                     className={`w-[${w}px]`}
-                    style={{width:`${w}px`}}
+                    style={{ width: `${w}px` }}
                     alt=""
                   />
                 </div>
@@ -407,7 +402,7 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
             <div
               className="absolute font-fira-mono mt-[0.5px] flex items-center justify-center"
               style={{
-                fontSize:"8px",
+                fontSize: "8px",
                 color: "#05f805",
                 fontWeight: 500,
                 left: unit.unit4Left,
@@ -417,12 +412,12 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
               }}
             >
               {/* {unit.unit4Consumption.toFixed(2)} */}
-              {fix2decimals(unit.unit4Consumption??0)||"00.00"}
+              {fix2decimals(unit.unit4Consumption ?? 0) || "00.00"}
             </div>
             <div
               className="absolute font-fira-mono mt-[0.8px] flex items-center justify-center"
               style={{
-                fontSize:"8px",
+                fontSize: "8px",
                 color: "#05f805",
                 fontWeight: 500,
                 left: unit.unit5Left,
@@ -431,7 +426,7 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
                 height: "14px",
               }}
             >
-              {fix2decimals(unit.unit5Consumption)||"00.00"}
+              {fix2decimals(unit.unit5Consumption) || "00.00"}
             </div>
           </div>
         ))}
@@ -448,7 +443,7 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
             }}
           >
             <span
-            className="font-fira-mono"
+              className="font-fira-mono"
               style={{
                 fontSize: "8px",
                 color: "#05f805",
@@ -459,7 +454,7 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
               {meter.activePowerTotalTag || "00.00"}
             </span>
             <span
-            className="font-fira-mono"
+              className="font-fira-mono"
               style={{
                 fontSize: "8px",
                 color: "#05f805",
@@ -470,7 +465,7 @@ const fix2decimals = (meter)=> Number(meter.toFixed(0))
               {meter.activeCurrentAvgTag || "00.00"}
             </span>
             <span
-            className="font-fira-mono"
+              className="font-fira-mono"
               style={{
                 fontSize: "8px",
                 color: "#05f805",

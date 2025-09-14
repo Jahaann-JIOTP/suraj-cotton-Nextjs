@@ -131,6 +131,7 @@ const Header = ({ handleTabClick, activeTab }) => {
   const seenAlarms = useRef(new Set());
   const lastFetchedIdsRef = useRef([]); // all occurrence IDs from the last fetch
   const lastFullFetchRef = useRef([]); // full enriched list (for beep control)
+  const sideBarButtonRef = useRef(null);
 
   // 🔊 Audio manager
   const { play, stop, stopAll } = useAlarmAudioManager("/alarm.mp3");
@@ -396,12 +397,11 @@ const Header = ({ handleTabClick, activeTab }) => {
       {/* Burger (<= 2xl) */}
       <div className="2xl:hidden flex justify-between items-center px-4 py-2 z-40 relative">
         <button
+          ref={sideBarButtonRef}
           onClick={() => {
-            // console.log("dropdown",isDropdownOpen)
-            setIsDropdownOpen((prev) => !prev)
-          console.log("dropdown after click =>", !isDropdownOpen);
+            setIsDropdownOpen((prev) => !prev);
           }}
-          className="cursor-pointer relative z-[10001]"
+          className="cursor-pointer outline-none relative z-[10001]"
           aria-label={isDropdownOpen ? "Close menu" : "Open menu"}
         >
           <FontAwesomeIcon
@@ -427,6 +427,7 @@ const Header = ({ handleTabClick, activeTab }) => {
           <MobileSidebar
             userPrivileges={userPrivileges}
             closeSidebar={() => setIsDropdownOpen(false)}
+            sideBarButtonRef={sideBarButtonRef}
           />
         </div>
       </div>

@@ -77,7 +77,6 @@ const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
-  console.log(normalizeData);
   // ---------handle input field change---------
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -148,7 +147,7 @@ const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
                     "Loading..."
                   ) : (
                     <>
-                      {selectDpt.replace(/_/g," ")}
+                      {selectDpt.replace(/_/g, " ")}
                       <HiChevronDown
                         className={`transition-transform ${
                           isOpenDptDropdonw ? "rotate-180" : ""
@@ -179,7 +178,7 @@ const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
                             }}
                             className="mr-2"
                           />
-                          {option.replace(/_/g," ")}
+                          {option.replace(/_/g, " ")}
                         </label>
                       );
                     })}

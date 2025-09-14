@@ -1,8 +1,21 @@
-'use client'
-import { comboChartConfig, doubleLineConfig, singleColumnConfig, singleLineConfig } from "@/components/trendsComponents/chart-config";
+"use client";
+import {
+  comboChartConfig,
+  doubleLineConfig,
+  singleColumnConfig,
+  singleLineConfig,
+} from "@/components/trendsComponents/chart-config";
 import ReusableTrendChart from "@/components/trendsComponents/ReusableTrendChart";
 import { createDynamicChart } from "@/components/trendsComponents/ReusableTrendChart";
-import { columnChartData, formatChartData, generateEnergyData, generatePowerData, generateVoltageData, lineChartData, sampleData } from "@/data/chart-data";
+import {
+  columnChartData,
+  formatChartData,
+  generateEnergyData,
+  generatePowerData,
+  generateVoltageData,
+  lineChartData,
+  sampleData,
+} from "@/data/chart-data";
 import React, { useState } from "react";
 // Example hourly line data
 const lineData = [
@@ -21,19 +34,18 @@ const barData = [
 const TrendU4Lt1 = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  
+
   // Generate sample data
   const energyData = formatChartData(generateEnergyData());
   const powerData = formatChartData(generatePowerData());
   const voltageData = formatChartData(generateVoltageData());
-  
-  console.log(energyData)
+
   // Handle interval change
   const handleIntervalChange = (newStartDate, newEndDate) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
   };
-  
+
   return (
     <div className="grid grid-cols-1 gap-6 p-6 h-[81vh] overflow-y-auto">
       {/* 1) Energy Usage */}
@@ -44,8 +56,20 @@ const TrendU4Lt1 = () => {
           xKey="time"
           xType="date"
           series={[
-            { type: "column", yKey: "energyInterval", name: "Energy Usage Interval", color: "#4682B4" },
-            { type: "line", yKey: "energy", name: "Active Energy (kWh)", color: "#008D23", yAxis: "right", strokeWidth: 3 },
+            {
+              type: "column",
+              yKey: "energyInterval",
+              name: "Energy Usage Interval",
+              color: "#4682B4",
+            },
+            {
+              type: "line",
+              yKey: "energy",
+              name: "Active Energy (kWh)",
+              color: "#008D23",
+              yAxis: "right",
+              strokeWidth: 3,
+            },
           ]}
           yLeftTitle="kWh (Δ)"
           yRightTitle="kWh (Cum.)"
@@ -68,7 +92,15 @@ const TrendU4Lt1 = () => {
           data={powerData}
           xKey="time"
           xType="date"
-          series={[{ type: "line", yKey: "power", name: "Real Power", color: "#249FFF", strokeWidth: 3 }]}
+          series={[
+            {
+              type: "line",
+              yKey: "power",
+              name: "Real Power",
+              color: "#249FFF",
+              strokeWidth: 3,
+            },
+          ]}
           yLeftTitle="kW"
           legend={true}
           cursor={true}
@@ -88,7 +120,15 @@ const TrendU4Lt1 = () => {
           data={voltageData}
           xKey="time"
           xType="date"
-          series={[{ type: "line", yKey: "voltage", name: "Avg Voltage", color: "#3D5AFE", strokeWidth: 3 }]}
+          series={[
+            {
+              type: "line",
+              yKey: "voltage",
+              name: "Avg Voltage",
+              color: "#3D5AFE",
+              strokeWidth: 3,
+            },
+          ]}
           yLeftTitle="Volts"
           legend={false}
           cursor={true}
@@ -102,7 +142,6 @@ const TrendU4Lt1 = () => {
       </div>
     </div>
   );
-
 };
 
 export default TrendU4Lt1;

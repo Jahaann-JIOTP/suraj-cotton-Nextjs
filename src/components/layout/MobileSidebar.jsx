@@ -14,7 +14,11 @@ import {
   privilegeOrder,
 } from "@/constant/navigation";
 
-export default function MobileSidebar({ userPrivileges, closeSidebar }) {
+export default function MobileSidebar({
+  userPrivileges,
+  closeSidebar,
+  sideBarButtonRef,
+}) {
   const [openTab, setOpenTab] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
   const dispatch = useDispatch();
@@ -25,11 +29,14 @@ export default function MobileSidebar({ userPrivileges, closeSidebar }) {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+      if (
+        sidebarRef.current &&
+        !sideBarButtonRef.current.contains(event.target) &&
+        !sidebarRef.current.contains(event.target)
+      ) {
         closeSidebar();
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [closeSidebar]);
