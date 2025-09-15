@@ -20,12 +20,26 @@ const Settings = () => {
   const [meterToggleStatus, setMeterToggleStatus] = useState([]);
   const token = localStorage.getItem("token");
 
-
+  /////////////////////////////////// fetch consumption calculation api
+  const callhiddenConsumptionApi = async () => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/meter/consumption`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // toggle meter for storing real time values
-  const postMeterWithrealTimeValues = async(meterId, unit)=>{
-    const token = localStorage.getItem("token")
-     const currentUnit = selectedUnits[meterId];
+  const postMeterWithrealTimeValues = async (meterId, unit) => {
+    const token = localStorage.getItem("token");
+    const currentUnit = selectedUnits[meterId];
     const targetAreaName = unit === 4 ? "Unit_4" : "Unit_5";
     const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
     // If already in the selected unit, no need to confirm
@@ -33,25 +47,17 @@ const Settings = () => {
       return;
     }
     try {
-      const response = await fetch(`${config.BASE_URL}/meter/fetch-real-time`,{
-        method:"GET",
-        headers:{
-          "Content-Type":"application/json",
+      const response = await fetch(`${config.BASE_URL}/meter/fetch-real-time`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        // body:JSON.stringify({
-        //   unit:targetAreaName,
-        //   meterIds:[meterId]
-        // })
-      })
-      // if(response.ok){
-      //   toast.success("meter toggle")
-      // }
+      });
     } catch (error) {
-      console.error(error)
-      
+      console.error(error);
     }
-  }
+  };
   // Fetch user details
   const fetchUserDetails = async () => {
     if (!token) return;
@@ -107,82 +113,90 @@ const Settings = () => {
   // Toggle handler
 
   const handleToggle = async (meterId, unit) => {
-  const currentUnit = selectedUnits[meterId];
-  const targetAreaName = unit === 4 ? "Unit 4" : "Unit 5";
-  const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
+    const currentUnit = selectedUnits[meterId];
+    const targetAreaName = unit === 4 ? "Unit 4" : "Unit 5";
+    const currentAreaName = currentUnit === 4 ? "Unit 4" : "Unit 5";
 
-  if (currentUnit === unit) {
-    Swal.fire({
-      icon: "question",
-      html: `This meter is already assigned to <b>${targetAreaName || "N/A"}</b>`,
-    });
-    return;
-  }
+    if (currentUnit === unit) {
+      Swal.fire({
+        icon: "question",
+        html: `This meter is already assigned to <b>${
+          targetAreaName || "N/A"
+        }</b>`,
+      });
+      return;
+    }
 
-  const result = await Swal.fire({
-    title: "Confirm Switch",
-    html: `
+    const result = await Swal.fire({
+      title: "Confirm Switch",
+      html: `
       Currently you are in <b>${currentAreaName || "N/A"}</b>.<br/>
       Are you sure you want to switch to <b>${targetAreaName}</b>?
     `,
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "Switch",
-    cancelButtonText: "Cancel",
-    confirmButtonColor: "#1A68B2",
-    cancelButtonColor: "#d33",
-  });
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Switch",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#1A68B2",
+      cancelButtonColor: "#d33",
+    });
 
-  if (!result.isConfirmed) {
-    return; // User cancelled
-  }
-
-  // ✅ First update DB toggle
-  try {
-    const response = await fetch(
-      `${config.BASE_URL}${config.METER_CONFIG.ADD_METER_TOGGLE}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          area: unit === 4 ? "unit4" : "unit5",
-          meterId: meterId,
-          email: userData.email,
-          username: userData.name,
-        }),
-      }
-    );
-
-    const resResult = await response.json();
-    if (response.ok) {
-      toast.success(resResult.message);
-
-      // ✅ Only after confirmation + success → update state
-      setSelectedUnits((prev) => ({
-        ...prev,
-        [meterId]: unit,
-      }));
-
-      // ✅ Call real-time values API here
-      await postMeterWithrealTimeValues(meterId, unit);
-
-      fetchMeterToggleStatus();
-    } else {
-      toast.error(resResult.message);
+    if (!result.isConfirmed) {
+      return; // User cancelled
     }
-  } catch (error) {
-    console.error(error.message);
-  }
-};
+
+    // ✅ First update DB toggle
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.METER_CONFIG.ADD_METER_TOGGLE}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            area: unit === 4 ? "unit4" : "unit5",
+            meterId: meterId,
+            email: userData.email,
+            username: userData.name,
+          }),
+        }
+      );
+
+      const resResult = await response.json();
+      if (response.ok) {
+        toast.success(resResult.message);
+
+        // ✅ Only after confirmation + success → update state
+        setSelectedUnits((prev) => ({
+          ...prev,
+          [meterId]: unit,
+        }));
+
+        // ✅ Call real-time values API here
+        await postMeterWithrealTimeValues(meterId, unit);
+
+        fetchMeterToggleStatus();
+      } else {
+        toast.error(resResult.message);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   useEffect(() => {
     fetchUserDetails();
     fetchMeterToggleStatus();
   }, []);
-
+  useEffect(() => {
+    callhiddenConsumptionApi();
+    const interval = setInterval(() => {
+      callhiddenConsumptionApi();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="px-4 md:px-20 rounded-md">
@@ -213,8 +227,7 @@ const Settings = () => {
             <div className="flex gap-4">
               <button
                 onClick={() => {
-                  handleToggle(meter.id, 4)
-             
+                  handleToggle(meter.id, 4);
                 }}
                 className={`px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 ${
                   selectedUnits[meter.id] === 4
@@ -225,9 +238,8 @@ const Settings = () => {
                 Unit 4
               </button>
               <button
-                onClick={() =>{
-                   handleToggle(meter.id, 5)
-                 
+                onClick={() => {
+                  handleToggle(meter.id, 5);
                 }}
                 className={`px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 ${
                   selectedUnits[meter.id] === 5

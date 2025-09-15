@@ -161,8 +161,8 @@ const ReusableTrendChart = ({
             labelText: "{name}: {valueY}",
           }),
         });
-        
-  // ✅ Add bullets so points are visible
+
+        // ✅ Add bullets so points are visible
         chartSeries.bullets.push(() =>
           am5.Bullet.new(root, {
             sprite: am5.Circle.new(root, {
@@ -171,7 +171,6 @@ const ReusableTrendChart = ({
             }),
           })
         );
-       
 
         if (seriesConfig.color) {
           const lineColor = am5.color(seriesConfig.color);
@@ -245,7 +244,7 @@ const ReusableTrendChart = ({
       );
 
       chartCursor.lineY.set("visible", false); // hide horizontal line
-      chartCursor.lineX.set("visible", true);  // show vertical line
+      chartCursor.lineX.set("visible", true); // show vertical line
       chartCursor.set("snapToSeries", chart.series.values); // snap to all series
     }
 

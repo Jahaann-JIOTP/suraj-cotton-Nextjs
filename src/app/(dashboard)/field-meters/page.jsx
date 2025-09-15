@@ -73,20 +73,7 @@ const FieldMeters = () => {
       console.error(error.message);
     }
   };
-  const callhiddenConsumptionApi = async () => {
-    try {
-      const response = await fetch(`${config.BASE_URL}/meter/consumption`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) throw new Error("Failed to fetch");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   function roundNumbersInJson(obj) {
     const newObj = { ...obj };
 
