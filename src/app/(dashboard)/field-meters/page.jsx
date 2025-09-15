@@ -51,9 +51,9 @@ const FieldMeters = () => {
   const [currentArea, setCurrentArea] = useState({});
   const [consumptionPerArea, setConumptionPerArea] = useState({});
   const router = useRouter();
+  const token = localStorage.getItem("token");
   // fetch real time values
   const getRealTimeData = async () => {
-    const token = localStorage.getItem("token");
     if (!token) return;
     try {
       const response = await fetch(
@@ -71,6 +71,20 @@ const FieldMeters = () => {
       }
     } catch (error) {
       console.error(error.message);
+    }
+  };
+  const callhiddenConsumptionApi = async () => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/meter/consumption`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch");
+    } catch (error) {
+      console.log(error);
     }
   };
   function roundNumbersInJson(obj) {
@@ -319,10 +333,12 @@ const FieldMeters = () => {
   useEffect(() => {
     fetchMConsumptionPerArea();
     fetchMeterAreaStatus();
+    callhiddenConsumptionApi();
     getRealTimeData();
     const interval = setInterval(() => {
       getRealTimeData();
       fetchMConsumptionPerArea();
+      callhiddenConsumptionApi();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
