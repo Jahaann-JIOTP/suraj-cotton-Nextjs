@@ -37,68 +37,17 @@ const trendsData = {
   powerFactor: useTrendsChart("powerfactor", "2025-09-07", "2025-09-07"),
   harmonics: useTrendsChart("harmonics", "2025-09-06", "2025-09-06"),
 };
-// console.log("chart3",trendsData.energy.data)
-// console.log("chart2",trendsData.activePower.data)
-// console.log("chart4",trendsData.current.data)
-// console.log("chart1",trendsData.voltage.data)
-//////////////////////
-  // console.log("chart5",trendsData.powerFactor.data)
-  console.log("chart6",trendsData.harmonics.data)
-  //===================fetch unit 4 lt 1 charts data=========================
-  const fetchU4Lt1Trends = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `${config.BASE_URL}/plants-trends/unit5-lt2?startDate=2025-09-11&endDate=2025-09-11&type=energy`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const resResult = await response.json();
-      if (response.ok) {
-        setU4Lt1Data(resResult);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  };
 
- 
-
-  const powerData = formatChartData(generatePowerData());
-  const voltageData = formatChartData(generateVoltageData());
-  
   const handleIntervalChange = (newStartDate, newEndDate) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
   };
-  // useEffect(() => {
-  //   const loadData = async () => {
-  //     setLoading(true);
-  //     const chartTypes = []
-  //     const data = await fetchStaticTrendsData("voltage", "2025-09-11", "2025-09-11");
-  //     setTrendsData(data);
-  //     setLoading(false);
-  //   };
 
-  //   loadData();
-  // }, []);
-console.log("this is dummy ",voltageData)
-  useEffect(() => {
-    fetchU4Lt1Trends();
-  }, [startDate]);
   return (
-    <div className="grid grid-cols-1 gap-6 p-6 h-[81vh] overflow-y-auto">
+    // <div className="grid grid-cols-1 gap-3 h-[81vh] overflow-y-auto">
+    <div className="h-[81vh] overflow-y-auto space-y-3">
       {/* 1) Energy Usage */}
-      <div className=" w-full px-4 py-4 h-[40vh]">
+      <div className="w-full">
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-[#ffffffc5] dark:bg-gray-700/50 rounded-md z-10">
             <CustomLoader />
@@ -118,13 +67,13 @@ console.log("this is dummy ",voltageData)
             {
               type: "column",
               yKey: "energyInterval",
-              name: "Energy Usage Interval",
+              name: "Interval Del-Active Energy",
               color: "#4682B4",
             },
             {
               type: "line",
               yKey: "energy",
-              name: "Active Energy (kWh)",
+              name: "Del-Active Energy (kWh)",
               color: "#008D23",
               yAxis: "right",
               strokeWidth: 3,
@@ -144,8 +93,8 @@ console.log("this is dummy ",voltageData)
         />
       </div>
 
-      {/* 2) Real Power */}
-      <div className="relative w-full px-4 py-4 h-[40vh]">
+      {/* 2) Active Power */}
+      <div className="w-full">
         <ReusableTrendChart
           title="UNIT 4 LT 1 - ACTIVE DEMAND (HISTORICAL)"
           // data={powerData}
@@ -159,7 +108,7 @@ console.log("this is dummy ",voltageData)
             {
               type: "line",
               yKey: "power",
-              name: "Real Power",
+              name: "Active Power",
               color: "#249FFF",
               strokeWidth: 3,
             },
@@ -177,7 +126,7 @@ console.log("this is dummy ",voltageData)
       </div>
 
       {/* 3) Voltage */}
-      <div className="relative w-full px-4 py-4 h-[40vh]">
+      <div className="w-full">
         <ReusableTrendChart
           title="UNIT 4 LT 1 - MAIN VOLTAGE"
           // data={voltageData}
@@ -191,7 +140,7 @@ console.log("this is dummy ",voltageData)
             {
               type: "line",
               yKey: "voltage",
-              name: "Avg Voltage",
+              name: "Voltage",
               color: "#3D5AFE",
               strokeWidth: 3,
             },
@@ -209,7 +158,7 @@ console.log("this is dummy ",voltageData)
       </div>
 
        {/* 4) main current */}
-      <div className="relative w-full px-4 py-4 h-[40vh]">
+      <div className="w-full">
         <ReusableTrendChart
           title="UNIT 4 LT 1 - MAIN CURRENT"
            data={trendsData.current.data.map((item) => ({
@@ -222,12 +171,12 @@ console.log("this is dummy ",voltageData)
             {
               type: "line",
               yKey: "current",
-              name: "Avg Voltage",
-              color: "#3D5AFE",
+              name: "Current",
+              color: "#FA8B02",
               strokeWidth: 3,
             },
           ]}
-          yLeftTitle="Volts"
+          yLeftTitle="Current"
           legend={true}
           cursor={true}
           startDate={startDate}
@@ -240,25 +189,33 @@ console.log("this is dummy ",voltageData)
       </div>
       
        {/* 5) main power factor */}
-      <div className="relative w-full px-4 py-4 h-[40vh]">
+      <div className="w-full">
         <ReusableTrendChart
           title="UNIT 4 LT 1 - REACTIVE POWER AND PF"
-           data={trendsData.current.data.map((item) => ({
+           data={trendsData.powerFactor.data.map((item) => ({
             time: new Date(item.timestamp).getTime(), // ✅ directly valid
-            current: item.sumCurrent,
+            sumpowerfactor: item.sumpowerfactor,
+            sumRecEnergy: item.sumRecEnergy,
           }))}
           xKey="time"
           xType="date"
           series={[
             {
               type: "line",
-              yKey: "current",
+              yKey: "sumpowerfactor",
               name: "Power Factor",
-              color: "#1C03FF",
+              color: "#8400F2",
+              strokeWidth: 3,
+            },
+            {
+              type: "line",
+              yKey: "sumRecEnergy",
+              name: "Reactive Energy",
+              color: "#05C2FF",
               strokeWidth: 3,
             },
           ]}
-          yLeftTitle="Power Factor"
+          yLeftTitle="Powerfactor"
           legend={true}
           cursor={true}
           startDate={startDate}
@@ -271,7 +228,7 @@ console.log("this is dummy ",voltageData)
       </div>
 
        {/* 6) main horm */}
-      <div className="relative w-full px-4 py-4 h-[40vh]">
+      <div className="w-full">
         <ReusableTrendChart
           title="UNIT 4 LT 1 - VOLTAGE HARMONIC REDUCTION"
            data={trendsData.harmonics.data.map((item) => ({

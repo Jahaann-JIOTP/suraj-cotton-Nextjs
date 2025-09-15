@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
@@ -29,7 +29,6 @@ const ReusableTrendChart = ({
   endDate,
   onIntervalChange,
 }) => {
-  console.log("this is series from chart component", series)
   const chartRef = useRef(null);
   const rootRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -60,19 +59,14 @@ const ReusableTrendChart = ({
     // Create root element
     const root = am5.Root.new(chartRef.current);
     rootRef.current = root;
-    
+
     // Set themes based on current theme
     if (theme === "dark") {
-      root.setThemes([
-        am5themes_Animated.new(root),
-        am5themes_Dark.new(root)
-      ]);
+      root.setThemes([am5themes_Animated.new(root), am5themes_Dark.new(root)]);
     } else {
-      root.setThemes([
-        am5themes_Animated.new(root)
-      ]);
+      root.setThemes([am5themes_Animated.new(root)]);
     }
-    
+
     root._logo?.dispose();
 
     // Create chart
@@ -83,7 +77,7 @@ const ReusableTrendChart = ({
         wheelX: "panX",
         wheelY: "zoomX",
         pinchZoomX: true,
-        layout: root.verticalLayout
+        layout: root.verticalLayout,
       })
     );
 
@@ -94,20 +88,20 @@ const ReusableTrendChart = ({
         am5xy.DateAxis.new(root, {
           baseInterval: { timeUnit: "minute", count: 1 },
           renderer: am5xy.AxisRendererX.new(root, {
-            minGridDistance: minGridDistance
+            minGridDistance: minGridDistance,
           }),
           tooltip: am5.Tooltip.new(root, {
-            labelText: "{valueX}"
-          })
+            labelText: "{valueX}",
+          }),
         })
       );
     } else {
       xAxis = chart.xAxes.push(
         am5xy.CategoryAxis.new(root, {
           renderer: am5xy.AxisRendererX.new(root, {
-            minGridDistance: minGridDistance
+            minGridDistance: minGridDistance,
           }),
-          categoryField: xKey
+          categoryField: xKey,
         })
       );
     }
@@ -115,40 +109,46 @@ const ReusableTrendChart = ({
     // Create Y axes
     const leftYAxis = chart.yAxes.push(
       am5xy.ValueAxis.new(root, {
-        renderer: am5xy.AxisRendererY.new(root, {})
+        renderer: am5xy.AxisRendererY.new(root, {}),
       })
     );
 
     if (yLeftTitle) {
-      leftYAxis.set("title", am5.Label.new(root, {
-        text: yLeftTitle,
-        fontSize: 12
-      }));
+      leftYAxis.set(
+        "title",
+        am5.Label.new(root, {
+          text: yLeftTitle,
+          fontSize: 12,
+        })
+      );
     }
 
     let rightYAxis;
-    if (series.some(s => s.yAxis === "right")) {
+    if (series.some((s) => s.yAxis === "right")) {
       rightYAxis = chart.yAxes.push(
         am5xy.ValueAxis.new(root, {
           renderer: am5xy.AxisRendererY.new(root, {
-            opposite: true
-          })
+            opposite: true,
+          }),
         })
       );
 
       if (yRightTitle) {
-        rightYAxis.set("title", am5.Label.new(root, {
-          text: yRightTitle,
-          fontSize: 12
-        }));
+        rightYAxis.set(
+          "title",
+          am5.Label.new(root, {
+            text: yRightTitle,
+            fontSize: 12,
+          })
+        );
       }
     }
 
     // Add series
-    series.forEach(seriesConfig => {
+    series.forEach((seriesConfig) => {
       let chartSeries;
       const yAxis = seriesConfig.yAxis === "right" ? rightYAxis : leftYAxis;
-      
+
       if (seriesConfig.type === "line") {
         chartSeries = am5xy.LineSeries.new(root, {
           name: seriesConfig.name,
@@ -158,16 +158,40 @@ const ReusableTrendChart = ({
           valueXField: xKey,
           tooltip: am5.Tooltip.new(root, {
             pointerOrientation: "horizontal",
-            labelText: "{name}: {valueY}"
-          })
+            labelText: "{name}: {valueY}",
+          }),
         });
         
+  // ✅ Add bullets so points are visible
+        chartSeries.bullets.push(() =>
+          am5.Bullet.new(root, {
+            sprite: am5.Circle.new(root, {
+              radius: 4,
+              fill: chartSeries.get("fill"),
+            }),
+          })
+        );
+       
+
         if (seriesConfig.color) {
-          chartSeries.strokes.template.set("stroke", am5.color(seriesConfig.color));
+          const lineColor = am5.color(seriesConfig.color);
+          chartSeries.strokes.template.setAll({
+            stroke: lineColor,
+            strokeWidth: seriesConfig.strokeWidth || 2,
+          });
+          chartSeries.fills.template.setAll({
+            fill: lineColor,
+            fillOpacity: 0.1,
+          });
+          chartSeries.set("fill", lineColor);
+          chartSeries.set("stroke", lineColor);
         }
-        
+
         if (seriesConfig.strokeWidth) {
-          chartSeries.strokes.template.set("strokeWidth", seriesConfig.strokeWidth);
+          chartSeries.strokes.template.set(
+            "strokeWidth",
+            seriesConfig.strokeWidth
+          );
         }
       } else if (seriesConfig.type === "column") {
         chartSeries = am5xy.ColumnSeries.new(root, {
@@ -178,28 +202,52 @@ const ReusableTrendChart = ({
           valueXField: xKey,
           tooltip: am5.Tooltip.new(root, {
             pointerOrientation: "horizontal",
-            labelText: "{name}: {valueY}"
-          })
+            labelText: "{name}: {valueY}",
+          }),
         });
-        
-        // Increase column width
+
         chartSeries.columns.template.setAll({
-          width: am5.percent(70), // Increased from default
+          width: am5.percent(70),
           cornerRadiusTL: 3,
-          cornerRadiusTR: 3
+          cornerRadiusTR: 3,
         });
-        
+
         if (seriesConfig.color) {
-          chartSeries.columns.template.set("fill", am5.color(seriesConfig.color));
-          chartSeries.columns.template.set("stroke", am5.color(seriesConfig.color));
+          const columnColor = am5.color(seriesConfig.color);
+          chartSeries.columns.template.setAll({
+            fill: columnColor,
+            stroke: columnColor,
+          });
+          chartSeries.set("fill", columnColor);
+          chartSeries.set("stroke", columnColor);
         }
       }
-      
+
       if (chartSeries) {
         chart.series.push(chartSeries);
         chartSeries.data.setAll(data);
+
+        if (seriesConfig.color) {
+          const seriesColor = am5.color(seriesConfig.color);
+          chartSeries.set("fill", seriesColor);
+          if (seriesConfig.type === "line") {
+            chartSeries.strokes.template.set("stroke", seriesColor);
+          }
+        }
       }
     });
+
+    // ✅ Cursor after series
+    if (cursor) {
+      const chartCursor = chart.set(
+        "cursor",
+        am5xy.XYCursor.new(root, { behavior: "none" })
+      );
+
+      chartCursor.lineY.set("visible", false); // hide horizontal line
+      chartCursor.lineX.set("visible", true);  // show vertical line
+      chartCursor.set("snapToSeries", chart.series.values); // snap to all series
+    }
 
     // Add legend
     if (legend) {
@@ -207,14 +255,13 @@ const ReusableTrendChart = ({
         am5.Legend.new(root, {
           centerX: am5.p50,
           x: am5.p50,
-          layout: root.horizontalLayout
+          layout: root.horizontalLayout,
         })
       );
       chartLegend.data.setAll(chart.series.values);
-      
-      // Style legend based on theme
+
       chartLegend.labels.template.setAll({
-        fill: theme === "dark" ? am5.color(0xffffff) : am5.color(0x000000)
+        fill: theme === "dark" ? am5.color(0xffffff) : am5.color(0x000000),
       });
     }
 
@@ -225,9 +272,12 @@ const ReusableTrendChart = ({
 
     // Add scrollbar if needed
     if (scrollbarX) {
-      chart.set("scrollbarX", am5.Scrollbar.new(root, {
-        orientation: "horizontal"
-      }));
+      chart.set(
+        "scrollbarX",
+        am5.Scrollbar.new(root, {
+          orientation: "horizontal",
+        })
+      );
     }
 
     // Cleanup function
@@ -237,7 +287,20 @@ const ReusableTrendChart = ({
         rootRef.current = null;
       }
     };
-  }, [data, xKey, xType, series, legend, cursor, scrollbarX, yLeftTitle, yRightTitle, minGridDistance, theme]);
+  }, [
+    data,
+    xKey,
+    xType,
+    series,
+    isFullscreen,
+    legend,
+    cursor,
+    scrollbarX,
+    yLeftTitle,
+    yRightTitle,
+    minGridDistance,
+    theme,
+  ]);
 
   // Handle interval changes
   const handleStartChange = (e) => {
@@ -256,7 +319,13 @@ const ReusableTrendChart = ({
   const endVal = toDateOnly(endDate);
 
   return (
-    <div className={` ${isFullscreen?"absolute top-0 left-0  h-[100vh] z-50":"relative h-[40vh]"} w-full p-4  bg-white dark:bg-gray-800 border-t-4 border-[#1F5897] rounded-[12px] shadow-md`}>
+    <div
+      className={` ${
+        isFullscreen
+          ? "absolute top-0 left-0  h-[100vh] z-50"
+          : "relative h-[40vh]"
+      } w-full p-4  bg-white dark:bg-gray-800 border-t-4 border-[#1F5897] rounded-[12px] shadow-md`}
+    >
       {showToolbar && (
         <div className="mb-2 flex items-center justify-between">
           <span className="text-[15px] font-semibold uppercase text-[#4F5562] dark:text-white font-raleway">
@@ -265,7 +334,9 @@ const ReusableTrendChart = ({
           <div className="flex items-center gap-2">
             {showInterval && xType === "date" && (
               <div className="flex items-center gap-2 text-sm">
-                <span className="font-medium dark:text-gray-300">Interval:</span>
+                <span className="font-medium dark:text-gray-300">
+                  Interval:
+                </span>
                 <input
                   type="date"
                   value={startVal}
@@ -287,7 +358,7 @@ const ReusableTrendChart = ({
             {showFullscreen && (
               <button
                 onClick={toggleFullscreen}
-                className="p-1 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                className="p-1 text-gray-600 cursor-pointer dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
               >
                 {isFullscreen ? (
                   <MdOutlineFullscreenExit size={20} />
@@ -303,7 +374,7 @@ const ReusableTrendChart = ({
       <div
         ref={chartRef}
         id={id}
-        style={{ height: isFullscreen ? "90vh" : `12rem` }}
+        style={{ height: isFullscreen ? "90vh" : `33vh` }}
         className="w-full"
       />
     </div>
