@@ -193,13 +193,6 @@ const Settings = () => {
     fetchUserDetails();
     fetchMeterToggleStatus();
   }, []);
-  // useEffect(() => {
-  //   callhiddenConsumptionApi();
-  //   const interval = setInterval(() => {
-  //     callhiddenConsumptionApi();
-  //   }, 5000);
-  //   return () => clearInterval(interval);
-  // }, []);
 
   return (
     <div className="px-4 md:px-20 rounded-md">

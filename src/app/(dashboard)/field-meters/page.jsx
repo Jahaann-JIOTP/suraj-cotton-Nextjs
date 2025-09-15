@@ -320,12 +320,10 @@ const FieldMeters = () => {
   useEffect(() => {
     fetchMConsumptionPerArea();
     fetchMeterAreaStatus();
-    callhiddenConsumptionApi();
     getRealTimeData();
     const interval = setInterval(() => {
       getRealTimeData();
       fetchMConsumptionPerArea();
-      callhiddenConsumptionApi();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
