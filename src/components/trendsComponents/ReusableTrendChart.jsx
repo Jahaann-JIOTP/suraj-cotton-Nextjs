@@ -29,6 +29,7 @@ const ReusableTrendChart = ({
   endDate,
   onIntervalChange,
 }) => {
+  console.log("this is series from chart component", series)
   const chartRef = useRef(null);
   const rootRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -241,13 +242,13 @@ const ReusableTrendChart = ({
   // Handle interval changes
   const handleStartChange = (e) => {
     if (!onIntervalChange) return;
-    const value = e.target.value ? new Date(e.target.value) : null;
+    const value = e.target.value;
     onIntervalChange(value, endDate);
   };
 
   const handleEndChange = (e) => {
     if (!onIntervalChange) return;
-    const value = e.target.value ? new Date(e.target.value) : null;
+    const value = e.target.value;
     onIntervalChange(startDate, value);
   };
 
@@ -255,7 +256,7 @@ const ReusableTrendChart = ({
   const endVal = toDateOnly(endDate);
 
   return (
-    <div className={`relative w-full p-4 h-[40vh] bg-white dark:bg-gray-800 border-t-4 border-[#1F5897] rounded-[12px] shadow-md ${isFullscreen ? "fixed inset-0 z-50" : ""}`}>
+    <div className={` ${isFullscreen?"absolute top-0 left-0  h-[100vh] z-50":"relative h-[40vh]"} w-full p-4  bg-white dark:bg-gray-800 border-t-4 border-[#1F5897] rounded-[12px] shadow-md`}>
       {showToolbar && (
         <div className="mb-2 flex items-center justify-between">
           <span className="text-[15px] font-semibold uppercase text-[#4F5562] dark:text-white font-raleway">
@@ -269,6 +270,7 @@ const ReusableTrendChart = ({
                   type="date"
                   value={startVal}
                   onChange={handleStartChange}
+                  placeholder="Date"
                   className="border rounded px-1 py-0.5 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                 />
                 <span className="dark:text-gray-300">to</span>

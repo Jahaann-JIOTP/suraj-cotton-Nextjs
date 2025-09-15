@@ -34,15 +34,15 @@ const Settings = () => {
     }
     try {
       const response = await fetch(`${config.BASE_URL}/meter/fetch-real-time`,{
-        method:"POST",
+        method:"GET",
         headers:{
           "Content-Type":"application/json",
           Authorization: `Bearer ${token}`,
         },
-        body:JSON.stringify({
-          unit:targetAreaName,
-          meterIds:[meterId]
-        })
+        // body:JSON.stringify({
+        //   unit:targetAreaName,
+        //   meterIds:[meterId]
+        // })
       })
       // if(response.ok){
       //   toast.success("meter toggle")
