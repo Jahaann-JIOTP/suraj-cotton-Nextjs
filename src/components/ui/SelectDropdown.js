@@ -16,6 +16,7 @@ const SelectDropdown = ({
   open,
   onOpenChange,
 }) => {
+
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropUp, setDropUp] = useState(false);
   const containerRef = useRef(null);
@@ -37,6 +38,25 @@ const setOpen = useCallback((v) => (isControlled ? onOpenChange?.(v) : setShowDr
       setDropUp(spaceBelow < dropdownHeight);
     }
   }, [actualOpen, options.length]);
+  
+  // Helper: format labels without changing values
+const formatLabel = (value, label) => {
+  if (label === "Location") {
+    // Remove underscores only for Unit dropdown
+    return value.replaceAll("_", " ");
+  }
+
+  if (label === "Parameter") {
+    // Example: U5_GW02_Voltage_AB → Voltage AB
+    const parts = value.split("_");
+    if (parts.length > 2) {
+      return parts.slice(2).join(" "); // remove first two indexes
+    }
+  }
+
+  // Default: return value as-is
+  return value;
+};
 
   // Close on outside click + Esc
   useEffect(() => {
@@ -72,7 +92,7 @@ const setOpen = useCallback((v) => (isControlled ? onOpenChange?.(v) : setShowDr
           onClick={toggleDropdown}
           className={`dark:text-white text-[13px] ${textColor} leading-[1.5rem] w-full ${padding} border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white text-left cursor-pointer !font-[Inter]`}
         >
-          {selectedValue || `${label}`}
+          {selectedValue ? formatLabel(selectedValue, label) : `Select ${label}`}
           <span className="float-right">
             {actualOpen ? <IoChevronUp size={20} /> : <HiMiniChevronDown size={25} />}
           </span>
@@ -102,7 +122,7 @@ const setOpen = useCallback((v) => (isControlled ? onOpenChange?.(v) : setShowDr
 
           {/* Real Options */}
           {options.map((option) => (
-            <label key={option} className="!font-[Inter] block px-4 py-2 dark:hover:bg-gray-600 hover:bg-gray-100 truncate cursor-pointer">
+            <label key={option} className="font-Inter block px-4 py-2 dark:hover:bg-gray-600 hover:bg-gray-100 truncate cursor-pointer">
               <input
                 type="radio"
                 name={label}
@@ -114,7 +134,7 @@ const setOpen = useCallback((v) => (isControlled ? onOpenChange?.(v) : setShowDr
                 }}
                 className="mr-2 !font-[Inter]"
               />
-              {option}
+              {formatLabel(option,label)}
             </label>
           ))}
         </div>

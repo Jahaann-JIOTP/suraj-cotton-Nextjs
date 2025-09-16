@@ -628,7 +628,7 @@ const handleDeviceChange = (selectedDevice) => {
         {/* Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 mt-2">
   <div className="w-full">
-    <label className="text-[14px] font-medium text-black dark:text-white !font-[Inter] font-semibold">
+    <label className="text-[14px] text-black dark:text-white !font-[Inter] font-semibold">
       Actions on Acknowledgement
     </label>
     <div className="flex flex-col space-y-2 w-full">

@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 
-export function useTrendsChart(type, startDate, endDate) {
+export function useTrendsChart(area,type, startDate, endDate) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!type || !startDate || !endDate) return;
+    if (!area || !type || !startDate || !endDate) return;
 
     const fetchData = async () => {
       setLoading(true);
@@ -17,7 +17,7 @@ export function useTrendsChart(type, startDate, endDate) {
 
       try {
         const response = await fetch(
-          `${config.BASE_URL}/plants-trends/unit4-lt1?startDate=${startDate}&endDate=${endDate}&type=${type}`,
+          `${config.BASE_URL}/plants-trends/${area}?startDate=${startDate}&endDate=${endDate}&type=${type}`,
           { method: "GET" }
         );
         const resResult = await response.json();

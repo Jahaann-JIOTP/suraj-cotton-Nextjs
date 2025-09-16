@@ -7,6 +7,7 @@ import { format, toZonedTime } from "date-fns-tz";
 import { toast } from "react-toastify";
 import config from "../../../config";
 
+
 // new added
 const useBeepSound = () => {
   const beepSoundRef = useRef(null);
@@ -354,7 +355,7 @@ export default function ActiveAlarmsPage() {
               options={alarmNames}
               selectedValue={alarmNameFilter}
               onChange={setAlarmNameFilter}
-              width="w-full lg:w-36"
+              width="w-full lg:w-40"
               padding="!p-[3.5px]"
               labelshow={false}
             />
@@ -589,6 +590,7 @@ export default function ActiveAlarmsPage() {
               <div className="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-gray-800/60 pointer-events-none">
                 <div className="loader" />
               </div>
+              
             )}
           </div>
         </div>

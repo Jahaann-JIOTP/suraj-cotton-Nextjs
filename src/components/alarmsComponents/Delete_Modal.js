@@ -104,14 +104,14 @@ toast.error(errorMessage, {
             <div className="flex border-t border-gray-300">
               <button
                 onClick={onClose}
-                className="w-1/2 py-2 text-blue-600 font-bold dark:text-white cursor-pointer dark:hover:bg-gray-600 font-medium hover:rounded-bl-lg hover:bg-gray-100 focus:outline-none !font-[Poppins]"
+                className="w-1/2 py-2 text-blue-600 dark:text-white cursor-pointer dark:hover:bg-gray-600 font-medium hover:rounded-bl-lg hover:bg-gray-100 focus:outline-none !font-[Poppins]"
               >
                 Cancel
               </button>
               <div className="w-px bg-gray-300" />
               <button
                 onClick={handleDelete}
-                className="w-1/2 py-2 text-red-600 font-bold cursor-pointer dark:hover:bg-gray-600 font-medium hover:rounded-br-lg hover:bg-gray-100 focus:outline-none !font-[Poppins]"
+                className="w-1/2 py-2 text-red-600 cursor-pointer dark:hover:bg-gray-600 font-medium hover:rounded-br-lg hover:bg-gray-100 focus:outline-none !font-[Poppins]"
               >
                 Delete
               </button>

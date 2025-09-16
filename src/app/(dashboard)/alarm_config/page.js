@@ -191,7 +191,12 @@ export default function Index() {
       )}`
     );
   };
-
+  // remove _ and id from param
+  const formateParmeter = (param)=>{
+    let parts = param.split("_");
+   return parts.slice(2).join(" ")
+  }
+console.log(formateParmeter("U5_GW01_Voltage_Avg"))
   const handleDeleteClick = (alarmRow) => {
     setSelectedAlarm(alarmRow);
     setIsDeleteModalOpen(true);
@@ -343,13 +348,13 @@ export default function Index() {
                 >
                   <td className="py-3 px-4 !font-[Inter]">{row.name}</td>
                   <td className="py-3 px-4 !font-[Inter]">
-                    {row.parameter ?? "Voltage"}
+                    {formateParmeter(row.parameter) ?? "Voltage"}
                   </td>
                   <td className="py-3 px-4 !font-[Inter]">
                     {row.device ?? "Transformer"}
                   </td>
                   <td className="py-3 px-4 !font-[Inter]">
-                    {row.location ?? "Location"}
+                    {row.location.replace("_"," ") ?? "Location"}
                   </td>
                   <td className="py-3 px-4 text-right relative">
                     <button

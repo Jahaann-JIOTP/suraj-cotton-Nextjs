@@ -6,6 +6,7 @@ import DeleteModal from '@/components/alarmsComponents/Delete_Modal';
 import { useRouter } from 'next/navigation';
 import config from "../../../config";
 import Image from 'next/image';
+import CustomLoader from '@/components/customLoader/CustomLoader';
 
 export default function Index() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -147,9 +148,7 @@ useEffect(() => {
         </div>
 
         {isLoading ? (
-          <div className="absolute inset-0 h-[90%] flex items-center justify-center bg-white dark:bg-gray-700 z-10">
-            <div className="loader" />
-          </div>
+          <CustomLoader/>
         ) : alarms.length === 0 ? (
           <div className="flex items-start gap-[21px] mt-[79px] w-full max-w-full mx-auto">
             <div className="flex-1 flex flex-col items-center mt-[5px]">

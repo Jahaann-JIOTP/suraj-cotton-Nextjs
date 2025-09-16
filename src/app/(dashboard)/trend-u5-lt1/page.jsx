@@ -16,7 +16,7 @@ import { useState } from "react";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 // Example hourly line data
 
-const TrendU4Lt1 = () => {
+const TrendU5Lt1 = () => {
   const today = new Date().toISOString().split("T")[0];
 
   // dates started
@@ -43,7 +43,8 @@ const TrendU4Lt1 = () => {
 
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
-const area = "unit4-lt1"
+const area = "unit5-lt1"
+
   //==============fetch for voltage================
 
   const trendsData = {
@@ -73,7 +74,7 @@ const area = "unit4-lt1"
       >
         <div className="mb-2 flex items-center justify-between">
           <span className="text-[15px] font-inter font-semibold uppercase text-[#4F5562] dark:text-white font-raleway">
-            UNIT 4 LT 1 - ENERGY USAGE
+            UNIT 5 LT 1 - ENERGY USAGE
           </span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2 text-sm">
@@ -123,7 +124,7 @@ const area = "unit4-lt1"
       >
         <div className="mb-2 flex items-center justify-between">
           <span className="text-[15px] font-inter font-semibold uppercase text-[#4F5562] dark:text-white font-raleway">
-            UNIT 4 LT 1 - ACTIVE DEMAND (HISTORICAL)
+            UNIT 5 LT 1 - ACTIVE DEMAND (HISTORICAL)
           </span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2 text-sm">
@@ -173,7 +174,7 @@ const area = "unit4-lt1"
       >
         <div className="mb-2 flex items-center justify-between">
           <span className="text-[15px] font-inter font-semibold uppercase text-[#4F5562] dark:text-white font-raleway">
-            UNIT 4 LT 1 - MAIN VOLTAGE
+            UNIT 5 LT 1 - MAIN VOLTAGE
           </span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2 text-sm">
@@ -223,7 +224,7 @@ const area = "unit4-lt1"
       >
         <div className="mb-2 flex items-center justify-between">
           <span className="text-[15px] font-inter font-semibold uppercase text-[#4F5562] dark:text-white font-raleway">
-            UNIT 4 LT 1 - MAIN CURRENT
+            UNIT 5 LT 1 - MAIN CURRENT
           </span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2 text-sm">
@@ -273,7 +274,7 @@ const area = "unit4-lt1"
       >
         <div className="mb-2 flex items-center justify-between">
           <span className="text-[15px] font-inter font-semibold uppercase text-[#4F5562] dark:text-white font-raleway">
-            UNIT 4 LT 1 - REACTIVE POWER AND PF
+            UNIT 5 LT 1 - REACTIVE POWER AND PF
           </span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2 text-sm">
@@ -323,7 +324,7 @@ const area = "unit4-lt1"
       >
         <div className="mb-2 flex items-center justify-between">
           <span className="text-[15px] font-inter font-semibold uppercase text-[#4F5562] dark:text-white font-raleway">
-            UNIT 4 LT 1 - VOLTAGE HARMONIC REDUCTION
+            UNIT 5 LT 1 - VOLTAGE HARMONIC REDUCTION
           </span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2 text-sm">
@@ -368,4 +369,4 @@ const area = "unit4-lt1"
   );
 };
 
-export default TrendU4Lt1;
+export default TrendU5Lt1;
