@@ -65,6 +65,7 @@ const { theme } = useTheme();
 
     // Enhanced tooltip to show date, time, and original value
     columnTemplate.tooltipText = "{fullDate} at {hour}: {originalValue}";
+    // columnTemplate.tooltip.fontSize=12;
  // ✅ Light/Dark Theme Integration
   const isDarkMode = theme === "dark";
 

@@ -35,7 +35,7 @@ export function useTrendsChart(area,type, startDate, endDate) {
     };
 
     fetchData();
-  }, [type, startDate, endDate]);
+  }, [area,type, startDate, endDate]);
 
   return { data, loading, error };
 }

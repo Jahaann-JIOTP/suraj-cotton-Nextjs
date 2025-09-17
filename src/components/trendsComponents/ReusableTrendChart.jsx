@@ -21,6 +21,7 @@ const ReusableTrendChart = ({
   minGridDistance = 80,
   isFullscreen = false,
 }) => {
+  console.log("in the chart", id)
   const chartRef = useRef(null);
   const rootRef = useRef(null);
   const { theme } = useTheme();

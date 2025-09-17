@@ -167,27 +167,43 @@ export default function AllAlarmsLikeImage() {
     }
   };
 
-  const fetchAlarms = async () => {
-    setIsUpdating(true);
-    const payload = generatePayload(type);
-    try {
-      const response = await axios.post(`${config.BASE_URL}/alarms/get-all-Alarms`, payload);
-      setAlarmData(Array.isArray(response?.data?.data) ? response.data.data : []);
-    } catch (error) {
-      console.error('Error fetching alarm data:', error);
-      setAlarmData([]);
-    } finally {
-      setIsUpdating(false);
-    }
-  };
+  // const fetchAlarms = async () => {
+  //   setIsUpdating(true);
+  //   const payload = generatePayload(type);
+  //   try {
+  //     const response = await axios.post(`${config.BASE_URL}/alarms/get-all-Alarms`, payload);
+  //     setAlarmData(Array.isArray(response?.data?.data) ? response.data.data : []);
+  //   } catch (error) {
+  //     console.error('Error fetching alarm data:', error);
+  //     setAlarmData([]);
+  //   } finally {
+  //     setIsUpdating(false);
+  //   }
+  // };
+  const fetchAlarms = useCallback(async () => {
+  setIsUpdating(true);
+  const payload = generatePayload(type);
+  try {
+    const response = await axios.post(`${config.BASE_URL}/alarms/get-all-Alarms`, payload);
+    setAlarmData(Array.isArray(response?.data?.data) ? response.data.data : []);
+  } catch (error) {
+    console.error('Error fetching alarm data:', error);
+    setAlarmData([]);
+  } finally {
+    setIsUpdating(false);
+  }
+}, [type]);
 
   const handleTimerFinish = useCallback(() => {
     fetchAlarms();
-  }, []);
+  }, [fetchAlarms]);
 
-  const onAcknowledge = () => {
-    fetchAlarms();
-  };
+  // const onAcknowledge = () => {
+  //   fetchAlarms();
+  // };
+  const onAcknowledge = useCallback(() => {
+  fetchAlarms();
+}, [fetchAlarms]);
 
   // 1) Define column accessors (used for sorting)
   const columns = useMemo(() => {
@@ -246,7 +262,8 @@ export default function AllAlarmsLikeImage() {
   // initial fetch + refetch on tab change
   useEffect(() => {
     fetchAlarms();
-  }, [type]);
+  }, [fetchAlarms]);
+  // }, [type]);
 
   // Reset filters when page type (tab) changes
   useEffect(() => {

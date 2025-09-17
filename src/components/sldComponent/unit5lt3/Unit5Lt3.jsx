@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ImArrowLeft2 } from "react-icons/im";
+import Link from "next/link";
 const lt1MeterData = [
   {
     link: "U5_GW02",
@@ -167,7 +168,7 @@ const Unit5Lt3 = ({ roundedData }) => {
       top: 213,
       left: 655,
     },
-    // transformer 1 lt-1 acb
+    // comber 1 to 14
     {
       activePowerTotalTag: roundedData?.U14_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U14_GW02_Current_Avg,
@@ -175,7 +176,7 @@ const Unit5Lt3 = ({ roundedData }) => {
       top: 316,
       left: 776,
     },
-    // spare
+    // ac plant spining
     {
       activePowerTotalTag: roundedData?.U15_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U15_GW02_Current_Avg,
@@ -183,7 +184,7 @@ const Unit5Lt3 = ({ roundedData }) => {
       top: 218,
       left: 908,
     },
-    // ac plant spinning
+    // water chiller
     {
       activePowerTotalTag: roundedData?.U16_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U16_GW02_Current_Avg,
@@ -191,7 +192,7 @@ const Unit5Lt3 = ({ roundedData }) => {
       top: 508,
       left: 100,
     },
-    // water chiller
+    // card mc 8-14
     {
       activePowerTotalTag: roundedData?.U17_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U17_GW02_Current_Avg,
@@ -278,13 +279,15 @@ const Unit5Lt3 = ({ roundedData }) => {
 
       <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
         {lt1MeterData.map((meter) => (
-          <button
+          <Link
+
+          href={`/meter?area=Unit_5&page-type=sld&LT_selections=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`}
             key={meter.link}
-            onClick={() =>
-              router.push(
-                `/meter?area=Unit_5&page-type=sld&LT_selections=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`
-              )
-            }
+            // onClick={() =>
+            //   router.push(
+            //     `/meter?area=Unit_5&page-type=sld&LT_selections=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`
+            //   )
+            // }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
@@ -296,7 +299,7 @@ const Unit5Lt3 = ({ roundedData }) => {
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
             }}
-          ></button>
+          ></Link>
         ))}
         {/* Diagram Image */}
         <img

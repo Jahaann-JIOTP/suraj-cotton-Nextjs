@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 const mainOverviewMeterData = [
   {
@@ -151,7 +152,7 @@ const MainSldOverview = ({ roundedData }) => {
       top: 455,
       left: 185.3,
     },
-    // T/F 3
+    // T/F 1
     {
       activePowerTotalTag: roundedData?.U20_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U20_GW03_Current_Avg,
@@ -159,7 +160,7 @@ const MainSldOverview = ({ roundedData }) => {
       top: 695,
       left: 188.5,
     },
-    // T/F 4
+    // T/F 2
     {
       activePowerTotalTag: roundedData?.U19_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_GW03_Current_Avg,
@@ -189,13 +190,14 @@ const MainSldOverview = ({ roundedData }) => {
     <div className="w-full">
       <div className="relative mx-auto" style={{ width: "1200px" }}>
         {mainOverviewMeterData.map((meter) => (
-          <button
+          <Link
+          href={`/meter?area=${meter.area}&page-type=sld&LT_selections=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
             key={meter.link}
-            onClick={() =>
-              router.push(
-                `/meter?area=${meter.area}&page-type=sld&LT_selections=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`
-              )
-            }
+            // onClick={() =>
+            //   router.push(
+            //     `/meter?area=${meter.area}&page-type=sld&LT_selections=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+            //   )
+            // }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
@@ -208,7 +210,7 @@ const MainSldOverview = ({ roundedData }) => {
               cursor: "pointer",
             }}
             className={``}
-          ></button>
+          ></Link>
         ))}
         <img
           src="./sld/main-overview.png"
@@ -248,25 +250,30 @@ const MainSldOverview = ({ roundedData }) => {
           </div>
         ))}
 
-        <button
+        <Link
           className="absolute font-inter bg-white cursor-pointer"
-          onClick={() => router.push("/sld?area=Unit_5")}
+          // onClick={() => router.push("/sld?area=Unit_5")}
+          href={"/sld?area=Unit_5"}
           style={{
             border: "1px dotted darkgray",
             height: "38px",
             left: "151px",
             top: "948px",
             width: "314px",
+            display:"flex",
+            alignItems:"center",
+            justifyContent:"center",
             fontSize: "20px",
             fontWeight: 700,
           }}
         >
           To Unit # 5
-        </button>
+        </Link>
 
-        <button
+        <Link
           className="absolute font-inter bg-white text-[#2e2d2d] cursor-pointer"
-          onClick={() => router.push("/sld?area=Unit_4")}
+          // onClick={() => router.push("/sld?area=Unit_4")}
+          href={"/sld?area=Unit_4" }
           style={{
             border: "1px dotted darkgray",
             left: "738px",
@@ -274,11 +281,14 @@ const MainSldOverview = ({ roundedData }) => {
             top: "948px",
             height: "38px",
             fontSize: "20px",
+            display:"flex",
+            alignItems:"center",
+            justifyContent:"center",
             fontWeight: 700,
           }}
         >
           To Unit # 4
-        </button>
+        </Link>
       </div>
     </div>
   );

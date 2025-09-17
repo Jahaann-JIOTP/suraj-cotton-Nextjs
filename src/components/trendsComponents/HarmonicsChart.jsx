@@ -4,7 +4,7 @@ import CustomLoader from "../customLoader/CustomLoader";
 import { useTrendsChart } from "../hooks/useChartData";
 import ReusableTrendChart from "./ReusableTrendChart";
 
-const HarmonicsChart = ({area, startDate, endDate,isFullscreen, }) => {
+const HarmonicsChart = ({area, chartId, startDate, endDate,isFullscreen, }) => {
   const { data, loading } = useTrendsChart(area, "harmonics", startDate, endDate);
 
   return (
@@ -15,7 +15,7 @@ const HarmonicsChart = ({area, startDate, endDate,isFullscreen, }) => {
         </div>
       )}
       <ReusableTrendChart
-        id="UNIT4LT1VOLTAGHARMONICREDUCTION"
+        id={`${area}-${chartId}`}
         data={data.map((item) => ({
           time: new Date(item.timestamp).getTime(), // ✅ directly valid
           hormonics: item.sumHarmonics,

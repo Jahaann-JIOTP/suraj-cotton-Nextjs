@@ -4,7 +4,7 @@ import CustomLoader from "../customLoader/CustomLoader";
 import { useTrendsChart } from "../hooks/useChartData";
 import ReusableTrendChart from "./ReusableTrendChart";
 
-const CurrentChart = ({area, startDate, endDate,isFullscreen }) => {
+const CurrentChart = ({area,chartId, startDate, endDate,isFullscreen }) => {
   const { data, loading } = useTrendsChart(area,"current", startDate, endDate);
 
   return (
@@ -15,7 +15,7 @@ const CurrentChart = ({area, startDate, endDate,isFullscreen }) => {
         </div>
       )}
       <ReusableTrendChart
-        id="UNIT4LT1MAINCURRENT"
+        id={`${area}-${chartId}`}
         data={data.map((item) => ({
           time: new Date(item.timestamp).getTime(), // ✅ directly valid
           current: item.sumCurrent,
@@ -26,7 +26,7 @@ const CurrentChart = ({area, startDate, endDate,isFullscreen }) => {
           {
             type: "line",
             yKey: "current",
-            name: "Current",
+            name: "Avg Current",
             color: "#FA8B02",
             strokeWidth: 3,
           },

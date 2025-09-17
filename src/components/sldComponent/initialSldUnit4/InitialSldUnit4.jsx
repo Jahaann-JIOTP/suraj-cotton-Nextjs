@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import { ImArrowLeft2 } from "react-icons/im";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 const unit4MeterData = [
   {
     link: "U19_PLC",
@@ -105,13 +106,14 @@ const InitialSldUnit4 = ({ roundedData }) => {
       </button>
       <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
         {unit4MeterData.map((meter) => (
-          <button
+          <Link
             key={meter.link}
-            onClick={() =>
-              router.push(
-                `/meter?area=Unit_4&page-type=sld&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
-              )
-            }
+            href={`/meter?area=Unit_4&page-type=sld&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
+            // onClick={() =>
+            //   router.push(
+            //     `/meter?area=Unit_4&page-type=sld&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
+            //   )
+            // }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
@@ -123,7 +125,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
               cursor: "pointer",
             }}
             className={``}
-          ></button>
+          ></Link>
         ))}
         {/* Diagram Image */}
         <img
@@ -133,8 +135,9 @@ const InitialSldUnit4 = ({ roundedData }) => {
           alt="unit 4 sld"
         />
         {/* Buttons */}
-        <button
-          onClick={() => router.replace("/sld?area=Unit_4&LT_selections=LT_1")}
+        <Link
+          // onClick={() => router.replace("/sld?area=Unit_4&LT_selections=LT_1")}
+          href={"/sld?area=Unit_4&LT_selections=LT_1"}
           className="absolute  cursor-pointer"
           style={{
             width: "239px",
@@ -142,9 +145,10 @@ const InitialSldUnit4 = ({ roundedData }) => {
             top: "385px",
             left: "77px",
           }}
-        ></button>
-        <button
-          onClick={() => router.push("/sld?area=Unit_4&LT_selections=LT_2")}
+        ></Link>
+        <Link
+          // onClick={() => router.push("/sld?area=Unit_4&LT_selections=LT_2")}
+          href={"/sld?area=Unit_4&LT_selections=LT_2"}
           className="absolute cursor-pointer"
           style={{
             width: "239px",
@@ -152,7 +156,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
             top: "385px",
             left: "642px",
           }}
-        ></button>
+        ></Link>
 
         {/* Meter Readings */}
         {unit4InitialSldMeterTAgs.map((meter, index) => (

@@ -16,7 +16,7 @@ const Card = ({
     <div className="w-full bg-white shadow-md rounded-lg border dark:bg-gray-800 border-gray-200 overflow-hidden !border-t-4 !border-t-[#1d5999]">
       {/* Title */}
       <div className="text-center p-3">
-        <h2 className="inline-block uppercase font-inter text-[#025697] font-semibold text-lg tracking-wide relative">
+        <h2 className="inline-block uppercase font-inter text-[#025697] font-semibold text-[17px] tracking-wide relative">
           {title}
           <span
             className="block h-[0.2vh] mt-1 rounded-full"

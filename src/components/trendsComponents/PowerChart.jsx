@@ -4,7 +4,7 @@ import CustomLoader from "../customLoader/CustomLoader";
 import { useTrendsChart } from "../hooks/useChartData";
 import ReusableTrendChart from "./ReusableTrendChart";
 
-const PowerChart = ({ area,startDate, endDate,isFullscreen }) => {
+const PowerChart = ({ area,startDate, chartId, endDate,isFullscreen }) => {
   const { data, loading } = useTrendsChart(area,"activePower", startDate, endDate);
 
   return (
@@ -15,7 +15,7 @@ const PowerChart = ({ area,startDate, endDate,isFullscreen }) => {
         </div>
       )}
       <ReusableTrendChart
-        id="UNIT4LT1ACTIVEDEMAND(HISTORICAL)"
+        id={`${area}-${chartId}`}
         data={data.map((item) => ({
           time: new Date(item.timestamp).getTime(), // ✅ directly valid
           power: item.sumActivePower,

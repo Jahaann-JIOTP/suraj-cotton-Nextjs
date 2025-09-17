@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { ImArrowLeft2 } from "react-icons/im";
@@ -302,13 +303,14 @@ const Unit4Lt2 = ({ roundedData }) => {
       </button>
       <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
         {lt2MeterData.map((meter) => (
-          <button
+          <Link
             key={meter.link}
-            onClick={() =>
-              router.push(
-                `/meter?area=Unit_4&LT_selections=LT_2&page-type=sld&meter_id=${meter.link}&meter_name=${meter.title}`
-              )
-            }
+            // onClick={() =>
+            //   router.push(
+            //     `/meter?area=Unit_4&LT_selections=LT_2&page-type=sld&meter_id=${meter.link}&meter_name=${meter.title}`
+            //   )
+            // }
+            href={`/meter?area=Unit_4&LT_selections=LT_2&page-type=sld&meter_id=${meter.link}&meter_name=${meter.title}`}
             style={{
               position: "absolute",
               top: `${meter.top}px`,
@@ -320,7 +322,7 @@ const Unit4Lt2 = ({ roundedData }) => {
               borderRadius: "0.375rem",
               cursor: "pointer",
             }}
-          ></button>
+          ></Link>
         ))}
         {/* Diagram Image */}
         <img

@@ -6,12 +6,12 @@ import HarmonicsChart from "@/components/trendsComponents/HarmonicsChart";
 import PowerChart from "@/components/trendsComponents/PowerChart";
 import PowerFactorChart from "@/components/trendsComponents/PowerFactor";
 import VoltageChart from "@/components/trendsComponents/VoltageChart";
+
 import { useState } from "react";
 
 
-const TrendU4Lt1 = () => {
+const Plants = () => {
   const today = new Date().toISOString().split("T")[0];
-  // dates started
   const [chartStates, setChartStates] = useState({
   energy: { start: today, end: today, fullscreen: false },
   power: { start: today, end: today, fullscreen: false },
@@ -28,42 +28,44 @@ const updateChartState = (key, field, value)=>{
   }))
 }
 
-  const charts = [
-    { id: "energy", title: "UNIT 4 LT 1 - ENERGY USAGE", Chart: EnergyChart },
+ const charts = [
+    { id: "energy", title: "PLANTS - ENERGY USAGE", Chart: EnergyChart },
     {
       id: "power",
-      title: "UNIT 4 LT 1 - ACTIVE DEMAND (HISTORICAL)",
+      title: "PLANTS - ACTIVE DEMAND (HISTORICAL)",
       Chart: PowerChart,
     },
-    { id: "voltage", title: "UNIT 4 LT 1 - MAIN VOLTAGE", Chart: VoltageChart },
-    { id: "current", title: "UNIT 4 LT 1 - MAIN CURRENT", Chart: CurrentChart },
+    { id: "voltage", title: "PLANTS - MAIN VOLTAGE", Chart: VoltageChart },
+    { id: "current", title: "PLANTS - MAIN CURRENT", Chart: CurrentChart },
     {
       id: "powerFactor",
-      title: "UNIT 4 LT 1 - REACTIVE POWER AND PF",
+      title: "PLANTS - REACTIVE POWER AND PF",
       Chart: PowerFactorChart,
     },
     {
       id: "harmonics",
-      title: "UNIT 4 LT 1 - VOLTAGE HARMONIC REDUCTION",
+      title: "PLANTS - VOLTAGE HARMONIC REDUCTION",
       Chart: HarmonicsChart,
     },
   ];
+
+
   return (
     <div className="h-[81vh] py-[1px] overflow-y-auto space-y-3">
       {charts.map(({ id, title, Chart }) => (
-        <ChartCard
-        area="unit4-lt1"
-          key={id}
-          id={id}
-          chartId={id}
-          title={title}
-          ChartComponent={Chart}
-          state={chartStates[id]}
-          onChange={updateChartState}
-        />
-      ))}
+              <ChartCard
+              area="Plants"
+                key={id}
+                id={id}
+                chartId={id}
+                title={title}
+                ChartComponent={Chart}
+                state={chartStates[id]}
+                onChange={updateChartState}
+              />
+            ))}
     </div>
   );
 };
 
-export default TrendU4Lt1;
+export default Plants;

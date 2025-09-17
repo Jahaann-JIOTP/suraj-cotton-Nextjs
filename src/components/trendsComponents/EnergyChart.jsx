@@ -4,7 +4,7 @@ import CustomLoader from "../customLoader/CustomLoader";
 import { useTrendsChart } from "../hooks/useChartData";
 import ReusableTrendChart from "./ReusableTrendChart";
 
-const EnergyChart = ({ area,startDate, endDate, isFullscreen }) => {
+const EnergyChart = ({ area,startDate,chartId, endDate, isFullscreen }) => {
   const { data, loading } = useTrendsChart(area,"energy", startDate, endDate);
 
   
@@ -17,7 +17,7 @@ const EnergyChart = ({ area,startDate, endDate, isFullscreen }) => {
         </div>
       )}
       <ReusableTrendChart
-        id="UNIT4LT1ENERGY"
+        id={`${area}-${chartId}`}
         title="UNIT 4 LT 1 - ENERGY USAGE"
         data={data.map((item) => ({
           time: new Date(item.timestamp).getTime(),

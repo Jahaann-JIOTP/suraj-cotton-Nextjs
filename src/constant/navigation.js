@@ -55,7 +55,7 @@ export const privilegeConfig = {
     label: "TRENDS",
     matchPaths: [
       "/custom_trend",
-      "/plants",
+      "/trend-plants",
       "/trend-u4-lt1",
       "/trend-u4-lt2",
       "/trend-u5-lt1",
@@ -253,7 +253,7 @@ export const sidebarLinksMap = {
         {
           id: 1,
           title: "Plants",
-          href: "/plants",
+          href: "/trend-plants",
           icon: AlarmSubMenuIcon,
         },
         {

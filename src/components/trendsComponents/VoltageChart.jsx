@@ -4,7 +4,7 @@ import CustomLoader from "../customLoader/CustomLoader";
 import { useTrendsChart } from "../hooks/useChartData";
 import ReusableTrendChart from "./ReusableTrendChart";
 
-const VoltageChart = ({ area,startDate, endDate,isFullscreen }) => {
+const VoltageChart = ({ area,startDate,chartId, endDate,isFullscreen }) => {
   const { data, loading } = useTrendsChart(area,"voltage", startDate, endDate);
 
   return (
@@ -15,7 +15,7 @@ const VoltageChart = ({ area,startDate, endDate,isFullscreen }) => {
         </div>
       )}
       <ReusableTrendChart
-        id="UNIT4LT1AINVOLTAGE"
+        id={`${area}-${chartId}`}
         // data={voltageData}
         data={data.map((item) => ({
           time: new Date(item.timestamp).getTime(), // ✅ directly valid
@@ -27,7 +27,7 @@ const VoltageChart = ({ area,startDate, endDate,isFullscreen }) => {
           {
             type: "line",
             yKey: "voltage",
-            name: "Voltage",
+            name: "Avg Voltage",
             color: "#3D5AFE",
             strokeWidth: 3,
           },
