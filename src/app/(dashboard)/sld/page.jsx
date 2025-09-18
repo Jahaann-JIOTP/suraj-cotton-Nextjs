@@ -53,7 +53,10 @@ const Page = () => {
       const value = newObj[key];
 
       if (typeof value === "number") {
-        if (value >= 1000) {
+         if(Math.abs(value)>1e5){
+          newObj[key]=0;
+        }
+        else if (value >= 1000) {
           // No decimal
           newObj[key] = Math.round(value);
         } else if (value >= 100 && value < 1000) {

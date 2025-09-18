@@ -26,6 +26,8 @@ const LogDetails = () => {
   const area = searchParams.get("area");
   const router = useRouter();
   const finalLt = ltScheme ==="LT_3"? "LT_1":ltScheme==="LT_4"?"LT_2":ltScheme;
+  const testingOnExpo = meterLogsData.map((item)=>{return item})
+  console.log(".................<>>>>>>>>>>>>>>>>>>>",testingOnExpo)
   const getMeterLogsData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -392,7 +394,7 @@ const LogDetails = () => {
                             className="border border-gray-200 px-3 py-1 text-center text-sm"
                           >
                             {typeof row[col] === "number"
-                              ? Math.abs(row[col]) > 1e9
+                              ? Math.abs(row[col]) > 1e8
                                 ? 0
                                 : Math.round(row[col] * 100) / 100
                               : row[col] == null

@@ -76,7 +76,7 @@ const mainOverviewMeterData = [
     lt_scheme: "LT_4",
   },
   {
-    link: "U23_GW01",
+    link: "U22_GW01",
     title: "Power House IC",
     top: 607,
     left: 795,
@@ -84,7 +84,7 @@ const mainOverviewMeterData = [
     lt_scheme: "LT_2",
   },
   {
-    link: "U22_GW01",
+    link: "U23_GW01",
     title: "Wapda IC",
     top: 605,
     left: 962,
@@ -170,17 +170,17 @@ const MainSldOverview = ({ roundedData }) => {
     },
     // p/h ic
     {
-      activePowerTotalTag: roundedData?.U23_GW01_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U23_GW01_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U23_GW01_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U22_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U22_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U22_GW01_Voltage_Avg,
       top: 614,
       left: 800,
     },
     // wapda ic
     {
-      activePowerTotalTag: roundedData?.U22_GW01_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U22_GW01_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U22_GW01_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U23_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U23_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U23_GW01_Voltage_Avg,
       top: 611,
       left: 967,
     },
@@ -193,11 +193,6 @@ const MainSldOverview = ({ roundedData }) => {
           <Link
           href={`/meter?area=${meter.area}&page-type=sld&LT_selections=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
             key={meter.link}
-            // onClick={() =>
-            //   router.push(
-            //     `/meter?area=${meter.area}&page-type=sld&LT_selections=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`
-            //   )
-            // }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
@@ -252,7 +247,6 @@ const MainSldOverview = ({ roundedData }) => {
 
         <Link
           className="absolute font-inter bg-white cursor-pointer"
-          // onClick={() => router.push("/sld?area=Unit_5")}
           href={"/sld?area=Unit_5"}
           style={{
             border: "1px dotted darkgray",
@@ -272,7 +266,6 @@ const MainSldOverview = ({ roundedData }) => {
 
         <Link
           className="absolute font-inter bg-white text-[#2e2d2d] cursor-pointer"
-          // onClick={() => router.push("/sld?area=Unit_4")}
           href={"/sld?area=Unit_4" }
           style={{
             border: "1px dotted darkgray",

@@ -104,13 +104,16 @@ const SankeyChart = ({ data, id }) => {
     series.nodes.labels.template.adapters.add("x", (x, lbl) => {
       const name = (lbl.dataItem?.get("name") || "").toLowerCase();
       if (name.startsWith("total")) {
-        lbl.setAll({
-          centerX: am5.percent(100),
-          paddingLeft: 0,
-          paddingRight: 0,
-        });
-        const GAP = 4;
-        return -GAP;
+        // lbl.setAll({
+        //   centerX: am5.percent(100),
+        //   fontSize:0,
+        //   paddingLeft: 0,
+        //   paddingRight: 0,
+        // });
+        // const GAP = 4;
+        // return -GAP;
+        lbl.set("visible",false);
+        return x;
       }
       return x;
     });

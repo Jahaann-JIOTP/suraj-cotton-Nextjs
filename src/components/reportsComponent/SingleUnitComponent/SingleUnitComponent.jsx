@@ -10,6 +10,8 @@ const SingleUnitComponent = ({
   unit4Spindle,
   unit5Spindle,
   resData,
+  startTime,
+  endTime,
 }) => {
   const { theme } = useTheme();
   const data = resData[0];
@@ -40,7 +42,7 @@ const SingleUnitComponent = ({
   }
 
   // /////-------------------------export to excel
- 
+
   const tableData = [
     {
       Department: "Blow Room",
@@ -270,8 +272,8 @@ const SingleUnitComponent = ({
       worksheet.columns = [
         { width: 30 },
         { width: 10 },
-        { width: 20 },
-        { width: 20 },
+        { width: 15 },
+        { width: 30 },
       ];
       worksheet.mergeCells("A5:D6");
       const mainHeadingCell = worksheet.getCell("A5");
@@ -287,13 +289,13 @@ const SingleUnitComponent = ({
 
       worksheet.mergeCells("A4:A4");
       const startDateCell = worksheet.getCell("A4");
-      startDateCell.value = `Start Date: ${startDate}`;
+      startDateCell.value = `Start Date: ${startDate} - ${startTime}`;
       startDateCell.font = { size: 12 };
       startDateCell.alignment = { vertical: "middle", horizontal: "left" };
 
       worksheet.mergeCells("D4:D4");
       const endDateCell = worksheet.getCell("D4");
-      endDateCell.value = `End Date: ${endDate}`;
+      endDateCell.value = `End Date: ${endDate} - ${endTime}`;
       endDateCell.font = { size: 12 };
       endDateCell.alignment = { vertical: "middle", horizontal: "right" };
 
@@ -496,10 +498,10 @@ const SingleUnitComponent = ({
             Consumption Report
           </span>
           <span className="text-[14.22px] mt-2 font-400 font-inter text-[#727272] dark:text-gray-400">
-            Start Date: {startDate}
+            Start Date: {`${startDate} - ${startTime}`}
           </span>
           <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-            End Date: {endDate}
+            End Date: {`${endDate} - ${endTime}`}
           </span>
         </div>
       </div>

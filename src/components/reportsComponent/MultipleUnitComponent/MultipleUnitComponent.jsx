@@ -9,6 +9,8 @@ const MultipleUnitComponent = ({
   unit4Spindle,
   unit5Spindle,
   resData,
+    startTime,
+endTime
 }) => {
   const { theme } = useTheme();
   const data = resData[0] || {};
@@ -398,15 +400,15 @@ const MultipleUnitComponent = ({
       mainHeadingCell.font = { size: 16, bold: true };
       mainHeadingCell.alignment = { vertical: "middle", horizontal: "center" };
       worksheet.addRow();
-      worksheet.mergeCells(`A${currentRowIndex - 1}:B${currentRowIndex - 1}`);
+      worksheet.mergeCells(`A${currentRowIndex - 1}:c${currentRowIndex - 1}`);
       const startDateCell = worksheet.getCell(`A${currentRowIndex - 1}`);
-      startDateCell.value = `Start Date: ${startDate}`;
+      startDateCell.value = `Start Date: ${startDate} - ${startTime}`;
       startDateCell.font = { size: 12 };
       startDateCell.alignment = { horizontal: "left", vertical: "middle" };
 
-      worksheet.mergeCells(`H${currentRowIndex - 1}:J${currentRowIndex - 1}`);
+      worksheet.mergeCells(`G${currentRowIndex - 1}:J${currentRowIndex - 1}`);
       const endDateCell = worksheet.getCell(`J${currentRowIndex - 1}`);
-      endDateCell.value = `End Date: ${endDate}`;
+      endDateCell.value = `End Date: ${endDate} - ${endTime}`;
       endDateCell.font = { size: 12 };
       endDateCell.alignment = { horizontal: "right", vertical: "middle" };
 
@@ -651,10 +653,10 @@ const MultipleUnitComponent = ({
             Consumption Report
           </span>
           <span className="text-[14.22px] mt-2 font-400 font-inter text-[#727272] dark:text-gray-400">
-            Start Date: {startDate}
+            Start Date: {`${startDate} - ${startTime}`}
           </span>
           <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-            End Date: {endDate}
+            End Date: {`${endDate} - ${endTime}`}
           </span>
         </div>
       </div>
@@ -667,7 +669,7 @@ const MultipleUnitComponent = ({
           <div className="flex gap-1 flex-col h-full mb-1 w-full max-w-full overflow-x-auto md:overflow-x-auto lg:overflow-x-visible custom-scrollbar-report">
             {/* ------------------- */}
             <div className="min-w-[1024px] lg:min-w-full flex justify-end gap-[1rem]">
-              <div className="w-[17rem] lg:w-[29.6%] flex items-center gap-2">
+              <div className="w-[17rem] lg:w-[30.3%] flex items-center gap-2">
                 <div className="w-[47.5%] relative h-[1px] bg-black dark:bg-gray-500">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] left-0"></div>
                 </div>
@@ -678,7 +680,7 @@ const MultipleUnitComponent = ({
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] right-0"></div>
                 </div>
               </div>
-              <div className="w-[24rem] lg:w-[29.9%] flex items-center gap-2">
+              <div className="w-[24rem] lg:w-[30.5%] flex items-center gap-2">
                 <div className="w-[47.5%] h-[1px] bg-black dark:bg-gray-500 relative">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] left-0"></div>
                 </div>
@@ -689,14 +691,14 @@ const MultipleUnitComponent = ({
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] right-0"></div>
                 </div>
               </div>
-              <div className="w-[7.5rem] lg:w-[16.5%] flex items-center">
-                <div className="w-[27%] h-[1px] bg-black dark:bg-gray-500 relative">
+              <div className="w-[7.7rem] lg:w-[16.8%] flex items-center">
+                <div className="w-[27.5%] h-[1px] bg-black dark:bg-gray-500 relative">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] left-0"></div>
                 </div>
-                <div className="w-[46%] font-500 font-inter text-[12px] text-center">
+                <div className="w-[46.5%] font-500 font-inter text-[12px] text-center">
                   Unit 4 + Unit 5
                 </div>
-                <div className="w-[27%] h-[1px] bg-black dark:bg-gray-500 relative">
+                <div className="w-[27.5%] h-[1px] bg-black dark:bg-gray-500 relative">
                   <div className="absolute w-[1px] h-[10px] bg-black dark:bg-gray-500 top-[-4px] right-0"></div>
                 </div>
               </div>

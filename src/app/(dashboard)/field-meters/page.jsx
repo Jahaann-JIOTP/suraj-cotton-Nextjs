@@ -1,5 +1,6 @@
 "use client";
 import config from "@/constant/apiRouteList";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 const fieldMetersBtn = [
@@ -81,7 +82,10 @@ const FieldMeters = () => {
       const value = newObj[key];
 
       if (typeof value === "number") {
-        if (value >= 1000) {
+        if(Math.abs(value)>1e3){
+          newObj[key]=0;
+        }
+        else if (value >= 1000) {
           // No decimal
           newObj[key] = Math.round(value);
         } else if (value >= 100 && value < 1000) {
@@ -93,10 +97,11 @@ const FieldMeters = () => {
         }
       }
     }
-
     return newObj;
   }
   const roundedData = roundNumbersInJson(realtime);
+  console.log(">>>>>>>>>>>>>>>>>>>>>>", roundedData)
+ 
   // fetch meter area status
   const fetchMeterAreaStatus = async () => {
     const token = localStorage.getItem("token");
@@ -239,7 +244,7 @@ const FieldMeters = () => {
     {
       key: "U2_GW02",
       on: [
-        { top: 109.5, left: 220.5, img: "onmeter1.png", w: 27 },
+        { top: 108, left: 220.2, img: "onmeter1.png", w: 27.2 },
         { top: 259.5, left: 233.5, img: "onmeter2.png", w: 36 },
       ],
       off: [
@@ -250,7 +255,7 @@ const FieldMeters = () => {
     {
       key: "U3_GW02",
       on: [
-        { top: 108.5, left: 398.5, img: "onmeter1.png", w: 27 },
+        { top: 108.5, left: 398, img: "onmeter1.png", w: 27.2 },
         { top: 259.2, left: 411.5, img: "onmeter2.png", w: 36 },
       ],
       off: [
@@ -261,11 +266,11 @@ const FieldMeters = () => {
     {
       key: "U4_GW02",
       on: [
-        { top: 109.5, left: 576.1, img: "onmeter1.png", w: 27 },
+        { top: 108.5, left: 576.1, img: "onmeter1.png", w: 27 },
         { top: 259.2, left: 589, img: "onmeter2.png", w: 36 },
       ],
       off: [
-        { top: 109.5, left: 646, img: "offmeter1.png", w: 27 },
+        { top: 108.5, left: 646, img: "offmeter1.png", w: 27 },
         { top: 259, left: 624.7, img: "offmeter2.png", w: 36 },
       ],
     },
@@ -325,7 +330,6 @@ const FieldMeters = () => {
     const interval = setInterval(() => {
       getRealTimeData();
       fetchMConsumptionPerArea();
-
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -334,13 +338,10 @@ const FieldMeters = () => {
       <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
         {fieldMetersBtn.map((meter) => {
           return (
-            <button
+            <Link
               key={meter.link}
-              onClick={() =>
-                router.push(
-                  `/meter?area=Unit_5&page-type=field-meter&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
-                )
-              }
+              href={`/meter?area=Unit_5&page-type=field-meter&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
+
               style={{
                 position: "absolute",
                 top: `${meter.top}px`,
@@ -352,7 +353,7 @@ const FieldMeters = () => {
                 cursor: "pointer",
               }}
               className={`rounded-md`}
-            ></button>
+            ></Link>
           );
         })}
         {/* Diagram Image */}
@@ -375,7 +376,6 @@ const FieldMeters = () => {
                 >
                   <img
                     src={`./fieldMeterStatus/${img}`}
-                    // className={`w-[${w}px]`}
                     style={{ width: `${w}px` }}
                     alt=""
                   />

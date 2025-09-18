@@ -159,7 +159,7 @@ const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
               </div>
 
               {isOpenDptDropdonw && (
-                <div className="absolute right-0 z-50 mt-1 w-[10rem] rounded shadow-lg border-1 border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700">
+                <div className="absolute h-[19rem] overflow-y-auto right-0 z-50 mt-1 w-[10rem] rounded shadow-lg border-1 border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700">
                   <div className="py-1">
                     {["All", ...uniqueDepartments].map((option) => {
                       return (

@@ -11,6 +11,8 @@ const PowerSummaryTable = ({
   resData,
   unit4Spindle,
   unit5Spindle,
+  startTime,
+  endTime
 }) => {
   const wapda1Tarif = Number(tarifData.wapda1);
   const wapda2Tarif = Number(tarifData.wapda1);
@@ -63,7 +65,7 @@ const PowerSummaryTable = ({
   const unit4SpindleCost = unit4SpindlePerKw * unit4AverageTarif;
   const unit5SpindleCost = unit5SpindlePerKw * unit5AverageTarif;
   const totalSpindlePerKw = unit4SpindlePerKw + unit5SpindlePerKw;
-  const totalSpindlecost = unit4SpindlePerKw + unit5SpindlePerKw;
+  const totalSpindlecost = unit4SpindleCost + unit5SpindleCost;
   // Trans. / Traffo Losses
   const tf1Cost = resData.trafo1Loss * unit5AverageTarif;
   const tf2Cost = resData.trafo2Loss * unit5AverageTarif;
@@ -88,6 +90,8 @@ const PowerSummaryTable = ({
     unit,
     startDate,
     endDate,
+    startTime,
+    endTime,
     tarifData,
     resData,
     unit4Spindle,
@@ -190,8 +194,8 @@ const PowerSummaryTable = ({
     console.error("Error adding logos:", error);
   }
   const dateRow = worksheet.getRow(4);
-  dateRow.getCell(1).value = `Start Date: ${startDate}`;
-  dateRow.getCell(3).value = `End Date: ${endDate}`;
+  dateRow.getCell(1).value = `Start Date: ${startDate} - ${startTime}`;
+  dateRow.getCell(3).value = `End Date: ${endDate} - ${endTime}`;
   dateRow.getCell(1).style = { font: { size: 11 }};
   dateRow.getCell(3).style = { font: { size: 11 },alignment:{horizontal:"right", vertical:"middle"}  };
   const titleRow = worksheet.getRow(5);
@@ -333,7 +337,7 @@ const PowerSummaryTable = ({
         "Unit 4",
         unit4Spindle,
         (resData.unit4_consumption / unit4Spindle).toFixed(2),
-        "00",
+        unit4SpindleCost.toFixed(2),
       ]);
     }
     if (unit === "Unit_5" || unit === "ALL") {
@@ -341,14 +345,15 @@ const PowerSummaryTable = ({
         "Unit 5",
         unit5Spindle,
         (resData.unit5_consumption / unit5Spindle).toFixed(2),
-        "00",
+        unit5SpindleCost.toFixed(2),
       ]);
     }
     productionData.push([
       "Total",
       unit4Spindle + unit5Spindle,
-      ((unit4Spindle + unit5Spindle) / resData.total_consumption).toFixed(2),
-      "00",
+      // ((unit4Spindle + unit5Spindle) / resData.total_consumption).toFixed(2),
+      totalSpindlePerKw.toFixed(2),
+      totalSpindlecost.toFixed(2),
     ]);
 
     addTable(
@@ -450,6 +455,8 @@ const PowerSummaryTable = ({
       unit,
       startDate,
       endDate,
+      startTime,
+      endTime,
       tarifData,
       resData,
       unit4Spindle,
@@ -500,10 +507,10 @@ const PowerSummaryTable = ({
             Consumption Report
           </span>
           <span className="text-[14.22px] mt-2 font-400 font-inter text-[#727272] dark:text-gray-400">
-            Start Date: {startDate}
+            Start Date: {`${startDate} - ${startTime}`}
           </span>
           <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-            End Date: {endDate}
+            End Date: {`${endDate} - ${endTime}`}
           </span>
           <div className="flex items-center justify-end gap-4">
             <span className="text-[14.22px] font-400 font-inter">

@@ -13,6 +13,8 @@ const energySummaryPage = () => {
   const [unit, setUnit] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -80,6 +82,7 @@ const energySummaryPage = () => {
       setLoading(false);
     }
   };
+  // fetch spindle of unit 4
   const fetchU5Spindles = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -126,6 +129,8 @@ const energySummaryPage = () => {
           body: JSON.stringify({
             start_date: startDate,
             end_date: endDate,
+            start_time:startTime,
+            end_time:endTime,
             suffixes: ["Del_ActiveEnergy"],
             area: unit,
           }),
@@ -145,6 +150,16 @@ const energySummaryPage = () => {
       setLoading(false);
     }
   };
+   // formate time to 24 hours
+  const convertTo12Hour = (time) => {
+    if (!time) return "";
+    let [hours, minutes] = time.split(":").map(Number);
+
+    let ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12; // convert 0 to 12, 13 -> 1, etc.
+
+    return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+  }
 
   return (
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report pb-5 rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
@@ -202,7 +217,7 @@ const energySummaryPage = () => {
       {!showResults ? (
         <div>
           <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
-            <div className="flex w-full items-center justify-evenly gap-5 flex-wrap">
+            <div className="flex w-full items-center justify-start gap-5 flex-wrap">
               {/* area slector dropdown */}
               <div className="flex flex-col w-full md:w-[30%] items-start justify-center gap-1">
                 <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
@@ -269,6 +284,42 @@ const energySummaryPage = () => {
                   required={true}
                   min={startDate}
                   onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+              {/* start Time */}
+              <div className="flex flex-col w-full md:w-[30%] items-start justify-start gap-1">
+                <label
+                  htmlFor="startTime"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  Start Time
+                </label>
+                <input
+                  type="time"
+                  value={startTime}
+                  id="startTime"
+                  name="startTime"
+                  required={true}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                />
+              </div>
+              {/* end Time */}
+              <div className="flex flex-col w-full md:w-[30%] items-start justify-start gap-1">
+                <label
+                  htmlFor="endTime"
+                  className="text-[13.51px] font-500 font-inter"
+                >
+                  End Time
+                </label>
+                <input
+                  type="time"
+                  value={endTime}
+                  id="endTime"
+                  name="endTime"
+                  required={true}
+                  onChange={(e) => setEndTime(e.target.value)}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />
               </div>
@@ -473,6 +524,8 @@ const energySummaryPage = () => {
           resData={resData}
           unit4Spindle={unit4Spindle}
           unit5Spindle={unit5Spindle}
+          startTime={convertTo12Hour(startTime)}
+          endTime={convertTo12Hour(endTime)}
         />
       )}
     </div>
