@@ -1,5 +1,4 @@
 "use client";
-import TimePeriodSelector from "@/components/dashboardComponents/timePeriodSelector/TimePeriodSelector";
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
 
 import { useEffect, useState } from "react";
@@ -7,12 +6,36 @@ import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 import SankeyTotalValues from "@/components/sakeyTotalValue/SankeyTotalValues";
+import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
+import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
 
 const UnitLt42Page = () => {
   const [Unit4Lt2TimePeriod, setUnit4Lt2TimePeriod] = useState("today");
   const [data, setDAta] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { startDate, endDate } = getDateRangeFromString(Unit4Lt2TimePeriod);
+   const today = new Date();
+  const formateDate = (date) => {
+    return date.toISOString().split("T")[0];
+  };
+  const [intervalPeriod, setIntervalPeriod] = useState({
+    startDate: formateDate(today),
+    endDate: formateDate(today),
+    startTime: "06:00",
+    endTime: "06:00",
+  });
+
+  let startDate = null;
+  let endDate = null;
+  if (Unit4Lt2TimePeriod !== "custom") {
+      ({ startDate, endDate } = getDateRangeFromString(
+        Unit4Lt2TimePeriod
+      ));
+    }
+    // 👉 build unified range
+  const finalRange =
+    Unit4Lt2TimePeriod === "custom"
+      ? intervalPeriod
+      : { startDate, endDate };
   const fetchUnit4Lt2Data = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -26,10 +49,7 @@ const UnitLt42Page = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            startDate: startDate,
-            endDate: endDate,
-          }),
+          body: JSON.stringify(finalRange),
         }
       );
       const resResult = await response.json();
@@ -45,16 +65,26 @@ const UnitLt42Page = () => {
 
   useEffect(() => {
     fetchUnit4Lt2Data();
-  }, [Unit4Lt2TimePeriod]);
+  }, [Unit4Lt2TimePeriod, intervalPeriod.startDate, intervalPeriod.endDate, intervalPeriod.startTime, intervalPeriod.endTime]);
 
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
-      <div className="w-full items-center flex justify-between">
-        <h2 className="text-[20px] font-600 font-inter">Unit 4 LT 2</h2>
-        <TimePeriodSelector
-          selected={Unit4Lt2TimePeriod}
-          setSelected={setUnit4Lt2TimePeriod}
-        />
+      <div className="w-full items-start md:items-center flex justify-between flex-col md:flex-row">
+        <h2 className="text-[20px] font-600 font-inter">Unit 4 LT-2</h2>
+        <div className="flex items-center flex-col md:flex-row gap-2">
+          <DailyConsumptionTimePeriod
+            selected={Unit4Lt2TimePeriod}
+            setSelected={setUnit4Lt2TimePeriod}
+          />
+          {Unit4Lt2TimePeriod === "custom" && (
+            <CustomDateAndTimeSelector
+              intervalPeriod={intervalPeriod}
+              onChange={(updated) =>
+                setIntervalPeriod((prev) => ({ ...prev, ...updated }))
+              }
+            />
+          )}
+        </div>
       </div>
       <div className=" w-full  flex items-center justify-center">
         <div className="w-full md:px-20 flex items-center justify-center mt-6">

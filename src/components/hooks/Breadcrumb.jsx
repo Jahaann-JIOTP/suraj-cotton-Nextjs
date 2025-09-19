@@ -10,59 +10,62 @@ const Breadcrumbs = () => {
   if (!crumbs.length) return null;
 
   const { labelParts, params } = crumbs[0];
-
   const buildHref = (part) => {
     let query = new URLSearchParams();
-
     if (part === "home") {
       return "/dashboard";
     }
-
+    
     if (part === "sld") {
       if (params.area) query.set("area", params.area);
       if (params.LT_selections)
         query.set("LT_selections", params.LT_selections);
       return `/sld`;
     }
-
+    
     if (part === "field-meters") {
       return "/field-meters";
     }
-
+    if(part.startsWith("hfo")){
+      return '/sld'
+    }
+    if(part.startsWith("ht")){
+      return 'sld'
+    }
     if (part.startsWith("Unit")) {
       query.set("area", part);
       return `/sld?${query.toString()}`;
     }
-
-    if (part.startsWith("LT")) {
-      if (params.area) query.set("area", params.area);
-      query.set("LT_selections", part);
-      return `/sld?${query.toString()}`;
+    if (params.area !== "ht" && params.area !== "hfo") {
+      if (part.startsWith("LT")) {
+        if (params.area) query.set("area", params.area);
+        query.set("LT_selections", part);
+        return `/sld?${query.toString()}`;
+      }
     }
-
+    
     if (part === "meter") {
       Object.keys(params).forEach((k) => query.set(k, params[k]));
       return `/meter?${query.toString()}`;
     }
-
+    
     if (part === "logs") {
       Object.keys(params).forEach((k) => query.set(k, params[k]));
       return `/logs?${query.toString()}`;
     }
-
+    
     if (part === "log-detail") {
       Object.keys(params).forEach((k) => query.set(k, params[k]));
       return `/log-detail?${query.toString()}`;
     }
-
+    
     return "#";
   };
-
+  
   const getDisplayLabel = (part) => {
     if (part === "home") return <FaHome />;
     if (part === "field-meters") return "field-meters";
-    if (part === "LT_3") return "LT 1";
-    if (part === "LT_4") return "LT 2";
+    if(part==="meter")return params.meter_name;
     return part.replace(/_/g, " ");
   };
 
@@ -70,9 +73,8 @@ const Breadcrumbs = () => {
     <nav className="flex items-center gap-2 text-[18px]">
       {labelParts.map((part, idx) => {
         const isLast = idx === labelParts.length - 1;
-
         return (
-          <span key={idx} className="flex capitalize items-center gap-2">
+          <span key={idx} className="flex uppercase items-center gap-2">
             {isLast ? (
               <span className="font-semibold text-[#1D5999]">
                 {getDisplayLabel(part)}

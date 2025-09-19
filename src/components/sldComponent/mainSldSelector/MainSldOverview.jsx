@@ -1,62 +1,61 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 const mainOverviewMeterData = [
   {
     link: "U27_PLC",
     title: "Wapda 2",
     top: 167,
     left: 179,
-    area: "Unit_4",
-    lt_scheme: "LT_1",
+    area: "hfo",
+    // lt_scheme: "LT_1",
   },
   {
     link: "U22_PLC",
     title: "HFO 1",
     top: 167,
     left: 313,
-    area: "Unit_4",
-    lt_scheme: "LT_1",
+    area: "hfo",
+    // lt_scheme: "LT_1",
   },
   {
     link: "U26_PLC",
     title: "I-GG",
     top: 154,
     left: 548,
-    area: "Unit_4",
-    lt_scheme: "LT_1",
+    area: "hfo",
+    // lt_scheme: "LT_1",
   },
   {
     link: "U23_PLC",
     title: "O/G 2",
     top: 322,
     left: 179,
-    area: "Unit_4",
-    lt_scheme: "LT_1",
+    area: "hfo",
+    // lt_scheme: "LT_1",
   },
   {
     link: "U24_PLC",
     title: "O/G 1",
     top: 322,
     left: 271,
-    area: "Unit_4",
-    lt_scheme: "LT_1",
+    area: "hfo",
+    // lt_scheme: "LT_1",
   },
   {
     link: "U25_PLC",
-    title: "HFO Aux",
+    title: "hfo aux",
     top: 322,
     left: 366,
-    area: "Unit_4",
-    lt_scheme: "LT_1",
+    area: "hfo",
+    // lt_scheme: "LT_1",
   },
   {
     link: "U21_GW03",
     title: "Main Incomming",
     top: 449,
     left: 181,
-    area: "Unit_5",
-    lt_scheme: "LT_4",
+    area: "ht",
+    // lt_scheme: "LT_2",
   },
 
   {
@@ -64,37 +63,37 @@ const mainOverviewMeterData = [
     title: "T/F 1",
     top: 690,
     left: 183,
-    area: "Unit_5",
-    lt_scheme: "LT_4",
+    area: "ht",
+    // lt_scheme: "LT_4",
   },
   {
     link: "U19_GW03",
     title: "T/F 2",
     top: 688,
     left: 357,
-    area: "Unit_5",
-    lt_scheme: "LT_4",
+    area: "ht",
+    // lt_scheme: "LT_4",
   },
   {
     link: "U22_GW01",
     title: "Power House IC",
     top: 607,
     left: 795,
-    area: "Unit_4",
-    lt_scheme: "LT_2",
+    area: "ht",
+    // lt_scheme: "LT_2",
   },
   {
     link: "U23_GW01",
     title: "Wapda IC",
     top: 605,
     left: 962,
-    area: "Unit_4",
-    lt_scheme: "LT_2",
+    area: "ht",
+    // lt_scheme: "LT_2",
   },
 ];
 
 const MainSldOverview = ({ roundedData }) => {
-  const router = useRouter();
+
   const mainOverviewMeterTags = [
     // wapda 2
     {

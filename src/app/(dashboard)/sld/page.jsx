@@ -90,8 +90,8 @@ const Page = () => {
     }
 
     if (area === "Unit_5") {
-      if (ltSelections === "LT_3") return <Unit5Lt3 roundedData={roundedData} />;
-      if (ltSelections === "LT_4") return <Unit5Lt4 roundedData={roundedData} />;
+      if (ltSelections === "LT_1") return <Unit5Lt3 roundedData={roundedData} />;
+      if (ltSelections === "LT_2") return <Unit5Lt4 roundedData={roundedData} />;
       return <InitialSldUnit5 roundedData={roundedData} />;
     }
 

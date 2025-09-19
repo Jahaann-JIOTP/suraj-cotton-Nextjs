@@ -20,10 +20,18 @@ const page = () => {
   const ltScheme = searchParams.get("LT_selections");
   const id = searchParams.get("meter_id");
   const meterName = searchParams.get("meter_name");
-useBreadcrumb();
+  const finalArea =
+    area !== "ht" && area !== "hfo"
+      ? `${area.split("_").join("").toLowerCase()}_${ltScheme
+          .split("_")
+          .join("")
+          .toLowerCase()}`
+      : area;
 
-   const crumbs = useSelector((state) => state.breadcrumb.crumbs)
-   
+  useBreadcrumb();
+
+  const crumbs = useSelector((state) => state.breadcrumb.crumbs);
+
   const pageType = searchParams.get("page-type");
   const getSingleMeterData = async () => {
     const token = localStorage.getItem("token");
@@ -38,8 +46,8 @@ useBreadcrumb();
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            area,
-            LT_selections: ltScheme,
+            area:finalArea,
+
             meterId: id,
           }),
         }
@@ -519,9 +527,8 @@ useBreadcrumb();
     <div className="relative w-full overflow-y-auto bg-white dark:bg-gray-800 p-5 rounded-sm border-t-3 h-[81vh] border-[#1F5897]">
       <div className="flex items-center justify-between w-full overflow-hidden">
         <div className="flex flex-col items-start pb-4">
-
-        <h1 className="font-semibold text-2xl font-inter">{meterName}</h1>
-        <Breadcrumbs/>
+          <h1 className="font-semibold text-2xl font-inter">{meterName}</h1>
+          <Breadcrumbs />
         </div>
         <button
           onClick={() => router.back()}
@@ -545,9 +552,8 @@ useBreadcrumb();
             Back
           </span>
         </button>
-        
       </div>
-      
+
       <div className="flex w-full mb-5 md:mb-auto items-center justify-center">
         <div
           className="flex flex-col md:flex-row items-center justify-center gap-1 rounded-sm bg-[#F9FAFB] dark:bg-[#f9fafb6c] p-1"

@@ -8,22 +8,22 @@ export default function useBreadcrumb() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
-
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
     let parts = [];
-
     // ✅ Always start with "home"
     parts.push("home");
-
+    
     const isFieldMeter = params["page-type"] === "field-meter";
 
     if (isFieldMeter) {
       // ✅ Field-meters flow
       parts.push("field-meters");
-
-      // ❌ Do not add unit or LT here
-      if (pathname.includes("/meter") || pathname.includes("/logs") || pathname.includes("/log-detail")) {
+      if (
+        pathname.includes("/meter") ||
+        pathname.includes("/logs") ||
+        pathname.includes("/log-detail")
+      ) {
         parts.push("meter");
       }
     } else {
@@ -31,14 +31,26 @@ export default function useBreadcrumb() {
       parts.push("sld");
 
       if (params["area"]) parts.push(params["area"]); // e.g. Unit_4
-      if (params["LT_selections"]) parts.push(params["LT_selections"]); // e.g. LT_2
-
-      if (pathname.includes("/meter") || pathname.includes("/logs") || pathname.includes("/log-detail")) {
+      
+      // ✅ Only push LT when area is NOT ht/hfo
+      if (
+        params["LT_selections"] &&
+        params["area"] !== "ht" &&
+        params["area"] !== "hfo"
+      ) {
+        parts.push(params["LT_selections"]);
+      }
+      
+      if (
+        pathname.includes("/meter") ||
+        pathname.includes("/logs") ||
+        pathname.includes("/log-detail")
+      ) {
         parts.push("meter");
       }
     }
 
-    // ✅ Add logs if pathname includes logs or log-detail
+
     if (pathname.includes("/logs") || pathname.includes("/log-detail")) {
       parts.push("logs");
     }

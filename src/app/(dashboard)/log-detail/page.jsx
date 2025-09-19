@@ -24,10 +24,9 @@ const LogDetails = () => {
   const meterName = searchParams.get("meter_name");
   const ltScheme = searchParams.get("LT_selections");
   const area = searchParams.get("area");
+
   const router = useRouter();
-  const finalLt = ltScheme ==="LT_3"? "LT_1":ltScheme==="LT_4"?"LT_2":ltScheme;
-  const testingOnExpo = meterLogsData.map((item)=>{return item})
-  console.log(".................<>>>>>>>>>>>>>>>>>>>",testingOnExpo)
+  const finalLt = ltScheme;
   const getMeterLogsData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -62,8 +61,7 @@ const LogDetails = () => {
     }
   };
   useBreadcrumb();
-   const crumbs = useSelector((state) => state.breadcrumb.crumbs)
-  
+  const crumbs = useSelector((state) => state.breadcrumb.crumbs);
 
   useEffect(() => {
     getMeterLogsData();
@@ -171,14 +169,16 @@ const LogDetails = () => {
       // worksheet.mergeCells(2, 1, 2, columnCount);
       worksheet.mergeCells(2, 1, 2, Math.floor(columnCount / 2));
       const title1 = worksheet.getCell(2, 1);
-      title1.value = `Meter Name: ${meterName?.toUpperCase()}`;
-      title1.font = { bold: false, size: 16, color: { argb: "000000" } };
+      title1.value = `METER NAME: ${meterName?.toUpperCase()} - LOGS: ${type?.toUpperCase()}`;
+      title1.font = { bold: false, size: 12, color: { argb: "000000" } };
       title1.alignment = { horizontal: "left", vertical: "middle" };
 
       worksheet.mergeCells(2, Math.floor(columnCount / 2) + 1, 2, columnCount);
       const title2 = worksheet.getCell(2, Math.floor(columnCount / 2) + 1);
-      title2.value = `Log Type: ${type?.toUpperCase()}`;
-      title2.font = { bold: false, size: 13, color: { argb: "000000" } };
+      title2.value = `AREA: ${area?.toUpperCase().replace("_"," ")}${
+        area !== "hfo" && area !== "ht" ? " - LT: " + ltScheme.replace("_", " "):""
+      }`;
+      title2.font = { bold: false, size: 12, color: { argb: "000000" } };
       title2.alignment = { horizontal: "right", vertical: "middle" };
 
       for (let i = 1; i <= columnCount; i++) {
@@ -244,24 +244,18 @@ const LogDetails = () => {
   return (
     <div className="h-[81vh] overflow-hidden custom-scrollbar-report overflow-y-auto bg-white dark:bg-gray-800 border-t-3 border-[#1D5999] rounded-md px-5 py-2">
       <div className="flex flex-col-reverse md:flex-row items-center justify-between">
-     <div className="flex flex-col items-start justify-start">
-
-        <div className="flex gap-3 items-center justify-end">
-          <span className="text-[20px] font-semibold">
-           Meter:{" "}
-            <span className="font-normal text-[#1D5999]">
-              {meterName}
+        <div className="flex flex-col items-start justify-start">
+          <div className="flex gap-3 items-center justify-end">
+            <span className="text-[20px] font-semibold">
+              Meter:{" "}
+              <span className="font-normal text-[#1D5999]">{meterName}</span>
             </span>
-          </span>
-          <span className="text-[20px] font-semibold">
-           Logs:{" "}
-            <span className="font-normal text-[#1D5999]">
-              {type}
+            <span className="text-[20px] font-semibold">
+              Logs: <span className="font-normal text-[#1D5999]">{type}</span>
             </span>
-          </span>
+          </div>
+          <Breadcrumbs />
         </div>
-        <Breadcrumbs/>
-     </div>
         <div className="flex flex-row-reverse md:flex w-full md:w-auto  items-center justify-between md:justify-end gap-3">
           <button
             onClick={exportToExcel}
@@ -313,17 +307,19 @@ const LogDetails = () => {
 
         <div className="flex gap-3 items-center justify-end">
           <span className="font-semibold">
-            Unit:{" "}
-            <span className="font-normal text-[#1D5999]">
-              {area.replace("_", " ") ||""}
+            Area:{" "}
+            <span className="font-normal font-inter uppercase text-[#1D5999]">
+              {area.replace("_", " ") || ""}
             </span>
           </span>
-          <span className="font-semibold">
-            LT Panel:{" "}
-            <span className="font-normal text-[#1D5999]">
-              {finalLt.replace("_", " ")||""}
+          {area !== "hfo" && area !== "ht" && (
+            <span className="font-semibold">
+              LT Panel:{" "}
+              <span className="font-normal text-[#1D5999]">
+                {ltScheme.replace("_", " ") || ""}
+              </span>
             </span>
-          </span>
+          )}
         </div>
       </div>
 

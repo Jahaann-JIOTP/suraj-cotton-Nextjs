@@ -9,42 +9,42 @@ const fieldMetersBtn = [
     title: "PDB1 CD1 (Field)",
     top: 310,
     left: 76,
-    ltScheme: "LT_3",
+    ltScheme: "LT_1",
   },
   {
     link: "U2_GW02",
     title: "PDB2 CD2 (Field)",
     top: 310,
     left: 245,
-    ltScheme: "LT_3",
+    ltScheme: "LT_1",
   },
   {
     link: "U3_GW02",
     title: "Card PDB 01 (Field)",
     top: 310,
     left: 423,
-    ltScheme: "LT_3",
+    ltScheme: "LT_1",
   },
   {
     link: "U4_GW02",
     title: "PDB 08 (Field)",
     top: 310,
     left: 602,
-    ltScheme: "LT_3",
+    ltScheme: "LT_1",
   },
   {
     link: "U22_GW03",
     title: "PDB 07 (Field)",
     top: 310,
     left: 780,
-    ltScheme: "LT_4",
+    ltScheme: "LT_2",
   },
   {
     link: "U23_GW03",
     title: "PDB 010 (Field)",
     top: 310,
     left: 959,
-    ltScheme: "LT_4",
+    ltScheme: "LT_2",
   },
 ];
 const FieldMeters = () => {
@@ -100,7 +100,7 @@ const FieldMeters = () => {
     return newObj;
   }
   const roundedData = roundNumbersInJson(realtime);
-  console.log(">>>>>>>>>>>>>>>>>>>>>>", roundedData)
+
  
   // fetch meter area status
   const fetchMeterAreaStatus = async () => {
@@ -233,11 +233,11 @@ const FieldMeters = () => {
     {
       key: "U1_GW02",
       on: [
-        { top: 109.5, left: 50.5, img: "onmeter1.png", w: 27 },
-        { top: 260, left: 63.5, img: "onmeter2.png", w: 36 },
+        { top: 108, left: 50.5, img: "onmeter1.png", w: 27 },
+        { top: 259.7, left: 63.4, img: "onmeter2.png", w: 36 },
       ],
       off: [
-        { top: 109.5, left: 120.5, img: "offmeter1.png", w: 27 },
+        { top: 107.8, left: 120, img: "offmeter1.png", w: 27.3 },
         { top: 259, left: 99, img: "offmeter2.png", w: 36 },
       ],
     },
@@ -255,7 +255,7 @@ const FieldMeters = () => {
     {
       key: "U3_GW02",
       on: [
-        { top: 108.5, left: 398, img: "onmeter1.png", w: 27.2 },
+        { top: 108.2, left: 398.2, img: "onmeter1.png", w: 27.2 },
         { top: 259.2, left: 411.5, img: "onmeter2.png", w: 36 },
       ],
       off: [

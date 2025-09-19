@@ -10,28 +10,28 @@ const unit4MeterData = [
     title: "Solar 1236.39 Kw",
     top: 310,
     left: 226,
-    ltScheme: "LT_3",
+    ltScheme: "LT_1",
   },
   {
     link: "U13_GW02",
     title: "T/F 1",
     top: 310,
     left: 388,
-    ltScheme: "LT_3",
+    ltScheme: "LT_1",
   },
   {
     link: "U16_GW03",
     title: "T/F 2",
     top: 310,
     left: 637,
-    ltScheme: "LT_4",
+    ltScheme: "LT_2",
   },
   {
     link: "U17_GW03",
     title: "Solar 1017 Kw",
     top: 310,
     left: 798,
-    ltScheme: "LT_4",
+    ltScheme: "LT_2",
   },
 ];
 const InitialSldUnit5 = ({ roundedData }) => {
@@ -129,8 +129,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
 
         {/* Buttons */}
         <Link
-          // onClick={() => router.replace("/sld?area=Unit_5&LT_selections=LT_3")}
-          href={"/sld?area=Unit_5&LT_selections=LT_3"}
+          href={"/sld?area=Unit_5&LT_selections=LT_1"}
           className="absolute top-[548px] left-[193px] w-[301px] h-[44px] cursor-pointer"
           style={{
             left: "210px",
@@ -140,8 +139,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
           }}
         ></Link>
         <Link
-          // onClick={() => router.push("/sld?area=Unit_5&LT_selections=LT_4")}
-          href={"/sld?area=Unit_5&LT_selections=LT_4"}
+          href={"/sld?area=Unit_5&LT_selections=LT_2"}
           className="absolute cursor-pointer"
           style={{
             left: "620px",

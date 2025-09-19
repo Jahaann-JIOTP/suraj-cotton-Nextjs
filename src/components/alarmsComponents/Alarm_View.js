@@ -13,7 +13,7 @@ export default function ViewDetailsModal({ isOpen, onClose, alarmData }) {
   const occursCount = alarmData.raw.alarmTriggerConfig.occursCount;
   const operator = alarmData.raw.alarmTriggerConfig.thresholds[0]?.operator;
   const value = alarmData.raw.alarmTriggerConfig.thresholds[0]?.value;
-  console.log(alarmData.raw.alarmTriggerConfig.thresholds, "=");
+  
 
   const acknowledgement =
     alarmData?.acknowledgement ?? "Single Acknowledgement";

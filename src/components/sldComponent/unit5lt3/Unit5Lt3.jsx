@@ -281,13 +281,9 @@ const Unit5Lt3 = ({ roundedData }) => {
         {lt1MeterData.map((meter) => (
           <Link
 
-          href={`/meter?area=Unit_5&page-type=sld&LT_selections=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`}
+          href={`/meter?area=Unit_5&page-type=sld&LT_selections=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`}
             key={meter.link}
-            // onClick={() =>
-            //   router.push(
-            //     `/meter?area=Unit_5&page-type=sld&LT_selections=LT_3&meter_id=${meter.link}&meter_name=${meter.title}`
-            //   )
-            // }
+
             style={{
               position: "absolute",
               top: `${meter.top}px`,
