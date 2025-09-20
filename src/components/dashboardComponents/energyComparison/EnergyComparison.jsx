@@ -30,18 +30,19 @@ const EnergyComparison = () => {
     "HT Generation": "#F8B257",
     "WAPDA Import": "#1261a0",
   };
+  const isMobile = window.innerWidth < 768;
 
   const meterNameMap = {
-    U19_PLC_Del_ActiveEnergy:"Diesel + Gas Incoming",
-    U11_GW01_Del_ActiveEnergy:"Gas LT Panel",
-    U6_GW02_Del_ActiveEnergy:"Solar 1",
-    U17_GW03_Del_ActiveEnergy:"Solar 2",
-    
-    U22_GW01_Del_ActiveEnergy:"Wapda 1",
-   
-    U27_PLC_Del_ActiveEnergy:"Wapda 2",
+    U19_PLC_Del_ActiveEnergy: "Diesel + Gas Incoming",
+    U11_GW01_Del_ActiveEnergy: "Gas LT Panel",
+    U6_GW02_Del_ActiveEnergy: "Solar 1",
+    U17_GW03_Del_ActiveEnergy: "Solar 2",
+
+    U22_GW01_Del_ActiveEnergy: "Wapda 1",
+
+    U27_PLC_Del_ActiveEnergy: "Wapda 2",
     U22_PLC_Del_ActiveEnergy: "HFO/1",
-    U26_PLC_Del_ActiveEnergy:"I-GG",
+    U26_PLC_Del_ActiveEnergy: "I-GG",
   };
 
   const fetchPieChartData = async () => {
@@ -115,10 +116,10 @@ const EnergyComparison = () => {
         width: am5.p100,
         height: am5.p100,
         layout: root.horizontalLayout,
-        paddingTop: 0,
+        paddingTop: isMobile?80:0,
         paddingBottom: 20,
-        paddingLeft: 50,
-        paddingRight: 0,
+        paddingLeft: isMobile ? 0 : 105,
+        paddingRight: isMobile ? 0 : -70,
       })
     );
 
@@ -143,13 +144,61 @@ const EnergyComparison = () => {
     });
 
     series.labels.template.setAll({
-      text: "{category}: {value} kWh",
-      radius: 10,
-      inside: false,
-      fontSize: "[fontSize: 8px]",
+      visible: false,
     });
 
     series.ticks.template.set("visible", false);
+    // ✅ Custom Legend for Main Pie Chart
+
+    const wrapper = root.container.children.push(
+      am5.Container.new(root, {
+        width: am5.p100,
+        height: am5.p100,
+        layout: root.horizontalLayout,
+      })
+    );
+
+    // ✅ Legend on the left
+    const mainLegend = wrapper.children.push(
+      am5.Legend.new(root, {
+        width: am5.percent(25), // takes 25% width on left
+        height: am5.percent(100),
+        layout: root.verticalLayout,
+        x: am5.percent(0),
+        centerX: am5.percent(0),
+        marginRight: 10,
+      })
+    );
+
+    // Legend label styles
+    mainLegend.labels.template.setAll({
+      fontSize: 11,
+      fontWeight: "500",
+    });
+
+    mainLegend.markers.template.setAll({
+      width: 11,
+      height: 11,
+      cornerRadius: 1,
+      marginRight: 5,
+    });
+
+    mainLegend.valueLabels.template.setAll({
+      fontSize: 11,
+      fontWeight: "500",
+    });
+
+    // Force legend to show actual values
+    mainLegend.valueLabels.template.adapters.add("text", (text, target) => {
+      const val = target.dataItem?.dataContext?.value;
+      return val ? `${val} kWh` : "";
+    });
+
+    // Attach legend after data
+    series.events.on("datavalidated", () => {
+      mainLegend.data.setAll(series.dataItems);
+    });
+    // =============
 
     series.slices.template.set("toggleKey", "none");
 
@@ -193,6 +242,7 @@ const EnergyComparison = () => {
         y: am5.percent(90),
         layout: root.horizontalLayout,
         marginTop: 0,
+        paddingLeft: isMobile?0:450,
       })
     );
 
@@ -259,7 +309,7 @@ const EnergyComparison = () => {
         const baseColor = am5.color(colorMap[category] || "#cccccc");
         const subData = dataContext.subData.map((d, i) => ({
           ...d,
-          fill: am5.Color.brighten(baseColor, i * 2),
+          fill: am5.Color.brighten(baseColor, i * 1),
         }));
 
         subSeries.data.setAll(subData);
@@ -329,7 +379,7 @@ const EnergyComparison = () => {
     return () => {
       root.dispose();
     };
-  }, [theme, isEnergyComparisonFullView, pieChartData]);
+  }, [theme, window.innerWidth, isEnergyComparisonFullView, pieChartData]);
 
   // Update the fetch function to use the selected dates
   const handleDateChange = () => {
@@ -347,7 +397,7 @@ const EnergyComparison = () => {
       className={`${
         isEnergyComparisonFullView
           ? "fixed inset-0 z-50  p-5 overflow-auto w-[100%] m-auto h-[100vh]"
-          : "relative  px-1 py-2 md:p-3 h-[17rem] md:h-[15rem] lg:h-[16.5rem] xl:h-[14.3rem]"
+          : "relative  px-1 py-2 md:p-3 h-[19rem] md:h-[15rem] lg:h-[16.5rem] xl:h-[14.3rem]"
       } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
     >
       {/* Header */}
@@ -356,7 +406,7 @@ const EnergyComparison = () => {
           Energy Comparison
         </span>
         <div className=" flex items-center justify-center gap-2">
-          <div className="flex items-start flex-col md:flex-row justify-start gap-1">
+          <div className="flex items-start justify-start gap-1">
             <span className="text-[12px] font-raleway font-semibold text-black dark:text-white">
               Select Interval
             </span>
@@ -367,7 +417,7 @@ const EnergyComparison = () => {
               className="text-[12px] font-raleway px-1 py-0.5 border rounded"
             />
           </div>
-          <div className="flex items-start justify-start flex-col md:flex-row gap-1">
+          <div className="flex items-start justify-start gap-1">
             <span className="text-[12px] font-raleway font-semibold text-black dark:text-white">
               to
             </span>
@@ -392,11 +442,11 @@ const EnergyComparison = () => {
         </div>
       </div>
 
-      {/* {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-700/50 rounded-md z-10">
-          <CustomLoader />
+      {loading && (
+        <div className="absolute top-0 left-0 h-full w-full flex items-center justify-center bg-white/50 dark:bg-gray-700/50 rounded-md z-10">
+          <CustomLoader size="50px" />
         </div>
-      )} */}
+      )}
       {/* Chart */}
       <div
         className={`flex justify-end ${
@@ -408,7 +458,7 @@ const EnergyComparison = () => {
         <div
           ref={chartDivRef}
           className={`w-full ${
-            isEnergyComparisonFullView ? "h-[70%]" : "h-[10.8rem]"
+            isEnergyComparisonFullView ? "h-[70%]" : "h-[14rem] md:h-[10.8rem]"
           }  right-0`}
         />
       </div>

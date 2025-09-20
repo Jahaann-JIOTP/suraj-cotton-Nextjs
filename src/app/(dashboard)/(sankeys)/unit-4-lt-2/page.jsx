@@ -21,7 +21,7 @@ const UnitLt42Page = () => {
     startDate: formateDate(today),
     endDate: formateDate(today),
     startTime: "06:00",
-    endTime: "06:00",
+    endTime: "18:00",
   });
 
   let startDate = null;

@@ -223,7 +223,7 @@ const Dashboard = () => {
           />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="HFO Auxiliary" value="000" unit="kWh" />
+          <SingleValueDiv title="HFO Auxiliary" value={Number(singleDivData.Aux_consumption||0).toLocaleString("en-US")} unit="kWh" />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv

@@ -77,6 +77,7 @@ const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
+ 
   // ---------handle input field change---------
   const handleChange = (e) => {
     const { name, value } = e.target;

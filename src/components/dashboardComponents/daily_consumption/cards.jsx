@@ -12,6 +12,9 @@ const Card = ({
   averagePowerFactor,
   averageVoltage,
 }) => {
+  const lightingMeter = ["lighting internal", "lighting external", "unit 5 lighting"];
+  const isLightingMeter = lightingMeter.includes(title.toLowerCase())
+  
   return (
     <div className="w-full bg-white shadow-md rounded-lg border dark:bg-gray-800 border-gray-200 overflow-hidden !border-t-4 !border-t-[#1d5999]">
       {/* Title */}
@@ -31,12 +34,12 @@ const Card = ({
       {/* Top section */}
       <div className="flex justify-between items-center text-sm text-gray-700 px-4 py-3">
         <div>
-          <div className="font-medium  font-inter text-[#545454] dark:text-white">No. of machines</div>
+          <div className="font-medium  font-inter text-[#545454] dark:text-white">{`No. of ${isLightingMeter?"Lighting":"Machines"}`}</div>
           <div className="text-[#025697]  font-inter font-semibold text-center">{pad2(machines)}</div>
         </div>
         <div>
           <div className="font-medium font-inter text-[#545454] dark:text-white">Load Connected</div>
-          <div className="text-[#025697] font-inter font-semibold text-center">{fmt2(loadConnected)} kWh</div>
+          <div className="text-[#025697] font-inter font-semibold text-center">{fmt2(loadConnected)} kW</div>
         </div>
       </div>
 

@@ -409,8 +409,8 @@ export default function AllAlarmsLikeImage() {
               options={alarmNames}
               selectedValue={alarmNameFilter}
               onChange={setAlarmNameFilter}
-              width="w-full lg:w-36"
-              padding="!h-9 !px-3 !py-0"
+              width="w-full lg:w-45"
+              padding="!h-9 !px-2 !py-0"
               labelshow={false}
             />
 
@@ -419,8 +419,8 @@ export default function AllAlarmsLikeImage() {
               options={locations}
               selectedValue={locationFilter}
               onChange={setLocationFilter}
-              width="w-full lg:w-36"
-              padding="!h-9 !px-3 !py-0"
+              width="w-full lg:w-40"
+              padding="!h-9 !px-2 !py-0"
               labelshow={false}
             />
 
@@ -429,8 +429,8 @@ export default function AllAlarmsLikeImage() {
               options={alarmTypes}
               selectedValue={alarmTypeFilter}
               onChange={setAlarmTypeFilter}
-              width="w-full lg:w-36"
-              padding="!h-9 !px-3 !py-0"
+              width="w-full lg:w-40"
+              padding="!h-9 !px-2 !py-0"
               labelshow={false}
             />
 

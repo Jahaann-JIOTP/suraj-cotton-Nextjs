@@ -6,6 +6,7 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
 import { useTheme } from "next-themes";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 
 const PowerComparison = () => {
   const date = new Date();
@@ -15,7 +16,7 @@ const PowerComparison = () => {
   const [endDate, setEndDate] = useState(today);
   const [timeRange, setTimeRange] = useState("hourly");
   const [loading, setLoading] = useState(false);
-   const { theme } = useTheme();
+  const { theme } = useTheme();
   const [isPowerComparisonFullView, setIsPowerComparisonFullView] =
     useState(false);
   const chartRef = useRef(null);
@@ -103,7 +104,10 @@ const PowerComparison = () => {
     const isDark = theme === "dark";
     root.interfaceColors.set("text", am5.color(isDark ? 0xffffff : 0x000000));
     root.interfaceColors.set("grid", am5.color(isDark ? 0x555555 : 0xcccccc));
-    root.interfaceColors.set("background", am5.color(isDark ? 0x111111 : 0xffffff));
+    root.interfaceColors.set(
+      "background",
+      am5.color(isDark ? 0x111111 : 0xffffff)
+    );
 
     const chart = root.container.children.push(
       am5xy.XYChart.new(root, {
@@ -231,10 +235,10 @@ const PowerComparison = () => {
       if (!dataItem) return text;
       const raw = dataItem.get("category");
       if (!raw) return text;
-      
+
       const date = new Date(raw);
       if (isNaN(date)) return text;
-      
+
       // Format in UTC based on timeRange
       switch (timeRange) {
         case "hourly":
@@ -313,13 +317,7 @@ const PowerComparison = () => {
     makeSeries("Unit 5", "unit5", "#1D4ED8", CLUSTER_GROUPS.UNITS, true);
 
     // Cluster 2: LOSSES
-    makeSeries(
-      "Losses",
-      "losses",
-      "#008B8B",
-      CLUSTER_GROUPS.LOSSES,
-      false
-    );
+    makeSeries("Losses", "losses", "#008B8B", CLUSTER_GROUPS.LOSSES, false);
     makeSeries(
       "Unacc. Energy",
       "unaccoutable_energy",
@@ -333,7 +331,7 @@ const PowerComparison = () => {
       if (series instanceof am5xy.ColumnSeries) {
         series.set("clustered", true);
         series.columns.template.setAll({
-          marginLeft: 0,  // Changed from 2 to 0
+          marginLeft: 0, // Changed from 2 to 0
           marginRight: 0, // Changed from 2 to 0
         });
       }
@@ -415,7 +413,7 @@ const PowerComparison = () => {
     return () => {
       root.dispose();
     };
-  }, [isPowerComparisonFullView, stackChartData,theme, timeRange]);
+  }, [isPowerComparisonFullView, stackChartData, theme, timeRange]);
 
   function calculateGridDistance(timeRange, daysInRange) {
     if (timeRange === "hourly") {
@@ -457,7 +455,7 @@ const PowerComparison = () => {
       className={`${
         isPowerComparisonFullView
           ? "fixed inset-0 z-50  p-5 overflow-auto w-[100%] m-auto h-[100vh]"
-          : "relative  px-1 py-2 md:p-3 h-[17rem] md:h-[15rem] lg:h-[16.5rem] xl:h-[14.3rem]"
+          : "relative  px-1 py-2 md:p-3 h-[19rem] md:h-[15rem] lg:h-[16.5rem] xl:h-[14.3rem]"
       } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
     >
       {/* Header */}
@@ -522,14 +520,14 @@ const PowerComparison = () => {
         </div>
       </div>
 
-      {/* {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-red-500 w-full h-[9rem] rounded-md z-10">
-          <CircularProgress color="inherit" />
+      {loading && (
+        <div className="absolute top-0 left-0 h-full w-full flex items-center justify-center bg-white/50 dark:bg-gray-700/50 rounded-md z-10">
+          <CustomLoader size="50px" />
         </div>
-      )} */}
+      )}
       <div
         className={`w-full ${
-          isPowerComparisonFullView ? "h-[80vh]" : "h-[9rem]"
+          isPowerComparisonFullView ? "h-[80vh]" : "h-10rem md:h-[9rem]"
         }  overflow-hidden`}
       >
         <div
@@ -537,7 +535,7 @@ const PowerComparison = () => {
           className={`${
             isPowerComparisonFullView === true
               ? "w-full h-[80vh]"
-              : "w-full h-[440px]"
+              : "w-full h-[490px] md:h-[440px]"
           } `}
         />
       </div>
