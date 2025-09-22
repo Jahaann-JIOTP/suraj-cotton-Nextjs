@@ -35,7 +35,7 @@ const lt2MeterData = [
     left: 440,
   },
   {
-    link: "U6_GW01",
+    link: "U18_GW01",
     title: "Colony",
     top: 306,
     left: 533,
@@ -95,7 +95,7 @@ const lt2MeterData = [
     left: 449,
   },
   {
-    link: "U18_GW01",
+    link: "U6_GW01",
     title: "Bale Press",
     top: 600,
     left: 543,
@@ -166,9 +166,9 @@ const Unit4Lt2 = ({ roundedData }) => {
     },
     // colony
     {
-      activePowerTotalTag: roundedData?.U6_GW01_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U6_GW01_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U6_GW01_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U18_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U18_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U18_GW01_Voltage_Avg,
       top: 313,
       left: 540,
     },
@@ -246,9 +246,9 @@ const Unit4Lt2 = ({ roundedData }) => {
     },
     // bale press
     {
-      activePowerTotalTag: roundedData?.U18_GW01_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U18_GW01_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U18_GW01_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U6_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U6_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U6_GW01_Voltage_Avg,
       top: 608,
       left: 550,
     },

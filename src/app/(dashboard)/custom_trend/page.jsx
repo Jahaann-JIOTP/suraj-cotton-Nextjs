@@ -29,9 +29,30 @@ function CustomTrend() {
   const [unitForExportFile, setUnitForExportFile] = useState("");
   const [showPdfBtn, setShowPdfBtn] = useState(false);
   const { theme } = useTheme();
-console.log("selected meter",selectedMeter)
   const meterDropdownRef = useRef();
   const parameterDropdownRef = useRef();
+
+
+  //============== unique color generation ==========================
+
+  function generateUniqueColors(count) {
+  const colors = new Set();
+
+  while (colors.size < count) {
+    // generate random hex color
+    const color =
+      "#" +
+      Math.floor(Math.random() * 16777215) // full RGB range
+        .toString(16)
+        .padStart(6, "0");
+
+    colors.add(color); // set ensures uniqueness
+  }
+
+  return Array.from(colors);
+}
+  //============== unique color generation ==========================
+
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -80,14 +101,13 @@ console.log("selected meter",selectedMeter)
     "HFO Aux": "U25_PLC",
     "I-GG": "U26_PLC",
     "Wapda 2": "U27_PLC",
-    // unit 4 lt 2
     "Drying Simplex AC": "U1_GW01",
     "Weikel Cond": "U2_GW01",
     "Winding AC": "U3_GW01",
     "Mills RES-CLNY & Workshop": "U4_GW01",
     "Card 1~8": "U5_GW01",
     Colony: "U6_GW01",
-    "Diesel + JGS Incomming": "U7_GW01",
+    "Diesel+JGS Incomming": "U7_GW01",
     "Blow Room": "U8_GW01",
     "Card 9~14 + 1 Breaker": "U9_GW01",
     "Winding 01~6": "U10_GW01",
@@ -104,7 +124,6 @@ console.log("selected meter",selectedMeter)
     "Spare 02": "U21_GW01",
     "P/H IC": "U22_GW01",
     "Wapda IC": "U23_GW01",
-    // Meters for Unit 5 LT1
     "PDB1 CD1 (Field)": "U1_GW02",
     "PDB2 CD2  (Field)": "U2_GW02",
     "Card PDB 01  (Field)": "U3_GW02",
@@ -119,7 +138,7 @@ console.log("selected meter",selectedMeter)
     "MLDB1 Blower Room Card": "U12_GW02",
     "Transformer 1 LT-1 ACB": "U13_GW02",
     "Comber MCS 1-14": "U14_GW02",
-    "A/C Plant Spinning": "U15_GW02",
+    "AC Plant Spinning": "U15_GW02",
     "Water Chiller": "U16_GW02",
     "Card M/C 8-14": "U17_GW02",
     "Auto Con-link Conner 1-9": "U18_GW02",
@@ -128,7 +147,6 @@ console.log("selected meter",selectedMeter)
     "Simplex M/C S1-5": "U21_GW02",
     "Spare 2": "U22_GW02",
     "Draw Frame Finish": "U23_GW02",
-    // Meters for Unit 5 LT2
     "Ring Frame 7-9": "U1_GW03",
     "Yarn Conditioning M/C": "U2_GW03",
     "MLDB3 Single Room Quarter": "U3_GW03",
@@ -144,7 +162,6 @@ console.log("selected meter",selectedMeter)
     "Fiber Deposit Plant": "U13_GW03",
     "MLDB2 Ring Con": "U14_GW03",
     "Deep Valve Turbine": "U15_GW03",
-    // "Transformer 2 LT-2 ACB": "U16_GW03",
     "TF # 2": "U16_GW03",
     "Solar 1017 Kw": "U17_GW03",
     "PF Panel": "U18_GW03",
@@ -187,8 +204,15 @@ console.log("selected meter",selectedMeter)
     "Harmonics I3": "Harmonics_I3_THD",
     "Active Energy Export": "ActiveEnergy_Exp_kWh",
   };
+ const meters = Object.keys(meterMapping); // all meter names
+const uniqueColors = generateUniqueColors(meters.length);
+// Create a mapping of meter -> unique color
+console.log("unique color", uniqueColors)
+const colorMapping = {};
+meters.forEach((meter, index) => {
+  colorMapping[meter] = uniqueColors[index];
+});
 
-  // let filteredMeters = [];
 
   let filteredMeters = [];
   if (area === "HFO") {
@@ -212,7 +236,7 @@ console.log("selected meter",selectedMeter)
     filteredMeters = Object.keys(meterMapping).filter(
       (key) =>
         meterMapping[key].endsWith("GW01") &&
-        !["HFO Incoming", "Wapda 1 Incoming"].includes(key)
+        !["P/H IC", "Wapda IC"].includes(key)
     );
   } else if (area === "Unit 5 LT_1") {
     // All meters ending with GW02
@@ -456,116 +480,34 @@ console.log("selected meter",selectedMeter)
     maxLabel.dy = -7; // Position below the line
     maxLabel.dx = 80;
 
-    const colorMap = {
-      "HFO 1": am4core.color("#E62222"),
-      "O/G 2": am4core.color("#39E66C"),
-      "O/G 1": am4core.color("#A345E6"),
-      "S/T": am4core.color("#E6CF2E"),
-      "I-GG": am4core.color("#50CDE6"),
-      "Wapda 2": am4core.color("#CC1F7C"),
-      Transport: am4core.color("#FF9933"),
-      "Unit 05 Aux": am4core.color("#A569BD"),
-      "Light External": am4core.color("#F7DC6F"),
-      "Light Internal": am4core.color("#8BC63E"),
-      "Power House 2nd Source": am4core.color("#E74C3C"),
-      Turbine: am4core.color("#3498DB"),
-      "Spare (PLC)": am4core.color("#BDC3C7"),
-      "Drawing 01": am4core.color("#000FE6"),
-      "Winding 01(PLC)": am4core.color("#680056"),
-      "Ring 01": am4core.color("#8BC63E"),
-      "Ring 5": am4core.color("#FFCEB0"),
-      "Ring 6(Auto Cone 1-9)": am4core.color("#DFB4DA"),
-      "Comber 1": am4core.color("#8DFFF0"),
-      Compressor: am4core.color("#FF8DB5"),
-      "Simplex 01": am4core.color("#27AE60"),
-      "Compressor 02 (90kW)": am4core.color("#B2927A"),
-      "Ring AC": am4core.color("#4A7A3D"),
-      "Ring AC (Bypass)": am4core.color("#2ECC71"),
-      "Diesel + Gas Incoming": am4core.color("#000000"),
-      "Compressor (Bypass)": am4core.color("#415A77"),
-      "Wapda + HFO + Gas Incoming (PLC)": am4core.color("#d9cbd9"),
-      "Drying Simplex AC": am4core.color("#9A8C98"),
-      "Weikel Conditioning Machine": am4core.color("#0E9594"),
-      "Winding AC": am4core.color("#DEE2E6"),
-      "Mills RES-CLNY & Workshop": am4core.color("#640D14"),
-      "Card 1": am4core.color("#FFC4D6"),
-      Colony: am4core.color("#B15E6C"),
-      "Power House and Source": am4core.color("#C8B6FF"),
-      "Blow Room": am4core.color("#A4AC86"),
-      "Card 2": am4core.color("#9B5DE5"),
-      "Winding 01 (GW)": am4core.color("#1A5276"),
-      "Gas LT Panel": am4core.color("#641E16"),
-      "Card Filter (Bypass)": am4core.color("#7FB3D5"),
-      "Wapda + HFO + Gas Incoming (GW01)": am4core.color("#ffc107"),
-      "D/R Card Filter": am4core.color("#D98880"),
-      "Ring 02 (Auto Cone 10-18)": am4core.color("#ADE8F4"),
-      "Ring 04": am4core.color("#566573"),
-      "Ring 03": am4core.color("#34495E"),
-      "Bale Press": am4core.color("#873600"),
-      "AC Lab": am4core.color("#16A085"),
-      "Spare 01 (GW01)": am4core.color("#AAB7B8"),
-      "Spare 02 (GW01)": am4core.color("#D5DBDB"),
-      "HFO Incoming": am4core.color("#943126"),
-      "Wapda 1 Incoming": am4core.color("#51F549"),
-      "PDB CD1": am4core.color("#8E44AD"),
-      "PDB CD2": am4core.color("#2980B9"),
-      "Card PDB 01": am4core.color("#B03A2E"),
-      "PDB 8": am4core.color("#D35400"),
-      "PF Panel 1": am4core.color("#27AE60"),
-      Solar: am4core.color("#F1C40F"),
-      "Ring 1-3": am4core.color("#f4a5c4"),
-      "A/C Plant Spinning (GW02-1)": am4core.color("#2ECC71"),
-      "Blow Room L1": am4core.color("#E67E22"),
-      "Ring Frames 4-6": am4core.color("#3498DB"),
-      "A/C Plant Blowing": am4core.color("#9dfeab"),
-      "MLDB1 Blower Room Card": am4core.color("#F1948A"),
-      "Transformer 1 LT-1 ACB": am4core.color("#7D3C98"),
-      "Spare (GW02)": am4core.color("#D5DBDB"),
-      "A/C Plant Spinning (GW02-2)": am4core.color("#95cea7"),
-      "Water Chiller": am4core.color("#F0B27A"),
-      "Card M/C 8-14": am4core.color("#F7DC6F"),
-      "Auto Con-link Conner 1-9": am4core.color("#9e837a"),
-      "Card M/C 1-7": am4core.color("#E74C3C"),
-      "AC Plant Winding": am4core.color("#F5B041"),
-      "Simplex M/C S1-5": am4core.color("#D35400"),
-      "Spare (GW02-2)": am4core.color("#D5DBDB"),
-      "Draw Frame Finish": am4core.color("#F0B27A"),
-      "Ring Frame 7-9": am4core.color("#c8d0f0"),
-      "Yarn Conditioning M/C": am4core.color("#2980B9"),
-      "MLDB3 Single Room Quarter": am4core.color("#F39C12"),
-      "Roving Transport System": am4core.color("#D35400"),
-      "Ring Frame 10-12": am4core.color("#ffa0c5"),
-      "Comber MCS 1-14": am4core.color("#B15E6C"),
-      "Spare2 (GW03)": am4core.color("#AAB7B8"),
-      "Ring Frame 13-15": am4core.color("#8E44AD"),
-      "Auto Con-linker Conner M/S 10-12": am4core.color("#c095e4"),
-      "Baling Press": am4core.color("#ffe589"),
-      "Ring Frame 16-18": am4core.color("#3498DB"),
-      "Fiber Deposit Plant": am4core.color("#6c584c"),
-      "MLDB2 Ring Con": am4core.color("#F1948A"),
-      "Deep Valve Turbine": am4core.color("#f2e1be"),
-      "Transformer 2 LT-2 ACB": am4core.color("#ffdd00"),
-      "Solar 2": am4core.color("#d2cdc2"),
-      "Wapda + HFO + Gas Incoming (GW03)": am4core.color("#E74C3C"),
-      "WAPDA + HFO + Gas Outgoing T/F 3": am4core.color("#da44f4"),
-      "WAPDA + HFO + Gas Outgoing T/F 4": am4core.color("#5DADE2"),
-      "PDB 07": am4core.color("#c3d1e7"),
-      "PDB 10": am4core.color("#D35400"),
-      "PF Panel 2": am4core.color("#27AE60"),
-    };
-
     if (selectedMeter.length > 0) {
-      selectedMeter.forEach((meter) => {
-        const series = chart.series.push(new am4charts.LineSeries());
-        series.dataFields.dateX = "Date";
-        series.dataFields.valueY = meter;
-        series.name = `${meter}`;
-        series.stroke = colorMap[meter] || am4core.color("#00eaff");
-        series.strokeWidth = 2;
-        series.tooltipText = "{dateX}: [b]{valueY.formatNumber('#.##')}[/]";
-        series.show();
-      });
-    }
+  selectedMeter.forEach((meter) => {
+    const series = chart.series.push(new am4charts.LineSeries());
+    series.dataFields.dateX = "Date";
+    series.dataFields.valueY = meter;
+    series.name = `${meter}`;
+    
+    // Get the color for this meter
+    const meterColor = colorMapping[meter] || am4core.color("#00eaff");
+    
+    // Apply color to the line
+    series.stroke = meterColor;
+    series.strokeWidth = 2;
+    
+    // Apply the same color to the tooltip background
+    series.tooltip.getFillFromObject = false;
+    series.tooltip.background.fill = meterColor;
+    series.tooltip.background.stroke = meterColor;
+    series.tooltip.background.strokeWidth = 1;
+    series.tooltip.background.cornerRadius = 3;
+    
+    // Set text color for better contrast
+    series.tooltip.label.fill = am4core.color("#FFFFFF");
+    
+    series.tooltipText = "{dateX}: [b]{valueY.formatNumber('#.##')}[/]";
+    series.show();
+  });
+}
 
     chart.cursor = new am4charts.XYCursor();
     chart.scrollbarX = new am4charts.XYChartScrollbar();

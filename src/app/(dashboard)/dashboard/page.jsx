@@ -8,7 +8,7 @@ import GenerationEnergy from "@/components/dashboardComponents/generationEnergy/
 import PowerComparison from "@/components/dashboardComponents/powerComparison/PowerComparison";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import config from "@/constant/apiRouteList";
-import { jwtDecode } from "jwt-decode";
+
 
 const Dashboard = () => {
   const [dashboardTimePeriod, setDashboardTimePeriod] = useState("today");
@@ -223,7 +223,7 @@ const Dashboard = () => {
           />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
-          <SingleValueDiv title="HFO Auxiliary" value={Number(singleDivData.Aux_consumption||0).toLocaleString("en-US")} unit="kWh" />
+          <SingleValueDiv title="HFO Auxiliary" loading={loading} value={Number(singleDivData.Aux_consumption||0).toLocaleString("en-US")} unit="kWh" />
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv
