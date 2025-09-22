@@ -197,8 +197,8 @@ console.log("selected meter",selectedMeter)
     filteredMeters = ["P/H IC", "Wapda IC"];
   } else if (area === "HT_Room2") {
     filteredMeters = [
-      "WAPDA + HFO + Gas Outgoing T/F 3",
-      "WAPDA + HFO + Gas Outgoing T/F 4",
+      "T/F 1",
+      "T/F 2",
     ];
   } else if (area === "Unit 4 LT_1") {
     // All meters ending with PLC except HFO meters
