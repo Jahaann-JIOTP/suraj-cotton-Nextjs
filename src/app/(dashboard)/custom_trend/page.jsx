@@ -20,7 +20,6 @@ function CustomTrend() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [area, setArea] = useState("");
-  const [lt, setLt] = useState("");
   const [selectedMeter, setSelectedMeter] = useState([]);
   const [selectedParameter, setSelectedParameter] = useState("");
   const [chartData, setChartData] = useState([]);
@@ -30,7 +29,7 @@ function CustomTrend() {
   const [unitForExportFile, setUnitForExportFile] = useState("");
   const [showPdfBtn, setShowPdfBtn] = useState(false);
   const { theme } = useTheme();
-
+console.log("selected meter",selectedMeter)
   const meterDropdownRef = useRef();
   const parameterDropdownRef = useRef();
 
@@ -195,7 +194,7 @@ function CustomTrend() {
   if (area === "HFO") {
     filteredMeters = ["HFO 1", "O/G 2", "O/G 1", "S/T", "I-GG", "Wapda 2"];
   } else if (area === "HT_Room1") {
-    filteredMeters = ["HFO Incoming", "Wapda 1 Incoming"];
+    filteredMeters = ["P/H IC", "Wapda IC"];
   } else if (area === "HT_Room2") {
     filteredMeters = [
       "WAPDA + HFO + Gas Outgoing T/F 3",
@@ -226,8 +225,8 @@ function CustomTrend() {
       (key) =>
         meterMapping[key].endsWith("GW03") &&
         ![
-          "WAPDA + HFO + Gas Outgoing T/F 3",
-          "WAPDA + HFO + Gas Outgoing T/F 4",
+          "T/F 1",
+          "T/F 2",
         ].includes(key)
     );
   }
@@ -429,8 +428,8 @@ function CustomTrend() {
     const minRange = valueAxis.axisRanges.create();
     minRange.value = minValue;
     minRange.grid.stroke = am4core.color("#00FF00"); // Green color
-    minRange.grid.strokeWidth = 2;
-    minRange.grid.strokeOpacity = 0.8;
+    minRange.grid.strokeWidth = 1;
+    minRange.grid.strokeOpacity = 0.5;
     minRange.grid.strokeDasharray = "3,3";
 
     // Add label for minimum line
@@ -438,14 +437,15 @@ function CustomTrend() {
     minLabel.text = `Min: ${minValue.toFixed(2)}`;
     minLabel.fill = am4core.color("#00FF00");
     minLabel.fontWeight = "bold";
-    minLabel.dy = 0; // Position above the line
+    minLabel.dy = -7; // Position above the line
+    minLabel.dx=80;
 
     // Add maximum line (red)
     const maxRange = valueAxis.axisRanges.create();
     maxRange.value = maxValue;
     maxRange.grid.stroke = am4core.color("#FF0000"); // Red color
-    maxRange.grid.strokeWidth = 2;
-    maxRange.grid.strokeOpacity = 0.8;
+    maxRange.grid.strokeWidth = 1;
+    maxRange.grid.strokeOpacity = 0.5;
     maxRange.grid.strokeDasharray = "3,3";
 
     // Add label for maximum line
@@ -453,7 +453,8 @@ function CustomTrend() {
     maxLabel.text = `Max: ${maxValue.toFixed(2)}`;
     maxLabel.fill = am4core.color("#FF0000");
     maxLabel.fontWeight = "bold";
-    maxLabel.dy = 0; // Position below the line
+    maxLabel.dy = -7; // Position below the line
+    maxLabel.dx = 80;
 
     const colorMap = {
       "HFO 1": am4core.color("#E62222"),
