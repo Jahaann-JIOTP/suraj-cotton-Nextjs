@@ -263,7 +263,7 @@ const Unit5Spindle = () => {
       </h1>
 
       {/* Form */}
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full mb-4 flex items-center justify-center">
         <div className="w-full md:w-[80%] lg:w-[50%] flex flex-col items-center">
           <form
             onSubmit={formMode === "create" ? handleSubmit : updateSpindle}
@@ -305,13 +305,16 @@ const Unit5Spindle = () => {
       </div>
 
       {/* Slot Rows */}
-      <div className="relative border-1 border-[#025697] px-3 mt-10">
+      <div className="relative">
+
+      
+      <div className="md:relative border-1 border-[#025697] px-3 mt-10">
         <div className="absolute mb-4 top-1 flex items-center gap-2">
           <label className="text-[12px]">Month:</label>
           <select
             value={month + 1}
             onChange={(e) => setMonth(parseInt(e.target.value) - 1)}
-            className="border p-1 rounded-sm shadow text-[12px] w-[90px] outline-none font-400"
+            className="border p-1 rounded-sm shadow text-[12px] w-[95px] outline-none font-400"
           >
             {Array.from({ length: 12 }, (_, i) => (
               <option key={i} value={i + 1}>
@@ -323,7 +326,7 @@ const Unit5Spindle = () => {
 
         <div className="w-full flex items-center justify-center">
           <h2
-            className="text-white capitalize bg-[#025697] px-10 py-1.5 text-[17.62px] font-inter font-500"
+            className="text-white capitalize bg-[#025697] px-10 py-1.5 text-[13px] md:text-[17.62px] font-inter font-500"
             style={{ clipPath: "polygon(10% 0, 90% 0, 100% 100%, 0 100%)" }}
           >
             History of daily production
@@ -380,6 +383,7 @@ const Unit5Spindle = () => {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

@@ -86,6 +86,7 @@ const ConsumptionEnergy = () => {
       series2Field,
       series1Name,
       series2Name;
+      
 
     if (value === "today") {
       xField = "Time";
@@ -112,9 +113,7 @@ const ConsumptionEnergy = () => {
       series1Name = "Previous Year (kWh)";
       series2Name = "Current Year (kWh)";
     }
-
     chart.data = data;
-
     // ✅ X Axis
     const xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     xAxis.dataFields.category = xField;
@@ -124,34 +123,28 @@ const ConsumptionEnergy = () => {
     xAxis.renderer.labels.template.fontSize = 12;
     xAxis.renderer.cellStartLocation = 0.1;
     xAxis.renderer.cellEndLocation = 0.9;
-
+    
     // ✅ Y Axis
     const yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.renderer.labels.template.fill = am4core.color(
       isDark ? "#ffffff" : "#000000"
     );
     yAxis.renderer.labels.template.fontSize = 12;
-
     function createSeries(field, name, color) {
       const series = chart.series.push(new am4charts.ColumnSeries());
       series.dataFields.valueY = field;
       series.dataFields.categoryX = xField;
       series.name = name;
-
       // ✅ Tooltip
   series.columns.template.tooltipText =
     "{name}, {categoryX}: {valueY}";
   series.tooltip.label.fontSize = 12; 
-      
       // ✅ Styling
       series.columns.template.width = am4core.percent(70);
       series.columns.template.fill = am4core.color(color);
       series.columns.template.strokeOpacity = 0;
-
-
       return series;
     }
-
     createSeries(series1Field, series1Name, "#11A8D7"); // previous
     createSeries(series2Field, series2Name, "#00378A"); // current
   };
