@@ -292,7 +292,7 @@ const FilterPage = () => {
               </div>
 
               {/* start date selector */}
-              <div className="w-full flex items-center justify-between">
+              <div className="w-full flex items-center gap-4 justify-between">
                 <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                   <label
                     htmlFor="startDate"
@@ -331,7 +331,7 @@ const FilterPage = () => {
                 </div>
               </div>
               {/* start Time Selector */}
-              <div className="w-full flex items-center justify-between">
+              <div className="w-full flex items-center gap-4 justify-between">
                 <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                   <label
                     htmlFor="startDate"
@@ -369,7 +369,7 @@ const FilterPage = () => {
                 </div>
               </div>
               {/* spindle field field */}
-              <div className="w-full flex items-center justify-between">
+              <div className="w-full flex items-center gap-4 justify-between">
                 {unit === "Unit_4" ? (
                   <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                     <label

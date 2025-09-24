@@ -525,20 +525,28 @@ const PowerComparison = () => {
           <CustomLoader size="50px" />
         </div>
       )}
+       {/* Empty State */}
+    {!loading && stackChartData.length === 0 && (
+      <div className="absolute top-19 left-0 h-[70%] w-full flex items-center justify-center bg-red-500/50 dark:bg-red-700/50 rounded-md z-10">
+          {/* <CustomLoader size="50px" /> */}
+          <h1>Loading</h1>
+        </div>
+    )}
+     {/* Chart */}
+    {!loading && stackChartData.length > 0 && (
       <div
         className={`w-full ${
           isPowerComparisonFullView ? "h-[80vh]" : "h-10rem md:h-[9rem]"
-        }  overflow-hidden`}
+        } overflow-hidden`}
       >
         <div
           ref={chartRef}
           className={`${
-            isPowerComparisonFullView === true
-              ? "w-full h-[80vh]"
-              : "w-full h-[490px] md:h-[440px]"
-          } `}
+            isPowerComparisonFullView ? "w-full h-[80vh]" : "w-full h-[490px] md:h-[440px]"
+          }`}
         />
       </div>
+    )}
     </div>
   );
 };

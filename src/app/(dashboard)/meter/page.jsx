@@ -69,7 +69,7 @@ const page = () => {
     const value = data[key];
     const isNumber = typeof value === "number";
     const roundedValue =
-      isNumber && Math.abs(value) > 1e9
+      isNumber && Math.abs(value) > 1e12
         ? 0
         : isNumber
         ? Math.round(value * 100) / 100
