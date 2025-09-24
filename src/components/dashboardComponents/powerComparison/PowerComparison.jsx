@@ -527,7 +527,7 @@ const PowerComparison = () => {
       )}
        {/* Empty State */}
     {!loading && stackChartData.length === 0 && (
-      <div className="absolute top-19 left-0 h-[70%] w-full flex items-center justify-center bg-red-500/50 dark:bg-red-700/50 rounded-md z-10">
+      <div className="absolute top-19 left-0 h-[70%] w-full flex items-center justify-center rounded-md z-10">
           {/* <CustomLoader size="50px" /> */}
           <h1>Loading</h1>
         </div>
