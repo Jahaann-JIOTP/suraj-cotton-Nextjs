@@ -186,7 +186,7 @@ export const sidebarLinksMap = {
     },
     {
       id: 2,
-      title: "Daily Consumption",
+      title: "Consumption Summary",
       icon: EnergySankey,
       submenu: [
         {

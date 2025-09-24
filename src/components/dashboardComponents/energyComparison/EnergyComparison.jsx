@@ -24,6 +24,7 @@ const EnergyComparison = () => {
   };
 
   const [pieChartData, setPieChartData] = useState([]);
+  console.log(pieChartData[0].subData)
   const colorMap = {
     "Solar Generation": "#63F4B7",
     "LT Generation": "#FF714E",
@@ -447,7 +448,14 @@ const EnergyComparison = () => {
           <CustomLoader size="50px" />
         </div>
       )}
-      {/* Chart */}
+      {!loading && pieChartData[0].subData.length === 0 && (
+      <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
+          <img src="./chartPlaceholder.png" className={`${isEnergyComparisonFullView?"w-[300px]":"w-[130px]"}`} alt="" />
+          <span className="text-gray-400 text-[13px]">No Data Available!</span>
+        </div>
+    )}
+    {!loading && pieChartData[0].subData.length > 0 &&
+      
       <div
         className={`flex justify-end ${
           isEnergyComparisonFullView
@@ -462,6 +470,7 @@ const EnergyComparison = () => {
           }  right-0`}
         />
       </div>
+}
     </div>
   );
 };

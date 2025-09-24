@@ -7,6 +7,7 @@ import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
 import { useTheme } from "next-themes";
 import CustomLoader from "@/components/customLoader/CustomLoader";
+import Image from "next/image";
 
 const PowerComparison = () => {
   const date = new Date();
@@ -527,9 +528,9 @@ const PowerComparison = () => {
       )}
        {/* Empty State */}
     {!loading && stackChartData.length === 0 && (
-      <div className="absolute top-19 left-0 h-[70%] w-full flex items-center justify-center rounded-md z-10">
-          {/* <CustomLoader size="50px" /> */}
-          <h1>Loading</h1>
+      <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
+          <img src="./chartPlaceholder.png" className={`${isPowerComparisonFullView?"w-[300px]":"w-[130px]"}`} alt="" />
+          <span className="text-gray-400 text-[13px]">No Data Available!</span>
         </div>
     )}
      {/* Chart */}
