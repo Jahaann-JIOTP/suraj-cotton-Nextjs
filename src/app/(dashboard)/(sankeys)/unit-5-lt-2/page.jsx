@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
-import SankeyTotalValues from "@/components/sakeyTotalValue/SankeyTotalValues";
+import SankeyTotalValues, { calculateSums } from "@/components/sakeyTotalValue/SankeyTotalValues";
 import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
 import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
 
@@ -27,15 +27,12 @@ const Unit5Lt4Page = () => {
   let startDate = null;
   let endDate = null;
   if (Unit5Lt2TimePeriod !== "custom") {
-      ({ startDate, endDate } = getDateRangeFromString(
-        Unit5Lt2TimePeriod
-      ));
-    }
-    // 👉 build unified range
+    ({ startDate, endDate } = getDateRangeFromString(Unit5Lt2TimePeriod));
+  }
+  const { generation, consumption } = calculateSums(data, "TotalLT4");
+  // 👉 build unified range
   const finalRange =
-    Unit5Lt2TimePeriod === "custom"
-      ? intervalPeriod
-      : { startDate, endDate };
+    Unit5Lt2TimePeriod === "custom" ? intervalPeriod : { startDate, endDate };
 
   const fetchSankeyData = async () => {
     const token = localStorage.getItem("token");
@@ -67,7 +64,13 @@ const Unit5Lt4Page = () => {
   };
   useEffect(() => {
     fetchSankeyData();
-  }, [Unit5Lt2TimePeriod, intervalPeriod.startDate, intervalPeriod.endDate, intervalPeriod.startTime, intervalPeriod.endTime]);
+  }, [
+    Unit5Lt2TimePeriod,
+    intervalPeriod.startDate,
+    intervalPeriod.endDate,
+    intervalPeriod.startTime,
+    intervalPeriod.endTime,
+  ]);
 
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
@@ -92,12 +95,19 @@ const Unit5Lt4Page = () => {
         <div className="w-full md:px-20 flex items-center justify-center mt-6">
           {loading ? (
             <CustomLoader />
-          ) : (
+          ) : consumption > 0 || generation > 0 ? (
             <SankeyChart data={data} id="unit5Lt4Chart" />
+          ) : (
+            <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
+              <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />
+              <span className="text-gray-400 text-[14px]">
+                No Data Available!
+              </span>
+            </div>
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="TotalLT4"/>
+      <SankeyTotalValues data={data} lt="TotalLT4" />
     </div>
   );
 };

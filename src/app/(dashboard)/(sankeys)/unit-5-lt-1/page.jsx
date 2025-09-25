@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
-import SankeyTotalValues from "@/components/sakeyTotalValue/SankeyTotalValues";
+import SankeyTotalValues, {
+  calculateSums,
+} from "@/components/sakeyTotalValue/SankeyTotalValues";
 import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
 import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
 
@@ -14,7 +16,7 @@ const Unit5Lt3Page = () => {
   const [data, setData] = useState([]);
 
   const [loading, setLoading] = useState(false);
-   const today = new Date();
+  const today = new Date();
   const formateDate = (date) => {
     return date.toISOString().split("T")[0];
   };
@@ -28,15 +30,13 @@ const Unit5Lt3Page = () => {
   let startDate = null;
   let endDate = null;
   if (Unit5lt1TimePeriod !== "custom") {
-      ({ startDate, endDate } = getDateRangeFromString(
-        Unit5lt1TimePeriod
-      ));
-    }
-    // 👉 build unified range
+    ({ startDate, endDate } = getDateRangeFromString(Unit5lt1TimePeriod));
+  }
+
+  const { generation, consumption } = calculateSums(data, "TotalLT3");
+  // 👉 build unified range
   const finalRange =
-    Unit5lt1TimePeriod === "custom"
-      ? intervalPeriod
-      : { startDate, endDate };
+    Unit5lt1TimePeriod === "custom" ? intervalPeriod : { startDate, endDate };
 
   const fetchSankeyData = async () => {
     const token = localStorage.getItem("token");
@@ -68,7 +68,13 @@ const Unit5Lt3Page = () => {
   };
   useEffect(() => {
     fetchSankeyData();
-  }, [Unit5lt1TimePeriod, intervalPeriod.startDate, intervalPeriod.endDate, intervalPeriod.startTime, intervalPeriod.endTime]);
+  }, [
+    Unit5lt1TimePeriod,
+    intervalPeriod.startDate,
+    intervalPeriod.endDate,
+    intervalPeriod.startTime,
+    intervalPeriod.endTime,
+  ]);
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-start md:items-center flex justify-between flex-col md:flex-row">
@@ -92,12 +98,19 @@ const Unit5Lt3Page = () => {
         <div className="w-full md:px-20 flex items-center justify-center mt-6">
           {loading ? (
             <CustomLoader />
-          ) : (
+          ) : consumption > 0 || generation > 0 ? (
             <SankeyChart data={data} id="unit5Lt3Chart" />
+          ) : (
+            <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
+              <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />
+              <span className="text-gray-400 text-[14px]">
+                No Data Available!
+              </span>
+            </div>
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="TotalLT3"/>
+      <SankeyTotalValues data={data} lt="TotalLT3" />
     </div>
   );
 };

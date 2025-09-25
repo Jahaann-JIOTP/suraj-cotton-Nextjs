@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
-import SankeyTotalValues from "@/components/sakeyTotalValue/SankeyTotalValues";
+import SankeyTotalValues, {
+  calculateSums,
+} from "@/components/sakeyTotalValue/SankeyTotalValues";
 import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
 import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
 
@@ -13,7 +15,7 @@ const UnitLt42Page = () => {
   const [Unit4Lt2TimePeriod, setUnit4Lt2TimePeriod] = useState("today");
   const [data, setDAta] = useState([]);
   const [loading, setLoading] = useState(false);
-   const today = new Date();
+  const today = new Date();
   const formateDate = (date) => {
     return date.toISOString().split("T")[0];
   };
@@ -27,15 +29,13 @@ const UnitLt42Page = () => {
   let startDate = null;
   let endDate = null;
   if (Unit4Lt2TimePeriod !== "custom") {
-      ({ startDate, endDate } = getDateRangeFromString(
-        Unit4Lt2TimePeriod
-      ));
-    }
-    // 👉 build unified range
+    ({ startDate, endDate } = getDateRangeFromString(Unit4Lt2TimePeriod));
+  }
+
+  const { generation, consumption } = calculateSums(data, "TotalLT2");
+  // 👉 build unified range
   const finalRange =
-    Unit4Lt2TimePeriod === "custom"
-      ? intervalPeriod
-      : { startDate, endDate };
+    Unit4Lt2TimePeriod === "custom" ? intervalPeriod : { startDate, endDate };
   const fetchUnit4Lt2Data = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -65,7 +65,13 @@ const UnitLt42Page = () => {
 
   useEffect(() => {
     fetchUnit4Lt2Data();
-  }, [Unit4Lt2TimePeriod, intervalPeriod.startDate, intervalPeriod.endDate, intervalPeriod.startTime, intervalPeriod.endTime]);
+  }, [
+    Unit4Lt2TimePeriod,
+    intervalPeriod.startDate,
+    intervalPeriod.endDate,
+    intervalPeriod.startTime,
+    intervalPeriod.endTime,
+  ]);
 
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
@@ -90,8 +96,15 @@ const UnitLt42Page = () => {
         <div className="w-full md:px-20 flex items-center justify-center mt-6">
           {loading ? (
             <CustomLoader />
-          ) : (
+          ) : consumption > 0 || generation > 0 ? (
             <SankeyChart data={data} id="unit4Lt2Chart" />
+          ) : (
+            <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
+              <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />
+              <span className="text-gray-400 text-[14px]">
+                No Data Available!
+              </span>
+            </div>
           )}
         </div>
       </div>

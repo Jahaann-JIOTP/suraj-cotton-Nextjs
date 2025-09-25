@@ -1,27 +1,27 @@
 import React from 'react'
 
-const SankeyTotalValues = ({data, lt}) => {
-    // sum of all generations adn consumption 
-      function calculateSums(data, totalNode) {
-      let generation = 0;
-      let consumption = 0;
-    
-      for (let i = 0; i < data.length; i++) {
-        const link = data[i];
-    
-        // incoming → generation
-        if (link.to === totalNode) {
-          generation += link.value;
-        }
-    
-        // outgoing → consumption
-        if (link.from === totalNode) {
-          consumption += link.value;
-        }
-      }
-    
-      return { generation, consumption };
+// sum of all generations adn consumption 
+  export function calculateSums(data, totalNode) {
+  let generation = 0;
+  let consumption = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const link = data[i];
+
+    // incoming → generation
+    if (link.to === totalNode) {
+      generation += link.value;
     }
+
+    // outgoing → consumption
+    if (link.from === totalNode) {
+      consumption += link.value;
+    }
+  }
+
+  return { generation, consumption };
+}
+const SankeyTotalValues = ({data, lt}) => {
     const { generation, consumption } = calculateSums(data, lt);
   return (
     <div className="absolute bottom-3">
