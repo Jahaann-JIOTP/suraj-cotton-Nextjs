@@ -40,7 +40,7 @@ const SingleUnitComponent = ({
   for (const key in finalData) {
     totalConsumption += finalData[key];
   }
-console.log(finalData)
+  console.log(finalData);
   // /////-------------------------export to excel
 
   const tableData = [
@@ -75,7 +75,7 @@ console.log(finalData)
     {
       Department: "Drawing(Finisher) + 2 Breaker",
       Mcs: { Unit_4: "8", Unit_5: "" },
-      InstalledLoad: { Unit_4: "12.6", Unit_5: "" },
+      InstalledLoad: { Unit_4: "22.6", Unit_5: "" },
       ConsumedUnits: finalData?.DrawingFinisherand2Breaker_consumption || 0,
       unit: "Unit_4",
     },
@@ -266,7 +266,7 @@ console.log(finalData)
         extension: "png",
       });
       worksheet.addImage(image2Id, {
-        tl: { col: 3, row: 1 },
+        tl: { col: 3.9, row: 1 },
         ext: { width: 130, height: 35 },
       });
       const borderRow = worksheet.getRow(4);
@@ -402,14 +402,18 @@ console.log(finalData)
       });
 
       const spindleRow = worksheet.addRow([
-        "No. of Spindles",
+        "No. of Bags",
         "",
         "",
         unit === "Unit_4"
-          ? unit4Spindle
+          ? unit4Spindle > 0
+            ? unit4Spindle
+            : "N/A"
           : unit === "Unit_5"
-          ? unit5Spindle
-          : "",
+          ? unit5Spindle > 0
+            ? unit5Spindle
+            : "N/A"
+          : "N/A",
       ]);
       spindleRow.font = { bold: true };
       spindleRow.alignment = { horizontal: "left", vertical: "middle" };
@@ -579,16 +583,15 @@ console.log(finalData)
               </tr>
               <tr className="border-1 border-gray-300 dark:border-gray-500">
                 <td className="border-1 px-2 py-1 border-gray-300 dark:border-gray-500 w-[30%] text-[12px] font-inter font-500">
-                  No. of Spindles
+                  No. of Bags
                 </td>
                 <td></td>
                 <td></td>
                 <td className="text-center px-2 py-1 text-[12px] font-inter font-500 border-1 border-gray-300 dark:border-gray-500">
-                  {unit === "Unit_4"
-                    ? unit4Spindle
-                    : unit === "Unit_5"
-                    ? unit5Spindle
-                    : ""}
+                  {unit === "Unit_4" &&
+                    (unit4Spindle > 0 ? unit4Spindle : "N/A")}
+                  {unit === "Unit_5" &&
+                    (unit5Spindle > 0 ? unit5Spindle : "N/A")}
                 </td>
               </tr>
             </tbody>

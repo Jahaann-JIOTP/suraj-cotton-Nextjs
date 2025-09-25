@@ -358,7 +358,7 @@ const PowerSummaryTable = ({
 
     addTable(
       "Production",
-      ["Plant", "No. of Spindle", "Kw/Spindle", "Cost/Spindle"],
+      ["Plant", "No. of Bags", "Kw/Bags", "Cost/Bags"],
       productionData
     );
 
@@ -719,13 +719,13 @@ const PowerSummaryTable = ({
                     Plant
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
-                    No. of Spindle
+                    No. of Bags
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
-                    Kw/Spindle
+                    Kw/Bags
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
-                    Cost/Spindle
+                    Cost/Bags
                   </th>
                 </tr>
               </thead>

@@ -26,9 +26,13 @@ const FilterPage = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingSpindle, setLoadingSpindle] = useState(false);
   const [resData, setResData] = useState([]);
+  
+  // Remove the blocking logic - always allow API calls
   const unit4 = unit === "Unit_4" || unit === "ALL" ? "U4" : "";
   const unit5 = unit === "Unit_5" || unit === "ALL" ? "U5" : "";
+  
   const toggleDropdown = () => setIsOpen(!isOpen);
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -38,6 +42,7 @@ const FilterPage = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
   const handleUnitChange = (unitClicked) => {
     if (unitClicked === "ALL") {
       setUnit("ALL");
@@ -54,10 +59,12 @@ const FilterPage = () => {
       setUnit(unitClicked);
     }
   };
-  // fetch unit 4 spindles
+
+  // fetch unit 4 spindles - simplified, no blocking
   const fetchU4Spindles = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
+    
     try {
       setLoadingSpindle(true);
       const response = await fetch(
@@ -67,22 +74,24 @@ const FilterPage = () => {
       const resResult = await response.json();
 
       if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
-        setUnit4Spindle(resResult[0].totalProduction); // can be 0 or >0
+        setUnit4Spindle(resResult[0].totalProduction);
       } else {
-        setUnit4Spindle(0); // ✅ empty array → treat as zero
+        setUnit4Spindle(0); // Default to 0 if no data
       }
     } catch (error) {
       console.error(error.message);
-      setUnit4Spindle(0);
+      setUnit4Spindle(0); // Default to 0 on error
     } finally {
       setLoadingSpindle(false);
-      setFetched(true); // ✅ mark as fetched
+      setFetched(true);
     }
   };
-  // fetch unit 4 spindles
+
+  // fetch unit 5 spindles - simplified, no blocking
   const fetchU5Spindles = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
+    
     try {
       setLoadingSpindle(true);
       const response = await fetch(
@@ -94,61 +103,60 @@ const FilterPage = () => {
       if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
         setUnit5Spindle(resResult[0].totalProduction);
       } else {
-        setUnit5Spindle(0); // ✅ empty array → treat as zero
+        setUnit5Spindle(0); // Default to 0 if no data
       }
     } catch (error) {
       console.error(error.message);
-      setUnit5Spindle(0);
+      setUnit5Spindle(0); // Default to 0 on error
     } finally {
       setLoadingSpindle(false);
-      setFetched(true); // ✅ mark as fetched
+      setFetched(true);
     }
   };
-  // formate time to 24 hours
+
+  // format time to 12 hours
   const convertTo12Hour = (time) => {
     if (!time) return "";
     let [hours, minutes] = time.split(":").map(Number);
 
     let ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12; // convert 0 to 12, 13 -> 1, etc.
+    hours = hours % 12 || 12;
 
     return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
   }
 
+  // Remove the blocking useEffect that prevented submission
+  // Only show warning messages but don't block form submission
   useEffect(() => {
-    if (!fetched) return; // ✅ don’t run before spindle API completes
+    if (!fetched) return;
 
+    // Show warning messages but don't set errorMessage that blocks submission
     if (unit === "Unit_4" && unit4Spindle === 0) {
-      setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
+      console.warn("Warning: No Unit 4 Bags data found");
     } else if (unit === "Unit_5" && unit5Spindle === 0) {
-      setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
+      console.warn("Warning: No Unit 5 Bags data found");
     } else if (unit === "ALL") {
       if (unit4Spindle === 0 && unit5Spindle === 0) {
-        setErrorMessage(
-          "Add Unit 4 and Unit 5 spindles first in Spindle Production Tab"
-        );
+        console.warn("Warning: No Bags data found for either unit");
       } else if (unit4Spindle === 0) {
-        setErrorMessage("Add Unit 4 spindles first in Spindle Production Tab");
+        console.warn("Warning: No Unit 4 Bags data found");
       } else if (unit5Spindle === 0) {
-        setErrorMessage("Add Unit 5 spindles first in Spindle Production Tab");
-      } else {
-        setErrorMessage("");
+        console.warn("Warning: No Unit 5 Bags data found");
       }
-    } else {
-      setErrorMessage("");
     }
   }, [unit, unit4Spindle, unit5Spindle, fetched]);
+
   useEffect(() => {
     if (unit !== "" && startDate !== "" && endDate !== "") {
       fetchU4Spindles();
       fetchU5Spindles();
     }
-  }, [unit4, unit5, startDate, endDate]);
-  // getting energy usage report
+  }, [unit, startDate, endDate]); // Added unit to dependencies
+
+  // getting energy usage report - removed the blocking condition
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (errorMessage.length > 0) return; // 🚫 prevent submit when error exists
-
+    
     const token = localStorage.getItem("token");
     if (!token) return;
 
@@ -177,26 +185,37 @@ const FilterPage = () => {
           }),
         }
       );
+      
       if (response.ok) {
         const resResult = await response.json();
         setResData(resResult);
+        setShowResults(true);
+      } else {
+        toast.error("Failed to generate report");
       }
-      setShowResults(true);
     } catch (error) {
       console.error(error.message);
+      toast.error("Error generating report");
     } finally {
       setLoadingSubmit(false);
     }
   };
 
+  // Helper function to get safe spindle values (default to 0 if null/undefined)
+  const getSafeSpindleValue = (value) => {
+    return value !== null && value !== undefined ? value : 0;
+  };
+
   return (
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
-      {!showResults && errorMessage.length !== 0 && (
-        <div className="flex relative md:absolute top-0 right-0 bg-[#D40000] text-[14.22px] items-center gap-3 px-5 py-1.5 rounded rounded-t-md md:rounded-tr-md text-white">
+      {/* Show warning but don't block UI */}
+      {!showResults && fetched && (
+        <div className="flex relative md:absolute top-0 right-0 bg-orange-500 text-[14.22px] items-center gap-3 px-5 py-1.5 rounded rounded-t-md md:rounded-tr-md text-white">
           <RiErrorWarningFill size={23} />
-          {errorMessage}
+          Please Add Number of Bags in Production Tab First!
         </div>
       )}
+      
       <div className="flex pb-3 items-center justify-between">
         <h1 className="text-[18.22px] text-raleway font-600">
           Energy Usage Report
@@ -210,8 +229,9 @@ const FilterPage = () => {
               setEndDate("");
               setStartTime("");
               setEndTime("");
-              setUnit4Spindle("");
-              setUnit5Spindle("");
+              setUnit4Spindle(null);
+              setUnit5Spindle(null);
+              setFetched(false);
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -240,7 +260,7 @@ const FilterPage = () => {
         <div>
           <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
             <div className="flex w-full items-center gap-5 flex-wrap">
-              {/* area slector dropdown */}
+              {/* area selector dropdown */}
               <div className="flex flex-col w-full items-start justify-center gap-1">
                 <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
                   Select Plants Units
@@ -368,7 +388,7 @@ const FilterPage = () => {
                   />
                 </div>
               </div>
-              {/* spindle field field */}
+              {/* spindle field - now shows 0 as default */}
               <div className="w-full flex items-center gap-4 justify-between">
                 {unit === "Unit_4" ? (
                   <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
@@ -376,15 +396,14 @@ const FilterPage = () => {
                       htmlFor="unit4Spindels"
                       className="text-[13.51px] font-500 font-inter"
                     >
-                      No. of Spindles Unit 4
+                      No. of Bags Unit 4
                     </label>
                     <input
                       type="number"
-                      value={unit4Spindle ?? ""} // Use nullish coalescing
+                      value={getSafeSpindleValue(unit4Spindle)}
                       id="rates"
                       name="rates"
                       readOnly
-                      onChange={(e) => setUnit4Spindle(e.target.value)}
                       placeholder="00"
                       className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                     />
@@ -392,18 +411,17 @@ const FilterPage = () => {
                 ) : unit === "Unit_5" ? (
                   <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                     <label
-                      htmlFor="unit4Spindels"
+                      htmlFor="unit5Spindels"
                       className="text-[13.51px] font-500 font-inter"
                     >
-                      No. of Spindles Unit 5
+                      No. of Bags Unit 5
                     </label>
                     <input
                       type="number"
-                      value={unit5Spindle ?? ""} // Use nullish coalescing
+                      value={getSafeSpindleValue(unit5Spindle)}
                       id="rates"
                       name="rates"
                       readOnly
-                      onChange={(e) => setUnit5Spindle(e.target.value)}
                       placeholder="00"
                       className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                     />
@@ -415,33 +433,31 @@ const FilterPage = () => {
                         htmlFor="unit4Spindels"
                         className="text-[13.51px] font-500 font-inter"
                       >
-                        No. of Spindles Unit 4
+                        No. of Bags Unit 4
                       </label>
                       <input
                         type="number"
-                        value={unit4Spindle ?? ""}
+                        value={getSafeSpindleValue(unit4Spindle)}
                         id="rates"
                         name="rates"
                         readOnly
-                        onChange={(e) => setUnit4Spindle(e.target.value)}
                         placeholder="00"
                         className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                       />
                     </div>
                     <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                       <label
-                        htmlFor="unit4Spindels"
+                        htmlFor="unit5Spindels"
                         className="text-[13.51px] font-500 font-inter"
                       >
-                        No. of Spindles Unit 5
+                        No. of Bags Unit 5
                       </label>
                       <input
                         type="number"
-                        value={unit5Spindle ?? ""}
+                        value={getSafeSpindleValue(unit5Spindle)}
                         id="rates"
                         name="rates"
                         readOnly
-                        onChange={(e) => setUnit5Spindle(e.target.value)}
                         placeholder="00"
                         className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                       />
@@ -455,17 +471,13 @@ const FilterPage = () => {
               {loadingSpindle ? (
                 <div className="flex justify-center items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mt-2">
                   <CircularProgress size={16} />{" "}
-                  <span>Fetching Spindles...</span>
+                  <span>Fetching Bags...</span>
                 </div>
               ) : (
                 <button
                   type="submit"
-                  disabled={loadingSubmit || errorMessage.length > 0}
-                  className={`bg-[#1A68B2] cursor-pointer text-white px-4 py-1 rounded flex items-center justify-center gap-2 ${
-                    errorMessage.length > 0
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                  }`}
+                  disabled={loadingSubmit}
+                  className="bg-[#1A68B2] cursor-pointer text-white px-4 py-1 rounded flex items-center justify-center gap-2"
                 >
                   {loadingSubmit ? (
                     <>
@@ -485,17 +497,17 @@ const FilterPage = () => {
           unit={unit}
           startDate={startDate}
           endDate={endDate}
-          unit4Spindle={unit4Spindle}
+          unit4Spindle={getSafeSpindleValue(unit4Spindle)}
           startTime={convertTo12Hour(startTime)}
           endTime={convertTo12Hour(endTime)}
-          unit5Spindle={unit5Spindle}
+          unit5Spindle={getSafeSpindleValue(unit5Spindle)}
           resData={resData}
         />
       ) : showResults && unit === "ALL" ? (
         <MultipleUnitComponent
           unit={unit}
-          unit4Spindle={unit4Spindle}
-          unit5Spindle={unit5Spindle}
+          unit4Spindle={getSafeSpindleValue(unit4Spindle)}
+          unit5Spindle={getSafeSpindleValue(unit5Spindle)}
           startDate={startDate}
           endDate={endDate}
           startTime={convertTo12Hour(startTime)}

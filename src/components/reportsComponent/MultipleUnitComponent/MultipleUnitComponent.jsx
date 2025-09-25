@@ -89,7 +89,7 @@ endTime
       dept: "Drawing (Finsher) + 2 Breacker",
       u4Mcs: "8",
       u5Mcs: "",
-      u4Load: "12.6",
+      u4Load: "22.6",
       u5Load: "",
       u4Consumption: data.unit_4DrawingFinisherand2Breaker_consumption,
       u5Consumption: data.unit_5DrawingFinisherand2Breaker_consumption,
@@ -554,7 +554,7 @@ endTime
       });
 
       const spindleRow = worksheet.addRow([
-        "Total Spindles",
+        "Total bags",
         "",
         "",
         unit4Spindle,
@@ -811,22 +811,22 @@ endTime
                     </tr>
                     <tr className="h-[27px] border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-semibold">
                       <td className="px-2 py-1 border border-gray-300 dark:border-gray-500   text-[12px] font-inter font-semibold">
-                        Total Spindles
+                        Total Bags
                       </td>
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-[5px] py-1 text-center border-r-1 border-gray-300 dark:border-gray-500 text-[12px] font-inter font-semibold">
-                        {unit4Spindle}
+                        {unit4Spindle >0?unit4Spindle:"N/A"}
                       </td>
                       <td className="px-[5px] py-1 border-r-1 border-gray-300 dark:border-gray-500 text-center text-[12px] font-inter font-semibold"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500  text-[12px] font-inter font-semibold">
-                        {unit5Spindle}
+                        {unit5Spindle >0 ?unit5Spindle :"N/A"}
                       </td>
                       <td className="px-[5px] py-1 text-center border-r-1 text-[12px] font-inter font-semibold"></td>
                       <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-semibold">
-                        {unit4Spindle + unit5Spindle}
+                        {(unit4Spindle + unit5Spindle) >0?(unit4Spindle + unit5Spindle):"N/A"}
                       </td>
                     </tr>
                   </tbody>

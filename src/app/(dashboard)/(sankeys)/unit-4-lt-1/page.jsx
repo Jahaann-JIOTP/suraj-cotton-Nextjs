@@ -14,6 +14,7 @@ import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePer
 const UnitLt41Page = () => {
   const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);
+  console.log(data)
   const [loading, setLoading] = useState(false);
   const today = new Date();
   const formateDate = (date) => {
@@ -93,6 +94,7 @@ const UnitLt41Page = () => {
       </div>
       <div className=" w-full  flex items-center justify-center">
         <div className="w-full md:px-20 flex items-center justify-center mt-6">
+          
           {loading ? (
             <CustomLoader />
           ) : (

@@ -390,7 +390,7 @@ const LogDetails = () => {
                             className="border border-gray-200 px-3 py-1 text-center text-sm"
                           >
                             {typeof row[col] === "number"
-                              ? Math.abs(row[col]) > 1e8
+                              ? Math.abs(row[col]) > 1e15
                                 ? 0
                                 : Math.round(row[col] * 100) / 100
                               : row[col] == null

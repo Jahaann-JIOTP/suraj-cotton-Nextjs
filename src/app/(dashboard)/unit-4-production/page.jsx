@@ -128,7 +128,7 @@ const Unit4Spindle = () => {
         );
 
         if (response.ok) {
-          toast.success("Unit 4 Spindle Added");
+          toast.success("Unit 4 Bags Added");
           await fetchSpindleProduction();
         }
       }
@@ -203,7 +203,7 @@ const Unit4Spindle = () => {
       });
       if (response.ok) {
         setProductionData({ unit: "U4", startDate: "", values: [] });
-        toast.success("Unit 4 Spindles Updated");
+        toast.success("Unit 4 Bags Updated");
         setLoading(false);
         await fetchSpindleProduction();
       }
@@ -267,8 +267,8 @@ const Unit4Spindle = () => {
     <div className="flex flex-col bg-white dark:bg-gray-800 w-full h-full md:h-[81vh] rounded-md border-t-3 overflow-x-auto border-[#1F5897] px-4 py-2">
       <h1 className="font-raleway text-[18.22px] text-black dark:text-white font-600">
         {formMode === "create"
-          ? "Add Spindle Production Unit 4"
-          : "Update Spindle Production Unit 4"}
+          ? "Add Bags Production Unit 4"
+          : "Update Bags Production Unit 4"}
       </h1>
 
       {/* Form */}

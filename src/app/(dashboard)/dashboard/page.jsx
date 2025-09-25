@@ -187,7 +187,7 @@ const Dashboard = () => {
           <div className="flex flex-wrap gap-3 md:gap-[0.7vw] items-center  justify-between">
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
-                title="Energy/Spindle(U4)"
+                title="Energy/Bags(U4)"
                 value={Number(u4EnergyPerSpindle||0).toFixed(2).toLocaleString("en-US")}
                 loading={loading}
                 unit="kWh"
@@ -195,7 +195,7 @@ const Dashboard = () => {
             </div>
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
-                title="Energy/Spindle(U5)"
+                title="Energy/Bags(U5)"
                 value={Number(u5EnergyPerSpindle||0).toFixed(2).toLocaleString("en-US")}
                 loading={loading}
                 unit="kWh"
