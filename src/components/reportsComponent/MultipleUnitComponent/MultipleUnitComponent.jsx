@@ -9,8 +9,8 @@ const MultipleUnitComponent = ({
   unit4Spindle,
   unit5Spindle,
   resData,
-    startTime,
-endTime
+  startTime,
+  endTime,
 }) => {
   const { theme } = useTheme();
   const data = resData[0] || {};
@@ -38,8 +38,7 @@ endTime
   });
   // all total of unit + Unit 5
   let allTotalofU4U5Sum = unit4Total + unit5Total;
-  
-  console.log(u4U5Total)
+
   const tableData = [
     {
       dept: "Blow Room",
@@ -98,8 +97,8 @@ endTime
     },
     {
       dept: "Drawing Finsher 1-8 Breaker",
-      u4Mcs: '',
-      u5Mcs: '8',
+      u4Mcs: "",
+      u5Mcs: "8",
       u4Load: "",
       u5Load: "13.6",
       u4Consumption: data.unit_4DrawingFinisher1to8Breaker_consumption,
@@ -110,9 +109,9 @@ endTime
     {
       dept: "Drawing Breaker + Simplex",
       u4Mcs: "",
-      u5Mcs: "6",
+      u5Mcs: "11",
       u4Load: "",
-      u5Load: "6.5",
+      u5Load: "40.5",
       u4Consumption: data.unit_4DrawingBreakerandSimplex_consumption,
       u5Consumption: data.unit_5DrawingBreakerandSimplex_consumption,
       u4andU5TotalConsumption: u4U5Total.drawingbreakerandsimplex,
@@ -188,7 +187,7 @@ endTime
       dept: "A/C Ring",
       u4Mcs: "",
       u5Mcs: "",
-      u4Load: "347",
+      u4Load: "347.5",
       u5Load: "476",
       u4Consumption: data.unit_4AC_Ring_consumption,
       u5Consumption: data.unit_5AC_Ring_consumption,
@@ -338,7 +337,6 @@ endTime
       u4andU5TotalConsumption: u4U5Total.spare,
       unit: "both",
     },
-    
   ];
 
   // ---------------------------
@@ -816,17 +814,19 @@ endTime
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-[5px] py-1 text-center border-r-1 border-gray-300 dark:border-gray-500 text-[12px] font-inter font-semibold">
-                        {unit4Spindle >0?unit4Spindle:"N/A"}
+                        {unit4Spindle > 0 ? unit4Spindle : "N/A"}
                       </td>
                       <td className="px-[5px] py-1 border-r-1 border-gray-300 dark:border-gray-500 text-center text-[12px] font-inter font-semibold"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1"></td>
                       <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500  text-[12px] font-inter font-semibold">
-                        {unit5Spindle >0 ?unit5Spindle :"N/A"}
+                        {unit5Spindle > 0 ? unit5Spindle : "N/A"}
                       </td>
                       <td className="px-[5px] py-1 text-center border-r-1 text-[12px] font-inter font-semibold"></td>
                       <td className="px-2 py-1 text-center border border-gray-300 dark:border-gray-500 text-[12px] font-inter font-semibold">
-                        {(unit4Spindle + unit5Spindle) >0?(unit4Spindle + unit5Spindle):"N/A"}
+                        {unit4Spindle + unit5Spindle > 0
+                          ? unit4Spindle + unit5Spindle
+                          : "N/A"}
                       </td>
                     </tr>
                   </tbody>

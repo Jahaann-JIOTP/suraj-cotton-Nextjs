@@ -68,8 +68,11 @@ export default function SidebarDropdown({
 
       {isOpen && (
         <div
-          className={`w-full flex flex-col  ${iscollapese ? "p-auto justify-center items-center px-1" : "pr-2 pl-4"
-            } gap-2`}
+          className={`w-full flex flex-col  ${
+            iscollapese
+              ? "p-auto justify-center items-center px-1"
+              : "pr-2 pl-4"
+          } gap-2`}
         >
           {item.submenu.map((sub) => {
             const nestedArr = ["/meter", "/logs", "/log-detail"];
@@ -129,8 +132,9 @@ export default function SidebarDropdown({
               <Link
                 key={sub.id ?? sub.href}
                 href={sub.href}
-                className={`group flex hover:text-[#1A68B2] w-full py-[7px] text-[13.216px] rounded-md ${iscollapese ? "items-center justify-center" : ""
-                  }`}
+                className={`group flex hover:text-[#1A68B2] w-full py-[7px] text-[13.216px] rounded-md ${
+                  iscollapese ? "items-center justify-center" : ""
+                }`}
                 style={{ fontWeight: 500 }}
               >
                 {iscollapese ? (
@@ -156,10 +160,11 @@ export default function SidebarDropdown({
                       >
                         <span>
                           <sub.icon
-                            className={`w-5 h-5 ${activePath
+                            className={`w-5 h-5 ${
+                              activePath
                                 ? "text-[#1A68B2]"
                                 : "text-black dark:text-white"
-                              } group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
+                            } group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
                           />
                         </span>
                       </Tooltip>
@@ -167,12 +172,18 @@ export default function SidebarDropdown({
                   </div>
                 ) : (
                   <div
-                    className={`text-[13px] font-inter ${activePath ? "text-[#1A68B2]" : "text-black dark:text-white"
-                      } w-full flex items-center justify-start pl-4 gap-2 group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
+                    className={`text-[13px] font-inter ${
+                      activePath
+                        ? "text-[#1A68B2]"
+                        : "text-black dark:text-white"
+                    } w-full flex items-center justify-start pl-4 gap-2 group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
                   >
                     <sub.icon
-                      className={`w-5 h-5 ${activePath ? "text-[#1A68B2]" : "text-black dark:text-white"
-                        } group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
+                      className={`w-5 h-5 ${
+                        activePath
+                          ? "text-[#1A68B2]"
+                          : "text-black dark:text-white"
+                      } group-hover:text-[#1A68B2] dark:group-hover:text-[#1A68B2]`}
                     />
                     {sub.title}
                   </div>

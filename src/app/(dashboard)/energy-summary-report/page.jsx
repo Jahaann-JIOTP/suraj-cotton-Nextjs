@@ -8,13 +8,14 @@ import config from "@/constant/apiRouteList";
 import { CircularProgress } from "@mui/material";
 import PowerSummaryTable from "@/components/reportsComponent/powerSummaryTable/PowerSummaryTable";
 import { ImArrowLeft2 } from "react-icons/im";
+import Swal from "sweetalert2";
 
 const energySummaryPage = () => {
   const [unit, setUnit] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
-    const [endTime, setEndTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -39,6 +40,33 @@ const energySummaryPage = () => {
       [name]: value,
     }));
   };
+  // restrict time equality
+  const toMinutes = (time) => {
+    if (!time) return null;
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + m;
+  };
+
+  useEffect(() => {
+    if (startDate === endDate && endTime) {
+      let startMins = toMinutes(startTime);
+      let endMins = toMinutes(endTime);
+      const diff = endMins - startMins;
+
+      if (endMins <= startMins || diff < 30) {
+        Swal.fire({
+          title: "Confirm Time",
+          html: `
+          End Time must be at least 30 minutes greater than Start Time for the same date.
+        `,
+          icon: "question",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#1A68B2",
+        });
+        setEndTime("");
+      }
+    }
+  }, [startTime, endTime, startDate, endDate]);
 
   const handleUnitChange = (unitClicked) => {
     if (unitClicked === "ALL") {
@@ -129,8 +157,8 @@ const energySummaryPage = () => {
           body: JSON.stringify({
             start_date: startDate,
             end_date: endDate,
-            start_time:startTime,
-            end_time:endTime,
+            start_time: startTime,
+            end_time: endTime,
             suffixes: ["Del_ActiveEnergy"],
             area: unit,
           }),
@@ -150,7 +178,7 @@ const energySummaryPage = () => {
       setLoading(false);
     }
   };
-   // formate time to 24 hours
+  // formate time to 24 hours
   const convertTo12Hour = (time) => {
     if (!time) return "";
     let [hours, minutes] = time.split(":").map(Number);
@@ -159,7 +187,7 @@ const energySummaryPage = () => {
     hours = hours % 12 || 12; // convert 0 to 12, 13 -> 1, etc.
 
     return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
-  }
+  };
 
   return (
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report pb-5 rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">

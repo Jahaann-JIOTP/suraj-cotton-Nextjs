@@ -8,6 +8,7 @@ import { RiErrorWarningFill } from "react-icons/ri";
 import config from "@/constant/apiRouteList";
 import { CircularProgress } from "@mui/material";
 import { ImArrowLeft2 } from "react-icons/im";
+import Swal from "sweetalert2";
 
 const FilterPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,13 +27,39 @@ const FilterPage = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingSpindle, setLoadingSpindle] = useState(false);
   const [resData, setResData] = useState([]);
-  
+  const toMinutes = (time) => {
+    if (!time) return null;
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + m;
+  };
+
+  useEffect(() => {
+    if (startDate === endDate && endTime) {
+      let startMins = toMinutes(startTime);
+      let endMins = toMinutes(endTime);
+      const diff = endMins - startMins;
+
+      if (endMins <= startMins || diff < 30) {
+        Swal.fire({
+          title: "Confirm Time",
+          html: `
+          End Time must be at least 30 minutes greater than Start Time for the same date.
+        `,
+          icon: "question",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#1A68B2",
+        });
+        setEndTime("");
+      }
+    }
+  }, [startTime, endTime, startDate, endDate]);
+
   // Remove the blocking logic - always allow API calls
   const unit4 = unit === "Unit_4" || unit === "ALL" ? "U4" : "";
   const unit5 = unit === "Unit_5" || unit === "ALL" ? "U5" : "";
-  
+  //  handle minimum end time
   const toggleDropdown = () => setIsOpen(!isOpen);
-  
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -64,7 +91,7 @@ const FilterPage = () => {
   const fetchU4Spindles = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    
+
     try {
       setLoadingSpindle(true);
       const response = await fetch(
@@ -91,7 +118,7 @@ const FilterPage = () => {
   const fetchU5Spindles = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    
+
     try {
       setLoadingSpindle(true);
       const response = await fetch(
@@ -123,7 +150,7 @@ const FilterPage = () => {
     hours = hours % 12 || 12;
 
     return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
-  }
+  };
 
   // Remove the blocking useEffect that prevented submission
   // Only show warning messages but don't block form submission
@@ -156,7 +183,7 @@ const FilterPage = () => {
   // getting energy usage report - removed the blocking condition
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const token = localStorage.getItem("token");
     if (!token) return;
 
@@ -185,7 +212,7 @@ const FilterPage = () => {
           }),
         }
       );
-      
+
       if (response.ok) {
         const resResult = await response.json();
         setResData(resResult);
@@ -215,7 +242,7 @@ const FilterPage = () => {
           Please Add Number of Bags in Production Tab First!
         </div>
       )}
-      
+
       <div className="flex pb-3 items-center justify-between">
         <h1 className="text-[18.22px] text-raleway font-600">
           Energy Usage Report
@@ -470,8 +497,7 @@ const FilterPage = () => {
             <div className="w-full flex items-center justify-center mt-5 md:mt-10">
               {loadingSpindle ? (
                 <div className="flex justify-center items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mt-2">
-                  <CircularProgress size={16} />{" "}
-                  <span>Fetching Bags...</span>
+                  <CircularProgress size={16} /> <span>Fetching Bags...</span>
                 </div>
               ) : (
                 <button

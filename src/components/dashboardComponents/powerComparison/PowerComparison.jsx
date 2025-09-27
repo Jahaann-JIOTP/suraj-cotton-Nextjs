@@ -500,20 +500,29 @@ const PowerComparison = () => {
           </div>
           <div className="flex items-center justify-center gap-2">
             <button
-              className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1 bg-[#6FA1F3]`}
+              className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1`}
               onClick={() => handleTimeRangeChange("hourly")}
+              style={{
+                background: timeRange === "hourly" ? "#226ce4" : "#6FA1F3",
+              }}
             >
               Hourly
             </button>
             <button
-              className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1 bg-[#55B87A]`}
+              className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1`}
               onClick={() => handleTimeRangeChange("daily")}
+              style={{
+                background: timeRange === "daily" ? "#23c15d" : "#55B87A",
+              }}
             >
               Daily
             </button>
             <button
-              className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1 bg-[#F57F62]`}
+              className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1`}
               onClick={() => handleTimeRangeChange("monthly")}
+              style={{
+                background: timeRange === "monthly" ? "#ed5e3a" : "#F57F62",
+              }}
             >
               Monthly
             </button>
@@ -526,28 +535,36 @@ const PowerComparison = () => {
           <CustomLoader size="50px" />
         </div>
       )}
-       {/* Empty State */}
-    {!loading && stackChartData.length === 0 && (
-      <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
-          <img src="./chartPlaceholder.png" className={`${isPowerComparisonFullView?"w-[300px]":"w-[130px]"}`} alt="" />
+      {/* Empty State */}
+      {!loading && stackChartData.length === 0 && (
+        <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
+          <img
+            src="./chartPlaceholder.png"
+            className={`${
+              isPowerComparisonFullView ? "w-[300px]" : "w-[130px]"
+            }`}
+            alt=""
+          />
           <span className="text-gray-400 text-[13px]">No Data Available!</span>
         </div>
-    )}
-     {/* Chart */}
-    {!loading && stackChartData.length > 0 && (
-      <div
-        className={`w-full ${
-          isPowerComparisonFullView ? "h-[80vh]" : "h-10rem md:h-[9rem]"
-        } overflow-hidden`}
-      >
+      )}
+      {/* Chart */}
+      {!loading && stackChartData.length > 0 && (
         <div
-          ref={chartRef}
-          className={`${
-            isPowerComparisonFullView ? "w-full h-[80vh]" : "w-full h-[490px] md:h-[440px]"
-          }`}
-        />
-      </div>
-    )}
+          className={`w-full ${
+            isPowerComparisonFullView ? "h-[80vh]" : "h-10rem md:h-[9rem]"
+          } overflow-hidden`}
+        >
+          <div
+            ref={chartRef}
+            className={`${
+              isPowerComparisonFullView
+                ? "w-full h-[80vh]"
+                : "w-full h-[490px] md:h-[440px]"
+            }`}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -32,7 +32,7 @@ const Settings = () => {
       });
       if (!response.ok) throw new Error("Failed to fetch");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

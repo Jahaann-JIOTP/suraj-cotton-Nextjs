@@ -13,13 +13,12 @@ import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePer
 const UnitLt41Page = () => {
   const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);
-  console.log(data);
+
   const [loading, setLoading] = useState(false);
   const today = new Date();
   const formateDate = (date) => {
     return date.toISOString().split("T")[0];
   };
-  console.log(formateDate(today));
 
   const [intervalPeriod, setIntervalPeriod] = useState({
     startDate: formateDate(today),

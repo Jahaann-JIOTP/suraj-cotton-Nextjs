@@ -7,7 +7,6 @@ import { format, toZonedTime } from "date-fns-tz";
 import { toast } from "react-toastify";
 import config from "../../../config";
 
-
 // new added
 const useBeepSound = () => {
   const beepSoundRef = useRef(null);
@@ -105,7 +104,6 @@ export default function ActiveAlarmsPage() {
         });
 
         setIsBeeping((prev) => ({ ...prev, [occurrenceId]: false }));
-        console.log("Stopped beep for", occurrenceId);
       } else {
         console.log("No beep sound found for", occurrenceId);
       }
@@ -135,7 +133,6 @@ export default function ActiveAlarmsPage() {
   };
 
   const toggleDropdown = (id) => {
-    console.log("toggledropdown", id);
     setOpenActionId((prev) => (prev === id ? null : id));
   };
   const alarmTypes = useMemo(
@@ -160,7 +157,6 @@ export default function ActiveAlarmsPage() {
 
   // Trigger sound on dropdown toggle (for example)
   const handleDropdownToggle = (id) => {
-    console.log(id);
     toggleDropdown(id); //  dropdown is opened
   };
   const fetchAlarms = async () => {
@@ -590,7 +586,6 @@ export default function ActiveAlarmsPage() {
               <div className="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-gray-800/60 pointer-events-none">
                 <div className="loader" />
               </div>
-              
             )}
           </div>
         </div>

@@ -24,7 +24,7 @@ const EnergyComparison = () => {
   };
 
   const [pieChartData, setPieChartData] = useState([]);
-  
+
   const colorMap = {
     "Solar Generation": "#63F4B7",
     "LT Generation": "#FF714E",
@@ -117,7 +117,7 @@ const EnergyComparison = () => {
         width: am5.p100,
         height: am5.p100,
         layout: root.horizontalLayout,
-        paddingTop: isMobile?80:0,
+        paddingTop: isMobile ? 80 : 0,
         paddingBottom: 20,
         paddingLeft: isMobile ? 0 : 105,
         paddingRight: isMobile ? 0 : -70,
@@ -144,11 +144,13 @@ const EnergyComparison = () => {
       return am5.color(colorMap[category] || "#cccccc");
     });
 
-    series.labels.template.setAll({
-      visible: false,
-    });
+    // series.labels.template.setAll({
+    //   visible: false,
+    // });
 
-    series.ticks.template.set("visible", false);
+    // series.ticks.template.set("visible", false);
+    series.labels.template.adapters.add("visible", () => false);
+    // subSeries.labels.template.adapters.add("visible", () => false);
     // ✅ Custom Legend for Main Pie Chart
 
     const wrapper = root.container.children.push(
@@ -219,9 +221,10 @@ const EnergyComparison = () => {
     );
 
     // ✅ Hide labels and ticks on sub pie chart
-    subSeries.labels.template.setAll({
-      visible: false,
-    });
+    // subSeries.labels.template.setAll({
+    //   visible: false,
+    // });
+    subSeries.labels.template.adapters.add("visible", () => false);
     subSeries.slices.template.setAll({
       toggleKey: "none",
       interactive: true, // ✅ enable hover interactions
@@ -243,9 +246,18 @@ const EnergyComparison = () => {
         y: am5.percent(90),
         layout: root.horizontalLayout,
         marginTop: 0,
-        paddingLeft: isMobile?0:450,
+        paddingLeft: isMobile ? 0 : 450,
       })
     );
+    mainLegend.itemContainers.template.setAll({
+      clickTarget: "none",
+      cursorOverStyle: "default",
+    });
+
+    legend.itemContainers.template.setAll({
+      clickTarget: "none",
+      cursorOverStyle: "default",
+    });
 
     legend.labels.template.setAll({
       fontSize: 10,
@@ -448,29 +460,42 @@ const EnergyComparison = () => {
           <CustomLoader size="50px" />
         </div>
       )}
-      {!loading && pieChartData.length > 0 && pieChartData[0].subData.length === 0 && (
-      <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
-          <img src="./chartPlaceholder.png" className={`${isEnergyComparisonFullView?"w-[300px]":"w-[130px]"}`} alt="" />
-          <span className="text-gray-400 text-[13px]">No Data Available!</span>
-        </div>
-    )}
-    {!loading && pieChartData.length > 0 && pieChartData[0].subData.length > 0 &&
-      
-      <div
-        className={`flex justify-end ${
-          isEnergyComparisonFullView
-            ? "h-[90%] flex items-center justify-center"
-            : "md:h-[11.7rem]"
-        } relative`}
-      >
-        <div
-          ref={chartDivRef}
-          className={`w-full ${
-            isEnergyComparisonFullView ? "h-[70%]" : "h-[14rem] md:h-[10.8rem]"
-          }  right-0`}
-        />
-      </div>
- }
+      {!loading &&
+        pieChartData.length > 0 &&
+        pieChartData[0].subData.length === 0 && (
+          <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
+            <img
+              src="./chartPlaceholder.png"
+              className={`${
+                isEnergyComparisonFullView ? "w-[300px]" : "w-[130px]"
+              }`}
+              alt=""
+            />
+            <span className="text-gray-400 text-[13px]">
+              No Data Available!
+            </span>
+          </div>
+        )}
+      {!loading &&
+        pieChartData.length > 0 &&
+        pieChartData[0].subData.length > 0 && (
+          <div
+            className={`flex justify-end ${
+              isEnergyComparisonFullView
+                ? "h-[90%] flex items-center justify-center"
+                : "md:h-[11.7rem]"
+            } relative`}
+          >
+            <div
+              ref={chartDivRef}
+              className={`w-full ${
+                isEnergyComparisonFullView
+                  ? "h-[70%]"
+                  : "h-[14rem] md:h-[10.8rem]"
+              }  right-0`}
+            />
+          </div>
+        )}
     </div>
   );
 };

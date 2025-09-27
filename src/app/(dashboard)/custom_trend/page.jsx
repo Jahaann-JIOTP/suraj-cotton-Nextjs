@@ -32,27 +32,25 @@ function CustomTrend() {
   const meterDropdownRef = useRef();
   const parameterDropdownRef = useRef();
 
-
   //============== unique color generation ==========================
 
   function generateUniqueColors(count) {
-  const colors = new Set();
+    const colors = new Set();
 
-  while (colors.size < count) {
-    // generate random hex color
-    const color =
-      "#" +
-      Math.floor(Math.random() * 16777215) // full RGB range
-        .toString(16)
-        .padStart(6, "0");
+    while (colors.size < count) {
+      // generate random hex color
+      const color =
+        "#" +
+        Math.floor(Math.random() * 16777215) // full RGB range
+          .toString(16)
+          .padStart(6, "0");
 
-    colors.add(color); // set ensures uniqueness
+      colors.add(color); // set ensures uniqueness
+    }
+
+    return Array.from(colors);
   }
-
-  return Array.from(colors);
-}
   //============== unique color generation ==========================
-
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -120,7 +118,7 @@ function CustomTrend() {
     "Ring 9~12": "U17_GW01",
     "Bale Press": "U18_GW01",
     "AC Lab": "U19_GW01",
-    "Spare": "U20_GW01",
+    Spare: "U20_GW01",
     "Spare 02": "U21_GW01",
     "P/H IC": "U22_GW01",
     "Wapda IC": "U23_GW01",
@@ -154,7 +152,7 @@ function CustomTrend() {
     "Ring Frame 10-12": "U5_GW03",
     "Spare 3": "U6_GW03",
     "Spare 1": "U7_GW03",
-    "Spare2": "U8_GW03",
+    Spare2: "U8_GW03",
     "Ring Frame 13-15": "U9_GW03",
     "Auto Con-linker Conner M/S 10-12": "U10_GW03",
     "Baling Press": "U11_GW03",
@@ -204,15 +202,14 @@ function CustomTrend() {
     "Harmonics I3": "Harmonics_I3_THD",
     "Active Energy Export": "ActiveEnergy_Exp_kWh",
   };
- const meters = Object.keys(meterMapping); // all meter names
-const uniqueColors = generateUniqueColors(meters.length);
-// Create a mapping of meter -> unique color
-console.log("unique color", uniqueColors)
-const colorMapping = {};
-meters.forEach((meter, index) => {
-  colorMapping[meter] = uniqueColors[index];
-});
+  const meters = Object.keys(meterMapping); // all meter names
+  const uniqueColors = generateUniqueColors(meters.length);
+  // Create a mapping of meter -> unique color
 
+  const colorMapping = {};
+  meters.forEach((meter, index) => {
+    colorMapping[meter] = uniqueColors[index];
+  });
 
   let filteredMeters = [];
   if (area === "HFO") {
@@ -220,10 +217,7 @@ meters.forEach((meter, index) => {
   } else if (area === "HT_Room1") {
     filteredMeters = ["P/H IC", "Wapda IC"];
   } else if (area === "HT_Room2") {
-    filteredMeters = [
-      "T/F 1",
-      "T/F 2",
-    ];
+    filteredMeters = ["T/F 1", "T/F 2"];
   } else if (area === "Unit 4 LT_1") {
     // All meters ending with PLC except HFO meters
     filteredMeters = Object.keys(meterMapping).filter(
@@ -247,11 +241,7 @@ meters.forEach((meter, index) => {
     // All meters ending with GW03 except HT Room 2 meters
     filteredMeters = Object.keys(meterMapping).filter(
       (key) =>
-        meterMapping[key].endsWith("GW03") &&
-        ![
-          "T/F 1",
-          "T/F 2",
-        ].includes(key)
+        meterMapping[key].endsWith("GW03") && !["T/F 1", "T/F 2"].includes(key)
     );
   }
 
@@ -462,7 +452,7 @@ meters.forEach((meter, index) => {
     minLabel.fill = am4core.color("#00FF00");
     minLabel.fontWeight = "bold";
     minLabel.dy = -7; // Position above the line
-    minLabel.dx=80;
+    minLabel.dx = 80;
 
     // Add maximum line (red)
     const maxRange = valueAxis.axisRanges.create();
@@ -481,33 +471,33 @@ meters.forEach((meter, index) => {
     maxLabel.dx = 80;
 
     if (selectedMeter.length > 0) {
-  selectedMeter.forEach((meter) => {
-    const series = chart.series.push(new am4charts.LineSeries());
-    series.dataFields.dateX = "Date";
-    series.dataFields.valueY = meter;
-    series.name = `${meter}`;
-    
-    // Get the color for this meter
-    const meterColor = colorMapping[meter] || am4core.color("#00eaff");
-    
-    // Apply color to the line
-    series.stroke = meterColor;
-    series.strokeWidth = 2;
-    
-    // Apply the same color to the tooltip background
-    series.tooltip.getFillFromObject = false;
-    series.tooltip.background.fill = meterColor;
-    series.tooltip.background.stroke = meterColor;
-    series.tooltip.background.strokeWidth = 1;
-    series.tooltip.background.cornerRadius = 3;
-    
-    // Set text color for better contrast
-    series.tooltip.label.fill = am4core.color("#FFFFFF");
-    
-    series.tooltipText = "{dateX}: [b]{valueY.formatNumber('#.##')}[/]";
-    series.show();
-  });
-}
+      selectedMeter.forEach((meter) => {
+        const series = chart.series.push(new am4charts.LineSeries());
+        series.dataFields.dateX = "Date";
+        series.dataFields.valueY = meter;
+        series.name = `${meter}`;
+
+        // Get the color for this meter
+        const meterColor = colorMapping[meter] || am4core.color("#00eaff");
+
+        // Apply color to the line
+        series.stroke = meterColor;
+        series.strokeWidth = 2;
+
+        // Apply the same color to the tooltip background
+        series.tooltip.getFillFromObject = false;
+        series.tooltip.background.fill = meterColor;
+        series.tooltip.background.stroke = meterColor;
+        series.tooltip.background.strokeWidth = 1;
+        series.tooltip.background.cornerRadius = 3;
+
+        // Set text color for better contrast
+        series.tooltip.label.fill = am4core.color("#FFFFFF");
+
+        series.tooltipText = "{dateX}: [b]{valueY.formatNumber('#.##')}[/]";
+        series.show();
+      });
+    }
 
     chart.cursor = new am4charts.XYCursor();
     chart.scrollbarX = new am4charts.XYChartScrollbar();

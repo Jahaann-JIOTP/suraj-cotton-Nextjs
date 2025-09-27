@@ -81,12 +81,7 @@ const ConsumptionEnergy = () => {
     chart.legend.markers.template.width = 12;
     chart.legend.markers.template.height = 12;
 
-    let xField,
-      series1Field,
-      series2Field,
-      series1Name,
-      series2Name;
-      
+    let xField, series1Field, series2Field, series1Name, series2Name;
 
     if (value === "today") {
       xField = "Time";
@@ -123,7 +118,7 @@ const ConsumptionEnergy = () => {
     xAxis.renderer.labels.template.fontSize = 12;
     xAxis.renderer.cellStartLocation = 0.1;
     xAxis.renderer.cellEndLocation = 0.9;
-    
+
     // ✅ Y Axis
     const yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.renderer.labels.template.fill = am4core.color(
@@ -136,9 +131,8 @@ const ConsumptionEnergy = () => {
       series.dataFields.categoryX = xField;
       series.name = name;
       // ✅ Tooltip
-  series.columns.template.tooltipText =
-    "{name}, {categoryX}: {valueY}";
-  series.tooltip.label.fontSize = 12; 
+      series.columns.template.tooltipText = "{name}, {categoryX}: {valueY}";
+      series.tooltip.label.fontSize = 12;
       // ✅ Styling
       series.columns.template.width = am4core.percent(70);
       series.columns.template.fill = am4core.color(color);
@@ -148,11 +142,11 @@ const ConsumptionEnergy = () => {
     createSeries(series1Field, series1Name, "#11A8D7"); // previous
     createSeries(series2Field, series2Name, "#00378A"); // current
   };
-useEffect(() => {
-  if (chartRef.current && !loading) {
-    updateChart(chartRef.current.data || [], selectedTimePeriod);
-  }
-}, [theme, selectedTimePeriod]);
+  useEffect(() => {
+    if (chartRef.current && !loading) {
+      updateChart(chartRef.current.data || [], selectedTimePeriod);
+    }
+  }, [theme, selectedTimePeriod]);
   return (
     <div
       className={`${
@@ -163,7 +157,7 @@ useEffect(() => {
     >
       <div className="relative flex items-center flex-col md:flex-row gap-3 md:gap-[0.7vw] justify-between">
         <span className="text-[15px] text-[#1A68B2] font-raleway font-600">
-          Consumption Energy
+          Total Energy Input
         </span>
         <div className="flex gap-4">
           <select
@@ -199,9 +193,7 @@ useEffect(() => {
       <div
         id="consumptionEnergyChart"
         className={`w-full ${
-          isConsumptionEnergyFullView
-            ? "h-[90%]"
-            : "h-[12rem lg:h-full"
+          isConsumptionEnergyFullView ? "h-[90%]" : "h-[12rem lg:h-full"
         }`}
       />
     </div>

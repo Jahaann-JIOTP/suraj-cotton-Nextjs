@@ -217,6 +217,9 @@ const TranformersPage = () => {
                     id="transformer1"
                     dataKey="Trafo1and2"
                     loading={loading}
+                    startRange={2000}
+                    endRage={600}
+                    stepGap={-8.23}
                   />
                 </div>
                 <div className="w-[30%]">
@@ -281,6 +284,9 @@ const TranformersPage = () => {
                     id="transformer3"
                     dataKey="Trafo3"
                     loading={loading}
+                    startRange={800}
+                    endRage={2500}
+                    stepGap={-10}
                   />
                 </div>
                 <div className="w-[30%]">
@@ -346,6 +352,9 @@ const TranformersPage = () => {
                     id="transformer4"
                     dataKey="Trafo4"
                     loading={loading}
+                    startRange={800}
+                    endRage={2500}
+                    stepGap={-10}
                   />
                 </div>
                 <div className="w-[30%]">

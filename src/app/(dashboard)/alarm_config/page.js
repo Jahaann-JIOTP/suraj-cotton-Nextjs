@@ -76,7 +76,7 @@ export default function Index() {
       if (list.length > 0) {
         const mapped = list.map((a) => {
           const thr = a?.alarmTriggerConfig?.thresholds?.[0] || {};
-          let thresholdComparison = '';
+          let thresholdComparison = "";
 
           switch (thr?.operator) {
             case ">":
@@ -134,12 +134,9 @@ export default function Index() {
     }
   }, [typeId]);
 
-
   useEffect(() => {
-    console.log("useEffect triggered with dates:");
     fetchAlarms();
   }, [fetchAlarms]); // Add fetchAlarms as a dependency
-
 
   const indexOfLastAlarm = currentPage * alarmsPerPage;
   const indexOfFirstAlarm = indexOfLastAlarm - alarmsPerPage;
@@ -177,26 +174,25 @@ export default function Index() {
       triggerOccursChecked: true,
     };
     router.push(
-      `/alarms?data=${encodeURIComponent(JSON.stringify(alarm))}&rowData=${encodeURIComponent(
-        JSON.stringify(rowData)
-      )}`
+      `/alarms?data=${encodeURIComponent(
+        JSON.stringify(alarm)
+      )}&rowData=${encodeURIComponent(JSON.stringify(rowData))}`
     );
   };
 
   const handleEditClick = (selected) => {
     const rowData = selected;
     router.push(
-      `/alarms?data=${encodeURIComponent(JSON.stringify(alarm))}&rowData=${encodeURIComponent(
-        JSON.stringify(rowData)
-      )}`
+      `/alarms?data=${encodeURIComponent(
+        JSON.stringify(alarm)
+      )}&rowData=${encodeURIComponent(JSON.stringify(rowData))}`
     );
   };
   // remove _ and id from param
-  const formateParmeter = (param)=>{
+  const formateParmeter = (param) => {
     let parts = param.split("_");
-   return parts.slice(2).join(" ")
-  }
-console.log(formateParmeter("U5_GW01_Voltage_Avg"))
+    return parts.slice(2).join(" ");
+  };
   const handleDeleteClick = (alarmRow) => {
     setSelectedAlarm(alarmRow);
     setIsDeleteModalOpen(true);
@@ -210,7 +206,7 @@ console.log(formateParmeter("U5_GW01_Voltage_Avg"))
   const handleDeleteSuccess = () => {
     // only called after API confirms deletion
     setIsDeleteModalOpen(false);
-    fetchAlarms();           // refresh table now
+    fetchAlarms(); // refresh table now
   };
 
   const handleCloseModal = () => {
@@ -241,13 +237,13 @@ console.log(formateParmeter("U5_GW01_Voltage_Avg"))
           ) : (
             <p>No alarm data found.</p>
           )}
-<div className="py-3">
-          <button
-            onClick={handleAddClick}
-            className="bg-[#025697] cursor-pointer !font-[Inter] text-white px-4 py-2 rounded hover:bg-[#024080] text-sm font-medium"
-          >
-            + Add Alarms
-          </button>
+          <div className="py-3">
+            <button
+              onClick={handleAddClick}
+              className="bg-[#025697] cursor-pointer !font-[Inter] text-white px-4 py-2 rounded hover:bg-[#024080] text-sm font-medium"
+            >
+              + Add Alarms
+            </button>
           </div>
         </div>
 
@@ -262,9 +258,7 @@ console.log(formateParmeter("U5_GW01_Voltage_Avg"))
             </span>
             <span>
               <strong>Alarm Type:</strong>{" "}
-              <span className="text-[#025697] font-semibold">
-                {alarm.type}
-              </span>
+              <span className="text-[#025697] font-semibold">{alarm.type}</span>
             </span>
             <span className="flex items-center">
               <strong>Alarm Color:</strong>
@@ -354,7 +348,7 @@ console.log(formateParmeter("U5_GW01_Voltage_Avg"))
                     {row.device ?? "Transformer"}
                   </td>
                   <td className="py-3 px-4 !font-[Inter]">
-                    {row.location.replace("_"," ") ?? "Location"}
+                    {row.location.replace("_", " ") ?? "Location"}
                   </td>
                   <td className="py-3 px-4 text-right relative">
                     <button
@@ -436,7 +430,6 @@ console.log(formateParmeter("U5_GW01_Voltage_Avg"))
             )}
           </div>
         )}
-
       </div>
 
       <ViewDetailsModal
@@ -446,8 +439,8 @@ console.log(formateParmeter("U5_GW01_Voltage_Avg"))
       />
       <DeleteModal
         isOpen={isModalsOpen}
-        onClose={() => setIsDeleteModalOpen(false)}   // NO refetch here
-        onDelete={handleDeleteSuccess}                // refresh ONLY on success
+        onClose={() => setIsDeleteModalOpen(false)} // NO refetch here
+        onDelete={handleDeleteSuccess} // refresh ONLY on success
         alarmData={selectedAlarm}
         alarmConfigId={selectedAlarm?._id}
         type={2}

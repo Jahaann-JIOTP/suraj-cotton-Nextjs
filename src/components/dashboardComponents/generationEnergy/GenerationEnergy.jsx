@@ -99,17 +99,16 @@ export default function GenerationEnergy() {
     );
 
     // ✅ Legend font + marker size
-    legend.labels.template.setAll({ fontSize: 12,fill:theme==="dark"?"#ffffff":"#000000" });
+    legend.labels.template.setAll({
+      fontSize: 12,
+      fill: theme === "dark" ? "#ffffff" : "#000000",
+    });
     legend.markers.template.setAll({
       width: 12,
       height: 12,
     });
 
-    let xField,
-      series1Field,
-      series2Field,
-      series1Name,
-      series2Name;
+    let xField, series1Field, series2Field, series1Name, series2Name;
 
     switch (value) {
       case "today":
@@ -162,7 +161,10 @@ export default function GenerationEnergy() {
         tooltip: am5.Tooltip.new(root, {}),
       })
     );
-    xAxis.get("renderer").labels.template.setAll({ fontSize: 12, fill:theme==="dark"?"#ffffff":"#000000" });
+    xAxis.get("renderer").labels.template.setAll({
+      fontSize: 12,
+      fill: theme === "dark" ? "#ffffff" : "#000000",
+    });
     xAxis.data.setAll(data);
 
     // Y Axis
@@ -171,7 +173,10 @@ export default function GenerationEnergy() {
         renderer: am5xy.AxisRendererY.new(root, { strokeOpacity: 0.1 }),
       })
     );
-    yAxis.get("renderer").labels.template.setAll({ fontSize: 12,fill:theme==="dark"?"#ffffff":"#000000" });
+    yAxis.get("renderer").labels.template.setAll({
+      fontSize: 12,
+      fill: theme === "dark" ? "#ffffff" : "#000000",
+    });
 
     // Series
     const makeSeries = (name, fieldName, color) => {
@@ -186,7 +191,7 @@ export default function GenerationEnergy() {
       );
       series.columns.template.setAll({
         tooltipText: "[fontSize: 12px]{name}, {categoryX}: {valueY}",
-        fontSize:12,
+        fontSize: 12,
         width: am5.percent(70),
         strokeOpacity: 0,
         fill: am5.color(color),
@@ -239,7 +244,7 @@ export default function GenerationEnergy() {
     >
       <div className="relative flex items-center flex-col md:flex-row gap-3 md:gap-[0.7vw] justify-between">
         <span className="text-[15px] text-[#1A68B2] font-raleway font-600">
-          Total Energy Input
+          Total Energy Output
         </span>
         <div className="flex gap-4">
           <select

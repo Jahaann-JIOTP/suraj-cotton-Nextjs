@@ -40,7 +40,6 @@ const SingleUnitComponent = ({
   for (const key in finalData) {
     totalConsumption += finalData[key];
   }
-  console.log(finalData);
   // /////-------------------------export to excel
 
   const tableData = [
@@ -88,8 +87,8 @@ const SingleUnitComponent = ({
     },
     {
       Department: "Drawing Breaker + Simplex",
-      Mcs: { Unit_4: "", Unit_5: "6" },
-      InstalledLoad: { Unit_4: "", Unit_5: "6.5" },
+      Mcs: { Unit_4: "", Unit_5: "11" },
+      InstalledLoad: { Unit_4: "", Unit_5: "40.5" },
       ConsumedUnits: finalData?.DrawingBreakerandSimplex_consumption || 0,
       unit: "Unit_5",
     },
@@ -138,7 +137,7 @@ const SingleUnitComponent = ({
     {
       Department: "A/C Ring",
       Mcs: { Unit_4: "", Unit_5: "" },
-      InstalledLoad: { Unit_4: "343", Unit_5: "446" },
+      InstalledLoad: { Unit_4: "347.5", Unit_5: "476" },
       ConsumedUnits: finalData?.AC_Ring_consumption || 0,
       unit: "both",
     },
@@ -166,7 +165,7 @@ const SingleUnitComponent = ({
     {
       Department: "Bailing Press",
       Mcs: { Unit_4: "1", Unit_5: "1" },
-      InstalledLoad: { Unit_4: "15", Unit_5: "22" },
+      InstalledLoad: { Unit_4: "15", Unit_5: "22.5" },
       ConsumedUnits: finalData?.BailingPress_consumption || 0,
       unit: "both",
     },

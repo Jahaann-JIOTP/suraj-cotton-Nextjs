@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState,useMemo } from 'react';
-import AlarmTypeModal from '@/components/alarmsComponents/Alarm_Type_Modal';
-import DeleteModal from '@/components/alarmsComponents/Delete_Modal';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, useMemo } from "react";
+import AlarmTypeModal from "@/components/alarmsComponents/Alarm_Type_Modal";
+import DeleteModal from "@/components/alarmsComponents/Delete_Modal";
+import { useRouter } from "next/navigation";
 import config from "../../../config";
-import Image from 'next/image';
-import CustomLoader from '@/components/customLoader/CustomLoader';
+import Image from "next/image";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 
 export default function Index() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,30 +16,36 @@ export default function Index() {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalsOpen, setIsDeleteModalOpen] = useState(false);
   const router = useRouter();
-const alarmsPerPage = 3;
+  const alarmsPerPage = 3;
 
   // Sort alarms by priority (ascending order)
-const sortedAlarms = useMemo(() => {
-  // avoid mutating state by copying first
-  return [...alarms].sort((a, b) => a.priority - b.priority);
-}, [alarms]);
+  const sortedAlarms = useMemo(() => {
+    // avoid mutating state by copying first
+    return [...alarms].sort((a, b) => a.priority - b.priority);
+  }, [alarms]);
 
-const totalPages = Math.max(1, Math.ceil(sortedAlarms.length / alarmsPerPage));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(sortedAlarms.length / alarmsPerPage)
+  );
   const handleViewClick = (alarm) => {
-    router.push(`/alarm_config?data=${encodeURIComponent(JSON.stringify(alarm))}`);
+    router.push(
+      `/alarm_config?data=${encodeURIComponent(JSON.stringify(alarm))}`
+    );
   };
 
   useEffect(() => {
     // Fetch alarm data from API
     const fetchAlarms = async () => {
       try {
-        const response = await fetch(`${config.BASE_URL}/alarms/all-types-alarms`);
+        const response = await fetch(
+          `${config.BASE_URL}/alarms/all-types-alarms`
+        );
         const data = await response.json();
-        console.log('---', data);
-        
+
         setAlarms(data); // Set the fetched alarm data
       } catch (error) {
-        console.error('Error fetching alarm data:', error);
+        console.error("Error fetching alarm data:", error);
       } finally {
         setIsLoading(false); // Stop loading when the data is fetched
       }
@@ -53,22 +59,22 @@ const totalPages = Math.max(1, Math.ceil(sortedAlarms.length / alarmsPerPage));
     2: "Priority 2",
     3: "Priority 3",
     4: "Priority 4",
-    5: "Priority 5"
+    5: "Priority 5",
   };
 
-
-const indexOfLastAlarm = currentPage * alarmsPerPage;
-const indexOfFirstAlarm = indexOfLastAlarm - alarmsPerPage;
-const currentAlarms = sortedAlarms.slice(indexOfFirstAlarm, indexOfLastAlarm);
-
+  const indexOfLastAlarm = currentPage * alarmsPerPage;
+  const indexOfFirstAlarm = indexOfLastAlarm - alarmsPerPage;
+  const currentAlarms = sortedAlarms.slice(indexOfFirstAlarm, indexOfLastAlarm);
 
   const refreshAlarms = async () => {
     try {
-      const response = await fetch(`${config.BASE_URL}/alarms/all-types-alarms`);
+      const response = await fetch(
+        `${config.BASE_URL}/alarms/all-types-alarms`
+      );
       const data = await response.json();
       setAlarms(data);
     } catch (error) {
-      console.error('Error fetching alarm data:', error);
+      console.error("Error fetching alarm data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -78,17 +84,16 @@ const currentAlarms = sortedAlarms.slice(indexOfFirstAlarm, indexOfLastAlarm);
     refreshAlarms();
   }, []);
 
-const handleNext = () => {
-  if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
-};
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+  };
 
-const handleBack = () => {
-  if (currentPage > 1) setCurrentPage(prev => prev - 1);
-};
+  const handleBack = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
 
-const canGoNext = currentPage < totalPages;
-const canGoBack = currentPage > 1;
-
+  const canGoNext = currentPage < totalPages;
+  const canGoBack = currentPage > 1;
 
   const handleAddClick = () => {
     setSelectedAlarm(null);
@@ -99,28 +104,27 @@ const canGoBack = currentPage > 1;
     setSelectedAlarm(alarm);
     setIsModalOpen(true);
   };
-const handleDeleteClick = (alarm) => {
-  setSelectedAlarm(alarm);
-  setIsDeleteModalOpen(true);
-};
+  const handleDeleteClick = (alarm) => {
+    setSelectedAlarm(alarm);
+    setIsDeleteModalOpen(true);
+  };
 
-const [modalKey, setModalKey] = useState(0);
+  const [modalKey, setModalKey] = useState(0);
 
-const handleTypeModalClose = () => {
-  setIsModalOpen(false);
-  setSelectedAlarm(null);     // clear edit data
-  setModalKey(k => k + 1);    // force remount on next open
-};
-
+  const handleTypeModalClose = () => {
+    setIsModalOpen(false);
+    setSelectedAlarm(null); // clear edit data
+    setModalKey((k) => k + 1); // force remount on next open
+  };
 
   const handleDelete = () => {
     refreshAlarms(); // Re-fetch alarms after delete
   };
-useEffect(() => {
-  if (currentPage > totalPages) {
-    setCurrentPage(totalPages);
-  }
-}, [currentPage, totalPages]);
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   return (
     <>
@@ -131,7 +135,8 @@ useEffect(() => {
               Alarm Type Configuration
             </span>
             <p className="mt-1 dark:text-white text-[15.04px] text-[#7E7E7E]">
-              Define and manage alarm priority levels, their visual identity, and acknowledgement rules.
+              Define and manage alarm priority levels, their visual identity,
+              and acknowledgement rules.
             </p>
           </div>
 
@@ -148,7 +153,7 @@ useEffect(() => {
         </div>
 
         {isLoading ? (
-          <CustomLoader/>
+          <CustomLoader />
         ) : alarms.length === 0 ? (
           <div className="flex items-start gap-[21px] mt-[79px] w-full max-w-full mx-auto">
             <div className="flex-1 flex flex-col items-center mt-[5px]">
@@ -163,7 +168,7 @@ useEffect(() => {
                 <div className="mb-1 mt-[7vh] text-[rgba(23, 40, 47, 0.81)] dark:text-white font-semibold font-[Inter]">
                   No Alarms Level Configured yet!
                 </div>
-                <div className='text-[rgba(23, 40, 47, 0.53)] font-[Inter] dark:text-white'>
+                <div className="text-[rgba(23, 40, 47, 0.53)] font-[Inter] dark:text-white">
                   Set up your first priority level to start managing alarms
                 </div>
               </div>
@@ -178,7 +183,10 @@ useEffect(() => {
         ) : (
           <>
             <div className="text-[#484848] mt-5 text-[20px] !font-[Inter] font-semibold dark:text-white">
-              Total Level Configured: <span className='text-inline !dark:text-white'>{alarms.length.toString().padStart(2, '0')}</span>
+              Total Level Configured:{" "}
+              <span className="text-inline !dark:text-white">
+                {alarms.length.toString().padStart(2, "0")}
+              </span>
             </div>
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {currentAlarms.map((alarm, idx) => (
@@ -186,7 +194,13 @@ useEffect(() => {
                   key={idx}
                   className={`rounded-lg border shadow-sm p-4 min-w-full max-w-sm !dark:bg-gray-800 dark:border-gray-700`}
                   style={{
-                    backgroundColor: `rgba(${parseInt(alarm.color.slice(1, 3), 16)}, ${parseInt(alarm.color.slice(3, 5), 16)}, ${parseInt(alarm.color.slice(5, 7), 16)}, 0.1)`,
+                    backgroundColor: `rgba(${parseInt(
+                      alarm.color.slice(1, 3),
+                      16
+                    )}, ${parseInt(alarm.color.slice(3, 5), 16)}, ${parseInt(
+                      alarm.color.slice(5, 7),
+                      16
+                    )}, 0.1)`,
                   }}
                 >
                   <h3 className="!font-[Inter] text-center text-md font-bold uppercase text-black dark:text-white mb-4">
@@ -198,7 +212,10 @@ useEffect(() => {
                     </label>
                     <input
                       type="text"
-                      value={priorityLabels[alarm.priority] || `Priority ${alarm.priority}`} // Default fallback if not in the mapping
+                      value={
+                        priorityLabels[alarm.priority] ||
+                        `Priority ${alarm.priority}`
+                      } // Default fallback if not in the mapping
                       readOnly
                       className="!font-[Inter] w-full px-3 py-1.5 rounded border text-sm border-gray-300 dark:border-gray-600 text-gray-800 dark:text-white cursor-default"
                     />
@@ -210,7 +227,10 @@ useEffect(() => {
                     </label>
                     <div className="w-full rounded-md border border-black/15 dark:border-white/20 p-[4px] flex gap-1 dark:bg-gray-700">
                       <div className="flex items-center gap-2 w-[70%] px-2 py-1 rounded-[2.003px] bg-[rgba(217,217,217,0.49)] dark:bg-gray-600">
-                        <div className="w-6 h-5 rounded-[4px] border border-black/20" style={{ backgroundColor: alarm.color }}></div>
+                        <div
+                          className="w-6 h-5 rounded-[4px] border border-black/20"
+                          style={{ backgroundColor: alarm.color }}
+                        ></div>
                         <input
                           type="text"
                           value={alarm.color}
@@ -228,13 +248,16 @@ useEffect(() => {
                       Acknowledgement Type:
                     </label>
                     <div className="dark:text-white flex items-center gap-2 text-[#025697] font-[Inter] text-[12px] not-italic font-normal leading-[174%]">
-                      {alarm.acknowledgeType === 'Both'
-                        ? 'Single + Mass Acknowledgement'
-                        : 'Single Acknowledgement'}
+                      {alarm.acknowledgeType === "Both"
+                        ? "Single + Mass Acknowledgement"
+                        : "Single Acknowledgement"}
                     </div>
                   </div>
                   <div className="flex justify-end gap-2 mt-4">
-                    <button onClick={() => handleViewClick(alarm)} className="cursor-pointer !font-[Inter] bg-[#007A1F] text-white text-[12px] px-4 py-1 rounded hover:bg-green-700">
+                    <button
+                      onClick={() => handleViewClick(alarm)}
+                      className="cursor-pointer !font-[Inter] bg-[#007A1F] text-white text-[12px] px-4 py-1 rounded hover:bg-green-700"
+                    >
                       View
                     </button>
                     <button
@@ -274,14 +297,14 @@ useEffect(() => {
           </>
         )}
       </div>
-     <AlarmTypeModal
-  key={modalKey}
-  isOpen={isModalOpen}
-  onClose={handleTypeModalClose}
-  mode={selectedAlarm ? 'edit' : 'add'}
-  alarmData={selectedAlarm}
-  refreshAlarms={refreshAlarms}
-/>
+      <AlarmTypeModal
+        key={modalKey}
+        isOpen={isModalOpen}
+        onClose={handleTypeModalClose}
+        mode={selectedAlarm ? "edit" : "add"}
+        alarmData={selectedAlarm}
+        refreshAlarms={refreshAlarms}
+      />
 
       <DeleteModal
         isOpen={isModalsOpen}
