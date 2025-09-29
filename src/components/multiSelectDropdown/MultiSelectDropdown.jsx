@@ -2,8 +2,13 @@
 import { useEffect, useRef, useState } from "react";
 import { FaChevronDown, FaXmark } from "react-icons/fa6";
 
-export default function MultiSelectDropdown({ privileges, privilegePostProp }) {
-  const [selectedIds, setSelectedIds] = useState([]);
+export default function MultiSelectDropdown({
+  privileges,
+  privilegePostProp,
+  existingPrivileges = [],
+}) {
+  const [selectedIds, setSelectedIds] = useState(existingPrivileges);
+
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [error, setError] = useState(false);
@@ -30,6 +35,7 @@ export default function MultiSelectDropdown({ privileges, privilegePostProp }) {
   const filteredOptions = privileges.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase())
   );
+
   useEffect(() => {
     privilegePostProp(selectedIds);
   }, [selectedIds]);

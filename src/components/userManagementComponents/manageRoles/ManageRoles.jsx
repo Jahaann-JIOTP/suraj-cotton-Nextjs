@@ -25,6 +25,9 @@ export default function Roles() {
   const getPrivilegesId = (id) => {
     setSelectedPrivileges(id);
   };
+  const getEditPrivileges = (id) => {
+    setEditPrivileges(id);
+  };
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
@@ -226,7 +229,9 @@ export default function Roles() {
     <div>
       <div className="flex justify-end items-center mb-4">
         <button
-          onClick={() => setShowRolePopup(true)}
+          onClick={() => {
+            setShowRolePopup(true);
+          }}
           className="bg-[#1F5897] text-white px-4 py-2 cursor-pointer rounded-md hover:bg-[#17406c]"
         >
           + Add Role
@@ -413,8 +418,9 @@ export default function Roles() {
               <div className="text-gray-700 dark:text-gray-200 font-semibold">
                 Update Privileges:
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                {privileges.map((p) => {
+              <div className="">
+                {/* <div className="grid grid-cols-2 gap-2"> */}
+                {/* {privileges.map((p) => {
                   return (
                     <label
                       key={p._id}
@@ -434,7 +440,12 @@ export default function Roles() {
                       {p.name}
                     </label>
                   );
-                })}
+                })} */}
+                <MultiSelectDropdown
+                  privileges={privileges}
+                  privilegePostProp={getEditPrivileges}
+                  existingPrivileges={editPrivileges}
+                />
               </div>
             </div>
             <div className="flex justify-end gap-3">
