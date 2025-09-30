@@ -20,7 +20,7 @@ const unit4MeterData = [
     ltScheme: "LT_1",
   },
   {
-    link: "U7_GW01",
+    link: "U11_GW01",
     title: "Diesel JGS Incomming",
     top: 200,
     left: 640,
@@ -56,9 +56,9 @@ const InitialSldUnit4 = ({ roundedData }) => {
     },
     // power house
     {
-      activePowerTotalTag: roundedData?.U7_GW01_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U7_GW01_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U7_GW01_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U11_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U11_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U11_GW01_Voltage_Avg,
       top: 207.5,
       left: 647,
     },
@@ -172,7 +172,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
           >
             <span
               className="text-[11.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500, top:"1px" }}
+              style={{ color: "#05f805", fontWeight: 500, top: "1px" }}
             >
               {meter.activePowerTotalTag || "00.00"}
             </span>

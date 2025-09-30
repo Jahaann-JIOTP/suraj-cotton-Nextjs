@@ -59,7 +59,7 @@ const lt2MeterData = [
     left: 812,
   },
   {
-    link: "U11_GW01",
+    link: "U7_GW01",
     title: "Power House 2nd Source",
     top: 306,
     left: 905,
@@ -198,9 +198,9 @@ const Unit4Lt2 = ({ roundedData }) => {
     },
     // gas lt panel
     {
-      activePowerTotalTag: roundedData?.U11_GW01_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U11_GW01_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U11_GW01_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U7_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U7_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U7_GW01_Voltage_Avg,
       top: 313,
       left: 913,
     },
