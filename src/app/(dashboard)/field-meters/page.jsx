@@ -339,7 +339,7 @@ const FieldMeters = () => {
         })}
         {/* Diagram Image */}
         <img
-          src="./sld/fieldMeter.png"
+          src="./sld/field-meters.png"
           className=""
           style={{ width: "1100px" }}
           alt="unit 4 sld"

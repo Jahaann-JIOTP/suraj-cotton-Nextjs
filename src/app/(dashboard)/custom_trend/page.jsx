@@ -372,6 +372,10 @@ function CustomTrend() {
     dateAxis.renderer.grid.template.stroke = am4core.color(gridColor);
     dateAxis.renderer.labels.template.fill = am4core.color(textColor);
     dateAxis.renderer.grid.template.fontSize = 12;
+    // fix label starting
+    dateAxis.renderer.minGridDistance = 50;
+    dateAxis.startLocation = 0;
+    dateAxis.endLocation = 1;
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     const param = selectedParameter.trim().toLowerCase();
     if (param.includes("current a")) {
