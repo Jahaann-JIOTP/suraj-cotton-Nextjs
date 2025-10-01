@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 
-// sum of all generations adn consumption 
-  export function calculateSums(data, totalNode) {
+// sum of all generations adn consumption
+export function calculateSums(data, totalNode) {
   let generation = 0;
   let consumption = 0;
 
@@ -21,16 +21,28 @@ import React from 'react'
 
   return { generation, consumption };
 }
-const SankeyTotalValues = ({data, lt}) => {
-    const { generation, consumption } = calculateSums(data, lt);
+const SankeyTotalValues = ({ data, lt }) => {
+  const { generation, consumption } = calculateSums(data, lt);
+  const unaccounted = generation - consumption;
+  console.log(unaccounted);
   return (
     <div className="absolute bottom-3">
-        <div className="border-1 flex flex-col border-gray-300 px-3 py-2 rounded gap-1">
-          <span className="font-semibold">Total Generation: <span className="font-normal">{generation.toFixed(2)}</span></span>
-          <span className="font-semibold">Total Consumption: <span className="font-normal">{consumption.toFixed(2)}</span></span>
-        </div>
+      <div className="border-1 flex flex-col border-gray-300 px-3 py-2 rounded gap-1">
+        <span className="font-semibold">
+          Total Generation:{" "}
+          <span className="font-normal">{generation.toFixed(2)}</span>
+        </span>
+        <span className="font-semibold">
+          Total Consumption:{" "}
+          <span className="font-normal">{consumption.toFixed(2)}</span>
+        </span>
+        <span className="font-semibold">
+          Unaccounted Energy:{" "}
+          <span className="font-normal">{unaccounted.toFixed(2)}</span>
+        </span>
       </div>
-  )
-}
+    </div>
+  );
+};
 
-export default SankeyTotalValues
+export default SankeyTotalValues;

@@ -52,7 +52,7 @@ const PowerSummaryPage = () => {
         />
       </div>
       {/* first section first of small divs */}
-     
+
       {/* second section */}
       <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full flex flex-wrap gap-3 lg:gap-[0.7vw] lg:w-[49.5%]">
@@ -112,7 +112,7 @@ const PowerSummaryPage = () => {
           />
         </div>
       </div>
-    
+
       {/* Third section */}
       <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full lg:w-[49.5%]">
@@ -159,7 +159,6 @@ const PowerSummaryPage = () => {
             title="Solar 1"
             loading={loading}
             value={Number(powerSummaryData.Solar1 || 0).toLocaleString("en-US")}
-            
             unit="kWh"
             height="6rem"
           />
@@ -176,15 +175,14 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[32.7%]">
           <SingleValueDiv
             title="Diesel and Gas Genset"
-            value={Number(powerSummaryData.DieselandGasGenset || 0).toLocaleString(
-              "en-US"
-            )}
+            value={Number(
+              powerSummaryData.DieselandGasGenset || 0
+            ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
             height="6rem"
           />
         </div>
-       
       </div>
       {/* fifth section first of small divs */}
       <div className="mt-3 md:mt-[0.9vw]  flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
@@ -200,7 +198,7 @@ const PowerSummaryPage = () => {
         </div>
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="Unaccountable Energy"
+            title="Unaccounted Energy"
             value={Number(
               powerSummaryData.unaccoutable_energy || 0
             ).toLocaleString("en-US")}

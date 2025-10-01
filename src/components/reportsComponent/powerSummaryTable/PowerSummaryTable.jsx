@@ -12,7 +12,7 @@ const PowerSummaryTable = ({
   unit4Spindle,
   unit5Spindle,
   startTime,
-  endTime
+  endTime,
 }) => {
   const wapda1Tarif = Number(tarifData.wapda1);
   const wapda2Tarif = Number(tarifData.wapda1);
@@ -39,7 +39,6 @@ const PowerSummaryTable = ({
       dgTarif) /
     8;
   const { theme } = useTheme();
- 
 
   // generation cost
   const wapda1Cost = resData.wapda1 * wapda1Tarif;
@@ -116,104 +115,107 @@ const PowerSummaryTable = ({
 
     // Define styles
     const titleStyle = {
-    font: { bold: true, size: 12, color: { argb: "00000000" } }, // White text
-    alignment: { horizontal: "center", vertical: "middle" },
-    fill: {
-      type: "pattern",
-      pattern: "solid",
-      fgColor: { argb: "E5F3FD" }, // Dark blue background
-    },
-  };
+      font: { bold: true, size: 12, color: { argb: "00000000" } }, // White text
+      alignment: { horizontal: "center", vertical: "middle" },
+      fill: {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "E5F3FD" }, // Dark blue background
+      },
+    };
 
     const headerStyle = {
-    font: { bold: true, size: 11, color: { argb: "FFFFFFFF" } }, // White text
-    alignment: { horizontal: "center", vertical: "middle" },
-    fill: {
-      type: "pattern",
-      pattern: "solid",
-      fgColor: { argb: "FF1A68B2" }, // Dark blue background
-    },
-    border: {
-      top: { style: "thin", color: { argb: "FFFFFFFF" } },
-      bottom: { style: "thin", color: { argb: "FFFFFFFF" } },
-      left: { style: "thin", color: { argb: "FFFFFFFF" } },
-      right: { style: "thin", color: { argb: "FFFFFFFF" } },
-    },
-  };
+      font: { bold: true, size: 11, color: { argb: "FFFFFFFF" } }, // White text
+      alignment: { horizontal: "center", vertical: "middle" },
+      fill: {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FF1A68B2" }, // Dark blue background
+      },
+      border: {
+        top: { style: "thin", color: { argb: "FFFFFFFF" } },
+        bottom: { style: "thin", color: { argb: "FFFFFFFF" } },
+        left: { style: "thin", color: { argb: "FFFFFFFF" } },
+        right: { style: "thin", color: { argb: "FFFFFFFF" } },
+      },
+    };
 
     const dataStyle = {
-    font: { size: 11 },
-    alignment: { vertical: "middle", horizontal: "center" },
-    border: {
-      top: { style: "thin", color: { argb: "FF000000" } },
-      bottom: { style: "thin", color: { argb: "FF000000" } },
-      left: { style: "thin", color: { argb: "FF000000" } },
-      right: { style: "thin", color: { argb: "FF000000" } },
-    },
-  };
+      font: { size: 11 },
+      alignment: { vertical: "middle", horizontal: "center" },
+      border: {
+        top: { style: "thin", color: { argb: "FF000000" } },
+        bottom: { style: "thin", color: { argb: "FF000000" } },
+        left: { style: "thin", color: { argb: "FF000000" } },
+        right: { style: "thin", color: { argb: "FF000000" } },
+      },
+    };
 
     const boldDataStyle = {
-    ...dataStyle,
-    font: { ...dataStyle.font, bold: true },
-  };
+      ...dataStyle,
+      font: { ...dataStyle.font, bold: true },
+    };
 
-  const leftAlignStyle = {
-    ...dataStyle,
-    alignment: { horizontal: "left", vertical: "middle", indent: 1 },
-  };
+    const leftAlignStyle = {
+      ...dataStyle,
+      alignment: { horizontal: "left", vertical: "middle", indent: 1 },
+    };
 
     // Add logos
     try {
-    const logo1Path = "../../../suraj-cotton-logo.png";
-    const logo2Path = "../../../jahaann-light.png";
+      const logo1Path = "../../../suraj-cotton-logo.png";
+      const logo2Path = "../../../jahaann-light.png";
 
-    const image1Buffer = await getImageBuffer(logo1Path);
-    if (image1Buffer) {
-      const image1Id = workbook.addImage({
-        buffer: image1Buffer,
-        extension: "png",
-      });
-      worksheet.addImage(image1Id, {
-        tl: { col: 0, row: 0 },
-        ext: { width: 150, height: 70 },
-      });
-    }
+      const image1Buffer = await getImageBuffer(logo1Path);
+      if (image1Buffer) {
+        const image1Id = workbook.addImage({
+          buffer: image1Buffer,
+          extension: "png",
+        });
+        worksheet.addImage(image1Id, {
+          tl: { col: 0, row: 0 },
+          ext: { width: 150, height: 70 },
+        });
+      }
 
-    const image2Buffer = await getImageBuffer(logo2Path);
-    if (image2Buffer) {
-      const image2Id = workbook.addImage({
-        buffer: image2Buffer,
-        extension: "png",
-      });
-      worksheet.addImage(image2Id, {
-        tl: { col: 2, row: 0.5 },
-        ext: { width: 170, height: 40 },
-      });
+      const image2Buffer = await getImageBuffer(logo2Path);
+      if (image2Buffer) {
+        const image2Id = workbook.addImage({
+          buffer: image2Buffer,
+          extension: "png",
+        });
+        worksheet.addImage(image2Id, {
+          tl: { col: 2, row: 0.5 },
+          ext: { width: 170, height: 40 },
+        });
+      }
+    } catch (error) {
+      console.error("Error adding logos:", error);
     }
-  } catch (error) {
-    console.error("Error adding logos:", error);
-  }
-  const dateRow = worksheet.getRow(4);
-  dateRow.getCell(1).value = `Start Date: ${startDate} - ${startTime}`;
-  dateRow.getCell(3).value = `End Date: ${endDate} - ${endTime}`;
-  dateRow.getCell(1).style = { font: { size: 11 }};
-  dateRow.getCell(3).style = { font: { size: 11 },alignment:{horizontal:"right", vertical:"middle"}  };
-  const titleRow = worksheet.getRow(5);
-  titleRow.getCell(1).value = `Energy Summary Reports of ${
-    unit === "Unit_4"
-      ? "Unit 4"
-      : unit === "Unit_5"
-      ? "Unit 5"
-      : unit === "ALL"
-      ? "Unit 4 and Unit 5"
-      : ""
-  }`;
-  worksheet.mergeCells(5, 1, 5, 3);
-  titleRow.getCell(1).style = {
-    font: { bold: true, size: 14 },
-    alignment: { horizontal: "center" },
-  };
-  titleRow.height = 20;
+    const dateRow = worksheet.getRow(4);
+    dateRow.getCell(1).value = `Start Date: ${startDate} - ${startTime}`;
+    dateRow.getCell(3).value = `End Date: ${endDate} - ${endTime}`;
+    dateRow.getCell(1).style = { font: { size: 11 } };
+    dateRow.getCell(3).style = {
+      font: { size: 11 },
+      alignment: { horizontal: "right", vertical: "middle" },
+    };
+    const titleRow = worksheet.getRow(5);
+    titleRow.getCell(1).value = `Energy Summary Reports of ${
+      unit === "Unit_4"
+        ? "Unit 4"
+        : unit === "Unit_5"
+        ? "Unit 5"
+        : unit === "ALL"
+        ? "Unit 4 and Unit 5"
+        : ""
+    }`;
+    worksheet.mergeCells(5, 1, 5, 3);
+    titleRow.getCell(1).style = {
+      font: { bold: true, size: 14 },
+      alignment: { horizontal: "center" },
+    };
+    titleRow.height = 20;
     const secondRow = worksheet.getRow(4);
     secondRow.getCell(1).border = {
       top: { style: "thin", color: { argb: "FF000000" } },
@@ -225,7 +227,7 @@ const PowerSummaryTable = ({
       top: { style: "thin", color: { argb: "FF000000" } },
     };
     worksheet.mergeCells(2, 2, 2, 2);
-  
+
     worksheet.addRow([]);
 
     const tariffHeaderRow = worksheet.addRow(["Tariff Rates"]);
@@ -396,7 +398,7 @@ const PowerSummaryTable = ({
       ]);
     }
     miscellaneousData.push([
-      "Unaccountable Energy",
+      "Unaccounted Energy",
       resData.unaccountable_energy,
       (resData.unaccountable_energy / 2).toFixed(1),
     ]);
@@ -897,7 +899,7 @@ const PowerSummaryTable = ({
                 )}
                 <tr>
                   <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                    Unaccountable Energy
+                    Unaccounted Energy
                   </td>
                   <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
                     {resData.unaccountable_energy.toFixed(1)}
