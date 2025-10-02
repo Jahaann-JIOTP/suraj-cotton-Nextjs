@@ -9,9 +9,12 @@ import config from "@/constant/apiRouteList";
 import { CircularProgress } from "@mui/material";
 import { ImArrowLeft2 } from "react-icons/im";
 import Swal from "sweetalert2";
+import { getDateRangeFromString } from "@/utils/dateRangeForReports";
 
 const FilterPage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [usageReportTimePeriod, setUsageReportTimePeriod] =
+    useState("Yesterday");
   const dropdownRef = useRef(null);
   const [unit, setUnit] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -21,7 +24,6 @@ const FilterPage = () => {
   const [unit4Spindle, setUnit4Spindle] = useState(null);
   const [unit5Spindle, setUnit5Spindle] = useState(null);
   const [fetched, setFetched] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [isHovered, setIsHovered] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -32,7 +34,17 @@ const FilterPage = () => {
     const [h, m] = time.split(":").map(Number);
     return h * 60 + m;
   };
-
+  useEffect(() => {
+    if (usageReportTimePeriod !== "Custom Date") {
+      const { startDate, endDate } = getDateRangeFromString(
+        usageReportTimePeriod
+      );
+      setStartDate(startDate);
+      setEndDate(endDate);
+      setStartTime("06:00");
+      setEndTime("06:00");
+    }
+  }, [usageReportTimePeriod]);
   useEffect(() => {
     if (startDate === endDate && endTime) {
       let startMins = toMinutes(startTime);
@@ -54,9 +66,6 @@ const FilterPage = () => {
     }
   }, [startTime, endTime, startDate, endDate]);
 
-  // Remove the blocking logic - always allow API calls
-  const unit4 = unit === "Unit_4" || unit === "ALL" ? "U4" : "";
-  const unit5 = unit === "Unit_5" || unit === "ALL" ? "U5" : "";
   //  handle minimum end time
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -86,7 +95,6 @@ const FilterPage = () => {
       setUnit(unitClicked);
     }
   };
-
   // fetch unit 4 spindles - simplified, no blocking
   const fetchU4Spindles = async () => {
     const token = localStorage.getItem("token");
@@ -251,13 +259,13 @@ const FilterPage = () => {
           <button
             onClick={() => {
               setShowResults(false);
-              setUnit("");
-              setStartDate("");
-              setEndDate("");
-              setStartTime("");
-              setEndTime("");
-              setUnit4Spindle(null);
-              setUnit5Spindle(null);
+              // setUnit("");
+              // setStartDate("");
+              // setEndDate("");
+              // setStartTime("");
+              // setEndTime("");
+              // setUnit4Spindle(null);
+              // setUnit5Spindle(null);
               setFetched(false);
             }}
             onMouseEnter={() => setIsHovered(true)}
@@ -288,56 +296,78 @@ const FilterPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
             <div className="flex w-full items-center gap-5 flex-wrap">
               {/* area selector dropdown */}
-              <div className="flex flex-col w-full items-start justify-center gap-1">
-                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
-                  Select Plants Units
-                </span>
-                <div className="relative inline-block w-full" ref={dropdownRef}>
-                  <button
-                    type="button"
-                    onClick={toggleDropdown}
-                    className="w-full bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
+              <div className="w-full flex items-center gap-4 justify-between">
+                <div className="flex flex-col w-full md:w-[46%] items-start justify-center gap-1">
+                  <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
+                    Select Plants Units
+                  </span>
+                  <div
+                    className="relative inline-block w-full"
+                    ref={dropdownRef}
                   >
-                    {unit === "ALL"
-                      ? "ALL Units"
-                      : unit === "Unit_4"
-                      ? "Unit 4"
-                      : unit === "Unit_5"
-                      ? "Unit 5"
-                      : "Select Area"}
-                  </button>
+                    <button
+                      type="button"
+                      onClick={toggleDropdown}
+                      className="w-full bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
+                    >
+                      {unit === "ALL"
+                        ? "ALL Units"
+                        : unit === "Unit_4"
+                        ? "Unit 4"
+                        : unit === "Unit_5"
+                        ? "Unit 5"
+                        : "Select Area"}
+                    </button>
 
-                  {isOpen && (
-                    <div className="absolute z-20 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
-                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
-                        <input
-                          type="checkbox"
-                          checked={unit === "Unit_4" || unit === "ALL"}
-                          onChange={() => handleUnitChange("Unit_4")}
-                        />
-                        Unit 4
-                      </label>
-                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
-                        <input
-                          type="checkbox"
-                          checked={unit === "Unit_5" || unit === "ALL"}
-                          onChange={() => handleUnitChange("Unit_5")}
-                        />
-                        Unit 5
-                      </label>
-                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
-                        <input
-                          type="checkbox"
-                          checked={unit === "ALL"}
-                          onChange={() => handleUnitChange("ALL")}
-                        />
-                        All
-                      </label>
-                    </div>
-                  )}
+                    {isOpen && (
+                      <div className="absolute z-20 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
+                        <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                          <input
+                            type="checkbox"
+                            checked={unit === "Unit_4" || unit === "ALL"}
+                            onChange={() => handleUnitChange("Unit_4")}
+                          />
+                          Unit 4
+                        </label>
+                        <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                          <input
+                            type="checkbox"
+                            checked={unit === "Unit_5" || unit === "ALL"}
+                            onChange={() => handleUnitChange("Unit_5")}
+                          />
+                          Unit 5
+                        </label>
+                        <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                          <input
+                            type="checkbox"
+                            checked={unit === "ALL"}
+                            onChange={() => handleUnitChange("ALL")}
+                          />
+                          All
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Time Period Dropdown */}
+                <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
+                  <label className="text-[13.51px] font-500 font-inter">
+                    Time Period
+                  </label>
+                  <select
+                    value={usageReportTimePeriod}
+                    onChange={(e) => setUsageReportTimePeriod(e.target.value)}
+                    className="w-full outline-none border border-gray-300 dark:border-gray-600 dark:bg-gray-800 rounded px-4 py-2"
+                  >
+                    <option value="Today">Today</option>
+                    <option value="Yesterday">Yesterday</option>
+                    <option value="This Week">This Week</option>
+                    <option value="This Month">This Month</option>
+                    <option value="Custom Date">Custom Date</option>
+                  </select>
                 </div>
               </div>
-
               {/* start date selector */}
               <div className="w-full flex items-center gap-4 justify-between">
                 <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
@@ -353,8 +383,9 @@ const FilterPage = () => {
                     id="startDate"
                     name="startDate"
                     required={true}
+                    readOnly={usageReportTimePeriod !== "Custom Date"}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
                   />
                 </div>
                 {/* end date selector */}
@@ -372,8 +403,9 @@ const FilterPage = () => {
                     name="endDate"
                     required={true}
                     min={startDate}
+                    readOnly={usageReportTimePeriod !== "Custom Date"}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
                   />
                 </div>
               </div>
@@ -393,7 +425,7 @@ const FilterPage = () => {
                     name="startTime"
                     required={true}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
                   />
                 </div>
                 {/* end Time selector */}
@@ -411,7 +443,7 @@ const FilterPage = () => {
                     name="endTime"
                     required={true}
                     onChange={(e) => setEndTime(e.target.value)}
-                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
                   />
                 </div>
               </div>
@@ -432,7 +464,7 @@ const FilterPage = () => {
                       name="rates"
                       readOnly
                       placeholder="00"
-                      className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                      className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
                     />
                   </div>
                 ) : unit === "Unit_5" ? (
@@ -450,7 +482,7 @@ const FilterPage = () => {
                       name="rates"
                       readOnly
                       placeholder="00"
-                      className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                      className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
                     />
                   </div>
                 ) : unit === "ALL" ? (
@@ -469,7 +501,7 @@ const FilterPage = () => {
                         name="rates"
                         readOnly
                         placeholder="00"
-                        className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                        className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
                       />
                     </div>
                     <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
@@ -486,7 +518,7 @@ const FilterPage = () => {
                         name="rates"
                         readOnly
                         placeholder="00"
-                        className="w-full outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                        className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
                       />
                     </div>
                   </>

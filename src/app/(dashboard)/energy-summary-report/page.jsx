@@ -9,9 +9,12 @@ import { CircularProgress } from "@mui/material";
 import PowerSummaryTable from "@/components/reportsComponent/powerSummaryTable/PowerSummaryTable";
 import { ImArrowLeft2 } from "react-icons/im";
 import Swal from "sweetalert2";
+import { getDateRangeFromString } from "@/utils/dateRangeForReports";
 
 const energySummaryPage = () => {
   const [unit, setUnit] = useState("");
+  const [summaryReportTimePeriod, setSummaryReportTimePeriod] =
+    useState("Yesterday");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -47,6 +50,17 @@ const energySummaryPage = () => {
     return h * 60 + m;
   };
 
+  useEffect(() => {
+    if (summaryReportTimePeriod !== "Custom Date") {
+      const { startDate, endDate } = getDateRangeFromString(
+        summaryReportTimePeriod
+      );
+      setStartDate(startDate);
+      setEndDate(endDate);
+      setStartTime("06:00");
+      setEndTime("06:00");
+    }
+  }, [summaryReportTimePeriod]);
   useEffect(() => {
     if (startDate === endDate && endTime) {
       let startMins = toMinutes(startTime);
@@ -205,19 +219,19 @@ const energySummaryPage = () => {
           <button
             onClick={() => {
               setShowResults(false);
-              setUnit("");
-              setStartDate("");
-              setEndDate("");
-              setTarifData({
-                wapda1: "",
-                wapda2: "",
-                niigata: "",
-                jms: "",
-                gg: "",
-                dg: "",
-                solar1: "",
-                solar2: "",
-              });
+              // setUnit("");
+              // setStartDate("");
+              // setEndDate("");
+              // setTarifData({
+              //   wapda1: "",
+              //   wapda2: "",
+              //   niigata: "",
+              //   jms: "",
+              //   gg: "",
+              //   dg: "",
+              //   solar1: "",
+              //   solar2: "",
+              // });
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -245,7 +259,7 @@ const energySummaryPage = () => {
       {!showResults ? (
         <div>
           <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
-            <div className="flex w-full items-center justify-start gap-5 flex-wrap">
+            <div className="flex w-full items-center justify-evenly gap-5 flex-wrap">
               {/* area slector dropdown */}
               <div className="flex flex-col w-full md:w-[30%] items-start justify-center gap-1">
                 <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
@@ -279,6 +293,24 @@ const energySummaryPage = () => {
                 </div>
               </div>
 
+              {/* Time Period Dropdown */}
+              <div className="flex flex-col w-full md:w-[30%] items-start justify-start gap-1">
+                <label className="text-[13.51px] font-500 font-inter">
+                  Time Period
+                </label>
+                <select
+                  value={summaryReportTimePeriod}
+                  onChange={(e) => setSummaryReportTimePeriod(e.target.value)}
+                  className="w-full lg:w-[80%] outline-none border-1 dark:bg-gray-800 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                >
+                  <option value="Today">Today</option>
+                  <option value="Yesterday">Yesterday</option>
+                  <option value="This Week">This Week</option>
+                  <option value="This Month">This Month</option>
+                  <option value="Custom Date">Custom Date</option>
+                </select>
+              </div>
+              {/* start date */}
               <div className="flex flex-col w-full md:w-[30%] items-start justify-start gap-1">
                 <label
                   htmlFor="startDate"
@@ -292,6 +324,7 @@ const energySummaryPage = () => {
                   id="startDate"
                   name="startDate"
                   required={true}
+                  readOnly={summaryReportTimePeriod !== "Custom Date"}
                   onChange={(e) => setStartDate(e.target.value)}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />
@@ -311,6 +344,7 @@ const energySummaryPage = () => {
                   name="endDate"
                   required={true}
                   min={startDate}
+                  readOnly={summaryReportTimePeriod !== "Custom Date"}
                   onChange={(e) => setEndDate(e.target.value)}
                   className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                 />

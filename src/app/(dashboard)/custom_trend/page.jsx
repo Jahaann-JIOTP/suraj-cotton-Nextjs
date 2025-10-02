@@ -1019,8 +1019,10 @@ function CustomTrend() {
         </div>
         {filteredMeters.length <= 0 ? (
           <div className="w-full flex flex-col items-center justify-center h-full">
-            <img src="../../../trend_icon.png" className="w-90" alt="" />
-            <span>Select Desired Filters to view Trend!</span>
+            <img src="../../../trend_icon.png" width={250} alt="" />
+            <span className="text-[13px] text-gray-300 dark:text-gray-500">
+              Select Desired Filters to view Trend!
+            </span>
           </div>
         ) : (
           <div className="flex-1 w-full">
