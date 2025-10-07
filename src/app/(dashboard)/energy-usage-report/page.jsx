@@ -42,7 +42,16 @@ const FilterPage = () => {
       setStartDate(startDate);
       setEndDate(endDate);
       setStartTime("06:00");
-      setEndTime("06:00");
+
+      if (usageReportTimePeriod === "Today") {
+        const today = new Date();
+        const hour = today.getHours().toString().padStart(2, "0");
+        const minutes = today.getMinutes().toString().padStart(2, "0");
+        const currentTime = `${hour}:${minutes}`;
+        setEndTime(currentTime);
+      } else {
+        setEndTime("06:00");
+      }
     }
   }, [usageReportTimePeriod]);
   useEffect(() => {
@@ -353,7 +362,7 @@ const FilterPage = () => {
                 {/* Time Period Dropdown */}
                 <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                   <label className="text-[13.51px] font-500 font-inter">
-                    Time Period
+                    Interval
                   </label>
                   <select
                     value={usageReportTimePeriod}
@@ -373,7 +382,10 @@ const FilterPage = () => {
                 <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                   <label
                     htmlFor="startDate"
-                    className="text-[13.51px] font-500 font-inter"
+                    className={`text-[13.51px] font-500 font-inter ${
+                      usageReportTimePeriod !== "Custom Date" &&
+                      "text-gray-300 dark:text-gray-700"
+                    }`}
                   >
                     Start Date
                   </label>
@@ -385,14 +397,21 @@ const FilterPage = () => {
                     required={true}
                     readOnly={usageReportTimePeriod !== "Custom Date"}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
+                    className={`w-full outline-none border-1 rounded px-4 py-2 ${
+                      usageReportTimePeriod === "Custom Date"
+                        ? "border-gray-300 dark:border-gray-600"
+                        : "border-gray-150 dark:border-gray-700 text-gray-400 dark:text-gray-700"
+                    }`}
                   />
                 </div>
                 {/* end date selector */}
                 <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                   <label
                     htmlFor="endDate"
-                    className="text-[13.51px] font-500 font-inter"
+                    className={`text-[13.51px] font-500 font-inter ${
+                      usageReportTimePeriod !== "Custom Date" &&
+                      "text-gray-300 dark:text-gray-700"
+                    }`}
                   >
                     End Date
                   </label>
@@ -405,7 +424,11 @@ const FilterPage = () => {
                     min={startDate}
                     readOnly={usageReportTimePeriod !== "Custom Date"}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
+                    className={`w-full outline-none border-1 rounded px-4 py-2 ${
+                      usageReportTimePeriod === "Custom Date"
+                        ? "border-gray-300 dark:border-gray-600"
+                        : "border-gray-150 dark:border-gray-700 text-gray-400 dark:text-gray-700"
+                    }`}
                   />
                 </div>
               </div>
@@ -414,7 +437,10 @@ const FilterPage = () => {
                 <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                   <label
                     htmlFor="startDate"
-                    className="text-[13.51px] font-500 font-inter"
+                    className={`text-[13.51px] font-500 font-inter ${
+                      usageReportTimePeriod !== "Custom Date" &&
+                      "text-gray-300 dark:text-gray-700"
+                    }`}
                   >
                     Start Time
                   </label>
@@ -424,15 +450,23 @@ const FilterPage = () => {
                     id="startTime"
                     name="startTime"
                     required={true}
+                    readOnly={usageReportTimePeriod !== "Custom Date"}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
+                    className={`w-full outline-none border-1 rounded px-4 py-2 ${
+                      usageReportTimePeriod === "Custom Date"
+                        ? "border-gray-300 dark:border-gray-600"
+                        : "border-gray-150 dark:border-gray-700 text-gray-400 dark:text-gray-700"
+                    }`}
                   />
                 </div>
                 {/* end Time selector */}
                 <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                   <label
                     htmlFor="endDate"
-                    className="text-[13.51px] font-500 font-inter"
+                    className={`text-[13.51px] font-500 font-inter ${
+                      usageReportTimePeriod !== "Custom Date" &&
+                      "text-gray-300 dark:text-gray-700"
+                    }`}
                   >
                     End Time
                   </label>
@@ -442,8 +476,13 @@ const FilterPage = () => {
                     id="endTime"
                     name="endTime"
                     required={true}
+                    readOnly={usageReportTimePeriod !== "Custom Date"}
                     onChange={(e) => setEndTime(e.target.value)}
-                    className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
+                    className={`w-full outline-none border-1 rounded px-4 py-2 ${
+                      usageReportTimePeriod === "Custom Date"
+                        ? "border-gray-300 dark:border-gray-600"
+                        : "border-gray-150 dark:border-gray-700 text-gray-400 dark:text-gray-700"
+                    }`}
                   />
                 </div>
               </div>

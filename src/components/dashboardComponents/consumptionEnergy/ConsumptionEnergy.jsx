@@ -131,7 +131,7 @@ const ConsumptionEnergy = () => {
       series.dataFields.categoryX = xField;
       series.name = name;
       // ✅ Tooltip
-      series.columns.template.tooltipText = "{name}, {categoryX}: {valueY}";
+      series.columns.template.tooltipText = "{name}: {valueY}";
       series.tooltip.label.fontSize = 12;
       // ✅ Styling
       series.columns.template.width = am4core.percent(70);

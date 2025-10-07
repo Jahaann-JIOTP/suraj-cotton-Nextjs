@@ -53,7 +53,7 @@ const SingleUnitComponent = ({
     {
       Department: "Card + Breaker",
       Mcs: { Unit_4: "15", Unit_5: "" },
-      InstalledLoad: { Unit_4: "19", Unit_5: "" },
+      InstalledLoad: { Unit_4: "19+6.6", Unit_5: "" },
       ConsumedUnits: finalData?.Card_Breaker_consumption || 0,
       unit: "Unit_4",
     },
@@ -67,14 +67,14 @@ const SingleUnitComponent = ({
     {
       Department: "Comber + Uni Lap",
       Mcs: { Unit_4: "12", Unit_5: "17" },
-      InstalledLoad: { Unit_4: "18", Unit_5: "33" },
+      InstalledLoad: { Unit_4: "6.2+11.8", Unit_5: "19.9+13.2" },
       ConsumedUnits: finalData?.Comberandunilap_consumption || 0,
       unit: "both",
     },
     {
       Department: "Drawing(Finisher) + 2 Breaker",
       Mcs: { Unit_4: "8", Unit_5: "" },
-      InstalledLoad: { Unit_4: "22.6", Unit_5: "" },
+      InstalledLoad: { Unit_4: "13.6+6.6", Unit_5: "" },
       ConsumedUnits: finalData?.DrawingFinisherand2Breaker_consumption || 0,
       unit: "Unit_4",
     },
@@ -88,7 +88,7 @@ const SingleUnitComponent = ({
     {
       Department: "Drawing Breaker + Simplex",
       Mcs: { Unit_4: "", Unit_5: "11" },
-      InstalledLoad: { Unit_4: "", Unit_5: "40.5" },
+      InstalledLoad: { Unit_4: "", Unit_5: "6.5+34" },
       ConsumedUnits: finalData?.DrawingBreakerandSimplex_consumption || 0,
       unit: "Unit_5",
     },
@@ -179,7 +179,7 @@ const SingleUnitComponent = ({
     {
       Department: "Residential Colony",
       Mcs: { Unit_4: "", Unit_5: "1" },
-      InstalledLoad: { Unit_4: "30", Unit_5: "30" },
+      InstalledLoad: { Unit_4: "50", Unit_5: "50" },
       ConsumedUnits: finalData?.Residentialcolony_consumption || 0,
       unit: "both",
     },

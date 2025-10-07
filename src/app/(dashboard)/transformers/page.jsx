@@ -23,7 +23,7 @@ const TranformersPage = () => {
   const { startDate, endDate } = getDateRangeFromString(transformerTimePeriod);
 
   // /----------------------------Destructure main to four array------------------------------
-  const trafo1 = data.map(({ date, Trafo1and2 }) => ({ date, Trafo1and2 }));
+  const trafo1 = data.map(({ date, Trafo1 }) => ({ date, Trafo1 }));
   const trafo2 = data.map(({ date, Trafo2 }) => ({ date, Trafo2 }));
   const trafo3 = data.map(({ date, Trafo3 }) => ({ date, Trafo3 }));
   const trafo4 = data.map(({ date, Trafo4 }) => ({ date, Trafo4 }));
@@ -203,7 +203,7 @@ const TranformersPage = () => {
             <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
-                Unit 4 Transformer 1 and 2 (kWh) Total:
+                Unit 4 Transformer 1 (kWh) Total:
                 {Number(
                   transformerTotalValTag.Trafo1outgoing || 0
                 ).toLocaleString("en-US")}
@@ -215,10 +215,10 @@ const TranformersPage = () => {
                   <HeatMapChart
                     TransformerData={trafo1}
                     id="transformer1"
-                    dataKey="Trafo1and2"
+                    dataKey="Trafo1"
                     loading={loading}
-                    startRange={2000}
-                    endRage={600}
+                    startRange={600}
+                    endRage={2000}
                     stepGap={-8.23}
                   />
                 </div>
@@ -231,6 +231,73 @@ const TranformersPage = () => {
                     traffoTemp={"Not Connected"}
                     losses={trafo1Losses.toFixed(2)}
                     trafoName="T1"
+                  />
+                </div>
+              </div>
+              {!loading && (
+                <div className="w-full px-5 mt-[-10px] md:mt-[-17px]">
+                  <div className="flex w-[93%] items-center justify-between flex-wrap">
+                    {trafo1and2.map((item, index, array) => {
+                      const isFirst = index === 0;
+                      const isLast = index === array.length - 1;
+                      const isHiddenOnSmall =
+                        index % 2 === 1 && !isFirst && !isLast;
+                      return (
+                        <span
+                          key={item}
+                          className={`text-[11px] ${
+                            isHiddenOnSmall ? "hidden xl:inline" : "inline"
+                          }`}
+                        >
+                          {item}
+                        </span>
+                      );
+                    })}
+                  </div>
+                  <div
+                    className="w-[93%] h-[20px]"
+                    style={{
+                      background:
+                        "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
+                    }}
+                  ></div>
+                </div>
+              )}
+            </div>
+          </div>
+          {/* transformer 2 */}
+          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-700 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
+            <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
+              <img src="../../../heatmapIcon.png" alt="" />
+              <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
+                Unit 4 Transformer 2 (kWh) Total:
+                {Number(
+                  transformerTotalValTag.Trafo2outgoing || 0
+                ).toLocaleString("en-US")}
+              </h2>
+            </div>
+            <div>
+              <div className="flex">
+                <div className="w-[70%] flex items-center justify-center">
+                  <HeatMapChart
+                    TransformerData={trafo2}
+                    id="transformer2"
+                    dataKey="Trafo2"
+                    loading={loading}
+                    startRange={600}
+                    endRage={2000}
+                    stepGap={-8.23}
+                  />
+                </div>
+                <div className="w-[30%]">
+                  <TransformerSide
+                    onMaintenanceUpdated={loadMaintenanceHrs}
+                    transformerReading={"2.0 MVA"}
+                    nxtMaintenance={maintenanceHrsT2.value}
+                    remainingHrs={remainingHrsT2}
+                    traffoTemp={"Not Connected"}
+                    losses={trafo2Losses.toFixed(2)}
+                    trafoName="T2"
                   />
                 </div>
               </div>
