@@ -99,6 +99,7 @@ function CustomTrend() {
     "HFO Aux": "U25_PLC",
     "I-GG": "U26_PLC",
     "Wapda 2": "U27_PLC",
+    "Solar 352.50 kW" : "U24_GW01",
     "Drying Simplex AC": "U1_GW01",
     "Weikel Cond": "U2_GW01",
     "Winding AC": "U3_GW01",
@@ -213,7 +214,7 @@ function CustomTrend() {
 
   let filteredMeters = [];
   if (area === "HFO") {
-    filteredMeters = ["HFO 1", "O/G 2", "O/G 1", "S/T", "I-GG", "Wapda 2"];
+    filteredMeters = ["HFO 1", "O/G 2", "O/G 1", "HFO Aux", "I-GG", "Wapda 2"];
   } else if (area === "HT_Room1") {
     filteredMeters = ["P/H IC", "Wapda IC"];
   } else if (area === "HT_Room2") {
@@ -223,7 +224,7 @@ function CustomTrend() {
     filteredMeters = Object.keys(meterMapping).filter(
       (key) =>
         meterMapping[key].endsWith("PLC") &&
-        !["HFO 1", "O/G 2", "O/G 1", "S/T", "I-GG", "Wapda 2"].includes(key)
+        !["HFO 1", "O/G 2", "O/G 1", "HFO Aux", "I-GG", "Wapda 2"].includes(key)
     );
   } else if (area === "Unit 4 LT_2") {
     // All meters ending with GW01 except HT Room 1 meters
