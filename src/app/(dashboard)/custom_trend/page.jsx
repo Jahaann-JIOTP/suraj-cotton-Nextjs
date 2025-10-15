@@ -76,7 +76,7 @@ function CustomTrend() {
     "Unit 05 Lighting": "U2_PLC",
     "Light External": "U3_PLC",
     "Light Internal": "U4_PLC",
-    "Power House": "U5_PLC",
+    "Power House (2nd Source Gas)": "U5_PLC",
     Turbine: "U6_PLC",
     "Main Meter": "U7_PLC",
     "Drawing Finisher 1~6 + 2 Breaker": "U8_PLC",
@@ -85,35 +85,35 @@ function CustomTrend() {
     "Ring 16~20": "U11_PLC",
     "Ring 21~24": "U12_PLC",
     "Comber 1~10 + Uni Lap 1~2": "U13_PLC",
-    Compressor: "U14_PLC",
+    "Compressor 119kw": "U14_PLC",
     "Simplex 1~6": "U15_PLC",
-    "Compressor 02": "U16_PLC",
+    "Compressor (303kw)": "U16_PLC",
     "Ring AC": "U17_PLC",
     "Ring AC (Bypass)": "U18_PLC",
     "Diesel + JGS Incomming": "U19_PLC",
-    "Compressor (Bypass)": "U20_PLC",
+    "Compressor (119kw)": "U20_PLC",
     "Wapda + HFO +JMS Incoming": "U21_PLC",
     "HFO 1": "U22_PLC",
-    "O/G 2": "U23_PLC",
-    "O/G 1": "U24_PLC",
+    "O/G 2 (Unit 5)": "U23_PLC",
+    "O/G 1 (Unit 4)": "U24_PLC",
     "HFO Aux": "U25_PLC",
     "I-GG": "U26_PLC",
     "Wapda 2": "U27_PLC",
     "Solar 352.50 kW" : "U24_GW01",
-    "Drying Simplex AC": "U1_GW01",
+    "A/C Back Process": "U1_GW01",
     "Weikel Cond": "U2_GW01",
     "Winding AC": "U3_GW01",
     "Mills RES-CLNY & Workshop": "U4_GW01",
-    "Card 1~8": "U5_GW01",
+    "Card (1-4) (9-12)": "U5_GW01",
     Colony: "U18_GW01",
     "Diesel+JGS Incomming": "U11_GW01",
     "Blow Room": "U8_GW01",
-    "Card 9~14 + 1 Breaker": "U9_GW01",
+    "Card (5-8) (13-14)": "U9_GW01",
     "Winding 01~6": "U10_GW01",
-    "Power House 2nd Source": "U7_GW01",
-    "Card Filter": "U12_GW01",
+    "Power House 2nd Source (HFO)": "U7_GW01",
+    "Card Filter (Bypass)": "U12_GW01",
     "Wapda + HFO + JMS Incoming": "U13_GW01",
-    "D/R Card Filter": "U14_GW01",
+    "B/R Card Filter": "U14_GW01",
     "Ring 5~8": "U15_GW01",
     "Ring 13~16": "U16_GW01",
     "Ring 9~12": "U17_GW01",
@@ -121,7 +121,7 @@ function CustomTrend() {
     "AC Lab": "U19_GW01",
     Spare: "U20_GW01",
     "Spare 02": "U21_GW01",
-    "P/H IC": "U22_GW01",
+    "P/H IC (HFO)": "U22_GW01",
     "Wapda IC": "U23_GW01",
     "PDB1 CD1 (Field)": "U1_GW02",
     "PDB2 CD2  (Field)": "U2_GW02",
@@ -130,22 +130,22 @@ function CustomTrend() {
     "PF Panel": "U5_GW02",
     "Solar 1236.39 Kw": "U6_GW02",
     "Ring 1-3": "U7_GW02",
-    "A/C Plant Spinning": "U8_GW02",
+    "AC Supply Fan": "U8_GW02",
     "Blow Room L1": "U9_GW02",
     "Ring Frames 4-6": "U10_GW02",
     "A/C Plant Blowing": "U11_GW02",
     "MLDB1 Blower Room Card": "U12_GW02",
     "Transformer 1 LT-1 ACB": "U13_GW02",
     "Comber MCS 1-14": "U14_GW02",
-    "AC Plant Spinning": "U15_GW02",
+    "AC Return Fan": "U15_GW02",
     "Water Chiller": "U16_GW02",
     "Card M/C 8-14": "U17_GW02",
-    "Auto Con-link Conner 1-9": "U18_GW02",
+    "Auto Con 1-9": "U18_GW02",
     "Card M/C 1-7": "U19_GW02",
     "AC Plant Winding": "U20_GW02",
-    "Simplex M/C S1-5": "U21_GW02",
+    "Simplex M/C 1~6 + 1~5 Breaker Machines": "U21_GW02",
     "Spare 2": "U22_GW02",
-    "Draw Frame Finish": "U23_GW02",
+    "Draw Frame Finish 1~8": "U23_GW02",
     "Ring Frame 7-9": "U1_GW03",
     "Yarn Conditioning M/C": "U2_GW03",
     "MLDB3 Single Room Quarter": "U3_GW03",
@@ -155,18 +155,18 @@ function CustomTrend() {
     "Spare 1": "U7_GW03",
     Spare2: "U8_GW03",
     "Ring Frame 13-15": "U9_GW03",
-    "Auto Con-linker Conner M/S 10-12": "U10_GW03",
+    "Auto Con 10-18": "U10_GW03",
     "Baling Press": "U11_GW03",
     "Ring Frame 16-18": "U12_GW03",
     "Fiber Deposit Plant": "U13_GW03",
-    "MLDB2 Ring Con": "U14_GW03",
+    "MLDB2 Ring Con (Lighting)": "U14_GW03",
     "Deep Valve Turbine": "U15_GW03",
     "TF # 2": "U16_GW03",
     "Solar 1017 Kw": "U17_GW03",
     "PF Panel": "U18_GW03",
     "T/F 2": "U19_GW03",
     "T/F 1": "U20_GW03",
-    "Main Incomming": "U21_GW03",
+    "Mian Incoming (Unit 5)": "U21_GW03",
     "PDB 07 (Field)": "U22_GW03",
     "PDB 010 (Field)": "U23_GW03",
   };
@@ -214,24 +214,24 @@ function CustomTrend() {
 
   let filteredMeters = [];
   if (area === "HFO") {
-    filteredMeters = ["HFO 1", "O/G 2", "O/G 1", "HFO Aux", "I-GG", "Wapda 2"];
+    filteredMeters = ["HFO 1", "O/G 2 (Unit 5)", "O/G 1 (Unit 4)", "HFO Aux", "I-GG", "Wapda 2"];
   } else if (area === "HT_Room1") {
-    filteredMeters = ["P/H IC", "Wapda IC"];
+    filteredMeters = ["P/H IC (HFO)", "Wapda IC"];
   } else if (area === "HT_Room2") {
-    filteredMeters = ["T/F 1", "T/F 2"];
+    filteredMeters = ["T/F 1", "T/F 2", "Mian Incoming (Unit 5)"];
   } else if (area === "Unit 4 LT_1") {
     // All meters ending with PLC except HFO meters
     filteredMeters = Object.keys(meterMapping).filter(
       (key) =>
         meterMapping[key].endsWith("PLC") &&
-        !["HFO 1", "O/G 2", "O/G 1", "HFO Aux", "I-GG", "Wapda 2"].includes(key)
+        !["HFO 1", "O/G 2 (Unit 5)", "O/G 1 (Unit 4)", "HFO Aux", "I-GG", "Wapda 2"].includes(key)
     );
   } else if (area === "Unit 4 LT_2") {
     // All meters ending with GW01 except HT Room 1 meters
     filteredMeters = Object.keys(meterMapping).filter(
       (key) =>
         meterMapping[key].endsWith("GW01") &&
-        !["P/H IC", "Wapda IC"].includes(key)
+        !["P/H IC (HFO)", "Wapda IC"].includes(key)
     );
   } else if (area === "Unit 5 LT_1") {
     // All meters ending with GW02
@@ -242,7 +242,7 @@ function CustomTrend() {
     // All meters ending with GW03 except HT Room 2 meters
     filteredMeters = Object.keys(meterMapping).filter(
       (key) =>
-        meterMapping[key].endsWith("GW03") && !["T/F 1", "T/F 2"].includes(key)
+        meterMapping[key].endsWith("GW03") && !["T/F 1", "T/F 2", "Mian Incoming (Unit 5)"].includes(key)
     );
   }
 
@@ -887,13 +887,13 @@ function CustomTrend() {
                 value="HT_Room1"
                 className="dark:text-gray-300 dark:bg-gray-800"
               >
-                HT ROOM 1
+            Unit 4 HT Room
               </option>
               <option
                 value="HT_Room2"
                 className="dark:text-gray-300 dark:bg-gray-800"
               >
-                HT ROOM 2
+                Unit 5 HT Room
               </option>
               <option
                 // value="Unit 4 LT_1"

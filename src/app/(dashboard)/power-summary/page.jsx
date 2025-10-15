@@ -58,7 +58,7 @@ const PowerSummaryPage = () => {
         <div className="w-full flex flex-wrap gap-3 lg:gap-[0.7vw] lg:w-[49.5%]">
           <div className="w-full md:w-[23.7%] lg:w-[49.1%] ">
             <SingleValueDiv
-              title="WAPDA 1"
+              title="WAPDA IC"
               value={Number(powerSummaryData.Wapda1).toLocaleString("en-US")}
               loading={loading}
               unit="kWh"
