@@ -7,30 +7,37 @@ import Link from "next/link";
 const unit4MeterData = [
   {
     link: "U19_PLC",
-    title: "Diesel_JGS Incomming",
-    top: 198,
-    left: 103,
+    title: "Diesel+JGS Incomming",
+    top: 241,
+    left: 90,
     ltScheme: "LT_1",
   },
   {
     link: "U21_PLC",
-    title: "Wapda + HFO + JMS IC",
-    top: 198,
-    left: 219,
+    title: "Wapda + HFO + JMS Incomming",
+    top: 241,
+    left: 206,
     ltScheme: "LT_1",
   },
   {
     link: "U11_GW01",
-    title: "Diesel JGS Incomming",
-    top: 200,
-    left: 640,
+    title: "Diesel+JGS Incomming",
+    top: 244,
+    left: 570,
     ltScheme: "LT_2",
   },
   {
     link: "U13_GW01",
     title: "WAPDA + HFO + JMS Inomming",
-    top: 200,
-    left: 766,
+    top: 243,
+    left: 679,
+    ltScheme: "LT_2",
+  },
+  {
+    link: "U24_GW01",
+    title: "Solar 352.50Kw",
+    top: 243,
+    left: 810,
     ltScheme: "LT_2",
   },
 ];
@@ -43,40 +50,48 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U19_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_PLC_Voltage_Avg,
-      top: 205,
-      left: 109,
+      top: 248,
+      left: 97,
     },
     // wapda IC
     {
       activePowerTotalTag: roundedData?.U21_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U21_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U21_PLC_Voltage_Avg,
-      top: 205,
-      left: 226,
+      top: 248,
+      left: 212,
     },
     // power house
     {
       activePowerTotalTag: roundedData?.U11_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U11_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U11_GW01_Voltage_Avg,
-      top: 207.5,
-      left: 647,
+      top: 249,
+      left: 576,
     },
-    // wapda IC
+    // Wapda + HFO+ JMS Incomming
     {
       activePowerTotalTag: roundedData?.U13_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_GW01_Voltage_Avg,
-      top: 207.5,
-      left: 773,
+      top: 249,
+      left: 685,
     },
-    //Solar 352.50kw
+    // Solar 352.50Kw
+    {
+      activePowerTotalTag: roundedData?.U24_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U24_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U24_GW01_Voltage_Avg,
+      top: 249,
+      left: 816,
+    },
+    //Solar 52Kw
     {
       activePowerTotalTag: "--.--",
       activeCurrentAvgTag: "--.--",
       activeVoltageAvgTag: "--.--",
-      top: 208.5,
-      left: 944,
+      top: 249,
+      left: 951,
     },
   ];
 
@@ -109,27 +124,21 @@ const InitialSldUnit4 = ({ roundedData }) => {
           <Link
             key={meter.link}
             href={`/meter?area=Unit_4&page-type=sld&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
-            // onClick={() =>
-            //   router.push(
-            //     `/meter?area=Unit_4&page-type=sld&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
-            //   )
-            // }
             style={{
               position: "absolute",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              width: "70px",
-              height: "65px",
+              width: "61px",
+              height: "57px",
               zIndex: 100,
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
             }}
-            className={``}
           ></Link>
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../sld/unit-4-sld.png"
+          src="../../../sld/uni4main-new.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
@@ -140,10 +149,10 @@ const InitialSldUnit4 = ({ roundedData }) => {
           href={"/sld?area=Unit_4&LT_selections=LT_1"}
           className="absolute  cursor-pointer"
           style={{
-            width: "239px",
-            height: "40px",
-            top: "385px",
-            left: "77px",
+            width: "205px",
+            height: "33px",
+            top: "403px",
+            left: "85px",
           }}
         ></Link>
         <Link
@@ -151,10 +160,10 @@ const InitialSldUnit4 = ({ roundedData }) => {
           href={"/sld?area=Unit_4&LT_selections=LT_2"}
           className="absolute cursor-pointer"
           style={{
-            width: "239px",
-            height: "40px",
-            top: "385px",
-            left: "642px",
+            width: "205px",
+            height: "33px",
+            top: "403px",
+            left: "700px",
           }}
         ></Link>
 
@@ -164,27 +173,27 @@ const InitialSldUnit4 = ({ roundedData }) => {
             key={index}
             className="absolute flex flex-col items-center z-40"
             style={{
-              width: "44px",
-              height: "52px",
+              width: "38px",
+              height: "45px",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
             }}
           >
             <span
-              className="text-[11.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500, top: "1px" }}
+              className="text-[10px] font-fira-mono"
+              style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activePowerTotalTag || "00.00"}
             </span>
             <span
-              className="text-[11.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500, marginTop: "1px" }}
+              className="text-[10px] font-fira-mono"
+              style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeCurrentAvgTag || "00.00"}
             </span>
             <span
-              className="text-[11.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500, marginTop: "1px" }}
+              className="text-[10px] font-fira-mono"
+              style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeVoltageAvgTag || "00.00"}
             </span>

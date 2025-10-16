@@ -440,7 +440,7 @@ const energySummaryPage = () => {
                       htmlFor="startDate"
                       className="text-[13.51px] font-500 font-inter"
                     >
-                      WAPDA 1
+                      WAPDA IC
                     </label>
                     <input
                       type="number"
@@ -556,7 +556,7 @@ const energySummaryPage = () => {
                       htmlFor="endDate"
                       className="text-[13.51px] font-500 font-inter"
                     >
-                      Solar 1
+                      Solar 1236.39 Kw
                     </label>
                     <input
                       type="number"
@@ -574,7 +574,7 @@ const energySummaryPage = () => {
                       htmlFor="endDate"
                       className="text-[13.51px] font-500 font-inter"
                     >
-                      Solar 2
+                      Solar 1017 Kw
                     </label>
                     <input
                       type="number"

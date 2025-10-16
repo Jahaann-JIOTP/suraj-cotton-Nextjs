@@ -175,8 +175,10 @@ const LogDetails = () => {
 
       worksheet.mergeCells(2, Math.floor(columnCount / 2) + 1, 2, columnCount);
       const title2 = worksheet.getCell(2, Math.floor(columnCount / 2) + 1);
-      title2.value = `AREA: ${area?.toUpperCase().replace("_"," ")}${
-        area !== "hfo" && area !== "ht" ? " - LT: " + ltScheme.replace("_", " "):""
+      title2.value = `AREA: ${area?.toUpperCase().replace("_", " ")}${
+        area !== "hfo" && area !== "ht"
+          ? " - LT: " + ltScheme.replace("_", " ")
+          : ""
       }`;
       title2.font = { bold: false, size: 12, color: { argb: "000000" } };
       title2.alignment = { horizontal: "right", vertical: "middle" };
@@ -248,10 +250,15 @@ const LogDetails = () => {
           <div className="flex gap-3 items-center justify-end">
             <span className="text-[20px] font-semibold">
               Meter:{" "}
-              <span className="font-normal text-[#1D5999]">{meterName}</span>
+              <span className="font-normal text-[#1D5999]">
+                {meterName.toUpperCase()}
+              </span>
             </span>
             <span className="text-[20px] font-semibold">
-              Logs: <span className="font-normal text-[#1D5999]">{type}</span>
+              Logs:{" "}
+              <span className="font-normal text-[#1D5999]">
+                {type.replace("_", " ").toUpperCase()}
+              </span>
             </span>
           </div>
           <Breadcrumbs />

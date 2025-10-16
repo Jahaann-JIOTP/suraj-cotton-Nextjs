@@ -308,11 +308,6 @@ const Unit4Lt1 = ({ roundedData }) => {
         {lt1MeterData.map((meter) => (
           <Link
             key={meter.link}
-            // onClick={() =>
-            //   router.push(
-            //     `/meter?area=Unit_4&page-type=sld&LT_selections=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`
-            //   )
-            // }
             href={`/meter?area=Unit_4&page-type=sld&LT_selections=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`}
             style={{
               position: "absolute",
@@ -359,7 +354,7 @@ const Unit4Lt1 = ({ roundedData }) => {
             </span>
             <span
               className="text-[11.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500, marginTop: "-2px" }}
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "-1.7px" }}
             >
               {meter.activeVoltageAvgTag || "000"}
             </span>

@@ -8,97 +8,97 @@ const lt1MeterData = [
     link: "U1_GW03",
     title: "Ring Frame 7-9",
     top: 194,
-    left: 152,
+    left: 140,
   },
   {
     link: "U2_GW03",
     title: "Yarn conditioning M/C",
     top: 294,
-    left: 238,
+    left: 226,
   },
   {
     link: "U3_GW03",
     title: "MLDB3 single room quarter",
     top: 194,
-    left: 328,
+    left: 316,
   },
   {
     link: "U4_GW03",
     title: "Roving Transport System",
     top: 294,
-    left: 413,
+    left: 400,
   },
   {
     link: "U5_GW03",
     title: "Ring Frame 10-12",
     top: 194,
-    left: 503,
+    left: 490,
   },
   {
     link: "U6_GW03",
     title: "Spare 3",
     top: 290,
-    left: 600,
+    left: 587,
   },
   {
     link: "U7_GW03",
     title: "Spare 1",
     top: 203,
-    left: 698,
+    left: 685,
   },
   {
     link: "U8_GW03",
     title: "Spare 2",
     top: 292,
-    left: 782,
+    left: 769,
   },
   {
     link: "U9_GW03",
     title: "Ring Frame 13-15",
     top: 199,
-    left: 879,
+    left: 866,
   },
   {
     link: "U10_GW03",
     title: "Auto con (10-18)",
     top: 508,
-    left: 153,
+    left: 140,
   },
   {
     link: "U11_GW03",
     title: "Baling Press",
     top: 606,
-    left: 238,
+    left: 225,
   },
   {
     link: "U12_GW03",
     title: "Ring Frame 16-18",
     top: 508,
-    left: 330,
+    left: 317,
   },
   {
     link: "U13_GW03",
     title: "Fiber Deposit Plant",
     top: 606,
-    left: 413,
+    left: 400,
   },
   {
     link: "U14_GW03",
     title: "MLDB2 Ring con (Lighting)",
     top: 508,
-    left: 506,
+    left: 493,
   },
   {
     link: "U15_GW03",
     title: "Deep Valve Turbine",
     top: 606,
-    left: 610,
+    left: 597,
   },
   {
     link: "U18_GW03",
     title: "PF Panel",
     top: 514,
-    left: 710,
+    left: 697,
   },
 ];
 
@@ -276,7 +276,6 @@ const Unit5Lt4 = ({ roundedData }) => {
               borderRadius: "0.375rem", // rounded-md
               cursor: "pointer",
             }}
-            className={``}
           ></Link>
         ))}
         {/* Diagram Image */}
@@ -295,7 +294,6 @@ const Unit5Lt4 = ({ roundedData }) => {
               left: `${meter.left}px`,
               width: "42.5px",
               height: "51px",
-              border: "1px solid red",
             }}
             className={`absolute z-20 flex flex-col items-center`}
           >

@@ -347,7 +347,7 @@ const Unit4Lt2 = ({ roundedData }) => {
             </span>
             <span
               className="text-[11.5px]  font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500 }}
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "1px" }}
             >
               {meter.activeCurrentAvgTag || "000"}
             </span>

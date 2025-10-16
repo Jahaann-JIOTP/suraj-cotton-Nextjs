@@ -199,10 +199,9 @@ const MainSldOverview = ({ roundedData }) => {
               height: "55px",
               backgroundColor: "transparent",
               zIndex: 21,
-              borderRadius: "0.375rem", // rounded-md
+              borderRadius: "0.375rem",
               cursor: "pointer",
             }}
-            className={``}
           ></Link>
         ))}
         <img

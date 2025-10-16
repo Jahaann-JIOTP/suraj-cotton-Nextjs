@@ -34,21 +34,24 @@ function CustomTrend() {
 
   //============== unique color generation ==========================
 
-  function generateUniqueColors(count) {
-    const colors = new Set();
+  const predefinedColors = [
+    "#b4801fff",
+    "#1f77b4",
+    "#5B9486",
+    "#ff7f0e",
+    "#2ca02c",
+    "#B0C01A",
+    "#d62727ff",
+    "#FFB000",
+    "#8b043cff",
+  ];
 
-    while (colors.size < count) {
-      // generate random hex color
-      const color =
-        "#" +
-        Math.floor(Math.random() * 16777215) // full RGB range
-          .toString(16)
-          .padStart(6, "0");
-
-      colors.add(color); // set ensures uniqueness
-    }
-
-    return Array.from(colors);
+  function getMeterColors(meterList) {
+    const colorMap = {};
+    meterList.forEach((meter, index) => {
+      colorMap[meter] = predefinedColors[index % predefinedColors.length];
+    });
+    return colorMap;
   }
   //============== unique color generation ==========================
 
@@ -99,7 +102,7 @@ function CustomTrend() {
     "HFO Aux": "U25_PLC",
     "I-GG": "U26_PLC",
     "Wapda 2": "U27_PLC",
-    "Solar 352.50 kW" : "U24_GW01",
+    "Solar 352.50 kW": "U24_GW01",
     "A/C Back Process": "U1_GW01",
     "Weikel Cond": "U2_GW01",
     "Winding AC": "U3_GW01",
@@ -203,18 +206,20 @@ function CustomTrend() {
     "Harmonics I3": "Harmonics_I3_THD",
     "Active Energy Export": "ActiveEnergy_Exp_kWh",
   };
-  const meters = Object.keys(meterMapping); // all meter names
-  const uniqueColors = generateUniqueColors(meters.length);
-  // Create a mapping of meter -> unique color
+  const meters = Object.keys(meterMapping);
 
-  const colorMapping = {};
-  meters.forEach((meter, index) => {
-    colorMapping[meter] = uniqueColors[index];
-  });
+  const colorMapping = getMeterColors(meters);
 
   let filteredMeters = [];
   if (area === "HFO") {
-    filteredMeters = ["HFO 1", "O/G 2 (Unit 5)", "O/G 1 (Unit 4)", "HFO Aux", "I-GG", "Wapda 2"];
+    filteredMeters = [
+      "HFO 1",
+      "O/G 2 (Unit 5)",
+      "O/G 1 (Unit 4)",
+      "HFO Aux",
+      "I-GG",
+      "Wapda 2",
+    ];
   } else if (area === "HT_Room1") {
     filteredMeters = ["P/H IC (HFO)", "Wapda IC"];
   } else if (area === "HT_Room2") {
@@ -224,7 +229,14 @@ function CustomTrend() {
     filteredMeters = Object.keys(meterMapping).filter(
       (key) =>
         meterMapping[key].endsWith("PLC") &&
-        !["HFO 1", "O/G 2 (Unit 5)", "O/G 1 (Unit 4)", "HFO Aux", "I-GG", "Wapda 2"].includes(key)
+        ![
+          "HFO 1",
+          "O/G 2 (Unit 5)",
+          "O/G 1 (Unit 4)",
+          "HFO Aux",
+          "I-GG",
+          "Wapda 2",
+        ].includes(key)
     );
   } else if (area === "Unit 4 LT_2") {
     // All meters ending with GW01 except HT Room 1 meters
@@ -242,7 +254,8 @@ function CustomTrend() {
     // All meters ending with GW03 except HT Room 2 meters
     filteredMeters = Object.keys(meterMapping).filter(
       (key) =>
-        meterMapping[key].endsWith("GW03") && !["T/F 1", "T/F 2", "Mian Incoming (Unit 5)"].includes(key)
+        meterMapping[key].endsWith("GW03") &&
+        !["T/F 1", "T/F 2", "Mian Incoming (Unit 5)"].includes(key)
     );
   }
 
@@ -887,7 +900,7 @@ function CustomTrend() {
                 value="HT_Room1"
                 className="dark:text-gray-300 dark:bg-gray-800"
               >
-            Unit 4 HT Room
+                Unit 4 HT Room
               </option>
               <option
                 value="HT_Room2"

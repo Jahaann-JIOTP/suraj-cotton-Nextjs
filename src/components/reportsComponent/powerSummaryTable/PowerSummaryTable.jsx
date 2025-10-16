@@ -238,7 +238,7 @@ const PowerSummaryTable = ({
     let allTariffs = [];
     if (unit === "Unit_4" || unit === "ALL") {
       allTariffs.push(
-        `Wapda 1: ${tarifData.wapda1}`,
+        `Wapda IC: ${tarifData.wapda1}`,
         `Wapda 2: ${tarifData.wapda2}`
       );
     }
@@ -250,8 +250,8 @@ const PowerSummaryTable = ({
     );
     if (unit === "Unit_5" || unit === "ALL") {
       allTariffs.push(
-        `Solar 1: ${tarifData.solar1}`,
-        `Solar 2: ${tarifData.solar2}`
+        `Solar 1236.39 Kw: ${tarifData.solar1}`,
+        `Solar 1017 Kw: ${tarifData.solar2}`
       );
     }
     const tariffValuesRow = worksheet.addRow([allTariffs.join(" | ")]);
@@ -300,19 +300,19 @@ const PowerSummaryTable = ({
     const generationData = [];
     if (unit === "Unit_4" || unit === "ALL") {
       generationData.push([
-        "Wapda 1",
+        "Wapda IC",
         resData.wapda1,
         (resData.wapda1 * Number(tarifData.wapda1)).toFixed(1),
       ]);
     }
     if (unit === "Unit_5" || unit === "ALL") {
       generationData.push([
-        "Solar 1",
+        "Solar 1236.39 Kw",
         resData.solar1,
         ((resData.solar1 * Number(tarifData.solar1)) / 2).toFixed(1),
       ]);
       generationData.push([
-        "Solar 2",
+        "Solar 1017 Kw",
         resData.solar2,
         ((resData.solar2 * Number(tarifData.solar2)) / 2).toFixed(1),
       ]);
@@ -521,7 +521,7 @@ const PowerSummaryTable = ({
             {(unit === "Unit_4" || unit === "ALL") && (
               <>
                 <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-                  Wapda 1: {tarifData.wapda1}
+                  Wapda IC: {tarifData.wapda1}
                 </span>
                 <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
                   Wapda 2: {tarifData.wapda2}
@@ -544,10 +544,10 @@ const PowerSummaryTable = ({
             {(unit === "Unit_5" || unit === "ALL") && (
               <>
                 <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-                  Solar 1: {tarifData.solar1}
+                  Solar 1236.39 Kw: {tarifData.solar1}
                 </span>
                 <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-                  Solar 2: {tarifData.solar2}
+                  Solar 1017 Kw: {tarifData.solar2}
                 </span>
               </>
             )}
@@ -586,7 +586,7 @@ const PowerSummaryTable = ({
                   <>
                     <tr>
                       <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Wapda 1
+                        Wapda IC
                       </td>
                       <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {resData.wapda1}
@@ -658,7 +658,7 @@ const PowerSummaryTable = ({
                   <>
                     <tr>
                       <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Solar 1
+                        Solar 1236.39 Kw
                       </td>
                       <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {resData.solar1}
@@ -669,7 +669,7 @@ const PowerSummaryTable = ({
                     </tr>
                     <tr>
                       <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Solar 2
+                        Solar 1017 Kw
                       </td>
                       <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {resData.solar2}

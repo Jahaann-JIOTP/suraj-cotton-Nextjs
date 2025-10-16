@@ -100,11 +100,6 @@ const InitialSldUnit5 = ({ roundedData }) => {
         {unit4MeterData.map((meter) => (
           <Link
             key={meter.link}
-            // onClick={() =>
-            //   router.push(
-            //     `/meter?area=Unit_5&page-type=sld&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`
-            //   )
-            // }
             href={`/meter?area=Unit_5&page-type=sld&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
             style={{
               position: "absolute",

@@ -247,7 +247,7 @@ const EnergyComparison = () => {
         y: am5.percent(90),
         layout: root.horizontalLayout,
         marginTop: 0,
-        paddingLeft: isMobile ? 0 : 450,
+        paddingLeft: isMobile ? 0 : 320,
       })
     );
     mainLegend.itemContainers.template.setAll({
