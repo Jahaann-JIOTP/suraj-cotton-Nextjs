@@ -30,7 +30,7 @@ const lt1MeterData = [
   },
   {
     link: "U5_PLC",
-    title: "Power House",
+    title: "Power House (2nd Source Gas)",
     top: 274,
     left: 427,
   },
@@ -84,7 +84,7 @@ const lt1MeterData = [
   },
   {
     link: "U14_PLC",
-    title: "Compressor",
+    title: "Compressor (119kw)",
     top: 541,
     left: 342,
   },
@@ -96,7 +96,7 @@ const lt1MeterData = [
   },
   {
     link: "U16_PLC",
-    title: "Compressor 2",
+    title: "Compressor (303kw)",
     top: 541,
     left: 507,
   },
@@ -114,7 +114,7 @@ const lt1MeterData = [
   },
   {
     link: "U20_PLC",
-    title: "Compressor (Bypass)",
+    title: "Compressor (119kw)",
     top: 605,
     left: 773,
   },
@@ -130,7 +130,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U1_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U1_PLC_Voltage_Avg,
       top: 285,
-      left: 102,
+      left: 101,
     },
     // Unit 5 Aux
     {
@@ -138,7 +138,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U2_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U2_PLC_Voltage_Avg,
       top: 350,
-      left: 185,
+      left: 184,
     },
     // Lighting Outside
     {
@@ -146,7 +146,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U3_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U3_PLC_Voltage_Avg,
       top: 281,
-      left: 267,
+      left: 266,
     },
     // Lighting Inside
     {
@@ -178,7 +178,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U7_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_PLC_Voltage_Avg,
       top: 285,
-      left: 605,
+      left: 606,
     },
     // Drawing 1
     {
@@ -186,7 +186,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U8_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U8_PLC_Voltage_Avg,
       top: 350,
-      left: 687,
+      left: 688,
     },
     // Winding 1
     {
@@ -194,7 +194,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U9_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U9_PLC_Voltage_Avg,
       top: 285,
-      left: 777.5,
+      left: 778,
     },
 
     // Ring 1
@@ -203,38 +203,38 @@ const Unit4Lt1 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U10_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U10_PLC_Voltage_Avg,
       top: 350,
-      left: 893,
+      left: 894,
     },
     // Ring 5
     {
       activePowerTotalTag: roundedData?.U11_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U11_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U11_PLC_Voltage_BC,
-      top: 612,
-      left: 101,
+      top: 614,
+      left: 100,
     },
     // Ring 6
     {
       activePowerTotalTag: roundedData?.U12_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U12_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U12_PLC_Voltage_Avg,
-      top: 548,
-      left: 185,
+      top: 550,
+      left: 183,
     },
     // Comber 1
     {
       activePowerTotalTag: roundedData?.U13_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_PLC_Voltage_Avg,
-      top: 612,
-      left: 265.5,
+      top: 614,
+      left: 264.5,
     },
     // Compressor
     {
       activePowerTotalTag: roundedData?.U14_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U14_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U14_PLC_Voltage_BC,
-      top: 548,
+      top: 550,
       left: 348,
     },
     // Simplex 1
@@ -242,7 +242,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U15_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U15_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U15_PLC_Voltage_Avg,
-      top: 612,
+      top: 614,
       left: 430.5,
     },
     // Compressor 2
@@ -250,7 +250,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U16_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U16_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U16_PLC_Voltage_Avg,
-      top: 548,
+      top: 550,
       left: 513,
     },
     // Ring AC
@@ -258,7 +258,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U17_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U17_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U17_PLC_Voltage_Avg,
-      top: 612,
+      top: 614,
       left: 595,
     },
     // Ring AC (Bypass)
@@ -266,7 +266,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U18_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U18_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U18_PLC_Voltage_BC,
-      top: 548,
+      top: 550,
       left: 687,
     },
     // Compressor (Bypass)
@@ -274,7 +274,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U20_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U20_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U20_PLC_Voltage_Avg,
-      top: 612,
+      top: 614,
       left: 779,
     },
   ];
@@ -328,7 +328,7 @@ const Unit4Lt1 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../sld/Unit-4-lt1-sld.png"
+          src="../../../sld/unit4lt1-new.png"
           className=" h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
@@ -347,7 +347,7 @@ const Unit4Lt1 = ({ roundedData }) => {
           >
             <span
               className="text-[11.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500, marginTop: "-1.2px" }}
+              style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activePowerTotalTag || "000"}
             </span>
@@ -359,7 +359,7 @@ const Unit4Lt1 = ({ roundedData }) => {
             </span>
             <span
               className="text-[11.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500, marginTop: "-0.5px" }}
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "-2px" }}
             >
               {meter.activeVoltageAvgTag || "000"}
             </span>

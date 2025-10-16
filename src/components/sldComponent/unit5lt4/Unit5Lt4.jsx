@@ -60,7 +60,7 @@ const lt1MeterData = [
   },
   {
     link: "U10_GW03",
-    title: "Auto con-linker conner M/S 10-12",
+    title: "Auto con (10-18)",
     top: 508,
     left: 153,
   },
@@ -84,7 +84,7 @@ const lt1MeterData = [
   },
   {
     link: "U14_GW03",
-    title: "MLDB2 Ring con",
+    title: "MLDB2 Ring con (Lighting)",
     top: 508,
     left: 506,
   },
@@ -112,7 +112,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U1_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U1_GW03_Voltage_Avg,
       top: 202,
-      left: 159,
+      left: 147,
     },
     // yarn conditioning m/c
     {
@@ -120,7 +120,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U2_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U2_GW03_Voltage_Avg,
       top: 302,
-      left: 245,
+      left: 232,
     },
     // ml db 3 single room quarter
     {
@@ -128,7 +128,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U3_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U3_GW03_Voltage_Avg,
       top: 202,
-      left: 335,
+      left: 322,
     },
     // roving transport system
     {
@@ -136,7 +136,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U4_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U4_GW03_Voltage_Avg,
       top: 302,
-      left: 419,
+      left: 407,
     },
     // ring frame 10-12
     {
@@ -144,7 +144,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U5_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U5_GW03_Voltage_Avg,
       top: 201,
-      left: 510,
+      left: 497,
     },
     // comber mcs 1-14
     {
@@ -152,7 +152,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U6_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U6_GW03_Voltage_Avg,
       top: 298,
-      left: 607,
+      left: 595,
     },
     // spare
     {
@@ -160,7 +160,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U7_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_GW03_Voltage_Avg,
       top: 209,
-      left: 705,
+      left: 692,
     },
     // sapre 2
     {
@@ -168,7 +168,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U8_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U8_GW03_Voltage_Avg,
       top: 298.5,
-      left: 789,
+      left: 777,
     },
     // ring frame 13-15
     {
@@ -176,7 +176,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U9_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U9_GW03_Voltage_Avg,
       top: 206.5,
-      left: 885,
+      left: 873,
     },
     // auto con linker conner m/s 10-12
     {
@@ -184,7 +184,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U10_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U10_GW03_Voltage_Avg,
       top: 515,
-      left: 160,
+      left: 148,
     },
     // baling press
     {
@@ -192,7 +192,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U11_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U11_GW03_Voltage_Avg,
       top: 613,
-      left: 245,
+      left: 232,
     },
     // ring frame 16-18
     {
@@ -200,7 +200,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U12_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U12_GW03_Voltage_Avg,
       top: 515,
-      left: 337,
+      left: 324,
     },
     // fiber deposit plant
     {
@@ -208,7 +208,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U13_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_GW03_Voltage_Avg,
       top: 613,
-      left: 419,
+      left: 407,
     },
     // mldb ring con
     {
@@ -216,7 +216,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U14_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U14_GW03_Voltage_Avg,
       top: 515,
-      left: 512,
+      left: 499,
     },
     // deep valve turbine
     {
@@ -224,15 +224,15 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U15_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U15_GW03_Voltage_Avg,
       top: 613,
-      left: 616,
+      left: 604,
     },
     // PF Panel
     {
       activePowerTotalTag: roundedData?.U18_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U18_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U18_GW03_Voltage_Avg,
-      top: 522,
-      left: 717,
+      top: 521,
+      left: 704.5,
     },
   ];
 
@@ -281,7 +281,7 @@ const Unit5Lt4 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./sld/unit-5-lt2-sld.png"
+          src="./sld/unit5lt2-new.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
@@ -295,6 +295,7 @@ const Unit5Lt4 = ({ roundedData }) => {
               left: `${meter.left}px`,
               width: "42.5px",
               height: "51px",
+              border: "1px solid red",
             }}
             className={`absolute z-20 flex flex-col items-center`}
           >

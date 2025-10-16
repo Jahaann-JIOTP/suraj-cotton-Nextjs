@@ -54,7 +54,7 @@ const lt1MeterData = [
   },
   {
     link: "U15_GW02",
-    title: "AC Plant Spinning",
+    title: "AC Return Fan",
     top: 210,
     left: 901,
   },
@@ -72,7 +72,7 @@ const lt1MeterData = [
   },
   {
     link: "U18_GW02",
-    title: "Auto Con-linker Conner 1-9",
+    title: "Auto Con 1-9",
     top: 501,
     left: 270,
   },
@@ -90,7 +90,7 @@ const lt1MeterData = [
   },
   {
     link: "U21_GW02",
-    title: "Simplex M/C s1-5",
+    title: "Simplex M/C 1~6+1~5 Breaker Machines",
     top: 606,
     left: 536,
   },
@@ -102,7 +102,7 @@ const lt1MeterData = [
   },
   {
     link: "U23_GW02",
-    title: "Draw Frame Finish",
+    title: "Draw Frame Finish 1~8",
     top: 606,
     left: 712,
   },
@@ -112,125 +112,117 @@ const Unit5Lt3 = ({ roundedData }) => {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
   const unitl5Lt3MeterTags = [
-    // pf panel
-    {
-      activePowerTotalTag: roundedData?.U5_GW02_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U5_GW02_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U5_GW02_Voltage_Avg,
-      top: 213,
-      left: 101,
-    },
     // ring 1-3
     {
       activePowerTotalTag: roundedData?.U7_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U7_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_GW02_Voltage_Avg,
-      top: 310,
-      left: 190,
+      top: 305,
+      left: 151,
     },
-    // Ac plant spining
+    // Ac Supply fan
     {
       activePowerTotalTag: roundedData?.U8_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U8_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U8_GW02_Voltage_Avg,
-      top: 213,
-      left: 277,
+      top: 209,
+      left: 238,
     },
     // blow room l1
     {
       activePowerTotalTag: roundedData?.U9_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U9_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U9_GW02_Voltage_Avg,
-      top: 310,
-      left: 365,
+      top: 305,
+      left: 323,
     },
     // ring frames 4-6
     {
       activePowerTotalTag: roundedData?.U10_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U10_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U10_GW02_Voltage_Avg,
-      top: 213,
-      left: 453,
+      top: 209,
+      left: 410,
     },
     // a/c plant blowing
     {
       activePowerTotalTag: roundedData?.U11_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U11_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U11_GW02_Voltage_Avg,
-      top: 310,
-      left: 542,
+      top: 305,
+      left: 498,
     },
     // mldb1 blower room card
     {
       activePowerTotalTag: roundedData?.U12_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U12_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U12_GW02_Voltage_Avg,
-      top: 213,
-      left: 655,
+      top: 209,
+      left: 609,
     },
     // comber 1 to 14
     {
       activePowerTotalTag: roundedData?.U14_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U14_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U14_GW02_Voltage_Avg,
-      top: 316,
-      left: 776,
+      top: 311,
+      left: 728,
     },
     // ac plant spining
     {
       activePowerTotalTag: roundedData?.U15_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U15_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U15_GW02_Voltage_Avg,
-      top: 218,
-      left: 908,
+      top: 214,
+      left: 858,
     },
     // water chiller
     {
       activePowerTotalTag: roundedData?.U16_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U16_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U16_GW02_Voltage_Avg,
-      top: 508,
-      left: 100,
+      top: 500,
+      left: 169,
     },
     // card mc 8-14
     {
       activePowerTotalTag: roundedData?.U17_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U17_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U17_GW02_Voltage_Avg,
-      top: 612,
-      left: 189,
+      top: 603,
+      left: 256,
     },
     // card m/c 8-14
     {
       activePowerTotalTag: roundedData?.U18_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U18_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U18_GW02_Voltage_Avg,
-      top: 507,
-      left: 277,
+      top: 499,
+      left: 342,
     },
     // auto con-link corner 1-9
     {
       activePowerTotalTag: roundedData?.U19_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_GW02_Voltage_Avg,
-      top: 612,
-      left: 365,
+      top: 603,
+      left: 429,
     },
     // card mc 1-7
     {
       activePowerTotalTag: roundedData?.U20_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U20_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U20_GW02_Voltage_Avg,
-      top: 507,
-      left: 452,
+      top: 499,
+      left: 515,
     },
     // AC plant winding
     {
       activePowerTotalTag: roundedData?.U21_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U21_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U21_GW02_Voltage_Avg,
-      top: 612,
-      left: 542,
+      top: 603,
+      left: 604,
     },
 
     // simplex m/c s1-5
@@ -238,16 +230,16 @@ const Unit5Lt3 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U22_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U22_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U22_GW02_Voltage_Avg,
-      top: 507,
-      left: 630,
+      top: 499,
+      left: 690,
     },
     // spare 2
     {
       activePowerTotalTag: roundedData?.U23_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U23_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U23_GW02_Voltage_Avg,
-      top: 612,
-      left: 718,
+      top: 603,
+      left: 777.5,
     },
   ];
 
@@ -280,10 +272,8 @@ const Unit5Lt3 = ({ roundedData }) => {
       <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
         {lt1MeterData.map((meter) => (
           <Link
-
-          href={`/meter?area=Unit_5&page-type=sld&LT_selections=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`}
+            href={`/meter?area=Unit_5&page-type=sld&LT_selections=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`}
             key={meter.link}
-
             style={{
               position: "absolute",
               top: `${meter.top}px`,
@@ -299,7 +289,7 @@ const Unit5Lt3 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./sld/unit-5-lt1-sld.png"
+          src="./sld/unit5lt1-new.png"
           className=" h-full"
           style={{ width: "1100px" }}
           alt="unit 5 lt3 sld"

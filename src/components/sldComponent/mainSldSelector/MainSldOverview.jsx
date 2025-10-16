@@ -27,7 +27,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U23_PLC",
-    title: "O/G 2",
+    title: "O/G 2 (Unit 5)",
     top: 322,
     left: 179,
     area: "hfo",
@@ -35,7 +35,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U24_PLC",
-    title: "O/G 1",
+    title: "O/G 1 (Unit 4)",
     top: 322,
     left: 271,
     area: "hfo",
@@ -51,7 +51,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U21_GW03",
-    title: "Main Incomming",
+    title: "Main Incomming (Unit 5)",
     top: 449,
     left: 181,
     area: "ht",
@@ -76,7 +76,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U22_GW01",
-    title: "Power House IC",
+    title: "P/H IC (HFO)",
     top: 607,
     left: 795,
     area: "ht",
@@ -93,7 +93,6 @@ const mainOverviewMeterData = [
 ];
 
 const MainSldOverview = ({ roundedData }) => {
-
   const mainOverviewMeterTags = [
     // wapda 2
     {
@@ -190,7 +189,7 @@ const MainSldOverview = ({ roundedData }) => {
       <div className="relative mx-auto" style={{ width: "1200px" }}>
         {mainOverviewMeterData.map((meter) => (
           <Link
-          href={`/meter?area=${meter.area}&page-type=sld&LT_selections=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
+            href={`/meter?area=${meter.area}&page-type=sld&LT_selections=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
             key={meter.link}
             style={{
               position: "absolute",
@@ -207,7 +206,7 @@ const MainSldOverview = ({ roundedData }) => {
           ></Link>
         ))}
         <img
-          src="./sld/main-overview.png"
+          src="./sld/main-overview-new.png"
           alt="Main Overview"
           className="mx-auto"
           style={{ width: "1200px" }}
@@ -230,7 +229,7 @@ const MainSldOverview = ({ roundedData }) => {
               {meter.activePowerTotalTag || "000"}
             </span>
             <span
-              className="text-[10.2px] font-fira-mono mt-[-1.2px]"
+              className="text-[10.2px] font-fira-mono mt-[-1.5px]"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeCurrentAvgTag || "000"}
@@ -253,9 +252,9 @@ const MainSldOverview = ({ roundedData }) => {
             left: "151px",
             top: "948px",
             width: "314px",
-            display:"flex",
-            alignItems:"center",
-            justifyContent:"center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             fontSize: "20px",
             fontWeight: 700,
           }}
@@ -265,7 +264,7 @@ const MainSldOverview = ({ roundedData }) => {
 
         <Link
           className="absolute font-inter bg-white text-[#2e2d2d] cursor-pointer"
-          href={"/sld?area=Unit_4" }
+          href={"/sld?area=Unit_4"}
           style={{
             border: "1px dotted darkgray",
             left: "738px",
@@ -273,9 +272,9 @@ const MainSldOverview = ({ roundedData }) => {
             top: "948px",
             height: "38px",
             fontSize: "20px",
-            display:"flex",
-            alignItems:"center",
-            justifyContent:"center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             fontWeight: 700,
           }}
         >

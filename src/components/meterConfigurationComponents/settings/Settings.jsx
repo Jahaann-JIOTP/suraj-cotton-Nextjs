@@ -5,12 +5,32 @@ import Swal from "sweetalert2";
 
 // Meters with display name and ID
 const meters = [
-  { name: "PDB1 CD1 + PDB 08", id: "U1_GW02" },
-  { name: "PDB2 CD2 + Card PDB 01", id: "U2_GW02" },
+  {
+    name: "PDB1 CD1 + PDB 08",
+    id: "U1_GW02",
+    u4buttonText: "LT2-Card 1-8",
+    u5buttonText: "LT1-Comber M/C 1-14",
+  },
+  {
+    name: "PDB2 CD2 + Card PDB 01",
+    id: "U2_GW02",
+    u4buttonText: "LT2-Card9-14+1Breaker",
+    u5buttonText: "LT1-Card M/C 8-14",
+  },
   // { name: "Card PDB 01", id: "U3_GW02" },
   // { name: "PDB 08", id: "U4_GW02" },
-  { name: "PDB 07", id: "U22_GW03" },
-  { name: "PDB 10", id: "U23_GW03" },
+  {
+    name: "PDB 07",
+    id: "U22_GW03",
+    u4buttonText: "LT1-Ring 21-24",
+    u5buttonText: "LT1-Auto Cone 1-9",
+  },
+  {
+    name: "PDB 10",
+    id: "U23_GW03",
+    u4buttonText: "LT2-Ring 5-8",
+    u5buttonText: "LT2-Auto Cone 10-18",
+  },
 ];
 
 const Settings = () => {
@@ -206,9 +226,16 @@ const Settings = () => {
           boxShadow: "5px 5px 25px 10px rgba(0,0,0,0.1)",
         }}
       >
-        <div className="flex items-center justify-between pr-15">
-          <span className="text-[20px] text-[#1F5897]">Source</span>
-          <span className="text-[20px] text-[#1F5897]">Area</span>
+        <div className="flex items-center justify-between">
+          <span className="text-[20px] font-inter text-[#1F5897]">METERS</span>
+          <div className="w-[50%] flex items-center justify-around">
+            <span className="text-[20px] font-inter text-[#1F5897]">
+              Unit 4
+            </span>
+            <span className="text-[20px] font-inter text-[#1F5897]">
+              Unit 5
+            </span>
+          </div>
         </div>
         <div className="w-full h-[2px] mt-3 mb-3 bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
         {meters.map((meter, index) => (
@@ -216,34 +243,37 @@ const Settings = () => {
             key={index}
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4 last:border-b-0"
           >
-            <span className="text-[16px] font-semibold text-gray-700 dark:text-gray-200">
-              {meter.name}
-            </span>
+            <div className="w-[50%]">
+              <span className="text-[16px] font-semibold text-gray-700 dark:text-gray-200">
+                {meter.name}
+              </span>
+            </div>
 
-            <div className="flex gap-4">
+            <div className="w-[50%] flex gap-4 justify-between">
               <button
                 onClick={() => {
                   handleToggle(meter.id, 4);
                 }}
-                className={`px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 ${
+                className={`px-4 py-2 text-[15px] rounded-md w-[15rem] cursor-pointer transition-all duration-300 ${
                   selectedUnits[meter.id] === 4
                     ? "bg-[#1A68B2] text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-[#cae5ff]"
                 }`}
               >
-                Unit 4
+                {meter.u4buttonText}
               </button>
+
               <button
                 onClick={() => {
                   handleToggle(meter.id, 5);
                 }}
-                className={`px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 ${
+                className={`px-4 py-2 rounded-md w-[15rem] cursor-pointer transition-all duration-300 ${
                   selectedUnits[meter.id] === 5
                     ? "bg-[#1A68B2] text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-[#cae5ff]"
                 }`}
               >
-                Unit 5
+                {meter.u5buttonText}
               </button>
             </div>
           </div>
