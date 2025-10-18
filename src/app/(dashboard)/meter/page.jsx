@@ -46,7 +46,7 @@ const page = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            area:finalArea,
+            area: finalArea,
 
             meterId: id,
           }),
@@ -556,7 +556,7 @@ const page = () => {
 
       <div className="flex w-full mb-5 md:mb-auto items-center justify-center">
         <div
-          className="flex flex-col md:flex-row items-center justify-center gap-1 rounded-sm bg-[#F9FAFB] dark:bg-[#f9fafb6c] p-1"
+          className="flex flex-col md:flex-row items-center justify-center gap-1 rounded-sm bg-[#F9FAFB] dark:bg-[#f9fafb2c] p-1"
           style={{
             boxShadow:
               "0 -4px 30px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.2)",

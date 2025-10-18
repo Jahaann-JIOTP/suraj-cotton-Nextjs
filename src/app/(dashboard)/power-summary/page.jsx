@@ -175,9 +175,9 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%]">
           <SingleValueDiv
             title="Solar 352.50 kW"
-            value={Number(
-              powerSummaryData.solarunit4 || 0
-            ).toLocaleString("en-US")}
+            value={Number(powerSummaryData.solarunit4 || 0).toLocaleString(
+              "en-US"
+            )}
             loading={loading}
             unit="kWh"
             height="6rem"

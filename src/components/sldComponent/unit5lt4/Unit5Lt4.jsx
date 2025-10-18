@@ -44,19 +44,19 @@ const lt1MeterData = [
     link: "U7_GW03",
     title: "Spare 1",
     top: 203,
-    left: 685,
+    left: 699,
   },
-  {
-    link: "U8_GW03",
-    title: "Spare 2",
-    top: 292,
-    left: 769,
-  },
+  // {
+  //   link: "U8_GW03",
+  //   title: "Spare 2",
+  //   top: 292,
+  //   left: 769,
+  // },
   {
     link: "U9_GW03",
     title: "Ring Frame 13-15",
-    top: 199,
-    left: 866,
+    top: 289,
+    left: 819,
   },
   {
     link: "U10_GW03",
@@ -160,23 +160,23 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U7_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_GW03_Voltage_Avg,
       top: 209,
-      left: 692,
+      left: 705,
     },
     // sapre 2
-    {
-      activePowerTotalTag: roundedData?.U8_GW03_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U8_GW03_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U8_GW03_Voltage_Avg,
-      top: 298.5,
-      left: 777,
-    },
+    // {
+    //   activePowerTotalTag: roundedData?.U8_GW03_ActivePower_Total,
+    //   activeCurrentAvgTag: roundedData?.U8_GW03_Current_Avg,
+    //   activeVoltageAvgTag: roundedData?.U8_GW03_Voltage_Avg,
+    //   top: 298.5,
+    //   left: 777,
+    // },
     // ring frame 13-15
     {
       activePowerTotalTag: roundedData?.U9_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U9_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U9_GW03_Voltage_Avg,
-      top: 206.5,
-      left: 873,
+      top: 296.5,
+      left: 825,
     },
     // auto con linker conner m/s 10-12
     {
@@ -184,7 +184,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U10_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U10_GW03_Voltage_Avg,
       top: 515,
-      left: 148,
+      left: 147,
     },
     // baling press
     {
@@ -280,7 +280,7 @@ const Unit5Lt4 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./sld/unit5lt2-new.png"
+          src="./sld/unit5lt2.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
@@ -299,7 +299,7 @@ const Unit5Lt4 = ({ roundedData }) => {
           >
             <span
               className="text-[11.5px] mt-[-0.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500 }}
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "0.7px" }}
             >
               {meter.activePowerTotalTag || "000"}
             </span>

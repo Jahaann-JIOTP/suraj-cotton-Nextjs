@@ -22,6 +22,104 @@ const PowerSummaryTable = ({
   const dgTarif = Number(tarifData.wapda1);
   const solar1Tarif = Number(tarifData.solar1);
   const solar2Tarif = Number(tarifData.solar2);
+  // optimized code
+  const convertTrafiToNumber = (obj) => {
+    const result = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (typeof value === "string") {
+        const num = Number(value);
+        result[key] = isNaN(num) ? value : num;
+      } else {
+        result[key] = value;
+      }
+    }
+    return result;
+  };
+  const tarifInNumbers = convertTrafiToNumber(tarifData);
+  // Define which keys belong to which unit
+  const allTr = {
+    wapda1: 1,
+    wapda2: 22,
+    jms: 32,
+    niigata: 15,
+    gg: 18,
+    dg: 42,
+    solar1: 62,
+    solar2: 33,
+  };
+  const u4Tr = {
+    wapda1: 80,
+    wapda2: 99,
+    jms: 76,
+    niigata: 65,
+    gg: 44,
+    dg: 34,
+  };
+  const u5Tr = {
+    wapda2: 29,
+    jms: 92,
+    niigata: 48,
+    solar1: 74,
+    solar2: 67,
+  };
+  const unitKeys = {
+    u4: ["wapda1", "wapda2", "jms", "niigata", "gg", "dg"],
+    u5: ["wapda2", "jms", "niigata", "solar1", "solar2"],
+  };
+
+  function calculateAverageTariff(area, tariffObject) {
+    switch (area) {
+      case "Unit_4":
+      case "Unit_5":
+        // For single units, just calculate average of all keys in the object
+        const values = Object.values(tariffObject);
+        const avg = values.reduce((sum, val) => sum + val, 0) / values.length;
+        return {
+          [`unit${area.slice(-1)}`]: avg,
+          all: avg,
+        };
+
+      case "all":
+        // For 'all' area, we need to separate u4 keys and u5 keys from the object
+        const u4Values = [];
+        const u5Values = [];
+        const allValues = Object.values(tariffObject);
+
+        // Separate values based on unit keys
+        for (const [key, value] of Object.entries(tariffObject)) {
+          if (unitKeys.u4.includes(key)) {
+            u4Values.push(value);
+          }
+          if (unitKeys.u5.includes(key)) {
+            u5Values.push(value);
+          }
+        }
+
+        // Calculate averages
+        const avgU4 =
+          u4Values.reduce((sum, val) => sum + val, 0) / u4Values.length;
+        const avgU5 =
+          u5Values.reduce((sum, val) => sum + val, 0) / u5Values.length;
+        const avgAll =
+          allValues.reduce((sum, val) => sum + val, 0) / allValues.length;
+
+        return {
+          unit4: avgU4,
+          unit5: avgU5,
+          all: avgAll,
+        };
+
+      default:
+        return null;
+    }
+  }
+  const unit4Tr = calculateAverageTariff("Unit_4", u4Tr);
+  const unit5Tr = calculateAverageTariff("Unit_5", u5Tr);
+  const allAvgTr = calculateAverageTariff("all", allTr);
+  console.log("Unti 4 Tarif", unit4Tr);
+  console.log("Unti 5 Tarif", unit5Tr);
+  console.log("All Tarif", allAvgTr);
+  //--------------------------------------------------
   const unit4AverageTarif =
     (wapda1Tarif + wapda2Tarif + niigataTarif + jmsTarif + ggTarif + dgTarif) /
     6;
@@ -245,13 +343,13 @@ const PowerSummaryTable = ({
     allTariffs.push(
       `Niigata: ${tarifData.niigata}`,
       `JMS 1: ${tarifData.jms}`,
-      `GG: ${tarifData.gg}`,
-      `DG: ${tarifData.dg}`
+      `Diesel+JGS Incomming: ${tarifData.gg}`,
+      `Diesel+JGS Incomming: ${tarifData.dg}`
     );
     if (unit === "Unit_5" || unit === "ALL") {
       allTariffs.push(
-        `Solar 1236.39 Kw: ${tarifData.solar1}`,
-        `Solar 1017 Kw: ${tarifData.solar2}`
+        `Solar 1236.39 kW: ${tarifData.solar1}`,
+        `Solar 1017 kW: ${tarifData.solar2}`
       );
     }
     const tariffValuesRow = worksheet.addRow([allTariffs.join(" | ")]);
@@ -307,12 +405,12 @@ const PowerSummaryTable = ({
     }
     if (unit === "Unit_5" || unit === "ALL") {
       generationData.push([
-        "Solar 1236.39 Kw",
+        "Solar 1236.39 kW",
         resData.solar1,
         ((resData.solar1 * Number(tarifData.solar1)) / 2).toFixed(1),
       ]);
       generationData.push([
-        "Solar 1017 Kw",
+        "Solar 1017 kW",
         resData.solar2,
         ((resData.solar2 * Number(tarifData.solar2)) / 2).toFixed(1),
       ]);
@@ -330,7 +428,7 @@ const PowerSummaryTable = ({
     ]);
     generationData.push(["Average Unit Cost", "", averageUnitcost.toFixed(1)]);
 
-    addTable("Generation", ["Resources", "KW", "Cost"], generationData);
+    addTable("Generation", ["Resources", "kWh", "Cost"], generationData);
 
     // PRODUCTION TABLE
     const productionData = [];
@@ -360,7 +458,7 @@ const PowerSummaryTable = ({
 
     addTable(
       "Production",
-      ["Plant", "No. of Bags", "Kw/Bags", "Cost/Bags"],
+      ["Plant", "No. of Bags", "kW/Bags", "Cost/Bags"],
       productionData
     );
 
@@ -386,7 +484,7 @@ const PowerSummaryTable = ({
       (resData.total_consumption / 8).toFixed(1),
     ]);
 
-    addTable("Consumption", ["Resources", "KW", "Cost"], consumptionData);
+    addTable("Consumption", ["Resources", "kWh", "Cost"], consumptionData);
 
     // MISCELLANEOUS TABLE
     const miscellaneousData = [];
@@ -403,7 +501,7 @@ const PowerSummaryTable = ({
       (resData.unaccountable_energy / 2).toFixed(1),
     ]);
 
-    addTable("Miscellaneous", ["Resources", "KW", "Cost"], miscellaneousData);
+    addTable("Miscellaneous", ["Resources", "kWh", "Cost"], miscellaneousData);
 
     // TRANSFORMER LOSSES TABLE (only for Unit_5 or ALL)
     if (unit === "Unit_5" || unit === "ALL") {
@@ -421,7 +519,7 @@ const PowerSummaryTable = ({
 
       addTable(
         "Trans. / Traffo Losses",
-        ["Resources", "KW", "Cost"],
+        ["Resources", "kWh", "Cost"],
         transformerData
       );
     }
@@ -435,7 +533,7 @@ const PowerSummaryTable = ({
           maxLength = columnLength;
         }
       });
-      column.width = Math.min(Math.max(maxLength + 2, 10), 30);
+      column.width = Math.min(Math.max(maxLength + 2, 10), 25);
     });
 
     // Generate Excel file
@@ -544,10 +642,10 @@ const PowerSummaryTable = ({
             {(unit === "Unit_5" || unit === "ALL") && (
               <>
                 <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-                  Solar 1236.39 Kw: {tarifData.solar1}
+                  Solar 1236.39 kW: {tarifData.solar1}
                 </span>
                 <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-                  Solar 1017 Kw: {tarifData.solar2}
+                  Solar 1017 kW: {tarifData.solar2}
                 </span>
               </>
             )}
@@ -574,7 +672,7 @@ const PowerSummaryTable = ({
                     Resources
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
-                    KW
+                    kWh
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     Cost
@@ -583,31 +681,30 @@ const PowerSummaryTable = ({
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {(unit === "Unit_4" || unit === "ALL") && (
-                  <>
-                    <tr>
-                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Wapda IC
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        {resData.wapda1}
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        {wapda1Cost.toFixed(1)}
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Wapda 2
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        0
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        {0 * tarifData.wapda2}
-                      </td>
-                    </tr>
-                  </>
+                  <tr>
+                    <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
+                      Wapda IC
+                    </td>
+                    <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
+                      {resData.wapda1}
+                    </td>
+                    <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
+                      {wapda1Cost.toFixed(1)}
+                    </td>
+                  </tr>
+                )}
+                {(unit === "Unit_4" || unit === "Unit_5" || unit === "ALL") && (
+                  <tr>
+                    <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
+                      Wapda 2
+                    </td>
+                    <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
+                      0
+                    </td>
+                    <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
+                      {0 * tarifData.wapda2}
+                    </td>
+                  </tr>
                 )}
                 <tr>
                   <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
@@ -622,7 +719,7 @@ const PowerSummaryTable = ({
                 </tr>
                 <tr>
                   <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                    JMS 1
+                    JMS
                   </td>
                   <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     0
@@ -631,34 +728,38 @@ const PowerSummaryTable = ({
                     0
                   </td>
                 </tr>
-                <tr>
-                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                    GG
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    0
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    0
-                  </td>
-                </tr>
-                <tr>
-                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                    DG
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    0
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    0
-                  </td>
-                </tr>
+                {(unit === "Unit_4" || unit === "ALL") && (
+                  <>
+                    <tr>
+                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
+                        Diesel+JGS Incomming
+                      </td>
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
+                        0
+                      </td>
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
+                        0
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
+                        Diesel+JGS Incomming
+                      </td>
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
+                        0
+                      </td>
+                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
+                        0
+                      </td>
+                    </tr>
+                  </>
+                )}
 
                 {(unit === "Unit_5" || unit === "ALL") && (
                   <>
                     <tr>
                       <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Solar 1236.39 Kw
+                        Solar 1236.39 kW
                       </td>
                       <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {resData.solar1}
@@ -669,7 +770,7 @@ const PowerSummaryTable = ({
                     </tr>
                     <tr>
                       <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Solar 1017 Kw
+                        Solar 1017 kW
                       </td>
                       <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                         {resData.solar2}
@@ -724,7 +825,7 @@ const PowerSummaryTable = ({
                     No. of Bags
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
-                    Kw/Bags
+                    kW/Bags
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     Cost/Bags
@@ -800,7 +901,7 @@ const PowerSummaryTable = ({
                     Resources
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
-                    KW
+                    kWh
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     Cost
@@ -876,7 +977,7 @@ const PowerSummaryTable = ({
                     Resources
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
-                    KW
+                    kWh
                   </th>
                   <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                     Cost
@@ -929,7 +1030,7 @@ const PowerSummaryTable = ({
                       Resources
                     </th>
                     <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
-                      KW
+                      kWh
                     </th>
                     <th className="text-center text-[12px] font-inter font-semibold w-[25%] border-1 border-gray-300">
                       Cost

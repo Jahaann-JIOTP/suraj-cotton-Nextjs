@@ -434,47 +434,65 @@ const energySummaryPage = () => {
             </div>
             <div className="flex w-full items-center lg:pl-5  gap-5 flex-wrap">
               {(unit === "Unit_4" || unit === "ALL") && (
+                <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
+                  <label
+                    htmlFor="startDate"
+                    className="text-[13.51px] font-500 font-inter"
+                  >
+                    WAPDA IC
+                  </label>
+                  <input
+                    type="number"
+                    value={tarifData.wapda1}
+                    id="wapda1"
+                    name="wapda1"
+                    required={true}
+                    placeholder="00"
+                    onChange={handleChange}
+                    className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                  />
+                </div>
+              )}
+              {(unit === "Unit_5" || unit === "Unit_4" || unit === "ALL") && (
+                <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
+                  <label
+                    htmlFor="endDate"
+                    className="text-[13.51px] font-500 font-inter"
+                  >
+                    WAPDA 2
+                  </label>
+                  <input
+                    type="number"
+                    value={tarifData.wapda2}
+                    id="wapda2"
+                    name="wapda2"
+                    required={true}
+                    placeholder="00"
+                    onChange={handleChange}
+                    className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
+                  />
+                </div>
+              )}
+              {(unit === "Unit_5" || unit === "Unit_4" || unit === "ALL") && (
                 <>
-                  <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
-                    <label
-                      htmlFor="startDate"
-                      className="text-[13.51px] font-500 font-inter"
-                    >
-                      WAPDA IC
-                    </label>
-                    <input
-                      type="number"
-                      value={tarifData.wapda1}
-                      id="wapda1"
-                      name="wapda1"
-                      required={true}
-                      placeholder="00"
-                      onChange={handleChange}
-                      className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                    />
-                  </div>
                   <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                     <label
                       htmlFor="endDate"
                       className="text-[13.51px] font-500 font-inter"
                     >
-                      WAPDA 2
+                      JMS
                     </label>
                     <input
                       type="number"
-                      value={tarifData.wapda2}
-                      id="wapda2"
-                      name="wapda2"
+                      value={tarifData.jms}
+                      id="jms"
+                      name="jms"
                       required={true}
                       placeholder="00"
                       onChange={handleChange}
                       className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                     />
                   </div>
-                </>
-              )}
-              {(unit === "Unit_5" || unit === "Unit_4" || unit === "ALL") && (
-                <>
                   <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                     <label
                       htmlFor="endDate"
@@ -493,30 +511,16 @@ const energySummaryPage = () => {
                       className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
                     />
                   </div>
+                </>
+              )}
+              {(unit === "Unit_4" || unit === "ALL") && (
+                <>
                   <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
                     <label
                       htmlFor="endDate"
                       className="text-[13.51px] font-500 font-inter"
                     >
-                      JMS 1
-                    </label>
-                    <input
-                      type="number"
-                      value={tarifData.jms}
-                      id="jms"
-                      name="jms"
-                      required={true}
-                      placeholder="00"
-                      onChange={handleChange}
-                      className="w-full lg:w-[80%] outline-none border-1 border-gray-300 dark:border-gray-500 rounded px-3 py-1"
-                    />
-                  </div>
-                  <div className="flex flex-col w-full md:w-[31%] lg:w-[32%] items-start justify-start gap-1">
-                    <label
-                      htmlFor="endDate"
-                      className="text-[13.51px] font-500 font-inter"
-                    >
-                      GG
+                      Diesel+JGS Incomming
                     </label>
                     <input
                       type="number"
@@ -534,7 +538,7 @@ const energySummaryPage = () => {
                       htmlFor="endDate"
                       className="text-[13.51px] font-500 font-inter"
                     >
-                      DG
+                      Diesel+JGS Incomming
                     </label>
                     <input
                       type="number"

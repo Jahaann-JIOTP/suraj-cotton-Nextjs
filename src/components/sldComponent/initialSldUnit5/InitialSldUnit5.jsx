@@ -7,30 +7,30 @@ import Link from "next/link";
 const unit4MeterData = [
   {
     link: "U6_GW02",
-    title: "Solar 1236.39 Kw",
+    title: "Solar 1284.55 Kw",
     top: 310,
-    left: 226,
+    left: 219,
     ltScheme: "LT_1",
   },
   {
     link: "U13_GW02",
     title: "T/F 1",
     top: 310,
-    left: 388,
+    left: 381,
     ltScheme: "LT_1",
   },
   {
     link: "U16_GW03",
     title: "T/F 2",
     top: 310,
-    left: 637,
+    left: 630,
     ltScheme: "LT_2",
   },
   {
     link: "U17_GW03",
-    title: "Solar 1017 Kw",
+    title: "Solar 1066.985 Kw",
     top: 310,
-    left: 798,
+    left: 791,
     ltScheme: "LT_2",
   },
 ];
@@ -44,7 +44,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U6_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U6_GW02_Voltage_Avg,
       top: 320,
-      left: 233.5,
+      left: 225,
     },
     // TF #1
     {
@@ -52,7 +52,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U13_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_GW02_Voltage_Avg,
       top: 320,
-      left: 395,
+      left: 389,
     },
     // TF #2
     {
@@ -60,7 +60,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U16_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U16_GW03_Voltage_Avg,
       top: 320,
-      left: 644,
+      left: 637,
     },
     // Solar 2
     {
@@ -68,7 +68,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U17_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U17_GW03_Voltage_Avg,
       top: 320,
-      left: 806,
+      left: 798,
     },
   ];
 
@@ -116,7 +116,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./sld/unit-5-sld.png"
+          src="./sld/unit5main.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
@@ -127,7 +127,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
           href={"/sld?area=Unit_5&LT_selections=LT_1"}
           className="absolute top-[548px] left-[193px] w-[301px] h-[44px] cursor-pointer"
           style={{
-            left: "210px",
+            left: "202px",
             top: "545px",
             height: "45px",
             width: "276px",
@@ -137,7 +137,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
           href={"/sld?area=Unit_5&LT_selections=LT_2"}
           className="absolute cursor-pointer"
           style={{
-            left: "620px",
+            left: "613px",
             top: "545px",
             height: "45px",
             width: "276px",

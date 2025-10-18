@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { ImArrowLeft2 } from "react-icons/im";
 
-
 const page = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -33,13 +32,13 @@ const page = () => {
     energy: [{ paramtype: "active_energy", top: 122 }],
   };
   const selectedButtons = buttonConfigs[type] || [];
- 
+
   return (
-    <div className="w-full bg-white p-5 h-[81vh] rounded-md border-t-3 border-[#1F5897] overflow-auto">
+    <div className="w-full bg-white dark:bg-gray-800 p-5 h-[81vh] rounded-md border-t-3 border-[#1F5897] overflow-auto">
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col items-start pb-4">
-        <h1 className="font-semibold text-2xl font-inter">Logs</h1>
-        <Breadcrumbs />
+          <h1 className="font-semibold text-2xl font-inter">Logs</h1>
+          <Breadcrumbs />
         </div>
         <button
           onClick={() => router.back()}
@@ -64,7 +63,7 @@ const page = () => {
           </span>
         </button>
       </div>
-      
+
       <div className="relative w-[1200px] flex items-start justify-center flex-col mx-auto">
         <div className="w-full flex items-center justify-center">
           <img src={`../../../${type}-logs.png`} alt="Voltage logs" />

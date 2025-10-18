@@ -35,9 +35,16 @@ const unit4MeterData = [
   },
   {
     link: "U24_GW01",
-    title: "Solar 352.50Kw",
+    title: "Solar 352.50kW",
     top: 243,
     left: 810,
+    ltScheme: "LT_2",
+  },
+  {
+    link: "U28_PLC",
+    title: "Solar 52.17kW",
+    top: 243,
+    left: 944,
     ltScheme: "LT_2",
   },
 ];
@@ -51,7 +58,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U19_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_PLC_Voltage_Avg,
       top: 248,
-      left: 97,
+      left: 96,
     },
     // wapda IC
     {
@@ -66,7 +73,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U11_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U11_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U11_GW01_Voltage_Avg,
-      top: 249,
+      top: 250,
       left: 576,
     },
     // Wapda + HFO+ JMS Incomming
@@ -74,7 +81,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U13_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_GW01_Voltage_Avg,
-      top: 249,
+      top: 250,
       left: 685,
     },
     // Solar 352.50Kw
@@ -82,16 +89,16 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U24_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U24_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U24_GW01_Voltage_Avg,
-      top: 249,
+      top: 250,
       left: 816,
     },
     //Solar 52Kw
     {
-      activePowerTotalTag: "--.--",
-      activeCurrentAvgTag: "--.--",
-      activeVoltageAvgTag: "--.--",
-      top: 249,
-      left: 951,
+      activePowerTotalTag: roundedData?.U28_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U28_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U28_PLC_Voltage_Avg,
+      top: 250,
+      left: 950,
     },
   ];
 
@@ -138,7 +145,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../sld/uni4main-new.png"
+          src="../../../sld/uni4main.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
