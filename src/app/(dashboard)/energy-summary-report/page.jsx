@@ -31,8 +31,8 @@ const energySummaryPage = () => {
     wapda2: "",
     niigata: "",
     jms: "",
-    gg: "",
-    dg: "",
+    lt1DieselJgs: "",
+    lt2DieselJgs: "",
     solar1: "",
     solar2: "",
   });
@@ -230,16 +230,16 @@ const energySummaryPage = () => {
               // setUnit("");
               // setStartDate("");
               // setEndDate("");
-              // setTarifData({
-              //   wapda1: "",
-              //   wapda2: "",
-              //   niigata: "",
-              //   jms: "",
-              //   gg: "",
-              //   dg: "",
-              //   solar1: "",
-              //   solar2: "",
-              // });
+              setTarifData({
+                wapda1: "",
+                wapda2: "",
+                niigata: "",
+                jms: "",
+                lt1DieselJgs: "",
+                lt2DieselJgs: "",
+                solar1: "",
+                solar2: "",
+              });
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -524,9 +524,9 @@ const energySummaryPage = () => {
                     </label>
                     <input
                       type="number"
-                      value={tarifData.gg}
-                      id="gg"
-                      name="gg"
+                      value={tarifData.lt1DieselJgs}
+                      id="lt1DieselJgs"
+                      name="lt1DieselJgs"
                       required={true}
                       placeholder="00"
                       onChange={handleChange}
@@ -542,9 +542,9 @@ const energySummaryPage = () => {
                     </label>
                     <input
                       type="number"
-                      value={tarifData.dg}
-                      id="dg"
-                      name="dg"
+                      value={tarifData.lt2DieselJgs}
+                      id="lt2DieselJgs"
+                      name="lt2DieselJgs"
                       required={true}
                       placeholder="00"
                       onChange={handleChange}

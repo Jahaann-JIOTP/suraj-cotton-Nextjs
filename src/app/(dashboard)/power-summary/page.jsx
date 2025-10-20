@@ -11,7 +11,7 @@ const PowerSummaryPage = () => {
   const [loading, setLoading] = useState(false);
   const [powerSummaryTimePeriod, setPowerSummaryTimePeriod] = useState("today");
   const { startDate, endDate } = getDateRangeFromString(powerSummaryTimePeriod);
-
+  console.log("........", powerSummaryData);
   const fetchPowerSummaryData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -59,7 +59,9 @@ const PowerSummaryPage = () => {
           <div className="w-full md:w-[23.7%] lg:w-[49.1%] ">
             <SingleValueDiv
               title="WAPDA IC"
-              value={Number(powerSummaryData.Wapda1).toLocaleString("en-US")}
+              value={Number(powerSummaryData.Wapda1 || 0).toLocaleString(
+                "en-US"
+              )}
               loading={loading}
               unit="kWh"
               height="6rem"
@@ -68,7 +70,9 @@ const PowerSummaryPage = () => {
           <div className="w-full md:w-[23.7%] lg:w-[49.1%] ">
             <SingleValueDiv
               title="WAPDA 2"
-              value={Number(powerSummaryData.Wapda2).toLocaleString("en-US")}
+              value={Number(powerSummaryData.Wapda2 || 0).toLocaleString(
+                "en-US"
+              )}
               loading={loading}
               unit="kWh"
               height="6rem"
@@ -77,7 +81,9 @@ const PowerSummaryPage = () => {
           <div className="w-full md:w-[23.7%] lg:w-[49.1%] ">
             <SingleValueDiv
               title="Niigata HFO"
-              value={Number(powerSummaryData.Niigata).toLocaleString("en-US")}
+              value={Number(powerSummaryData.Niigata || 0).toLocaleString(
+                "en-US"
+              )}
               loading={loading}
               unit="kWh"
               height="6rem"
@@ -86,7 +92,7 @@ const PowerSummaryPage = () => {
           <div className="w-full md:w-[23.7%] lg:w-[49.1%] ">
             <SingleValueDiv
               title="JMS"
-              value={Number(powerSummaryData.JMS).toLocaleString("en-US")}
+              value={Number(powerSummaryData.JMS || 0).toLocaleString("en-US")}
               loading={loading}
               unit="kWh"
               height="6rem"
@@ -154,25 +160,25 @@ const PowerSummaryPage = () => {
       </div>
       {/* fourth section first of small divs */}
       <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
-        <div className="w-full md:w-[23%] lg:w-[24.3%]">
+        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
           <SingleValueDiv
-            title="Solar 1236.39 kW"
+            title="Solar 1184.55 kW"
             loading={loading}
             value={Number(powerSummaryData.Solar1 || 0).toLocaleString("en-US")}
             unit="kWh"
             height="6rem"
           />
         </div>
-        <div className="w-full md:w-[23%] lg:w-[24.3%]">
+        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
           <SingleValueDiv
-            title="Solar 1017 kW"
+            title="Solar 1066.985 kW"
             value={Number(powerSummaryData.Solar2 || 0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
             height="6rem"
           />
         </div>
-        <div className="w-full md:w-[23%] lg:w-[24.3%]">
+        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
           <SingleValueDiv
             title="Solar 352.50 kW"
             value={Number(powerSummaryData.solarunit4 || 0).toLocaleString(
@@ -183,7 +189,18 @@ const PowerSummaryPage = () => {
             height="6rem"
           />
         </div>
-        <div className="w-full md:w-[23%] lg:w-[24.3%]">
+        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
+          <SingleValueDiv
+            title="Solar 52.17 kW"
+            value={Number(powerSummaryData.solar52 || 0).toLocaleString(
+              "en-US"
+            )}
+            loading={loading}
+            unit="kWh"
+            height="6rem"
+          />
+        </div>
+        <div className="w-full md:w-[18.5%] lg:w-[19%]">
           <SingleValueDiv
             title="Diesel and Gas Genset"
             value={Number(
@@ -200,7 +217,9 @@ const PowerSummaryPage = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="WAPDA Energy Export"
-            value={Number(powerSummaryData.Wapdaexport).toLocaleString("en-US")}
+            value={Number(powerSummaryData.Wapdaexport || 0).toLocaleString(
+              "en-US"
+            )}
             loading={loading}
             unit="kWh"
             height="6rem"
@@ -235,7 +254,7 @@ const PowerSummaryPage = () => {
           <SingleValueDiv
             title="HT Transmission Losses"
             value={Number(
-              powerSummaryData.HT_Transmissioin_Losses
+              powerSummaryData.HT_Transmissioin_Losses || 0
             ).toLocaleString("en-US")}
             unit="kWh"
             loading={loading}

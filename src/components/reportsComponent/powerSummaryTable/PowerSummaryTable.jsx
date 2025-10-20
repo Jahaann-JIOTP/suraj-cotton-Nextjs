@@ -14,162 +14,229 @@ const PowerSummaryTable = ({
   startTime,
   endTime,
 }) => {
-  const wapda1Tarif = Number(tarifData.wapda1);
-  const wapda2Tarif = Number(tarifData.wapda1);
-  const niigataTarif = Number(tarifData.wapda1);
-  const jmsTarif = Number(tarifData.wapda1);
-  const ggTarif = Number(tarifData.wapda1);
-  const dgTarif = Number(tarifData.wapda1);
-  const solar1Tarif = Number(tarifData.solar1);
-  const solar2Tarif = Number(tarifData.solar2);
-  // optimized code
-  const convertTrafiToNumber = (obj) => {
-    const result = {};
-    for (const [key, value] of Object.entries(obj)) {
-      if (typeof value === "string") {
-        const num = Number(value);
-        result[key] = isNaN(num) ? value : num;
-      } else {
-        result[key] = value;
-      }
-    }
-    return result;
-  };
-  const tarifInNumbers = convertTrafiToNumber(tarifData);
-  // Define which keys belong to which unit
-  const allTr = {
-    wapda1: 1,
-    wapda2: 22,
-    jms: 32,
-    niigata: 15,
-    gg: 18,
-    dg: 42,
-    solar1: 62,
-    solar2: 33,
-  };
-  const u4Tr = {
-    wapda1: 80,
-    wapda2: 99,
-    jms: 76,
-    niigata: 65,
-    gg: 44,
-    dg: 34,
-  };
-  const u5Tr = {
-    wapda2: 29,
-    jms: 92,
-    niigata: 48,
-    solar1: 74,
-    solar2: 67,
-  };
+  const { theme } = useTheme();
+
+  // Convert tariff values safely to numbers
+  const convertTariffToNumber = (obj) =>
+    Object.fromEntries(
+      Object.entries(obj).map(([k, v]) => [k, isNaN(Number(v)) ? 0 : Number(v)])
+    );
+
+  const tarif = convertTariffToNumber(tarifData);
+
+  // Define source keys by unit
   const unitKeys = {
-    u4: ["wapda1", "wapda2", "jms", "niigata", "gg", "dg"],
+    u4: ["wapda1", "wapda2", "jms", "niigata", "lt1DieselJgs", "lt2DieselJgs"],
     u5: ["wapda2", "jms", "niigata", "solar1", "solar2"],
   };
 
-  function calculateAverageTariff(area, tariffObject) {
-    switch (area) {
-      case "Unit_4":
-      case "Unit_5":
-        // For single units, just calculate average of all keys in the object
-        const values = Object.values(tariffObject);
-        const avg = values.reduce((sum, val) => sum + val, 0) / values.length;
-        return {
-          [`unit${area.slice(-1)}`]: avg,
-          all: avg,
-        };
+  // Compute average tariff
+  const calculateAverageTariff = (unitType) => {
+    const getAvg = (keys) =>
+      keys.reduce((sum, key) => sum + (tarif[key] || 0), 0) / keys.length;
 
-      case "all":
-        // For 'all' area, we need to separate u4 keys and u5 keys from the object
-        const u4Values = [];
-        const u5Values = [];
-        const allValues = Object.values(tariffObject);
+    if (unitType === "Unit_4") return { unit4: getAvg(unitKeys.u4) };
+    if (unitType === "Unit_5") return { unit5: getAvg(unitKeys.u5) };
 
-        // Separate values based on unit keys
-        for (const [key, value] of Object.entries(tariffObject)) {
-          if (unitKeys.u4.includes(key)) {
-            u4Values.push(value);
-          }
-          if (unitKeys.u5.includes(key)) {
-            u5Values.push(value);
-          }
-        }
+    // ALL
+    return {
+      unit4: getAvg(unitKeys.u4),
+      unit5: getAvg(unitKeys.u5),
+      all:
+        Object.values(tarif).reduce((sum, v) => sum + v, 0) /
+        Object.values(tarif).length,
+    };
+  };
 
-        // Calculate averages
-        const avgU4 =
-          u4Values.reduce((sum, val) => sum + val, 0) / u4Values.length;
-        const avgU5 =
-          u5Values.reduce((sum, val) => sum + val, 0) / u5Values.length;
-        const avgAll =
-          allValues.reduce((sum, val) => sum + val, 0) / allValues.length;
+  const avgTariff = calculateAverageTariff(unit);
+  const unit4Avg = avgTariff.unit4 || 0;
+  const unit5Avg = avgTariff.unit5 || 0;
+  const allAvg = avgTariff.all || 0;
 
-        return {
-          unit4: avgU4,
-          unit5: avgU5,
-          all: avgAll,
-        };
+  // === Dynamically Select Generation Sources ===
+  const getGenerationKeys = () => {
+    if (unit === "Unit_4") return unitKeys.u4;
+    if (unit === "Unit_5") return unitKeys.u5;
+    // For ALL, combine both without duplicates
+    return [...new Set([...unitKeys.u4, ...unitKeys.u5])];
+  };
 
-      default:
-        return null;
-    }
-  }
-  const unit4Tr = calculateAverageTariff("Unit_4", u4Tr);
-  const unit5Tr = calculateAverageTariff("Unit_5", u5Tr);
-  const allAvgTr = calculateAverageTariff("all", allTr);
-  console.log("Unti 4 Tarif", unit4Tr);
-  console.log("Unti 5 Tarif", unit5Tr);
-  console.log("All Tarif", allAvgTr);
-  //--------------------------------------------------
-  const unit4AverageTarif =
-    (wapda1Tarif + wapda2Tarif + niigataTarif + jmsTarif + ggTarif + dgTarif) /
-    6;
-  const unit5AverageTarif =
-    (wapda1Tarif + wapda2Tarif + niigataTarif + jmsTarif + ggTarif + dgTarif) /
-    6;
-  const allAverageTarif =
-    (wapda1Tarif +
-      wapda2Tarif +
-      wapda1Tarif +
-      wapda2Tarif +
-      niigataTarif +
-      jmsTarif +
-      ggTarif +
-      dgTarif) /
-    8;
-  const { theme } = useTheme();
+  const selectedKeys = getGenerationKeys();
 
-  // generation cost
-  const wapda1Cost = resData.wapda1 * wapda1Tarif;
-  const solar1Cost = resData.solar1 * solar1Tarif;
-  const solar2Cost = resData.solar2 * solar2Tarif;
-  const totalCost = wapda1Cost + solar1Cost + solar2Cost;
-  const avgUnitCost = totalCost / resData.total_generation;
-  // consumption
-  const unit4Cost = resData.unit4_consumption * unit4AverageTarif;
-  const unit5Cost = resData.unit5_consumption * unit5AverageTarif;
-  const totalconsumption = unit4Cost + unit5Cost;
-  // Miscellaneous
-  const wapdaExportCost = resData.wapdaexport * unit4AverageTarif;
-  const unAccountableEnergyCost =
-    resData.unaccountable_energy * allAverageTarif;
-  // production
+  // Label mapping for readable names
+  const labelMap = {
+    wapda1: "WAPDA 1",
+    wapda2: "WAPDA 2",
+    jms: "JMS",
+    niigata: "Niigata",
+    lt1DieselJgs: "LT1 Diesel JGS",
+    lt2DieselJgs: "LT2 Diesel JGS",
+    solar1: "Solar 1",
+    solar2: "Solar 2",
+  };
+
+  // Generate generation array dynamically based on selected unit
+  const generation = selectedKeys.map((key) => {
+    const consumption = resData[key] || 0;
+    const cost = consumption * (tarif[key] || 0);
+    return { label: labelMap[key] || key, consumption, cost };
+  });
+
+  const totalGenCost = generation.reduce((sum, g) => sum + g.cost, 0);
+  const totalGenConsumption = generation.reduce(
+    (sum, g) => sum + g.consumption,
+    0
+  );
+  const avgUnitCost = totalGenCost / (resData.total_generation || 1);
+
+  generation.push({
+    label: "Total",
+    consumption: totalGenConsumption,
+    cost: totalGenCost,
+  });
+
+  // === Consumption ===
+  const consumption = [
+    {
+      label: "Unit 4 Consumption",
+      consumption: resData.unit4_consumption || 0,
+      cost: (resData.unit4_consumption || 0) * unit4Avg,
+    },
+    {
+      label: "Unit 5 Consumption",
+      consumption: resData.unit5_consumption || 0,
+      cost: (resData.unit5_consumption || 0) * unit5Avg,
+    },
+  ];
+
+  const totalConsumption = consumption.reduce((s, c) => s + c.consumption, 0);
+  const totalConsumptionCost = consumption.reduce((s, c) => s + c.cost, 0);
+  consumption.push({
+    label: "Total",
+    consumption: totalConsumption,
+    cost: totalConsumptionCost,
+  });
+
+  // === Miscellaneous ===
+  const miscellaneous = [
+    {
+      label: "WAPDA Export",
+      consumption: resData.wapdaexport || 0,
+      cost: (resData.wapdaexport || 0) * unit4Avg,
+    },
+    {
+      label: "Unaccountable Energy",
+      consumption: resData.unaccountable_energy || 0,
+      cost: (resData.unaccountable_energy || 0) * allAvg,
+    },
+  ];
+
+  const totalMiscConsumption = miscellaneous.reduce(
+    (s, c) => s + c.consumption,
+    0
+  );
+  const totalMiscCost = miscellaneous.reduce((s, c) => s + c.cost, 0);
+  miscellaneous.push({
+    label: "Total",
+    consumption: totalMiscConsumption,
+    cost: totalMiscCost,
+  });
+
+  // === Production (per spindle) ===
+  // === Production (per spindle) ===
   const unit4SpindlePerKw = unit4Spindle
-    ? resData.unit4_consumption / unit4Spindle
+    ? (resData.unit4_consumption || 0) / unit4Spindle
     : 0;
   const unit5SpindlePerKw = unit5Spindle
-    ? resData.unit5_consumption / unit5Spindle
+    ? (resData.unit5_consumption || 0) / unit5Spindle
     : 0;
-  const unit4SpindleCost = unit4SpindlePerKw * unit4AverageTarif;
-  const unit5SpindleCost = unit5SpindlePerKw * unit5AverageTarif;
-  const totalSpindlePerKw = unit4SpindlePerKw + unit5SpindlePerKw;
-  const totalSpindlecost = unit4SpindleCost + unit5SpindleCost;
-  // Trans. / Traffo Losses
-  const tf1Cost = resData.trafo1Loss * unit5AverageTarif;
-  const tf2Cost = resData.trafo2Loss * unit5AverageTarif;
-  const tf3Cost = resData.trafo3Loss * unit5AverageTarif;
-  const tf4Cost = resData.trafo4Loss * unit5AverageTarif;
-  const totalTfCost = tf1Cost + tf2Cost + tf3Cost + tf4Cost;
-  // ///////////////
+
+  // Create base data for both units
+  const baseProduction = [
+    {
+      label: "Unit 4",
+      spindles: unit4Spindle || 0,
+      spindlePerKw: unit4SpindlePerKw,
+      spindleCost: unit4SpindlePerKw * unit4Avg,
+    },
+    {
+      label: "Unit 5 Production",
+      spindles: unit5Spindle || 0,
+      spindlePerKw: unit5SpindlePerKw,
+      spindleCost: unit5SpindlePerKw * unit5Avg,
+    },
+  ];
+
+  let production = [];
+  let totalSpindles = 0;
+  let totalSpindlePerKw = 0;
+  let totalSpindleCost = 0;
+
+  if (unit === "Unit_4") {
+    const u4 = baseProduction[0];
+    production = [u4];
+    totalSpindles = u4.spindles;
+    totalSpindlePerKw = u4.spindlePerKw;
+    totalSpindleCost = u4.spindleCost;
+  } else if (unit === "Unit_5") {
+    const u5 = baseProduction[1];
+    production = [u5];
+    totalSpindles = u5.spindles;
+    totalSpindlePerKw = u5.spindlePerKw;
+    totalSpindleCost = u5.spindleCost;
+  } else {
+    // ALL Units
+    production = [...baseProduction];
+    totalSpindles = production.reduce((s, p) => s + p.spindles, 0);
+    totalSpindlePerKw = production.reduce((s, p) => s + p.spindlePerKw, 0);
+    totalSpindleCost = production.reduce((s, p) => s + p.spindleCost, 0);
+  }
+
+  // Add Total Row (common for all cases)
+  production.push({
+    label: "Total",
+    spindles: totalSpindles,
+    spindlePerKw: totalSpindlePerKw,
+    spindleCost: totalSpindleCost,
+  });
+
+  // === Transformer Losses ===
+  const traffoKeys = ["trafo1Loss", "trafo2Loss", "trafo3Loss", "trafo4Loss"];
+  const traffoLosses = traffoKeys.map((key, i) => ({
+    label: `Trafo ${i + 1}`,
+    consumption: resData[key] || 0,
+    cost: (resData[key] || 0) * unit5Avg,
+  }));
+
+  const totalTraffoConsumption = traffoLosses.reduce(
+    (s, t) => s + t.consumption,
+    0
+  );
+  const totalTraffoCost = traffoLosses.reduce((s, t) => s + t.cost, 0);
+  traffoLosses.push({
+    label: "Total",
+    consumption: totalTraffoConsumption,
+    cost: totalTraffoCost,
+  });
+
+  // === Final Structured Data ===
+  const powerSummaryData = {
+    generation,
+    consumption,
+    production,
+    miscellaneous,
+    traffoLosses,
+    totals: {
+      totalGenCost,
+      avgUnitCost,
+      totalConsumptionCost,
+      totalMiscCost,
+      totalSpindleCost,
+      totalTraffoCost,
+    },
+  };
+
+  console.log(powerSummaryData);
 
   // ////////----------------------------------------------
   const getImageBuffer = async (imageUrl) => {
@@ -182,7 +249,9 @@ const PowerSummaryTable = ({
       return null;
     }
   };
-
+  // ================================================
+  // EXCEL EXPORT (uses powerSummaryData structure)
+  // ================================================
   const exportToExcel = async ({
     unit,
     startDate,
@@ -194,12 +263,12 @@ const PowerSummaryTable = ({
     unit4Spindle,
     unit5Spindle,
     theme,
+    powerSummaryData,
   }) => {
-    // Create a new workbook
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Energy Summary Report");
 
-    // Set worksheet properties
+    // ---- Basic setup ----
     worksheet.properties.defaultGridColor = false;
     worksheet.views = [{ showGridLines: false }];
     worksheet.pageSetup.margins = {
@@ -211,24 +280,19 @@ const PowerSummaryTable = ({
       footer: 0.3,
     };
 
-    // Define styles
+    // ---- Styles ----
     const titleStyle = {
-      font: { bold: true, size: 12, color: { argb: "00000000" } }, // White text
+      font: { bold: true, size: 12, color: { argb: "00000000" } },
       alignment: { horizontal: "center", vertical: "middle" },
-      fill: {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "E5F3FD" }, // Dark blue background
-      },
+      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "E5F3FD" } },
     };
-
     const headerStyle = {
-      font: { bold: true, size: 11, color: { argb: "FFFFFFFF" } }, // White text
+      font: { bold: true, size: 11, color: { argb: "FFFFFFFF" } },
       alignment: { horizontal: "center", vertical: "middle" },
       fill: {
         type: "pattern",
         pattern: "solid",
-        fgColor: { argb: "FF1A68B2" }, // Dark blue background
+        fgColor: { argb: "FF1A68B2" },
       },
       border: {
         top: { style: "thin", color: { argb: "FFFFFFFF" } },
@@ -237,7 +301,6 @@ const PowerSummaryTable = ({
         right: { style: "thin", color: { argb: "FFFFFFFF" } },
       },
     };
-
     const dataStyle = {
       font: { size: 11 },
       alignment: { vertical: "middle", horizontal: "center" },
@@ -248,17 +311,14 @@ const PowerSummaryTable = ({
         right: { style: "thin", color: { argb: "FF000000" } },
       },
     };
-
     const boldDataStyle = {
       ...dataStyle,
       font: { ...dataStyle.font, bold: true },
     };
-
     const leftAlignStyle = {
       ...dataStyle,
       alignment: { horizontal: "left", vertical: "middle", indent: 1 },
     };
-
     // Add logos
     try {
       const logo1Path = "../../../suraj-cotton-logo.png";
@@ -272,7 +332,7 @@ const PowerSummaryTable = ({
         });
         worksheet.addImage(image1Id, {
           tl: { col: 0, row: 0 },
-          ext: { width: 150, height: 70 },
+          ext: { width: 130, height: 60 },
         });
       }
 
@@ -283,37 +343,29 @@ const PowerSummaryTable = ({
           extension: "png",
         });
         worksheet.addImage(image2Id, {
-          tl: { col: 2, row: 0.5 },
-          ext: { width: 170, height: 40 },
+          tl: { col: 2.8, row: 0.5 },
+          ext: { width: 140, height: 35 },
         });
       }
     } catch (error) {
       console.error("Error adding logos:", error);
     }
+
+    // ---- Header section ----
     const dateRow = worksheet.getRow(4);
     dateRow.getCell(1).value = `Start Date: ${startDate} - ${startTime}`;
     dateRow.getCell(3).value = `End Date: ${endDate} - ${endTime}`;
-    dateRow.getCell(1).style = { font: { size: 11 } };
-    dateRow.getCell(3).style = {
-      font: { size: 11 },
-      alignment: { horizontal: "right", vertical: "middle" },
-    };
     const titleRow = worksheet.getRow(5);
-    titleRow.getCell(1).value = `Energy Summary Reports of ${
-      unit === "Unit_4"
-        ? "Unit 4"
-        : unit === "Unit_5"
-        ? "Unit 5"
-        : unit === "ALL"
-        ? "Unit 4 and Unit 5"
-        : ""
+    titleRow.getCell(1).value = `Energy Summary Report - ${
+      unit === "Unit_4" ? "Unit 4" : unit === "Unit_5" ? "Unit 5" : "Unit 4 & 5"
     }`;
     worksheet.mergeCells(5, 1, 5, 3);
     titleRow.getCell(1).style = {
       font: { bold: true, size: 14 },
       alignment: { horizontal: "center" },
     };
-    titleRow.height = 20;
+    worksheet.addRow([]);
+
     const secondRow = worksheet.getRow(4);
     secondRow.getCell(1).border = {
       top: { style: "thin", color: { argb: "FF000000" } },
@@ -328,215 +380,81 @@ const PowerSummaryTable = ({
 
     worksheet.addRow([]);
 
-    const tariffHeaderRow = worksheet.addRow(["Tariff Rates"]);
-    tariffHeaderRow.getCell(1).style = {
-      font: { size: 12, bold: true },
-      alignment: { horizontal: "left" },
-    };
-    let allTariffs = [];
-    if (unit === "Unit_4" || unit === "ALL") {
-      allTariffs.push(
-        `Wapda IC: ${tarifData.wapda1}`,
-        `Wapda 2: ${tarifData.wapda2}`
-      );
-    }
-    allTariffs.push(
-      `Niigata: ${tarifData.niigata}`,
-      `JMS 1: ${tarifData.jms}`,
-      `Diesel+JGS Incomming: ${tarifData.gg}`,
-      `Diesel+JGS Incomming: ${tarifData.dg}`
-    );
-    if (unit === "Unit_5" || unit === "ALL") {
-      allTariffs.push(
-        `Solar 1236.39 kW: ${tarifData.solar1}`,
-        `Solar 1017 kW: ${tarifData.solar2}`
-      );
-    }
-    const tariffValuesRow = worksheet.addRow([allTariffs.join(" | ")]);
-    worksheet.mergeCells(8, 1, 8, 3); // Merge cells A9:H9
-    tariffValuesRow.getCell(1).style = {
-      font: { size: 11 },
-      alignment: { horizontal: "left" },
-    };
-
-    worksheet.addRow([]);
-
-    // Helper function to add a table
+    // ---- Helper function to add a table ----
     const addTable = (title, headers, data) => {
-      // Add title row
       const titleRow = worksheet.addRow([title]);
       worksheet.mergeCells(titleRow.number, 1, titleRow.number, headers.length);
       titleRow.getCell(1).style = titleStyle;
-      titleRow.height = 20;
-
-      // Add header row
       const headerRow = worksheet.addRow(headers);
-      headerRow.eachCell((cell) => {
-        cell.style = headerStyle;
-      });
-      headerRow.height = 20;
+      headerRow.eachCell((c) => (c.style = headerStyle));
 
-      // Add data rows
-      data.forEach((rowData) => {
-        const row = worksheet.addRow(rowData);
-        row.eachCell((cell, colNumber) => {
-          // Apply different styles based on content
-          if (rowData[0] === "Total" || rowData[0] === "Average Unit Cost") {
-            cell.style = boldDataStyle;
-          } else if (colNumber === 1) {
-            cell.style = leftAlignStyle;
-          } else {
-            cell.style = dataStyle;
-          }
+      data.forEach((row) => {
+        const r = worksheet.addRow(row);
+        r.eachCell((cell, i) => {
+          if (row[0] === "Total") cell.style = boldDataStyle;
+          else if (i === 1) cell.style = leftAlignStyle;
+          else cell.style = dataStyle;
         });
-        row.height = 20;
       });
       worksheet.addRow([]);
     };
 
-    // GENERATION TABLE
-    const generationData = [];
-    if (unit === "Unit_4" || unit === "ALL") {
-      generationData.push([
-        "Wapda IC",
-        resData.wapda1,
-        (resData.wapda1 * Number(tarifData.wapda1)).toFixed(1),
-      ]);
-    }
-    if (unit === "Unit_5" || unit === "ALL") {
-      generationData.push([
-        "Solar 1236.39 kW",
-        resData.solar1,
-        ((resData.solar1 * Number(tarifData.solar1)) / 2).toFixed(1),
-      ]);
-      generationData.push([
-        "Solar 1017 kW",
-        resData.solar2,
-        ((resData.solar2 * Number(tarifData.solar2)) / 2).toFixed(1),
-      ]);
-    }
-
-    const totalGenerationCost =
-      wapda1Cost + solar1Cost + solar2Cost; /* your calculation */
-    const averageUnitcost = totalCost / resData.total_generation;
-    /* your calculation */
-
-    generationData.push([
-      "Total",
-      resData.total_generation,
-      totalGenerationCost.toFixed(1),
+    // ---- GENERATION ----
+    const generationData = powerSummaryData.generation.map((g) => [
+      g.label,
+      g.consumption,
+      g.cost,
     ]);
-    generationData.push(["Average Unit Cost", "", averageUnitcost.toFixed(1)]);
+    addTable("Generation", ["Source", "kWh", "Cost"], generationData);
 
-    addTable("Generation", ["Resources", "kWh", "Cost"], generationData);
-
-    // PRODUCTION TABLE
-    const productionData = [];
-    if (unit === "Unit_4" || unit === "ALL") {
-      productionData.push([
-        "Unit 4",
-        unit4Spindle,
-        (resData.unit4_consumption / unit4Spindle).toFixed(2),
-        unit4SpindleCost.toFixed(2),
-      ]);
-    }
-    if (unit === "Unit_5" || unit === "ALL") {
-      productionData.push([
-        "Unit 5",
-        unit5Spindle,
-        (resData.unit5_consumption / unit5Spindle).toFixed(2),
-        unit5SpindleCost.toFixed(2),
-      ]);
-    }
-    productionData.push([
-      "Total",
-      unit4Spindle + unit5Spindle,
-      // ((unit4Spindle + unit5Spindle) / resData.total_consumption).toFixed(2),
-      totalSpindlePerKw.toFixed(2),
-      totalSpindlecost.toFixed(2),
+    // ---- CONSUMPTION ----
+    const consumptionData = powerSummaryData.consumption.map((c) => [
+      c.label,
+      c.consumption,
+      c.cost,
     ]);
+    addTable("Consumption", ["Unit", "kWh", "Cost"], consumptionData);
 
+    // ---- PRODUCTION ----
+    const productionData = powerSummaryData.production.map((p) => [
+      p.label,
+      p.spindles,
+      p.spindlePerKw,
+      p.spindleCost,
+    ]);
     addTable(
       "Production",
-      ["Plant", "No. of Bags", "kW/Bags", "Cost/Bags"],
+      ["Plant", "Spindles", "kW/Spindle", "Cost/Spindle"],
       productionData
     );
 
-    // CONSUMPTION TABLE
-    const consumptionData = [];
-    if (unit === "Unit_4" || unit === "ALL") {
-      consumptionData.push([
-        "Unit 4",
-        resData.unit4_consumption,
-        (resData.unit4_consumption / 4).toFixed(1),
-      ]);
-    }
-    if (unit === "Unit_5" || unit === "ALL") {
-      consumptionData.push([
-        "Unit 5",
-        resData.unit5_consumption,
-        (resData.unit5_consumption / 4).toFixed(1),
-      ]);
-    }
-    consumptionData.push([
-      "Total",
-      resData.total_consumption,
-      (resData.total_consumption / 8).toFixed(1),
+    // ---- MISCELLANEOUS ----
+    const miscellaneousData = powerSummaryData.miscellaneous.map((m) => [
+      m.label,
+      m.consumption,
+      m.cost,
     ]);
+    addTable("Miscellaneous", ["Type", "kWh", "Cost"], miscellaneousData);
 
-    addTable("Consumption", ["Resources", "kWh", "Cost"], consumptionData);
-
-    // MISCELLANEOUS TABLE
-    const miscellaneousData = [];
-    if (unit === "Unit_4" || unit === "ALL") {
-      miscellaneousData.push([
-        "Wapda Export",
-        resData.wapdaexport,
-        resData.wapdaexport,
-      ]);
-    }
-    miscellaneousData.push([
-      "Unaccounted Energy",
-      resData.unaccountable_energy,
-      (resData.unaccountable_energy / 2).toFixed(1),
+    // ---- TRANSFORMER LOSSES ----
+    const traffoData = powerSummaryData.traffoLosses.map((t) => [
+      t.label,
+      t.consumption,
+      t.cost,
     ]);
+    addTable("Transformer Losses", ["Transformer", "kWh", "Cost"], traffoData);
 
-    addTable("Miscellaneous", ["Resources", "kWh", "Cost"], miscellaneousData);
-
-    // TRANSFORMER LOSSES TABLE (only for Unit_5 or ALL)
-    if (unit === "Unit_5" || unit === "ALL") {
-      const transformerData = [
-        ["TF1", resData.trafo1Loss, (resData.trafo1Loss / 2).toFixed(1)],
-        ["TF2", resData.trafo2Loss, (resData.trafo2Loss / 2).toFixed(1)],
-        ["TF3", resData.trafo3Loss, (resData.trafo3Loss / 2).toFixed(1)],
-        ["TF4", resData.trafo4Loss, (resData.trafo4Loss / 2).toFixed(1)],
-        [
-          "Total",
-          resData.transformerLosses,
-          (resData.transformerLosses / 8).toFixed(1),
-        ],
-      ];
-
-      addTable(
-        "Trans. / Traffo Losses",
-        ["Resources", "kWh", "Cost"],
-        transformerData
-      );
-    }
-
-    // Auto-fit columns
-    worksheet.columns.forEach((column) => {
-      let maxLength = 0;
-      column.eachCell({ includeEmpty: true }, (cell) => {
-        const columnLength = cell.value ? cell.value.toString().length : 0;
-        if (columnLength > maxLength) {
-          maxLength = columnLength;
-        }
+    // ---- Auto-fit columns ----
+    worksheet.columns.forEach((col) => {
+      let maxLen = 0;
+      col.eachCell({ includeEmpty: true }, (c) => {
+        const valLen = c.value ? c.value.toString().length : 0;
+        if (valLen > maxLen) maxLen = valLen;
       });
-      column.width = Math.min(Math.max(maxLength + 2, 10), 25);
+      col.width = Math.min(Math.max(maxLen + 2, 10), 25);
     });
 
-    // Generate Excel file
+    // ---- Download file ----
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -548,8 +466,8 @@ const PowerSummaryTable = ({
     a.click();
     URL.revokeObjectURL(url);
   };
-  // ////////----------------------------------------------
 
+  // === Export handler ===
   const handleExport = () => {
     exportToExcel({
       unit,
@@ -561,8 +479,11 @@ const PowerSummaryTable = ({
       resData,
       unit4Spindle,
       unit5Spindle,
+      theme,
+      powerSummaryData, // ✅ Pass the structured data here
     });
   };
+
   // ///////////////
   return (
     <>
@@ -617,14 +538,14 @@ const PowerSummaryTable = ({
               Tarrif Rates:
             </span>
             {(unit === "Unit_4" || unit === "ALL") && (
-              <>
-                <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-                  Wapda IC: {tarifData.wapda1}
-                </span>
-                <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-                  Wapda 2: {tarifData.wapda2}
-                </span>
-              </>
+              <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
+                Wapda IC: {tarifData.wapda1}
+              </span>
+            )}
+            {(unit === "Unit_4" || unit === "Unit_5" || unit === "ALL") && (
+              <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
+                Wapda 2: {tarifData.wapda2}
+              </span>
             )}
 
             <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
@@ -633,12 +554,16 @@ const PowerSummaryTable = ({
             <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
               JMS 1: {tarifData.jms}
             </span>
-            <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-              GG: {tarifData.gg}
-            </span>
-            <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
-              DG: {tarifData.dg}
-            </span>
+            {(unit === "Unit_4" || unit === "ALL") && (
+              <>
+                <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
+                  GG: {tarifData.gg}
+                </span>
+                <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
+                  DG: {tarifData.dg}
+                </span>
+              </>
+            )}
             {(unit === "Unit_5" || unit === "ALL") && (
               <>
                 <span className="text-[14.22px] font-400 font-inter text-[#727272] dark:text-gray-400">
@@ -655,8 +580,8 @@ const PowerSummaryTable = ({
       {/* tables */}
       <div className="flex flex-col md:flex-row w-full justify-between">
         <div className="flex flex-col w-[49%] gap-2">
+          {/* Generatiobn table */}
           <div className="w-full  custom-scrollbar-report">
-            {/* generation table */}
             <table className="min-w-full border border-gray-200">
               <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f] ">
                 <tr>
@@ -680,133 +605,34 @@ const PowerSummaryTable = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {(unit === "Unit_4" || unit === "ALL") && (
-                  <tr>
+                {powerSummaryData.generation.map((item) => (
+                  <tr key={item.label + item.consumption}>
                     <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                      Wapda IC
+                      {item.label}
                     </td>
                     <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                      {resData.wapda1}
+                      {item.consumption.toFixed(2)}
                     </td>
                     <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                      {wapda1Cost.toFixed(1)}
+                      {item.cost.toFixed(2)}
                     </td>
                   </tr>
-                )}
-                {(unit === "Unit_4" || unit === "Unit_5" || unit === "ALL") && (
-                  <tr>
-                    <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                      Wapda 2
-                    </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                      0
-                    </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                      {0 * tarifData.wapda2}
-                    </td>
-                  </tr>
-                )}
-                <tr>
-                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                    Niigata
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    0
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    0
-                  </td>
-                </tr>
-                <tr>
-                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                    JMS
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    0
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    0
-                  </td>
-                </tr>
-                {(unit === "Unit_4" || unit === "ALL") && (
-                  <>
-                    <tr>
-                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Diesel+JGS Incomming
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        0
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        0
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Diesel+JGS Incomming
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        0
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        0
-                      </td>
-                    </tr>
-                  </>
-                )}
-
-                {(unit === "Unit_5" || unit === "ALL") && (
-                  <>
-                    <tr>
-                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Solar 1236.39 kW
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        {resData.solar1}
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        {solar1Cost.toFixed(1)}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                        Solar 1017 kW
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        {resData.solar2}
-                      </td>
-                      <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                        {solar2Cost.toFixed(1)}
-                      </td>
-                    </tr>
-                  </>
-                )}
-
-                <tr>
-                  <td className="w-[50%] pl-[3rem] border-1 border-gray-300 py-[0.5px]  text-[12px] font-inter font-400">
-                    Total
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    {resData.total_generation}
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    {totalCost.toFixed(2)}
-                  </td>
-                </tr>
+                ))}
                 <tr>
                   <td className="w-[50%] pl-[3rem] border-y-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
                     Average Unit Cost
                   </td>
                   <td className="text-center w-[25%] border-y-1 border-gray-300"></td>
                   <td className="text-center w-[25%] border-y-1 border-gray-300 py-[0.5px] text-[12px] font-inter font-400">
-                    {avgUnitCost.toFixed(2)}
+                    {/* {avgUnitCost.toFixed(2)} */}
+                    00
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
+          {/* production table */}
           <div className="">
-            {/* production */}
             <table className="min-w-full border border-gray-200">
               <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f]">
                 <tr>
@@ -833,59 +659,29 @@ const PowerSummaryTable = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {(unit === "Unit_4" || unit === "ALL") && (
-                  <tr>
+                {powerSummaryData?.production?.map((item) => (
+                  <tr key={item.label}>
                     <td className="w-[25%] pl-[3rem] border-y-1 border-gray-300  text-[12px] font-inter font-400">
-                      Unit 4
+                      {item.label}
                     </td>
                     <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {unit4Spindle}
+                      {item.spindles}
                     </td>
                     <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {unit4SpindlePerKw.toFixed(2)}
+                      {item.spindlePerKw.toFixed(2)}
                     </td>
                     <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {unit4SpindleCost.toFixed(2)}
+                      {item.spindleCost.toFixed(2)}
                     </td>
                   </tr>
-                )}
-                {(unit === "Unit_5" || unit === "ALL") && (
-                  <tr>
-                    <td className="w-[25%] pl-[3rem] border-y-1 border-gray-300  text-[12px] font-inter font-400">
-                      Unit 5
-                    </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {unit5Spindle}
-                    </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {unit5SpindlePerKw.toFixed(2)}
-                    </td>
-                    <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {unit5SpindleCost.toFixed(2)}
-                    </td>
-                  </tr>
-                )}
-                <tr>
-                  <td className="w-[25%] pl-[3rem] border-y-1 border-gray-300  text-[12px] font-inter font-400">
-                    Total
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
-                    {unit4Spindle + unit5Spindle}
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
-                    {totalSpindlePerKw.toFixed(2)}
-                  </td>
-                  <td className="text-center w-[25%] border-1 border-gray-300 text-[12px] font-inter font-400">
-                    {totalSpindlecost.toFixed(2)}
-                  </td>
-                </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
         <div className="w-[49%] flex flex-col gap-2  h-full">
+          {/* Constumption Table */}
           <div>
-            {/* Consumption */}
             <table className="min-w-full border border-gray-200">
               <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f]">
                 <tr>
@@ -909,59 +705,24 @@ const PowerSummaryTable = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {/* <tr>
-                  <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                    Power House Aux.
-                  </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                    888.7
-                  </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                    888.87
-                  </td>
-                </tr> */}
-                {(unit === "Unit_4" || unit === "ALL") && (
-                  <tr>
+                {powerSummaryData.consumption.map((item) => (
+                  <tr key={item.label}>
                     <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                      Unit 4
+                      {item.label}
                     </td>
                     <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {resData.unit4_consumption.toFixed(2)}
+                      {item.consumption.toFixed(2)}
                     </td>
                     <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {unit4Cost.toFixed(1)}
+                      {item.cost.toFixed(2)}
                     </td>
                   </tr>
-                )}
-                {(unit === "Unit_5" || unit === "ALL") && (
-                  <tr>
-                    <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                      Unit 5
-                    </td>
-                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {resData.unit5_consumption.toFixed(2)}
-                    </td>
-                    <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {unit5Cost.toFixed(1)}
-                    </td>
-                  </tr>
-                )}
-                <tr>
-                  <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                    Total
-                  </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                    {resData.total_consumption.toFixed(2)}
-                  </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                    {totalconsumption.toFixed(1)}
-                  </td>
-                </tr>
+                ))}
               </tbody>
             </table>
           </div>
+          {/* Miscellaneous Table */}
           <div>
-            {/* Miscellaneous */}
             <table className="min-w-full border border-gray-200">
               <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f]">
                 <tr>
@@ -985,35 +746,23 @@ const PowerSummaryTable = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {(unit === "Unit_4" || unit === "ALL") && (
-                  <tr>
+                {powerSummaryData?.miscellaneous?.map((item) => (
+                  <tr key={item.label}>
                     <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                      Wapda Export
+                      {item.label}
                     </td>
                     <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {resData.wapdaexport.toFixed(2)}
+                      {item.consumption.toFixed(2)}
                     </td>
                     <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {wapdaExportCost}
+                      {item.cost.toFixed(2)}
                     </td>
                   </tr>
-                )}
-                <tr>
-                  <td className="w-[50%] pl-[3rem] py-[1px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                    Unaccounted Energy
-                  </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                    {resData.unaccountable_energy.toFixed(1)}
-                  </td>
-                  <td className="text-center w-[25%] py-[1px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                    {unAccountableEnergyCost.toFixed(1)}
-                  </td>
-                </tr>
+                ))}
               </tbody>
             </table>
           </div>
           <div>
-            {/* Trans. / Traffo Losses */}
             {(unit === "Unit_5" || unit === "ALL") && (
               <table className="min-w-full border border-gray-200">
                 <thead className="bg-[#E5F3FD] dark:bg-[#e5f3fd4f]">
@@ -1038,61 +787,19 @@ const PowerSummaryTable = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  <tr>
-                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                      TF1
-                    </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {resData.trafo1Loss.toFixed(2)}
-                    </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {tf1Cost.toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                      TF2
-                    </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {resData.trafo2Loss.toFixed(2)}
-                    </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {tf2Cost.toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                      TF3
-                    </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {resData.trafo3Loss.toFixed(2)}
-                    </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {tf3Cost.toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                      TF4
-                    </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {resData.trafo4Loss}
-                    </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {tf4Cost.toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
-                      Total
-                    </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {resData.transformerLosses}
-                    </td>
-                    <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
-                      {totalTfCost.toFixed(2)}
-                    </td>
-                  </tr>
+                  {powerSummaryData.traffoLosses.map((item) => (
+                    <tr key={item.label}>
+                      <td className="w-[50%] pl-[3rem] py-[0.5px] border-1 border-gray-300  text-[12px] font-inter font-400">
+                        {item.label}
+                      </td>
+                      <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
+                        {item.consumption.toFixed(2)}
+                      </td>
+                      <td className="text-center w-[25%] py-[0.5px] border-1 border-gray-300 text-[12px] font-inter font-400">
+                        {item.cost.toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             )}

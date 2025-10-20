@@ -36,12 +36,11 @@ const EnergyComparison = () => {
   const meterNameMap = {
     U19_PLC_Del_ActiveEnergy: "Diesel + Gas Incoming",
     U11_GW01_Del_ActiveEnergy: "Gas LT Panel",
-    U6_GW02_Del_ActiveEnergy: "Solar 1236.39 kW",
-    U17_GW03_Del_ActiveEnergy: "Solar 1017 kW",
+    U6_GW02_Del_ActiveEnergy: "Solar 1184.55 Kw",
+    U17_GW03_Del_ActiveEnergy: "Solar 1066.985 kW",
     U24_GW01_Del_ActiveEnergy: "Solar 352.50 kW",
-
+    U28_PLC_Del_ActiveEnergy: "Solar 52.17 kW",
     U23_GW01_Del_ActiveEnergy: "Wapda IC",
-
     U27_PLC_Del_ActiveEnergy: "Wapda 2",
     U22_PLC_Del_ActiveEnergy: "HFO/1",
     U26_PLC_Del_ActiveEnergy: "I-GG",

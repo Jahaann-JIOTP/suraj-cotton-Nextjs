@@ -7,7 +7,7 @@ import Link from "next/link";
 const unit4MeterData = [
   {
     link: "U6_GW02",
-    title: "Solar 1284.55 Kw",
+    title: "Solar 1184.55 Kw",
     top: 310,
     left: 219,
     ltScheme: "LT_1",
