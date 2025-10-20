@@ -237,13 +237,14 @@ function CustomTrend() {
           "HFO Aux",
           "I-GG",
           "Wapda 2",
+          "Solar 52.17 kW",
         ].includes(key)
     );
   } else if (area === "Unit 4 LT_2") {
-    // All meters ending with GW01 except HT Room 1 meters
     filteredMeters = Object.keys(meterMapping).filter(
       (key) =>
-        meterMapping[key].endsWith("GW01") &&
+        (meterMapping[key].endsWith("GW01") ||
+          meterMapping[key] === "U28_PLC") && // Include Solar 52.17 kW (U28_PLC)
         !["P/H IC (HFO)", "Wapda IC"].includes(key)
     );
   } else if (area === "Unit 5 LT_1") {
