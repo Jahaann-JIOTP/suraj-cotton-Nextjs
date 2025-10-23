@@ -1,22 +1,31 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TimePeriodSelector from "@/components/dashboardComponents/timePeriodSelector/TimePeriodSelector";
 import SingleValueDiv from "@/components/dashboardComponents/singleValueDiv/SingleValueDiv";
 import ConsumptionEnergy from "@/components/dashboardComponents/consumptionEnergy/ConsumptionEnergy";
 import EnergyComparison from "@/components/dashboardComponents/energyComparison/EnergyComparison";
 import GenerationEnergy from "@/components/dashboardComponents/generationEnergy/GenerationEnergy";
 import PowerComparison from "@/components/dashboardComponents/powerComparison/PowerComparison";
-import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import config from "@/constant/apiRouteList";
 
+import { DateRangePicker } from "@/components/dashboardComponents/timePeriodSelector/UnifiedDateRangeSelector";
+
 const Dashboard = () => {
-  const [dashboardTimePeriod, setDashboardTimePeriod] = useState("today");
   const [singleDivData, setSingleDivData] = useState({});
   const [u4Spindle, setU4Spindle] = useState(0);
   const [u5Spindle, setU5Spindle] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { startDate, endDate } = getDateRangeFromString(dashboardTimePeriod);
 
+  const [dateRange, setDateRange] = useState({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+  });
+  const handleDateRangeChange = useCallback((range) => {
+    setDateRange(range);
+  }, []);
+  // ===========================fetch consumption api data===================
   const fetchSingleValueData = async () => {
     const token = localStorage.getItem("token");
 
@@ -24,7 +33,7 @@ const Dashboard = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${startDate}&end_date=${endDate}`,
+        `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
         {
           method: "GET",
           headers: {
@@ -42,13 +51,14 @@ const Dashboard = () => {
       console.error(error.message);
     }
   };
+  // ======================fetch unit 4 spindle===========================
   const fetchU4Spindles = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
       setLoading(true);
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U4`,
+        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&unit=U4`,
         {
           method: "GET",
           headers: {
@@ -66,13 +76,14 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+  // ======================fetch unit 5 spindle ==============================
   const fetchU5Spindles = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
       setLoading(true);
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U5`,
+        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&unit=U5`,
         {
           method: "GET",
           headers: {
@@ -100,16 +111,26 @@ const Dashboard = () => {
     fetchU4Spindles();
     fetchU5Spindles();
     fetchSingleValueData();
-  }, [dashboardTimePeriod]);
+    const interval = setInterval(() => {
+      fetchU4Spindles();
+      fetchU5Spindles();
+      fetchSingleValueData();
+    }, 900000);
+    return () => clearInterval(interval);
+  }, [dateRange]);
 
   return (
     <div className="h-[81vh] overflow-y-auto relative">
       {/* first section */}
       <div className="w-full z-100 flex items-center justify-center md:justify-start">
-        {/* <TimePeriodSelector getTimePeriod={handleTimePeriodForDashboard} /> */}
-        <TimePeriodSelector
-          selected={dashboardTimePeriod}
-          setSelected={setDashboardTimePeriod}
+        <DateRangePicker
+          showTime={false}
+          showLabels={true}
+          dateRangeLabel="Select Date Range:"
+          intervalLabel="From"
+          toLabel="To"
+          timeLabel="Time"
+          onChange={handleDateRangeChange}
         />
       </div>
       {/* second section first of small divs */}
@@ -156,7 +177,7 @@ const Dashboard = () => {
           />
         </div>
       </div>
-      {/* charts firlst section */}
+      {/* charts second section */}
       <div className=" mt-3 lg:mt-[0.7vw] flex flex-wrap w-full items-center gap-3 lg:gap-[0.7vw] justify-between">
         {/* left side */}
         <div className="w-full lg:w-[49.5%] flex flex-col gap-3 lg:gap-[0.7vw]">
@@ -164,7 +185,8 @@ const Dashboard = () => {
           <div className="flex flex-wrap gap-3 md:gap-[0.7vw] items-center  justify-between">
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
-                title="Total Generation"
+                // title="Total Generation"
+                title="In-house Generation"
                 value={Number(
                   singleDivData.Total_Generation || 0
                 ).toLocaleString("en-US")}
@@ -219,7 +241,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      {/* small divs second section */}
+      {/*  third section */}
       <div className="mt-3 md:mt-[0.7vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv
@@ -243,7 +265,7 @@ const Dashboard = () => {
         </div>
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv
-            title="HFO Auxiliary"
+            title="HFO + JMS Auxiliary"
             loading={loading}
             value={Number(singleDivData.Aux_consumption || 0).toLocaleString(
               "en-US"
@@ -265,10 +287,10 @@ const Dashboard = () => {
       {/* comparison graphs */}
       <div className="flex flex-col lg:flex-row mt-3 md:mt-[0.7vw] gap-3 md:gap-[0.7vw] justify-between">
         <div className="w-full lg:w-[49.5%]">
-          <EnergyComparison />
+          <EnergyComparison dateRange={dateRange} />
         </div>
         <div className="w-full lg:w-[49.5%]">
-          <PowerComparison />
+          <PowerComparison dateRange={dateRange} />
         </div>
       </div>
     </div>

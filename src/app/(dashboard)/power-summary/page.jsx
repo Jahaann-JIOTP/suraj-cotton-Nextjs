@@ -1,24 +1,29 @@
 "use client";
 import SingleValueDiv from "@/components/dashboardComponents/singleValueDiv/SingleValueDiv";
-import TimePeriodSelector from "@/components/dashboardComponents/timePeriodSelector/TimePeriodSelector";
+import { DateRangePicker } from "@/components/dashboardComponents/timePeriodSelector/UnifiedDateRangeSelector";
 import TrafoCard from "@/components/dashboardComponents/trafoCard/TrafoCard";
 import config from "@/constant/apiRouteList";
-import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 const PowerSummaryPage = () => {
   const [powerSummaryData, setPowerSummaryData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [powerSummaryTimePeriod, setPowerSummaryTimePeriod] = useState("today");
-  const { startDate, endDate } = getDateRangeFromString(powerSummaryTimePeriod);
-  console.log("........", powerSummaryData);
+  const [dateRange, setDateRange] = useState({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+  });
+  const handleDateRangeChange = useCallback((range) => {
+    setDateRange(range);
+  }, []);
   const fetchPowerSummaryData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${startDate}&end_date=${endDate}`,
+        `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
         {
           method: "GET",
           headers: {
@@ -40,15 +45,24 @@ const PowerSummaryPage = () => {
   };
   useEffect(() => {
     fetchPowerSummaryData();
-  }, [powerSummaryTimePeriod]);
+    const interval = setInterval(() => {
+      fetchPowerSummaryData();
+    }, 900000);
+    return () => clearInterval(interval);
+  }, [dateRange]);
 
   return (
     <div className="h-full lg:h-[81vh] overflow-y-auto">
       {/* time period selector */}
       <div className="w-full z-100 flex items-center justify-center md:justify-start">
-        <TimePeriodSelector
-          selected={powerSummaryTimePeriod}
-          setSelected={setPowerSummaryTimePeriod}
+        <DateRangePicker
+          showTime={false}
+          showLabels={true}
+          dateRangeLabel="Select Date Range:"
+          intervalLabel="From"
+          toLabel="To"
+          timeLabel="Time"
+          onChange={handleDateRangeChange}
         />
       </div>
       {/* first section first of small divs */}

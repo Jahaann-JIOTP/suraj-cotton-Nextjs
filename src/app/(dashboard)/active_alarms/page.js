@@ -105,7 +105,7 @@ export default function ActiveAlarmsPage() {
 
         setIsBeeping((prev) => ({ ...prev, [occurrenceId]: false }));
       } else {
-        console.log("No beep sound found for", occurrenceId);
+        console.error("No beep sound found for", occurrenceId);
       }
     },
     [beepSounds]

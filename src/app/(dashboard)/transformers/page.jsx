@@ -1,12 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import HeatMapChart from "@/components/dashboardComponents/heatMapCharts/HeatMapCharts";
-import TimePeriodSelector from "@/components/dashboardComponents/timePeriodSelector/TimePeriodSelector";
 import TransformerSide from "@/components/dashboardComponents/heatMapCharts/TransformerSide";
 import config from "@/constant/apiRouteList";
-import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import { useMaintenanceCountdown } from "@/components/dashboardComponents/heatMapCharts/useCountdonwTimer";
+import { DateRangePicker } from "@/components/dashboardComponents/timePeriodSelector/UnifiedDateRangeSelector";
 
 const intervalPeriod = 60 * 60 * 1000;
 const TranformersPage = () => {
@@ -14,13 +13,18 @@ const TranformersPage = () => {
   const [maintenanceHrsT2, setmaintenanceHrsT2] = useState({});
   const [maintenanceHrsT3, setmaintenanceHrsT3] = useState({});
   const [maintenanceHrsT4, setmaintenanceHrsT4] = useState({});
-  const [transformerTimePeriod, setTransformerTimePeriod] =
-    useState("thisweek");
   const [loading, setLoading] = useState(false);
   const [transformerTotalValTag, setTransformerTotalValTag] = useState({});
-
+  const [dateRange, setDateRange] = useState({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+  });
+  const handleDateRangeChange = useCallback((range) => {
+    setDateRange(range);
+  }, []);
   const [data, setData] = useState([]);
-  const { startDate, endDate } = getDateRangeFromString(transformerTimePeriod);
 
   // /----------------------------Destructure main to four array------------------------------
   const trafo1 = data.map(({ date, Trafo1 }) => ({ date, Trafo1 }));
@@ -92,7 +96,7 @@ const TranformersPage = () => {
     if (!token) return;
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${startDate}&end_date=${endDate}`,
+        `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
         {
           method: "GET",
           headers: {
@@ -114,7 +118,7 @@ const TranformersPage = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.GET_HEAT_MAP_DATA}?start_date=${startDate}&end_date=${endDate}`,
+        `${config.BASE_URL}${config.DASHBOARD.GET_HEAT_MAP_DATA}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
         {
           method: "GET",
           headers: {
@@ -183,7 +187,7 @@ const TranformersPage = () => {
       fetchTransformerData();
     }, intervalPeriod);
     return () => clearInterval(interval);
-  }, [transformerTimePeriod]);
+  }, [dateRange]);
 
   return (
     <>
@@ -192,9 +196,14 @@ const TranformersPage = () => {
           <h1 className="font-raleway font-600 text-[17px] md:text-[20px]">
             Transformer Energy Usage Heat Map
           </h1>
-          <TimePeriodSelector
-            selected={transformerTimePeriod}
-            setSelected={setTransformerTimePeriod}
+          <DateRangePicker
+            showTime={false}
+            showLabels={true}
+            dateRangeLabel="Select Date Range:"
+            intervalLabel="From"
+            toLabel="To"
+            timeLabel="Time"
+            onChange={handleDateRangeChange}
           />
         </div>
         <div className="flex w-full flex-wrap gap-2 mb-2">

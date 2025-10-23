@@ -8,7 +8,7 @@ import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 
-const EnergyComparison = () => {
+const EnergyComparison = ({ dateRange }) => {
   const today = new Date().toISOString().split("T")[0];
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(today);
@@ -52,7 +52,7 @@ const EnergyComparison = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.GET_ENERGY_COMPARISON}?start_date=${startDate}&end_date=${endDate}&Label=Custom`,
+        `${config.BASE_URL}${config.DASHBOARD.GET_ENERGY_COMPARISON}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&Label=Custom`,
         {
           method: "GET",
           headers: {
@@ -83,7 +83,7 @@ const EnergyComparison = () => {
 
   useEffect(() => {
     fetchPieChartData();
-  }, [startDate, endDate]);
+  }, [dateRange]);
 
   useEffect(() => {
     if (!chartDivRef.current || pieChartData.length === 0) return;
@@ -396,14 +396,14 @@ const EnergyComparison = () => {
 
   // Update the fetch function to use the selected dates
   const handleDateChange = () => {
-    if (startDate && endDate) {
+    if (dateRange) {
       fetchPieChartData();
     }
   };
 
   useEffect(() => {
     handleDateChange();
-  }, [startDate, endDate]);
+  }, [dateRange]);
 
   return (
     <div
@@ -419,7 +419,7 @@ const EnergyComparison = () => {
           Energy Comparison
         </span>
         <div className=" flex items-center justify-center gap-2">
-          <div className="flex items-start justify-start gap-1">
+          {/* <div className="flex items-start justify-start gap-1">
             <span className="text-[12px] font-raleway font-semibold text-black dark:text-white">
               Select Interval
             </span>
@@ -429,8 +429,8 @@ const EnergyComparison = () => {
               onChange={(e) => setStartDate(e.target.value)}
               className="text-[12px] font-raleway px-1 py-0.5 border rounded"
             />
-          </div>
-          <div className="flex items-start justify-start gap-1">
+          </div> */}
+          {/* <div className="flex items-start justify-start gap-1">
             <span className="text-[12px] font-raleway font-semibold text-black dark:text-white">
               to
             </span>
@@ -441,7 +441,7 @@ const EnergyComparison = () => {
               onChange={(e) => setEndDate(e.target.value)}
               className="text-[12px] font-raleway px-1 py-0.5 border rounded"
             />
-          </div>
+          </div> */}
           <button
             className="absolute top-0 right-[0px] md:relative cursor-pointer"
             onClick={handleEnergyComparisonFullView}

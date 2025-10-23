@@ -236,8 +236,6 @@ const PowerSummaryTable = ({
     },
   };
 
-  console.log(powerSummaryData);
-
   // ////////----------------------------------------------
   const getImageBuffer = async (imageUrl) => {
     try {

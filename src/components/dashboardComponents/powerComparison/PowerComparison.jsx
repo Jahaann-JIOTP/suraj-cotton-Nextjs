@@ -7,14 +7,10 @@ import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
 import { useTheme } from "next-themes";
 import CustomLoader from "@/components/customLoader/CustomLoader";
-import Image from "next/image";
 
-const PowerComparison = () => {
-  const date = new Date();
-  const today = date.toISOString().split("T")[0];
+const PowerComparison = ({ dateRange }) => {
   const [stackChartData, setStackchartData] = useState([]);
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(today);
+
   const [timeRange, setTimeRange] = useState("hourly");
   const [loading, setLoading] = useState(false);
   const { theme } = useTheme();
@@ -32,7 +28,7 @@ const PowerComparison = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}/power_comparison?start_date=${startDate}&end_date=${endDate}&label=${timeRange}`,
+        `${config.BASE_URL}/power_comparison?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&label=${timeRange}`,
         {
           method: "GET",
           headers: {
@@ -78,22 +74,13 @@ const PowerComparison = () => {
     }
   };
 
-  const handleDateChange = (e, type) => {
-    const value = e.target.value;
-    if (type === "start") {
-      setStartDate(value);
-    } else {
-      setEndDate(value);
-    }
-  };
-
   const handleTimeRangeChange = (range) => {
     setTimeRange(range);
   };
 
   useEffect(() => {
     fetchPowerComparisonData();
-  }, [startDate, endDate, timeRange]);
+  }, [dateRange, timeRange]);
 
   useEffect(() => {
     if (!chartRef.current || stackChartData.length === 0) return;
@@ -465,7 +452,7 @@ const PowerComparison = () => {
           <span className="text-[15px] text-[#1A68B2] .font-raleway font-600">
             Energy Balance Chart
           </span>
-          <button
+          {/* <button
             className="cursor-pointer"
             onClick={handlePowerComparisonFullView}
           >
@@ -474,30 +461,7 @@ const PowerComparison = () => {
             ) : (
               <MdOutlineFullscreen size={20} />
             )}
-          </button>
-        </div>
-        <div className="flex items-center justify-end w-full gap-3 flex-col md:flex-row ">
-          <div className="flex items-center justify-center gap-2">
-            <span className="hidden xl:flex text-[12px] font-raleway font-semibold text-black dark:text-white">
-              Start Date
-            </span>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => handleDateChange(e, "start")}
-              className="text-[12px] font-raleway px-1 py-0.5 border rounded"
-            />
-            <span className="hidden xl:flex text-[12px] font-raleway font-semibold text-black dark:text-white">
-              End Date
-            </span>
-            <input
-              type="date"
-              value={endDate}
-              min={startDate}
-              onChange={(e) => handleDateChange(e, "end")}
-              className="text-[12px] font-raleway px-1 py-0.5 border rounded"
-            />
-          </div>
+          </button> */}
           <div className="flex items-center justify-center gap-2">
             <button
               className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1`}
@@ -526,7 +490,79 @@ const PowerComparison = () => {
             >
               Monthly
             </button>
+            <button
+              className="cursor-pointer"
+              onClick={handlePowerComparisonFullView}
+            >
+              {isPowerComparisonFullView ? (
+                <MdOutlineFullscreenExit size={20} />
+              ) : (
+                <MdOutlineFullscreen size={20} />
+              )}
+            </button>
           </div>
+        </div>
+        <div className="flex items-center justify-end w-full gap-3 flex-col md:flex-row ">
+          {/* <div className="flex items-center justify-center gap-2">
+            <span className="hidden xl:flex text-[12px] font-raleway font-semibold text-black dark:text-white">
+              Start Date
+            </span>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => handleDateChange(e, "start")}
+              className="text-[12px] font-raleway px-1 py-0.5 border rounded"
+            />
+            <span className="hidden xl:flex text-[12px] font-raleway font-semibold text-black dark:text-white">
+              End Date
+            </span>
+            <input
+              type="date"
+              value={endDate}
+              min={startDate}
+              onChange={(e) => handleDateChange(e, "end")}
+              className="text-[12px] font-raleway px-1 py-0.5 border rounded"
+            />
+          </div> */}
+          {/* <div className="flex items-center justify-center gap-2">
+            <button
+              className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1`}
+              onClick={() => handleTimeRangeChange("hourly")}
+              style={{
+                background: timeRange === "hourly" ? "#226ce4" : "#6FA1F3",
+              }}
+            >
+              Hourly
+            </button>
+            <button
+              className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1`}
+              onClick={() => handleTimeRangeChange("daily")}
+              style={{
+                background: timeRange === "daily" ? "#23c15d" : "#55B87A",
+              }}
+            >
+              Daily
+            </button>
+            <button
+              className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1`}
+              onClick={() => handleTimeRangeChange("monthly")}
+              style={{
+                background: timeRange === "monthly" ? "#ed5e3a" : "#F57F62",
+              }}
+            >
+              Monthly
+            </button>
+            <button
+              className="cursor-pointer"
+              onClick={handlePowerComparisonFullView}
+            >
+              {isPowerComparisonFullView ? (
+                <MdOutlineFullscreenExit size={20} />
+              ) : (
+                <MdOutlineFullscreen size={20} />
+              )}
+            </button>
+          </div> */}
         </div>
       </div>
 
