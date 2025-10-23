@@ -110,7 +110,7 @@ const Unit5Lt3Page = () => {
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="TotalLT3" />
+      {/* <SankeyTotalValues data={data} lt="TotalLT3" /> */}
     </div>
   );
 };

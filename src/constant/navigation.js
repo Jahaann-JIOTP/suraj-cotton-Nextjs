@@ -161,24 +161,24 @@ export const sidebarLinksMap = {
       title: "Energy Sankeys",
       icon: EnergySankey,
       submenu: [
-        {
-          id: 0,
-          title: "Main",
-          href: "/main-sankey",
-          icon: Unit4Lt1,
-        },
-        {
-          id: 1,
-          title: "Unit 4",
-          href: "/unit4-sankey",
-          icon: Unit4Lt1,
-        },
-        {
-          id: 2,
-          title: "Unit 5",
-          href: "/unit5-sankey",
-          icon: Unit4Lt1,
-        },
+        // {
+        //   id: 0,
+        //   title: "Main",
+        //   href: "/main-sankey",
+        //   icon: Unit4Lt1,
+        // },
+        // {
+        //   id: 1,
+        //   title: "Unit 4",
+        //   href: "/unit4-sankey",
+        //   icon: Unit4Lt1,
+        // },
+        // {
+        //   id: 2,
+        //   title: "Unit 5",
+        //   href: "/unit5-sankey",
+        //   icon: Unit4Lt1,
+        // },
         {
           id: 3,
           title: "Unit 4 LT-1",
@@ -368,11 +368,11 @@ export const sidebarLinksMap = {
     //   icon: PlantOverview,
     //   href: "/energy-summary-report",
     // },
-    {
-      title: "Energy Comparison Report",
-      icon: PlantOverview,
-      href: "/energy-comparison-report",
-    },
+    // {
+    //   title: "Energy Comparison Report",
+    //   icon: PlantOverview,
+    //   href: "/energy-comparison-report",
+    // },
   ],
 
   Settings: [

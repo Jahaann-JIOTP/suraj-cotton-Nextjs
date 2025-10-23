@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
-import SankeyTotalValues, { calculateSums } from "@/components/sakeyTotalValue/SankeyTotalValues";
+import SankeyTotalValues, {
+  calculateSums,
+} from "@/components/sakeyTotalValue/SankeyTotalValues";
 import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
 import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
 
@@ -107,7 +109,7 @@ const Unit5Lt4Page = () => {
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="TotalLT4" />
+      {/* <SankeyTotalValues data={data} lt="TotalLT4" /> */}
     </div>
   );
 };
