@@ -28,6 +28,14 @@ const EnergyComparisonPage = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingSpindle, setLoadingSpindle] = useState(false);
   const [resData, setResData] = useState([]);
+  const intervalsObj = {
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    usageReportTimePeriod,
+  };
+
   const toMinutes = (time) => {
     if (!time) return null;
     const [h, m] = time.split(":").map(Number);
@@ -590,7 +598,7 @@ const EnergyComparisonPage = () => {
           </form>
         </div>
       ) : showResults ? (
-        <EnergyComparisonReport rawData={resData} />
+        <EnergyComparisonReport rawData={resData} intervalsObj={intervalsObj} />
       ) : null}
     </div>
   );

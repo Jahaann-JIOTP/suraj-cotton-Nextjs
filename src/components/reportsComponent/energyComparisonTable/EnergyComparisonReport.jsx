@@ -1,7 +1,7 @@
 import { useTheme } from "next-themes";
 import React from "react";
 
-const EnergyComparisonReport = ({ rawData }) => {
+const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
   const { theme } = useTheme();
   //   extract data
   const startTimestamp = rawData.startTimestamp;
@@ -20,10 +20,6 @@ const EnergyComparisonReport = ({ rawData }) => {
     ":" +
     endTimestamp.split("T")[1].split(":")[1]; // "06:00"
 
-  console.log("Start Date:", startDate);
-  console.log("Start Time:", startTime);
-  console.log("End Date:", endDate);
-  console.log("End Time:", endTime);
   return (
     <div>
       <div className="flex px-3 md:px-6 flex-col gap-3 overflow-hidden">
@@ -61,7 +57,7 @@ const EnergyComparisonReport = ({ rawData }) => {
         {/* parameters table */}
         <div className="w-full mt-5">
           <table class=" border w-full lg:w-[40%]   overflow-hidden">
-            <thead class="">
+            {/* <thead class="">
               <tr>
                 <th class="py-1 px-4 text-left font-semibold border border-gray-400 dark:border-gray-500">
                   Parameter
@@ -70,14 +66,14 @@ const EnergyComparisonReport = ({ rawData }) => {
                   Value
                 </th>
               </tr>
-            </thead>
+            </thead> */}
             <tbody>
               <tr class="py-1 px-4 text-left font-semibold border border-gray-400 dark:border-gray-500">
                 <td class="py-1 px-4 border border-gray-400 dark:border-gray-500r">
                   Selected Period
                 </td>
                 <td class="py-1 px-4 border border-gray-400 dark:border-gray-500">
-                  Month
+                  {intervalsObj.usageReportTimePeriod}
                 </td>
               </tr>
               <tr class="">
@@ -85,7 +81,7 @@ const EnergyComparisonReport = ({ rawData }) => {
                   Start Date
                 </td>
                 <td class="py-1 px-4 border border-gray-400 dark:border-gray-500">
-                  {startDate} {startTime}
+                  {intervalsObj.startDate} {intervalsObj.endTime}
                 </td>
               </tr>
               <tr class="">
@@ -93,7 +89,7 @@ const EnergyComparisonReport = ({ rawData }) => {
                   End Date
                 </td>
                 <td class="py-1 px-4 border border-gray-400 dark:border-gray-500">
-                  {endDate} {endTime}
+                  {intervalsObj.endDate} {intervalsObj.endTime}
                 </td>
               </tr>
               {/* <tr class="">
