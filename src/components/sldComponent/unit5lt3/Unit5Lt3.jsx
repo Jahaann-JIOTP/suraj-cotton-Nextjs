@@ -289,7 +289,7 @@ const Unit5Lt3 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./sld/unit5lt1-new.png"
+          src="./sld/unit5lit1newsld.png"
           className=" h-full"
           style={{ width: "1100px" }}
           alt="unit 5 lt3 sld"
