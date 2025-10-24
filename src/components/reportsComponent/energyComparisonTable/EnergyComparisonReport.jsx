@@ -55,59 +55,85 @@ const EnergyComparisonReport = ({ rawData }) => {
       <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
       {/* intervals */}
       <div className="w-full mt-5">
-        <div className="w-full bg-[#bdd7ee] py-2 px-4 font-semibold text-[20px]">
+        <div className="w-full bg-blue-300 py-2 px-4 font-semibold text-[20px]">
           Report Parameters
         </div>
         {/* parameters table */}
         <div className="w-full mt-5">
-          <table class=" bg-white border  overflow-hidden">
+          <table class=" border w-full lg:w-[40%]   overflow-hidden">
             <thead class="">
               <tr>
-                <th class="py-1 px-4 text-left font-semibold text-gray-700 border-b">
+                <th class="py-1 px-4 text-left font-semibold border border-gray-400 dark:border-gray-500">
                   Parameter
                 </th>
-                <th class="py-1 px-4 text-left font-semibold text-gray-700 border-b">
+                <th class="py-1 px-4 text-left font-semibold border border-gray-400 dark:border-gray-500">
                   Value
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr class="">
-                <td class="py-1 px-4 border-b">Selected Period</td>
-                <td class="py-1 px-4 border-b">Month</td>
+              <tr class="py-1 px-4 text-left font-semibold border border-gray-400 dark:border-gray-500">
+                <td class="py-1 px-4 border border-gray-400 dark:border-gray-500r">
+                  Selected Period
+                </td>
+                <td class="py-1 px-4 border border-gray-400 dark:border-gray-500">
+                  Month
+                </td>
               </tr>
               <tr class="">
-                <td class="py-1 px-4 border-b">Start Date</td>
-                <td class="py-1 px-4 border-b">
+                <td class="py-1 px-4 border border-gray-400 dark:border-gray-500">
+                  Start Date
+                </td>
+                <td class="py-1 px-4 border border-gray-400 dark:border-gray-500">
                   {startDate} {startTime}
                 </td>
               </tr>
               <tr class="">
-                <td class="py-1 px-4 border-b">End Date</td>
-                <td class="py-1 px-4 border-b">
+                <td class="py-1 px-4 border border-gray-400 dark:border-gray-500">
+                  End Date
+                </td>
+                <td class="py-1 px-4 border border-gray-400 dark:border-gray-500">
                   {endDate} {endTime}
                 </td>
               </tr>
-              <tr class="">
+              {/* <tr class="">
                 <td class="py-1 px-4 border-b">Report Type</td>
                 <td class="py-1 px-4 border-b">SingleComparison</td>
-              </tr>
-              <tr class="">
+              </tr> */}
+              {/* <tr class="">
                 <td class="py-1 px-4 border-b">Comparison Type</td>
                 <td class="py-1 px-4 border-b">SuperToday vs Yesterday</td>
-              </tr>
+              </tr> */}
               <tr class="">
-                <td class="py-1 px-4 border-b">Selected Timezone</td>
-                <td class="py-1 px-4 border-b">(UTC+05:00) Asia Karachi</td>
+                <td class="py-1 px-4 border border-gray-400 dark:border-gray-500">
+                  Selected Timezone
+                </td>
+                <td class="py-1 px-4 border border-gray-400 dark:border-gray-500">
+                  (UTC+05:00) Asia Karachi
+                </td>
               </tr>
             </tbody>
           </table>
-          <table>
-            <thead>
+          <table class="mt-2 border w-[44%] lg:w-[17.5%] overflow-hidden">
+            <thead class="">
               <tr>
-                <th>Source</th>
+                <th class="py-1 px-4 text-left font-semibold border border-gray-400 dark:border-gray-500">
+                  Sources
+                </th>
               </tr>
             </thead>
+            <tbody>
+              <tr class="">
+                <td class="py-1 px-4 border border-gray-400 dark:border-gray-500r">
+                  Unit 4
+                </td>
+              </tr>
+              <tr class="">
+                <td class="py-1 px-4 border border-gray-400 dark:border-gray-500r">
+                  Unit 5
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>

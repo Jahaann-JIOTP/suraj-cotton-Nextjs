@@ -8,13 +8,13 @@ const meters = [
   {
     name: "PDB1 CD1 + PDB 08",
     id: "U1_GW02",
-    u4buttonText: "LT2-Card 1-8",
+    u4buttonText: "LT2-Card (1-4)(9-12)",
     u5buttonText: "LT1-Comber M/C 1-14",
   },
   {
     name: "PDB2 CD2 + Card PDB 01",
     id: "U2_GW02",
-    u4buttonText: "LT2-Card9-14+1Breaker",
+    u4buttonText: "LT2-Card (5-8)(13-14)",
     u5buttonText: "LT1-Card M/C 8-14",
   },
   // { name: "Card PDB 01", id: "U3_GW02" },
