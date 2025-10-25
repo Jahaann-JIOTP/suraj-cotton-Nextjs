@@ -26,9 +26,9 @@ const EnergyComparisonPage = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [loadingSpindle, setLoadingSpindle] = useState(false);
   const [resData, setResData] = useState([]);
   const intervalsObj = {
+    unit,
     startDate,
     endDate,
     startTime,
@@ -112,58 +112,6 @@ const EnergyComparisonPage = () => {
     }
   };
   // fetch unit 4 spindles - simplified, no blocking
-  const fetchU4Spindles = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      setLoadingSpindle(true);
-      const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U4`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const resResult = await response.json();
-
-      if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
-        setUnit4Spindle(resResult[0].totalProduction);
-      } else {
-        setUnit4Spindle(0); // Default to 0 if no data
-      }
-    } catch (error) {
-      console.error(error.message);
-      setUnit4Spindle(0); // Default to 0 on error
-    } finally {
-      setLoadingSpindle(false);
-      setFetched(true);
-    }
-  };
-
-  // fetch unit 5 spindles - simplified, no blocking
-  const fetchU5Spindles = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      setLoadingSpindle(true);
-      const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${startDate}&end_date=${endDate}&unit=U5`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const resResult = await response.json();
-
-      if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
-        setUnit5Spindle(resResult[0].totalProduction);
-      } else {
-        setUnit5Spindle(0); // Default to 0 if no data
-      }
-    } catch (error) {
-      console.error(error.message);
-      setUnit5Spindle(0); // Default to 0 on error
-    } finally {
-      setLoadingSpindle(false);
-      setFetched(true);
-    }
-  };
 
   // format time to 12 hours
   const convertTo12Hour = (time) => {
@@ -177,32 +125,32 @@ const EnergyComparisonPage = () => {
   };
 
   // Remove the blocking useEffect that prevented submission
-  // Only show warning messages but don't block form submission
-  useEffect(() => {
-    if (!fetched) return;
+  // // Only show warning messages but don't block form submission
+  // useEffect(() => {
+  //   if (!fetched) return;
 
-    // Show warning messages but don't set errorMessage that blocks submission
-    if (unit === "Unit_4" && unit4Spindle === 0) {
-      console.warn("Warning: No Unit 4 Bags data found");
-    } else if (unit === "Unit_5" && unit5Spindle === 0) {
-      console.warn("Warning: No Unit 5 Bags data found");
-    } else if (unit === "ALL") {
-      if (unit4Spindle === 0 && unit5Spindle === 0) {
-        console.warn("Warning: No Bags data found for either unit");
-      } else if (unit4Spindle === 0) {
-        console.warn("Warning: No Unit 4 Bags data found");
-      } else if (unit5Spindle === 0) {
-        console.warn("Warning: No Unit 5 Bags data found");
-      }
-    }
-  }, [unit, unit4Spindle, unit5Spindle, fetched]);
+  //   // Show warning messages but don't set errorMessage that blocks submission
+  //   if (unit === "Unit_4" && unit4Spindle === 0) {
+  //     console.warn("Warning: No Unit 4 Bags data found");
+  //   } else if (unit === "Unit_5" && unit5Spindle === 0) {
+  //     console.warn("Warning: No Unit 5 Bags data found");
+  //   } else if (unit === "ALL") {
+  //     if (unit4Spindle === 0 && unit5Spindle === 0) {
+  //       console.warn("Warning: No Bags data found for either unit");
+  //     } else if (unit4Spindle === 0) {
+  //       console.warn("Warning: No Unit 4 Bags data found");
+  //     } else if (unit5Spindle === 0) {
+  //       console.warn("Warning: No Unit 5 Bags data found");
+  //     }
+  //   }
+  // }, [unit, unit4Spindle, unit5Spindle, fetched]);
 
-  useEffect(() => {
-    if (unit !== "" && startDate !== "" && endDate !== "") {
-      fetchU4Spindles();
-      fetchU5Spindles();
-    }
-  }, [unit, startDate, endDate]); // Added unit to dependencies
+  // useEffect(() => {
+  //   if (unit !== "" && startDate !== "" && endDate !== "") {
+  //     fetchU4Spindles();
+  //     fetchU5Spindles();
+  //   }
+  // }, [unit, startDate, endDate]); // Added unit to dependencies
 
   // getting energy usage report - removed the blocking condition
   const handleSubmit = async (e) => {
@@ -495,7 +443,7 @@ const EnergyComparisonPage = () => {
                 </div>
               </div>
               {/* spindle field - now shows 0 as default */}
-              <div className="w-full flex items-center gap-4 justify-between">
+              {/* <div className="w-full flex items-center gap-4 justify-between">
                 {unit === "Unit_4" ? (
                   <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
                     <label
@@ -570,30 +518,30 @@ const EnergyComparisonPage = () => {
                     </div>
                   </>
                 ) : null}
-              </div>
+              </div> */}
             </div>
 
             <div className="w-full flex items-center justify-center mt-5 md:mt-10">
-              {loadingSpindle ? (
-                <div className="flex justify-center items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mt-2">
+              {/* {loadingSpindle ? ( */}
+              {/* <div className="flex justify-center items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mt-2">
                   <CircularProgress size={16} /> <span>Fetching Bags...</span>
                 </div>
-              ) : (
-                <button
-                  type="submit"
-                  disabled={loadingSubmit}
-                  className="bg-[#1A68B2] cursor-pointer text-white px-4 py-1 rounded flex items-center justify-center gap-2"
-                >
-                  {loadingSubmit ? (
-                    <>
-                      <span>Generating</span>
-                      <CircularProgress size={20} sx={{ color: "white" }} />
-                    </>
-                  ) : (
-                    "Generate Report"
-                  )}
-                </button>
-              )}
+              ) : ( */}
+              <button
+                type="submit"
+                disabled={loadingSubmit}
+                className="bg-[#1A68B2] cursor-pointer text-white px-4 py-1 rounded flex items-center justify-center gap-2"
+              >
+                {loadingSubmit ? (
+                  <>
+                    <span>Generating</span>
+                    <CircularProgress size={20} sx={{ color: "white" }} />
+                  </>
+                ) : (
+                  "Generate Report"
+                )}
+              </button>
+              {/* )} */}
             </div>
           </form>
         </div>

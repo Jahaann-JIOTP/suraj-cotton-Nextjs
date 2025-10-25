@@ -2,6 +2,8 @@ import { useTheme } from "next-themes";
 import React from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import { loadImageAsBase64 } from "@/utils/imageToBase64";
+import EnergyComparisonChart from "./EnergyComparisonChart";
 
 const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
   const { theme } = useTheme();
@@ -155,15 +157,49 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
     const u5 = Number(dept.u5Consumption) || 0;
     return sum + u4 + u5;
   }, 0);
+
+  const unit4Total = availableUnits
+    .map((unit) => (unit === 4 ? unitTotals[unit] : 0))
+    .reduce((a, b) => a + b, 0);
+  const unit5Total = availableUnits
+    .map((unit) => (unit === 5 ? unitTotals[unit] : 0))
+    .reduce((a, b) => a + b, 0);
+  const unit4Lt1total = totalRow.Unit_4_LT1 || 0;
+  const unit4Lt2total = totalRow.Unit_4_LT2 || 0;
+  const unit5Lt1total = totalRow.Unit_5_LT1 || 0;
+  const unit5Lt2total = totalRow.Unit_5_LT2 || 0;
+  const unit4TotalPropstotal = {
+    unit4Total,
+    unit4Lt1total,
+    unit4Lt2total,
+  };
+  const unit5TotalPropstotal = {
+    unit5Total,
+    unit5Lt1total,
+    unit5Lt2total,
+  };
+
   /////////////////================================================
   ////////////////export to pdf///////////////////////////////
-  if (pdfFonts && pdfFonts.pdfMake && pdfFonts.pdfMake.vfs) {
+  if (pdfFonts?.pdfMake?.vfs) {
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  } else {
+    console.error("pdfMake vfs fonts not found.");
   }
-
-  const handleExportPdf = () => {
+  const handleExportPdf = async () => {
     try {
-      // Initialize pdfmake with fonts
+      // ✅ Ensure images load successfully before proceeding
+
+      const surajCottonBase64Logo = await loadImageAsBase64(
+        "/suraj-cotton-logo-reports.png"
+      );
+      const jahaannBase64Logo = await loadImageAsBase64("/jahaann-light.png");
+
+      if (!surajCottonBase64Logo || !jahaannBase64Logo) {
+        alert("Error loading logos. Please check the file paths.");
+        return;
+      }
+
       pdfMake.fonts = {
         Roboto: {
           normal: "Roboto-Regular.ttf",
@@ -173,7 +209,6 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
         },
       };
 
-      // Get current date and time for report
       const now = new Date();
       const reportedDate = now.toLocaleDateString("en-GB");
       const reportedTime = now.toLocaleTimeString("en-US", {
@@ -182,86 +217,81 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
         hour12: true,
       });
 
-      // Define document content
       const docDefinition = {
         pageSize: "A4",
         pageOrientation: "landscape",
-        header: function (currentPage, pageCount) {
-          return [
-            {
-              columns: [
-                {
-                  // Left logo - using text as placeholder since images need base64
-                  text: "Suraj Cotton",
-                  width: 100,
-                  alignment: "left",
-                  margin: [40, 20, 0, 0],
-                  fontSize: 12,
-                  bold: true,
-                },
-                {
-                  text: "",
-                  width: "*",
-                },
-                {
-                  // Right logo
-                  text: "Jahaann",
-                  width: 120,
-                  alignment: "right",
-                  margin: [0, 20, 40, 0],
-                  fontSize: 12,
-                  bold: true,
-                },
-              ],
-            },
-            // Border line
-            {
-              canvas: [
-                {
-                  type: "line",
-                  x1: 0, // Start from left edge
-                  y1: 0,
-                  x2: 595, // Full width for A4 landscape (842px width - 40px left margin - 40px right margin = 762px available)
-                  y2: 0,
-                  lineWidth: 2,
-                  lineColor: "#1A68B2",
-                },
-              ],
-              margin: [0, 10, 0, 0],
-            },
-            // Reported date and time in header
-            {
-              text: `Reported Date: ${reportedDate} ${reportedTime}`,
-              alignment: "right",
-              margin: [0, 5, 40, 0],
-              fontSize: 9,
-              bold: true,
-            },
-          ];
-        },
-        content: [
-          // Report Parameters Section - FIXED full width background
+        header: (currentPage, pageCount) => [
           {
+            columns: [
+              {
+                image: surajCottonBase64Logo,
+                width: 80,
+                margin: [40, 20, 0, 0],
+              },
+              {
+                text: "",
+                width: "*",
+              },
+              {
+                image: jahaannBase64Logo,
+                width: 110,
+                alignment: "right",
+                margin: [0, 25, 20, 0],
+              },
+            ],
+          },
+          {
+            canvas: [
+              {
+                type: "line",
+                x1: 0,
+                y1: 0,
+                x2: 763,
+                y2: 0,
+                lineWidth: 2,
+                lineColor: "#1C4D82",
+              },
+            ],
+            margin: [40, 5, 0, 0],
+          },
+          {
+            columns: [
+              {
+                text: "Suraj Cotton Mills Limited, Raiwind",
+                alignment: "left",
+                margin: [40, 5, 0, 0],
+                fontSize: 14,
+                bold: true,
+                color: "#000000",
+              },
+              {
+                text: `Reported Date: ${reportedDate} ${reportedTime}`,
+                alignment: "right",
+                margin: [0, 5, 40, 0],
+                fontSize: 9,
+                bold: true,
+              },
+            ],
+          },
+        ],
+
+        content: [
+          // --- (1) REPORT PARAMETERS — 50% width ---
+          {
+            width: "50%",
             stack: [
               {
                 table: {
-                  widths: ["*"], // Full width table
+                  widths: ["*"],
                   body: [
-                    [
-                      {
-                        text: "Report Parameters",
-                        style: "sectionHeader",
-                        margin: [0, 0, 0, 0],
-                      },
-                    ],
+                    [{ text: "Report Parameters", style: "sectionHeader" }],
                   ],
                 },
-                layout: "noBorders", // Remove table borders for the header
-                margin: [0, 0, 0, 0],
+                layout: "noBorders",
               },
               {
                 table: {
-                  widths: ["auto", "*"],
+                  widths: ["25%", "25%"],
                   body: [
                     [
                       { text: "Selected Period", style: "tableHeader" },
@@ -298,45 +328,50 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
               },
               {
                 table: {
-                  widths: ["*"],
-                  body: [
-                    [{ text: "Sources", style: "tableHeader" }],
-                    ...(availableUnits.map((unit) => [
-                      { text: `Unit ${unit}`, style: "tableCell" },
-                    ]) || []),
-                  ],
+                  widths: ["25%"],
+                  body: (() => {
+                    const body = [[{ text: "Sources", style: "tableHeader" }]];
+
+                    // ✅ Handle cases for Unit_4, Unit_5, or ALL
+                    if (intervalsObj?.unit === "Unit_4") {
+                      body.push([{ text: "Unit 4", style: "tableCell" }]);
+                    } else if (intervalsObj?.unit === "Unit_5") {
+                      body.push([{ text: "Unit 5", style: "tableCell" }]);
+                    } else if (
+                      intervalsObj?.unit === "ALL" ||
+                      intervalsObj?.unit === "All" ||
+                      intervalsObj?.unit === "all"
+                    ) {
+                      body.push([{ text: "Unit 4", style: "tableCell" }]);
+                      body.push([{ text: "Unit 5", style: "tableCell" }]);
+                    }
+
+                    return body;
+                  })(),
                 },
-                margin: [0, 0, 0, 20],
+                margin: [0, 5, 0, 10],
               },
             ],
-            margin: [0, 60, 0, 0], // Remove left/right margins for full width
+            margin: [0, 0, 0, 20],
           },
 
-          // Summary Section - FIXED full width background
+          // --- (2) SUMMARY — 50% width ---
           {
+            width: "50%",
             stack: [
               {
                 table: {
-                  widths: ["*"], // Full width table
-                  body: [
-                    [
-                      {
-                        text: "Summary",
-                        style: "sectionHeader",
-                        margin: [0, 0, 0, 0],
-                      },
-                    ],
-                  ],
+                  widths: ["*"],
+                  body: [[{ text: "Summary", style: "sectionHeader" }]],
                 },
-                layout: "noBorders", // Remove table borders for the header
-                margin: [0, 0, 0, 0],
+                layout: "noBorders",
               },
               {
                 table: {
-                  widths: ["*", "*"],
+                  widths: ["25%", "25%"],
                   body: [
                     [
-                      { text: "Unit No.", style: "tableHeader" },
+                      { text: "Unit.", style: "tableHeader" },
                       {
                         text: "Total Consumption (kWh)",
                         style: "tableHeader",
@@ -371,27 +406,20 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 margin: [0, 5, 0, 20],
               },
             ],
-            margin: [0, 0, 0, 0], // Remove margins for full width
           },
 
-          // Consumption Detail Section - FIXED full width background
+          // --- (3) CONSUMPTION DETAIL — full width ---
           {
+            width: "100%",
             stack: [
               {
                 table: {
-                  widths: ["*"], // Full width table
+                  widths: ["*"],
                   body: [
-                    [
-                      {
-                        text: "Consumption Detail",
-                        style: "sectionHeader",
-                        margin: [0, 0, 0, 0],
-                      },
-                    ],
+                    [{ text: "Consumption Detail", style: "sectionHeader" }],
                   ],
                 },
-                layout: "noBorders", // Remove table borders for the header
-                margin: [0, 0, 0, 0],
+                layout: "noBorders",
               },
               {
                 table: {
@@ -437,93 +465,81 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 margin: [0, 5, 0, 20],
               },
             ],
-            margin: [0, 0, 0, 0], // Remove margins for full width
           },
 
-          // Consumption Summary by Department Section - FIXED full width background
+          // --- (4) CONSUMPTION SUMMARY BY DEPARTMENT — full width ---
           {
+            width: "100%",
             stack: [
               {
                 table: {
-                  widths: ["*"], // Full width table
+                  widths: ["*"],
                   body: [
                     [
                       {
                         text: "Consumption Summary by Department",
                         style: "sectionHeader",
-                        margin: [0, 0, 0, 0],
                       },
                     ],
                   ],
                 },
-                layout: "noBorders", // Remove table borders for the header
-                margin: [0, 0, 0, 0],
+                layout: "noBorders",
               },
               {
                 table: {
                   headerRows: 1,
-                  widths: [
-                    "auto",
-                    "auto",
-                    "auto",
-                    "auto",
-                    "auto",
-                    "auto",
-                    "auto",
-                    "auto",
-                    "auto",
-                  ],
+                  widths: Array(9).fill("*"),
                   body: [
                     [
-                      { text: "S.No", style: "tableHeader" },
-                      { text: "Department", style: "tableHeader" },
+                      { text: "Sr.No", style: "tableHeader" },
+                      { text: "Process Department", style: "tableHeader" },
                       { text: "Unit", style: "tableHeader" },
-                      { text: "MCS", style: "tableHeader" },
+                      { text: "M/C", style: "tableHeader" },
                       {
-                        text: "Connected Load / Dept",
+                        text: "Connected Load Per Department",
                         style: "tableHeader",
                         alignment: "right",
                       },
                       {
-                        text: "Connected Load / MCS",
+                        text: "Connected Load Per Machine",
                         style: "tableHeader",
                         alignment: "right",
                       },
                       {
-                        text: "Running Load",
+                        text: "Running Load Per Department",
                         style: "tableHeader",
                         alignment: "right",
                       },
                       {
-                        text: "Avg Consumption",
+                        text: "Average Department Load",
                         style: "tableHeader",
                         alignment: "right",
                       },
                       {
-                        text: "Consumption",
+                        text: "Total Consumption (KWH)",
                         style: "tableHeader",
                         alignment: "right",
                       },
                     ],
                     ...((consumptionPerDept || []).flatMap((dept, index) => {
                       const rows = [];
-                      const hasU4 =
-                        dept &&
-                        Object.keys(dept).some((k) => k.startsWith("u4"));
-                      const hasU5 =
-                        dept &&
-                        Object.keys(dept).some((k) => k.startsWith("u5"));
+                      const hasU4 = Object.keys(dept || {}).some((k) =>
+                        k.startsWith("u4")
+                      );
+                      const hasU5 = Object.keys(dept || {}).some((k) =>
+                        k.startsWith("u5")
+                      );
 
                       if (hasU4) {
                         rows.push([
                           {
                             text: (index + 1).toString(),
-                            rowSpan: hasU4 && hasU5 ? 2 : 1,
+                            rowSpan: hasU5 ? 2 : 1,
                             style: "tableCell",
                           },
                           {
                             text: dept.name,
-                            rowSpan: hasU4 && hasU5 ? 2 : 1,
+                            rowSpan: hasU5 ? 2 : 1,
                             style: "tableCell",
                           },
                           { text: "4", style: "tableCell" },
@@ -566,16 +582,9 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                             ? {}
                             : {
                                 text: (index + 1).toString(),
-                                rowSpan: hasU4 && hasU5 ? 2 : 1,
                                 style: "tableCell",
                               },
-                          hasU4
-                            ? {}
-                            : {
-                                text: dept.name,
-                                rowSpan: hasU4 && hasU5 ? 2 : 1,
-                                style: "tableCell",
-                              },
+                          hasU4 ? {} : { text: dept.name, style: "tableCell" },
                           { text: "5", style: "tableCell" },
                           { text: dept.u5Mcs || "-", style: "tableCell" },
                           {
@@ -613,18 +622,13 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                       return rows;
                     }) || []),
                     [
-                      {},
-                      {},
-                      {},
-                      {},
-                      {},
-                      {},
-                      {},
                       {
                         text: "Total Consumption",
                         style: "tableHeader",
                         alignment: "right",
+                        colSpan: 8, // Merge first 8 columns into one
                       },
+                      ...Array(7).fill({}), // filler cells for the colSpan
                       {
                         text: (totalConsumption || 0).toLocaleString("en-US", {
                           minimumFractionDigits: 2,
@@ -639,38 +643,39 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 margin: [0, 5, 0, 20],
               },
             ],
-            margin: [0, 0, 0, 0], // Remove margins for full width
           },
         ],
+
         styles: {
           sectionHeader: {
             fontSize: 16,
             bold: true,
-            background: "#BFDBFE", // light blue background
+            background: "#1C4D82",
+            fillColor: "#1C4D82",
+            color: "#FFFFFF",
             padding: [8, 4],
-            margin: [0, 0, 0, 0],
+            margin: [8, 4],
             alignment: "left",
-            fillColor: "#BFDBFE", // Ensure background color
           },
           tableHeader: {
             bold: true,
             fontSize: 10,
+            background: "#E5F3FD",
+            fillColor: "#E5F3FD",
             padding: [4, 2],
-            background: "#F3F4F6", // light gray background
-            fillColor: "#F3F4F6",
           },
           tableCell: {
             fontSize: 9,
             padding: [4, 2],
           },
         },
+
         defaultStyle: {
           font: "Roboto",
         },
-        pageMargins: [40, 120, 40, 60], // Increased top margin for header
+        pageMargins: [40, 120, 40, 60],
       };
 
-      // Generate and download PDF
       pdfMake.createPdf(docDefinition).download("Energy_Comparison_Report.pdf");
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -711,18 +716,18 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-end mb-4">
+      <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
+      <div className="flex justify-start my-4">
         <button
           onClick={handleExportPdf}
-          className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2"
+          className="bg-[#1C4D82] hover:bg-[#1C4D82] cursor-pointer text-white font-bold py-2 px-4 rounded flex items-center gap-2"
         >
           <span>Export to PDF</span>
         </button>
       </div>
-      <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#1A68B2]  to-transparent"></div>
       {/* intervals */}
       <div className="w-full mt-5">
-        <div className="w-full bg-blue-300 py-2 px-4 font-semibold text-[20px]">
+        <div className="w-full bg-[#1C4D82] text-white py-2 px-4 font-semibold text-[20px]">
           Report Parameters
         </div>
         {/* parameters table */}
@@ -730,7 +735,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
           <table className=" border w-full lg:w-[40%]   overflow-hidden">
             <tbody>
               <tr className="text-[14px] font-inter">
-                <td className="py-1 px-2 border border-gray-400 dark:border-gray-500">
+                <td className="bg-[#E5F3FD] dark:bg-gray-600 font-semibold py-1 px-2 border border-gray-400 dark:border-gray-500">
                   Selected Period
                 </td>
                 <td className="py-1 px-4 border border-gray-400 dark:border-gray-500">
@@ -738,7 +743,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 </td>
               </tr>
               <tr className="text-[14px] font-inter">
-                <td className="py-1 px-4 border border-gray-400 dark:border-gray-500">
+                <td className="bg-[#E5F3FD] dark:bg-gray-600 font-semibold py-1 px-4 border border-gray-400 dark:border-gray-500">
                   Start Date
                 </td>
                 <td className="py-1 px-4 border border-gray-400 dark:border-gray-500">
@@ -746,7 +751,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 </td>
               </tr>
               <tr className="text-[14px] font-inter">
-                <td className="py-1 px-4 border border-gray-400 dark:border-gray-500">
+                <td className="bg-[#E5F3FD] dark:bg-gray-600 font-semibold py-1 px-4 border border-gray-400 dark:border-gray-500">
                   End Date
                 </td>
                 <td className="py-1 px-4 border border-gray-400 dark:border-gray-500">
@@ -754,7 +759,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 </td>
               </tr>
               <tr className="text-[14px] font-inter">
-                <td className="py-1 px-4 border border-gray-400 dark:border-gray-500">
+                <td className="bg-[#E5F3FD] dark:bg-gray-600 font-semibold py-1 px-4 border border-gray-400 dark:border-gray-500">
                   Selected Timezone
                 </td>
                 <td className="py-1 px-4 border border-gray-400 dark:border-gray-500">
@@ -764,7 +769,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
             </tbody>
           </table>
           <table className="mt-2 border w-[44%] lg:w-[17.5%] overflow-hidden">
-            <thead className="text-[14px] font-inter">
+            <thead className="bg-[#E5F3FD] dark:bg-gray-600 text-[14px] font-inter">
               <tr>
                 <th className="py-1 px-4 text-left font-semibold border border-gray-400 dark:border-gray-500">
                   Sources
@@ -772,31 +777,33 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
               </tr>
             </thead>
             <tbody>
-              {availableUnits.map((unit) => (
-                <tr key={unit} className="text-[14px] font-inter">
-                  <td className="py-1 px-3 border border-gray-400 dark:border-gray-500">
-                    Unit {unit}
-                  </td>
-                </tr>
-              ))}
+              {availableUnits.map((unit) => {
+                return (
+                  <tr key={unit} className="text-[14px] font-inter">
+                    <td className="py-1 px-3 border border-gray-400 dark:border-gray-500">
+                      Unit {unit}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
       </div>
       {/* Summary */}
       <div className="w-full mt-5">
-        <div className="w-full bg-blue-300 py-2 px-4 font-semibold text-[20px]">
+        <div className="w-full bg-[#1C4D82] text-white py-2 px-4 font-semibold text-[20px]">
           Summary
         </div>
         <div className="w-full mt-5">
           <table className="w-full lg:w-[40%] border-collapse border border-gray-400 text-sm">
-            <thead className="bg-gray-100 dark:bg-gray-800">
+            <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[14px] font-inter">
                 <th className="py-1 px-3 border border-gray-400 dark:border-gray-500 text-left">
                   Unit No.
                 </th>
                 <th className="py-1 px-3 border border-gray-400 dark:border-gray-500 text-right">
-                  Total Consumption (kWh)
+                  Total Consumption
                 </th>
               </tr>
             </thead>
@@ -820,7 +827,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 <td className="py-1 px-3 border border-gray-400 dark:border-gray-500">
                   Total
                 </td>
-                <td className="py-1 px-3 border border-gray-400 dark:border-gray-500 text-right">
+                <td className="text-[#1C4D82] dark:text-white/80 py-1 px-3 border border-gray-400 dark:border-gray-500 text-right">
                   {grandTotal.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -833,12 +840,12 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
       </div>
       {/* Comsumption Detail */}
       <div className="w-full mt-5">
-        <div className="w-full bg-blue-300 py-2 px-4 font-semibold text-[20px]">
+        <div className="w-full bg-[#1C4D82] text-white py-2 px-4 font-semibold text-[20px]">
           Comsumption Detail
         </div>
         <div className="w-full mt-5">
           <table className="min-w-full border-collapse border border-gray-400 text-sm">
-            <thead className="bg-gray-100 dark:bg-gray-800">
+            <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[14px] font-inter">
                 <th className="py-1 px-2 border border-gray-400 dark:border-gray-500">
                   Day
@@ -872,7 +879,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   ))}
                 </tr>
               ))}
-              {/* total row */}
+
               <tr className="font-semibold text-[14px] font-inter">
                 <td className="py-1 px-2 border border-gray-400 dark:border-gray-500">
                   Total
@@ -880,7 +887,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 {visibleColumns.map((key) => (
                   <td
                     key={key}
-                    className="py-1 px-2 border border-gray-400 dark:border-gray-500 text-right"
+                    className="text-[#1C4D82] dark:text-white/80 py-1 px-2 border border-gray-400 dark:border-gray-500 text-right"
                   >
                     {totalRow[key]?.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
@@ -895,39 +902,39 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
       </div>
       {/* Comsumption Detail */}
       <div className="w-full mt-5">
-        <div className="w-full bg-blue-300 py-2 px-4 font-semibold text-[20px]">
+        <div className="w-full bg-[#1C4D82] text-white py-2 px-4 font-semibold text-[20px]">
           Consumption Summary by Department
         </div>
         <div className="w-full mt-5">
           <table className=" border w-full overflow-hidden">
-            <thead className="bg-gray-100 dark:bg-gray-800">
+            <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[14px] font-inter">
-                <th className="border border-gray-700 px-3 py-1 text-left">
-                  S.No
+                <th className="text-center border border-gray-700 px-3 py-1 ">
+                  Sr.No
                 </th>
-                <th className="border border-gray-700 px-3 py-1 text-left">
-                  Department
+                <th className="text-center border border-gray-700 px-3 py-1 ">
+                  Process Department
                 </th>
-                <th className="border border-gray-700 px-3 py-1 text-center">
+                <th className="text-center border border-gray-700 px-3 py-1 ">
                   Unit
                 </th>
-                <th className="border border-gray-700 px-3 py-1 text-center">
-                  MCS
+                <th className="text-center border border-gray-700 px-3 py-1 ">
+                  M/C
                 </th>
-                <th className="border border-gray-700 px-3 py-1 text-right">
-                  Connected Load / Dept
+                <th className="text-center border border-gray-700 px-3 py-1 ">
+                  Connected Load Per Depratment
                 </th>
-                <th className="border border-gray-700 px-3 py-1 text-right">
-                  Connected Load / MCS
+                <th className="text-center border border-gray-700 px-3 py-1 ">
+                  Connected Load Per Machine
                 </th>
-                <th className="border border-gray-700 px-3 py-1 text-right">
-                  Running Load
+                <th className="text-center border border-gray-700 px-3 py-1 ">
+                  Running Load Per Department
                 </th>
-                <th className="border border-gray-700 px-3 py-1 text-right">
-                  Avg Consumption
+                <th className="text-center border border-gray-700 px-3 py-1 ">
+                  Avg Department Load
                 </th>
-                <th className="border border-gray-700 px-3 py-1 text-right">
-                  Consumption
+                <th className="text-center border border-gray-700 px-3 py-1 ">
+                  Total Consumption (KWH)
                 </th>
               </tr>
             </thead>
@@ -944,7 +951,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 <td className="text-right border border-gray-700 px-2 py-1">
                   Total Consumption
                 </td>
-                <td className="text-right border border-gray-700 px-2 py-1">
+                <td className="text-[#1C4D82] dark:text-white/80 text-right border border-gray-700 px-2 py-1">
                   {totalConsumption.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -955,6 +962,15 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
           </table>
         </div>
       </div>
+      {/* Chart component */}
+      {/* <div>
+        <EnergyComparisonChart
+          data={consumptionPerDept}
+          unit5Total={unit5TotalPropstotal}
+          unit4Total={unit4TotalPropstotal}
+          intervalsObj={intervalsObj}
+        />
+      </div> */}
     </div>
   );
 };

@@ -157,7 +157,7 @@ function CustomTrend() {
     "Ring Frame 10-12": "U5_GW03",
     "Spare 3": "U6_GW03",
     "Spare 1": "U7_GW03",
-    Spare2: "U8_GW03",
+    // Spare2: "U8_GW03",
     "Ring Frame 13-15": "U9_GW03",
     "Auto Con 10-18": "U10_GW03",
     "Baling Press": "U11_GW03",

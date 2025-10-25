@@ -368,11 +368,11 @@ export const sidebarLinksMap = {
     //   icon: PlantOverview,
     //   href: "/energy-summary-report",
     // },
-    // {
-    //   title: "Energy Comparison Report",
-    //   icon: PlantOverview,
-    //   href: "/energy-comparison-report",
-    // },
+    {
+      title: "Energy Comparison Report",
+      icon: PlantOverview,
+      href: "/energy-comparison-report",
+    },
   ],
 
   Settings: [
