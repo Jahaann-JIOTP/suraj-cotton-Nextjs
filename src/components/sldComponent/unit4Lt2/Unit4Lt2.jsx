@@ -48,7 +48,7 @@ const lt2MeterData = [
   },
   {
     link: "U9_GW01",
-    title: "Comber (5-8)(13-14)",
+    title: "Card (5-8)(13-14)",
     top: 306,
     left: 719,
   },

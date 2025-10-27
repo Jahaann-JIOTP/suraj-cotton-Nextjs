@@ -109,7 +109,7 @@ const Unit5Lt4Page = () => {
           )}
         </div>
       </div>
-      {/* <SankeyTotalValues data={data} lt="TotalLT4" /> */}
+      <SankeyTotalValues data={data} lt="TotalLT4" />
     </div>
   );
 };

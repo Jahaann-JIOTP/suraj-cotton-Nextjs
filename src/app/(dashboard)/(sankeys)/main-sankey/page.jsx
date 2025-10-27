@@ -1,5 +1,5 @@
 "use client";
-import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
+// import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
 import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
@@ -9,6 +9,7 @@ import SankeyTotalValues, {
 } from "@/components/sakeyTotalValue/SankeyTotalValues";
 import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
 import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
+import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
 const mainSanekyData = [
   { from: "HT", to: "Total", value: 300 },
   { from: "LT", to: "Total", value: 300 },
@@ -36,7 +37,7 @@ const MainSankey = () => {
     endTime: "18:00",
   });
 
-  const { generation, consumption } = calculateSums(data, "TotalLT1");
+  const { generation, consumption } = calculateSums(data, "Total Generation");
 
   // time period selector
   let startDate = null;
@@ -54,17 +55,14 @@ const MainSankey = () => {
     if (!token) return;
     setLoading(true);
     try {
-      const response = await fetch(
-        `${config.BASE_URL}${config.SANKEY.UNIT4_LT1}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(finalRange),
-        }
-      );
+      const response = await fetch(`${config.BASE_URL}/mainsankey`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(intervalPeriod),
+      });
       const resResult = await response.json();
       if (response.ok) {
         setData(resResult);
@@ -110,7 +108,7 @@ const MainSankey = () => {
           {loading ? (
             <CustomLoader />
           ) : consumption > 0 || generation > 0 ? (
-            <SankeyChart data={mainSanekyData} id="MainSankey" />
+            <SankeyChart data={data} id="MainSankey" />
           ) : (
             <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
               <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />
@@ -121,7 +119,7 @@ const MainSankey = () => {
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="TotalLT1" />
+      <SankeyTotalValues data={data} lt="Total Generation" />
     </div>
   );
 };
