@@ -32,6 +32,7 @@
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "html-to-pdfmake": "^2.5.31",
+    "html2canvas": "^1.4.1",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.515.0",
     "moment": "^2.30.1",

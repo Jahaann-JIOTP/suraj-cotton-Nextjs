@@ -7,6 +7,10 @@ import EnergyComparisonChart from "./EnergyComparisonChart";
 
 const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
   const { theme } = useTheme();
+  const [chartImages, setChartImages] = React.useState({
+    unit4Image: null,
+    unit5Image: null,
+  });
   //   extract data
   const dailyConsumption = rawData?.dailyConsumption || [];
   const consumptionPerDept = rawData?.summarybydept || [];
@@ -144,6 +148,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
   };
   /////////////////================================================
   ////////////////export to pdf///////////////////////////////
+
   if (pdfFonts?.pdfMake?.vfs) {
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
   } else {
@@ -821,6 +826,33 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
               },
             ],
           },
+          // ✅ Add charts
+          ...(chartImages.unit4Image
+            ? [
+                {
+                  text: "Unit 4 Consumption",
+                  style: "sectionHeader",
+                },
+                {
+                  image: chartImages.unit4Image,
+                  width: 400, // adjust size
+                  margin: [0, 5, 0, 20],
+                },
+              ]
+            : []),
+          ...(chartImages.unit5Image
+            ? [
+                {
+                  text: "Unit 5 Consumption",
+                  style: "sectionHeader",
+                },
+                {
+                  image: chartImages.unit5Image,
+                  width: 400,
+                  margin: [0, 5, 0, 20],
+                },
+              ]
+            : []),
         ],
 
         styles: {
@@ -864,7 +896,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
       alert("Error generating PDF. Please try again.");
     }
   };
-
+  // console.log(">>>>>>>>>>>>>>", onChartReady);
   /////////////////================================================
   return (
     <div>
@@ -1151,25 +1183,6 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
               </tr>
             </thead>
             <tbody>
-              {/* {renderRows()}
-              <tr className="font-semibold text-[14px]">
-                <td className=" px-2 py-1"></td>
-                <td className=" px-2 py-1"></td>
-                <td className=" px-2 py-1"></td>
-                <td className=" px-2 py-1"></td>
-                <td className=" px-2 py-1"></td>
-                <td className=" px-2 py-1"></td>
-                <td className=" px-2 py-1"></td>
-                <td className="text-right border border-gray-700 px-2 py-1">
-                  Total Consumption
-                </td>
-                <td className="text-[#1C4D82] dark:text-white/80 text-right border border-gray-700 px-2 py-1">
-                  {totalConsumption.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </td>
-              </tr> */}
               {consumptionPerDept.map((dept, index) => {
                 const hasU4 = "u4Consumption" in dept;
                 const hasU5 = "u5Consumption" in dept;
@@ -1329,14 +1342,15 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
         </div>
       </div>
       {/* Chart component */}
-      {/* <div>
+      <div>
         <EnergyComparisonChart
           data={consumptionPerDept}
           unit5Total={unit5TotalPropstotal}
           unit4Total={unit4TotalPropstotal}
           intervalsObj={intervalsObj}
+          onChartReady={(images) => setChartImages(images)}
         />
-      </div> */}
+      </div>
     </div>
   );
 };

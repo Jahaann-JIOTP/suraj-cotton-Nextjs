@@ -10,253 +10,264 @@ const EnergyComparisonChart = ({
   unit4Total = {},
   intervalsObj,
 }) => {
+  const colorArray = [
+    "#00C5CD",
+    "#01868B",
+    "#65CDAA",
+    "#458B73",
+    "#010080",
+    "#EE5A40",
+    "#EF9A49",
+    "#CD4F39",
+    "#EF9A49",
+    "#81007F",
+    "#EE8420",
+    "#8483EB",
+    "#008001",
+    "#CDAF95",
+    "#8A7766",
+    "#9C6D27",
+    "#800000",
+    "#8B5900",
+    "#F7BF82",
+    "#808080",
+    "#CD5D5C",
+    "#F0807F",
+    "#6F2C01",
+    "#9A32CD",
+    "#0000FE",
+    "#00FF01",
+    "#FE0000",
+    "#F778A1",
+  ];
+
+  // ✅ Prepare data for Unit 4 and Unit 5 separately
   const unit4Data = data
     .filter((d) => d.u4Consumption !== undefined)
-    .map((d) => ({
+    .map((d, i) => ({
       label: d.name,
       value: d.u4Consumption,
+      color: colorArray[i % colorArray.length],
     }));
 
-  useEffect(() => {
-    const disposeRoot = (id) => {
-      am5.registry.rootElements.forEach((root) => {
-        if (root.dom.id === id) root.dispose();
-      });
-    };
+  const unit5Data = data
+    .filter((d) => d.u5Consumption !== undefined)
+    .map((d, i) => ({
+      label: d.name,
+      value: d.u5Consumption,
+      color: colorArray[i % colorArray.length],
+    }));
 
-    const createChart = (id, chartData, unitName) => {
-      disposeRoot(id);
-      const root = am5.Root.new(id);
-      root.setThemes([am5themes_Animated.new(root)]);
+  // ✅ Utility to draw one donut chart (used for both Unit 4 & 5)
+  const drawDonutChart = (chartId, chartData, totals, title) => {
+    // Cleanup old chart
+    am5.registry.rootElements.forEach((root) => {
+      if (root.dom.id === chartId) root.dispose();
+    });
 
-      const chart = root.container.children.push(
-        am5percent.PieChart.new(root, {
-          layout: root.verticalLayout,
-          innerRadius: am5.percent(10),
+    const root = am5.Root.new(chartId);
+    root.setThemes([am5themes_Animated.new(root)]);
+
+    // --- MAIN CONTAINER (Legend Left, Chart Right) ---
+    const mainContainer = root.container.children.push(
+      am5.Container.new(root, {
+        layout: root.horizontalLayout,
+        width: am5.percent(100),
+        height: am5.percent(100),
+      })
+    );
+
+    // --- LEGEND (LEFT SIDE) ---
+    const legendContainer = mainContainer.children.push(
+      am5.Container.new(root, {
+        width: am5.percent(35),
+        height: am5.percent(100),
+        layout: root.verticalLayout,
+        paddingTop: 30,
+        paddingLeft: 20,
+        paddingRight: 10,
+        y: am5.p50,
+        centerY: am5.p50,
+      })
+    );
+
+    // Add custom legend items
+    chartData.forEach((item) => {
+      const legendItem = legendContainer.children.push(
+        am5.Container.new(root, {
+          layout: root.horizontalLayout,
+          centerY: am5.p50,
+          marginBottom: 4, // ✅ Reduced spacing between items
         })
       );
 
-      const bgColor = root.interfaceColors.get("background");
-
-      // ✅ Updated: Dynamic center calculation and improved label placement
-      const createCurvedLabel = (
-        svg,
-        text,
-        centerX,
-        centerY,
-        radius,
-        startAngle,
-        arc
-      ) => {
-        const pathId = `path-${Math.random().toString(36).substr(2, 9)}`;
-        const defs =
-          svg.querySelector("defs") ||
-          document.createElementNS("http://www.w3.org/2000/svg", "defs");
-        if (!svg.querySelector("defs")) svg.appendChild(defs);
-
-        const endAngle = startAngle + arc;
-        const startRad = (startAngle * Math.PI) / 180;
-        const endRad = (endAngle * Math.PI) / 180;
-
-        // Adjusted: place curve further OUTSIDE
-        const outerRadius = radius + 120;
-
-        const x1 = centerX + outerRadius * Math.cos(startRad);
-        const y1 = centerY + outerRadius * Math.sin(startRad);
-        const x2 = centerX + outerRadius * Math.cos(endRad);
-        const y2 = centerY + outerRadius * Math.sin(endRad);
-
-        const largeArc = arc > 180 ? 1 : 0;
-        const sweep = 1;
-
-        const pathData = `M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 ${largeArc} ${sweep} ${x2} ${y2}`;
-
-        const path = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "path"
-        );
-        path.setAttribute("id", pathId);
-        path.setAttribute("d", pathData);
-        path.setAttribute("fill", "none");
-        defs.appendChild(path);
-
-        // ✅ Label text styling
-        const textElement = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "text"
-        );
-        textElement.setAttribute("font-size", "12");
-        textElement.setAttribute("font-weight", "600");
-        textElement.setAttribute("fill", "#333");
-        textElement.setAttribute("text-anchor", "middle");
-
-        const textPath = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "textPath"
-        );
-        textPath.setAttribute("href", `#${pathId}`);
-        textPath.setAttribute("startOffset", "50%");
-        textPath.textContent = text;
-
-        textElement.appendChild(textPath);
-        svg.appendChild(textElement);
-      };
-
-      // 🌀 Helper to create ring
-      const makeRing = (inner, outer, ringData, ringIndex) => {
-        const series = chart.series.push(
-          am5percent.PieSeries.new(root, {
-            valueField: "value",
-            categoryField: "label",
-            alignLabels: true,
-            radius: am5.percent(outer),
-            innerRadius: am5.percent(inner),
-          })
-        );
-
-        series.slices.template.setAll({
-          stroke: bgColor,
-          strokeWidth: 2,
-          tooltipText: `${unitName}\n{category}: {valuePercentTotal.formatNumber('0.00')}% ({value})`,
-        });
-
-        // Disable default labels and ticks
-        series.labels.template.setAll({ disabled: false });
-        series.ticks.template.setAll({ disabled: false });
-
-        series.data.setAll(ringData);
-        series.appear(800 + ringIndex * 300, 100);
-
-        // ✅ On validated, draw labels outside
-        series.events.on("datavalidated", () => {
-          const svg = root.dom.querySelector("svg");
-          if (svg) {
-            series.slices.each((slice) => {
-              const dataItem = slice.dataItem;
-              if (dataItem) {
-                const startAngle = slice.get("startAngle");
-                const arc = slice.get("arc");
-                const category = dataItem.get("category");
-                const value = dataItem.get("value");
-                const total = ringData.reduce((sum, d) => sum + d.value, 0);
-                const percent = ((value / total) * 150).toFixed(1);
-
-                // Label text shows name + actual value
-                const labelText = `${category}: ${value.toFixed(
-                  1
-                )} (${percent}%)`;
-
-                // Center and radius positioning
-                const bbox = svg.getBBox();
-                const centerX = bbox.x + bbox.width / 2;
-                const centerY = bbox.y + bbox.height / 2;
-
-                const radius = (outer / 150) * (bbox.width / 2);
-
-                createCurvedLabel(
-                  svg,
-                  labelText,
-                  centerX,
-                  centerY,
-                  radius,
-                  startAngle,
-                  arc
-                );
-              }
-            });
-          }
-        });
-      };
-
-      const splitIntoRings = (arr) => {
-        const rings = [];
-        const perRing = Math.ceil(arr.length / 4);
-        for (let i = 0; i < 4; i++) {
-          const start = i * perRing;
-          const end = start + perRing;
-          const slice = arr.slice(start, end);
-          if (slice.length) rings.push(slice);
-        }
-        return rings;
-      };
-
-      const rings = splitIntoRings(chartData);
-      const radii = [
-        [30, 55],
-        [55, 75],
-        [75, 95],
-        [95, 115],
-      ];
-
-      rings.forEach((ringData, i) =>
-        makeRing(radii[i][0], radii[i][1], ringData, i)
+      legendItem.children.push(
+        am5.Rectangle.new(root, {
+          width: 14,
+          height: 14,
+          fill: am5.color(item.color),
+          stroke: am5.color(0x000000),
+          strokeWidth: 0.5,
+          cornerRadiusTL: 2,
+          cornerRadiusTR: 2,
+          cornerRadiusBL: 2,
+          cornerRadiusBR: 2,
+          centerY: am5.p50,
+        })
       );
 
-      // --- Center content: date range and totals ---
-      try {
-        const startDate = intervalsObj?.startDate || "";
-        const endDate = intervalsObj?.endDate || "";
+      legendItem.children.push(
+        am5.Label.new(root, {
+          text: `${item.label}: ${item.value.toFixed(1)}`,
+          fontSize: 13,
+          fill: am5.color(0x333333),
+          marginLeft: 5, // ✅ Slightly reduced gap between square and label
+          centerY: am5.p50,
+        })
+      );
+    });
 
-        const centerLines = [];
-        if (startDate || endDate) centerLines.push(`${startDate} - ${endDate}`);
+    // --- CHART AREA (RIGHT SIDE) ---
+    const chartContainer = mainContainer.children.push(
+      am5.Container.new(root, {
+        width: am5.percent(65),
+        height: am5.percent(100),
+      })
+    );
 
-        // Use safe accessors for unit4 totals
-        const u4TotalVal = unit4Total?.unit4Total ?? unit4Total ?? 0;
-        const u4Lt1 = unit4Total?.unit4Lt1total ?? 0;
-        const u4Lt2 = unit4Total?.unit4Lt2total ?? 0;
+    const chart = chartContainer.children.push(
+      am5percent.PieChart.new(root, {
+        innerRadius: am5.percent(20),
+        layout: root.verticalLayout,
+      })
+    );
 
-        centerLines.push(`Unit 4 = ${Number(u4TotalVal).toFixed(1)}`);
-        centerLines.push(`Unit 4 lt 1 = ${Number(u4Lt1).toFixed(1)}`);
-        centerLines.push(`Unit 4 lt 2 = ${Number(u4Lt2).toFixed(1)}`);
+    const bgColor = root.interfaceColors.get("background");
 
-        const centerContainer = chart.seriesContainer.children.push(
-          am5.Container.new(root, {
-            width: am5.percent(100),
-            centerX: am5.percent(50),
-            centerY: am5.percent(50),
-            layout: root.verticalLayout,
-            valign: "middle",
-          })
-        );
+    // --- CREATE MULTIPLE RINGS ---
+    const makeRing = (inner, outer, ringData, ringIndex) => {
+      const series = chart.series.push(
+        am5percent.PieSeries.new(root, {
+          valueField: "value",
+          categoryField: "label",
+          radius: am5.percent(outer),
+          innerRadius: am5.percent(inner),
+        })
+      );
 
-        centerLines.forEach((line, idx) => {
-          centerContainer.children.push(
-            am5.Label.new(root, {
-              text: line,
-              fontSize: idx === 0 ? 14 : 12,
-              fontWeight: idx === 0 ? "700" : "600",
-              fill: am5.color(0x333333),
-              textAlign: "center",
-              centerX: am5.percent(50),
-            })
-          );
-        });
-      } catch (e) {
-        // ignore center rendering errors to avoid breaking chart
-        // console.warn(e);
-      }
+      series.slices.template.adapters.add("fill", (fill, target) => {
+        const dataItem = target.dataItem;
+        if (dataItem && dataItem.dataContext?.color) {
+          return am5.color(dataItem.dataContext.color);
+        }
+        return fill;
+      });
 
-      return () => root.dispose();
+      series.slices.template.setAll({
+        stroke: bgColor,
+        strokeWidth: 2,
+        tooltipText:
+          "{category}: {value.formatNumber('0.0')} ({valuePercentTotal.formatNumber('0.0')}%)",
+      });
+
+      series.labels.template.set("visible", false);
+      series.ticks.template.set("visible", false);
+      series.data.setAll(ringData);
+      series.appear(800 + ringIndex * 300, 100);
     };
 
-    createChart("unit4-donut-chart", unit4Data, "Unit 4");
-  }, [data]);
+    // --- Split data into rings ---
+    const splitIntoRings = (arr) => {
+      const rings = [];
+      const perRing = Math.ceil(arr.length / 4);
+      for (let i = 0; i < 4; i++) {
+        const slice = arr.slice(i * perRing, (i + 1) * perRing);
+        if (slice.length) rings.push(slice);
+      }
+      return rings;
+    };
+
+    const rings = splitIntoRings(chartData);
+    const radii = [
+      [30, 55],
+      [55, 80],
+      [80, 105],
+      [105, 130],
+    ];
+    rings.forEach((r, i) => makeRing(radii[i][0], radii[i][1], r, i));
+
+    // --- CENTER TEXT ---
+    const centerContainer = chart.seriesContainer.children.push(
+      am5.Container.new(root, {
+        centerX: am5.percent(50),
+        centerY: am5.percent(50),
+        layout: root.verticalLayout,
+      })
+    );
+
+    const startDate = intervalsObj?.startDate || "";
+    const endDate = intervalsObj?.endDate || "";
+    const totalVal = totals?.unit4Total ?? totals?.unit5Total ?? 0;
+    const lt1 = totals?.unit4Lt1total ?? totals?.unit5Lt1total ?? 0;
+    const lt2 = totals?.unit4Lt2total ?? totals?.unit5Lt2total ?? 0;
+
+    const lines = [
+      `${startDate} - ${endDate}`,
+      `${title} = ${totalVal.toFixed(1)}`,
+      `LT1 = ${lt1.toFixed(1)}`,
+      `LT2 = ${lt2.toFixed(1)}`,
+    ];
+
+    lines.forEach((line, i) => {
+      centerContainer.children.push(
+        am5.Label.new(root, {
+          text: line,
+          fontSize: i === 0 ? 14 : 12,
+          fontWeight: i === 0 ? "700" : "600",
+          fill: am5.color(0x333333),
+          textAlign: "center",
+        })
+      );
+    });
+
+    return () => root.dispose();
+  };
+
+  // --- Run Effect ---
+  useEffect(() => {
+    if (unit4Data.length > 0) {
+      drawDonutChart("unit4-donut-chart", unit4Data, unit4Total, "Unit 4");
+    }
+    if (unit5Data.length > 0) {
+      drawDonutChart("unit5-donut-chart", unit5Data, unit5Total, "Unit 5");
+    }
+  }, [data, unit4Total, unit5Total, intervalsObj]);
 
   return (
-    <div>
-      <h3
-        style={{
-          textAlign: "center",
-          fontWeight: 600,
-          marginBottom: "10px",
-        }}
-      >
-        Unit 4
-      </h3>
-      <div
-        id="unit4-donut-chart"
-        style={{ width: "100%", height: "60rem" }}
-      ></div>
+    <div className="my-10 space-y-20">
+      {unit4Data.length > 0 && (
+        <div>
+          <h2 className="text-xl font-semibold mb-4 text-center">
+            Unit 4 Energy Comparison
+          </h2>
+          <div
+            id="unit4-donut-chart"
+            style={{ width: "100%", height: "50rem" }}
+          />
+        </div>
+      )}
+
+      {unit5Data.length > 0 && (
+        <div>
+          <h2 className="text-xl font-semibold mb-4 text-center">
+            Unit 5 Energy Comparison
+          </h2>
+          <div
+            id="unit5-donut-chart"
+            style={{ width: "100%", height: "50rem" }}
+          />
+        </div>
+      )}
     </div>
   );
 };
