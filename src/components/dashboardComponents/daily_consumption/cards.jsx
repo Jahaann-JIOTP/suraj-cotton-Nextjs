@@ -1,4 +1,5 @@
 import React from "react";
+import { MdInfoOutline } from "react-icons/md";
 
 const pad2 = (n) => String(n ?? 0).padStart(2, "0");
 const fmt2 = (n) => Number(n ?? 0).toFixed(2);
@@ -11,6 +12,7 @@ const Card = ({
   averagePower,
   averagePowerFactor,
   averageVoltage,
+  info = "",
 }) => {
   const lightingMeter = [
     "lighting internal",
@@ -20,9 +22,39 @@ const Card = ({
   const plantMeter = ["ac_ring db 01", "ac_ring bypass"];
   const isLightingMeter = lightingMeter.includes(title.toLowerCase());
   const isPlantMeter = plantMeter.includes(title.toLowerCase());
+  const isInfo = info.length > 0;
+  console.log("this is info", isInfo);
 
   return (
-    <div className="w-full bg-white shadow-md rounded-lg border dark:bg-gray-800 border-gray-200 overflow-hidden !border-t-4 !border-t-[#1d5999]">
+    <div className="w-full relative bg-white shadow-md rounded-lg border dark:bg-gray-800 border-gray-200 overflow-hidden !border-t-4 !border-t-[#1d5999]">
+      {/* Info Section */}
+      {isInfo && (
+        <div className="absolute right-2 top-2 group">
+          {/* Info Button */}
+          <button
+            type="button"
+            className="p-1.5 rounded-full bg-[#E8F5FF] cursor-pointer dark:bg-gray-700 hover:bg-[#d6ebff] dark:hover:bg-gray-600 transition-colors duration-200"
+          >
+            <MdInfoOutline
+              size={22}
+              className="text-[#1E538D] dark:text-white"
+            />
+          </button>
+
+          {/* Tooltip Content */}
+          <div
+            className="absolute right-0 top-10 w-64 bg-[#1D528B] dark:bg-gray-600 text-gray-200 dark:text-gray-100 
+               text-sm font-inter p-2 rounded-sm shadow-xl opacity-0 scale-95 
+               group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 z-50"
+          >
+            <div className="flex items-start space-x-2">
+              {/* <MdInfoOutline className="text-gray-200 dark:text-[#1E538D] mt-0.5 text-[24px]" /> */}
+              <div>{info}</div>
+            </div>
+            <div className="absolute top-[-6px] right-3 w-3 h-3 rotate-45 bg-[#1D528B] dark:bg-gray-600" />
+          </div>
+        </div>
+      )}
       {/* Title */}
       <div className="text-center p-3">
         <h2 className="inline-block uppercase font-inter text-[#025697] font-semibold text-[17px] tracking-wide relative">

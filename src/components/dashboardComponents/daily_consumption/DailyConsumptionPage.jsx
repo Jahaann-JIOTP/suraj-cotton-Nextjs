@@ -12,6 +12,7 @@ const ITEMS_PER_PAGE = 8;
 const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
   const [dailyConsumptionTimePeriod, setDailyConsumptionTimePeriod] =
     useState("today");
+
   const [isOpenDptDropdonw, setIsOpenDptDropdonw] = useState(false);
   const [selectDpt, setSelectDpt] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -77,7 +78,7 @@ const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
- 
+
   // ---------handle input field change---------
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -309,6 +310,7 @@ const DailyConsumptionPage = ({ pageTitle, data, loading, onRangeChange }) => {
                   averagePower={meter.avgPower}
                   averagePowerFactor={meter.avgPowerFactor}
                   averageVoltage={meter.avgVoltage}
+                  info={meter.info}
                 />
               );
             })}

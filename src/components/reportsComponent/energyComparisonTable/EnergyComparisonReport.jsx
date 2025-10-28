@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import React from "react";
+import React, { useState } from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { loadImageAsBase64 } from "@/utils/imageToBase64";
@@ -7,10 +7,9 @@ import EnergyComparisonChart from "./EnergyComparisonChart";
 
 const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
   const { theme } = useTheme();
-  const [chartImages, setChartImages] = React.useState({
-    unit4Image: null,
-    unit5Image: null,
-  });
+
+  const [chartImages, setChartImages] = useState({ unit4: "", unit5: "" });
+  console.log("chart images from table", chartImages);
   //   extract data
   const dailyConsumption = rawData?.dailyConsumption || [];
   const consumptionPerDept = rawData?.summarybydept || [];
@@ -323,58 +322,6 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
             margin: [0, 0, 0, 20],
           },
 
-          // --- (2) SUMMARY — 50% width ---
-          // {
-          //   width: "50%",
-          //   stack: [
-          //     {
-          //       table: {
-          //         widths: ["*"],
-          //         body: [[{ text: "Summary", style: "sectionHeader" }]],
-          //       },
-          //       layout: "noBorders",
-          //     },
-          //     {
-          //       table: {
-          //         widths: ["25%", "25%"],
-          //         body: [
-          //           [
-          //             { text: "Unit.", style: "tableHeader" },
-          //             {
-          //               text: "Total Consumption (kWh)",
-          //               style: "tableHeader",
-          //               alignment: "right",
-          //             },
-          //           ],
-          //           ...(availableUnits.map((unit) => [
-          //             { text: unit.toString(), style: "tableCell" },
-          //             {
-          //               text:
-          //                 unitTotals[unit]?.toLocaleString("en-US", {
-          //                   minimumFractionDigits: 2,
-          //                   maximumFractionDigits: 2,
-          //                 }) || "-",
-          //               style: "tableCell",
-          //               alignment: "right",
-          //             },
-          //           ]) || []),
-          //           [
-          //             { text: "Total", style: "tableHeader" },
-          //             {
-          //               text: (grandTotal || 0).toLocaleString("en-US", {
-          //                 minimumFractionDigits: 2,
-          //                 maximumFractionDigits: 2,
-          //               }),
-          //               style: "tableCell",
-          //               alignment: "right",
-          //             },
-          //           ],
-          //         ],
-          //       },
-          //       margin: [0, 5, 0, 20],
-          //     },
-          //   ],
-          // },
           {
             width: "*",
             stack: [
@@ -826,30 +773,34 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
               },
             ],
           },
-          // ✅ Add charts
-          ...(chartImages.unit4Image
+          // (2) --- Add charts at the end ---
+          ...(chartImages.unit4
             ? [
                 {
-                  text: "Unit 4 Consumption",
-                  style: "sectionHeader",
-                },
-                {
-                  image: chartImages.unit4Image,
-                  width: 400, // adjust size
-                  margin: [0, 5, 0, 20],
+                  stack: [
+                    {
+                      image: chartImages.unit4,
+                      width: 500, // full width for landscape A4
+                      alignment: "center",
+                      margin: [0, 10, 0, 0],
+                    },
+                  ],
                 },
               ]
             : []),
-          ...(chartImages.unit5Image
+
+          // Unit 5 chart (heading + chart on same page)
+          ...(chartImages.unit5
             ? [
                 {
-                  text: "Unit 5 Consumption",
-                  style: "sectionHeader",
-                },
-                {
-                  image: chartImages.unit5Image,
-                  width: 400,
-                  margin: [0, 5, 0, 20],
+                  stack: [
+                    {
+                      image: chartImages.unit5,
+                      width: 500,
+                      alignment: "center",
+                      margin: [0, 10, 0, 0],
+                    },
+                  ],
                 },
               ]
             : []),
@@ -896,7 +847,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
       alert("Error generating PDF. Please try again.");
     }
   };
-  // console.log(">>>>>>>>>>>>>>", onChartReady);
+
   /////////////////================================================
   return (
     <div>
@@ -1342,7 +1293,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
         </div>
       </div>
       {/* Chart component */}
-      <div>
+      <div className="mb-3">
         <EnergyComparisonChart
           data={consumptionPerDept}
           unit5Total={unit5TotalPropstotal}

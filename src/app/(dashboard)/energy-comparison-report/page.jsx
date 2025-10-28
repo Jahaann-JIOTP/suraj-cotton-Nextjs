@@ -124,35 +124,6 @@ const EnergyComparisonPage = () => {
     return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
   };
 
-  // Remove the blocking useEffect that prevented submission
-  // // Only show warning messages but don't block form submission
-  // useEffect(() => {
-  //   if (!fetched) return;
-
-  //   // Show warning messages but don't set errorMessage that blocks submission
-  //   if (unit === "Unit_4" && unit4Spindle === 0) {
-  //     console.warn("Warning: No Unit 4 Bags data found");
-  //   } else if (unit === "Unit_5" && unit5Spindle === 0) {
-  //     console.warn("Warning: No Unit 5 Bags data found");
-  //   } else if (unit === "ALL") {
-  //     if (unit4Spindle === 0 && unit5Spindle === 0) {
-  //       console.warn("Warning: No Bags data found for either unit");
-  //     } else if (unit4Spindle === 0) {
-  //       console.warn("Warning: No Unit 4 Bags data found");
-  //     } else if (unit5Spindle === 0) {
-  //       console.warn("Warning: No Unit 5 Bags data found");
-  //     }
-  //   }
-  // }, [unit, unit4Spindle, unit5Spindle, fetched]);
-
-  // useEffect(() => {
-  //   if (unit !== "" && startDate !== "" && endDate !== "") {
-  //     fetchU4Spindles();
-  //     fetchU5Spindles();
-  //   }
-  // }, [unit, startDate, endDate]); // Added unit to dependencies
-
-  // getting energy usage report - removed the blocking condition
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -442,91 +413,9 @@ const EnergyComparisonPage = () => {
                   />
                 </div>
               </div>
-              {/* spindle field - now shows 0 as default */}
-              {/* <div className="w-full flex items-center gap-4 justify-between">
-                {unit === "Unit_4" ? (
-                  <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
-                    <label
-                      htmlFor="unit4Spindels"
-                      className="text-[13.51px] font-500 font-inter"
-                    >
-                      No. of Bags Unit 4
-                    </label>
-                    <input
-                      type="number"
-                      value={getSafeSpindleValue(unit4Spindle)}
-                      id="rates"
-                      name="rates"
-                      readOnly
-                      placeholder="00"
-                      className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
-                    />
-                  </div>
-                ) : unit === "Unit_5" ? (
-                  <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
-                    <label
-                      htmlFor="unit5Spindels"
-                      className="text-[13.51px] font-500 font-inter"
-                    >
-                      No. of Bags Unit 5
-                    </label>
-                    <input
-                      type="number"
-                      value={getSafeSpindleValue(unit5Spindle)}
-                      id="rates"
-                      name="rates"
-                      readOnly
-                      placeholder="00"
-                      className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
-                    />
-                  </div>
-                ) : unit === "ALL" ? (
-                  <>
-                    <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
-                      <label
-                        htmlFor="unit4Spindels"
-                        className="text-[13.51px] font-500 font-inter"
-                      >
-                        No. of Bags Unit 4
-                      </label>
-                      <input
-                        type="number"
-                        value={getSafeSpindleValue(unit4Spindle)}
-                        id="rates"
-                        name="rates"
-                        readOnly
-                        placeholder="00"
-                        className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
-                      />
-                    </div>
-                    <div className="flex flex-col w-full md:w-[46%] items-start justify-start gap-1">
-                      <label
-                        htmlFor="unit5Spindels"
-                        className="text-[13.51px] font-500 font-inter"
-                      >
-                        No. of Bags Unit 5
-                      </label>
-                      <input
-                        type="number"
-                        value={getSafeSpindleValue(unit5Spindle)}
-                        id="rates"
-                        name="rates"
-                        readOnly
-                        placeholder="00"
-                        className="w-full outline-none border-1 border-gray-300 dark:border-gray-600 rounded px-4 py-2"
-                      />
-                    </div>
-                  </>
-                ) : null}
-              </div> */}
             </div>
 
             <div className="w-full flex items-center justify-center mt-5 md:mt-10">
-              {/* {loadingSpindle ? ( */}
-              {/* <div className="flex justify-center items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mt-2">
-                  <CircularProgress size={16} /> <span>Fetching Bags...</span>
-                </div>
-              ) : ( */}
               <button
                 type="submit"
                 disabled={loadingSubmit}
@@ -541,7 +430,6 @@ const EnergyComparisonPage = () => {
                   "Generate Report"
                 )}
               </button>
-              {/* )} */}
             </div>
           </form>
         </div>
