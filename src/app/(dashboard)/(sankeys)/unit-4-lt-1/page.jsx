@@ -101,7 +101,7 @@ const UnitLt41Page = () => {
           {loading ? (
             <CustomLoader />
           ) : consumption > 0 || generation > 0 ? (
-            <SankeyChart data={data} id="unit4Lt1Chart" />
+            <SankeyChart data={data} isGray={true} />
           ) : (
             <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
               <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />

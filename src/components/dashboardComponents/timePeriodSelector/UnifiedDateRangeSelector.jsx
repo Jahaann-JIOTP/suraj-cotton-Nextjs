@@ -69,7 +69,7 @@ export const DateRangePicker = ({
     return {
       startDate: formatDate(today),
       endDate: formatDate(today),
-      startTime: "00:00",
+      startTime: "06:00",
       endTime: "23:59",
     };
   });

@@ -1,5 +1,5 @@
 "use client";
-// import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
+
 import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
@@ -10,16 +10,12 @@ import SankeyTotalValues, {
 import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
 import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
-const mainSanekyData = [
-  { from: "HT", to: "Total", value: 300 },
-  { from: "LT", to: "Total", value: 300 },
-  { from: "WAPDA", to: "Total", value: 100 },
-  { from: "SOLAR", to: "Total", value: 500 },
-  { from: "Total", to: "U4", value: 400 },
-  { from: "Total", to: "U5", value: 200 },
-  { from: "Total", to: "HFO Auxiliary", value: 300 },
-  { from: "Total", to: "LOSSES", value: 300 },
-];
+
+const navigationMap = {
+  "Unit 4 Consumption": "/unit4-sankey",
+  "Unit 5 Consumption": "/unit5-sankey",
+  Losses: "/losses-sankey",
+};
 const MainSankey = () => {
   const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);
@@ -108,7 +104,11 @@ const MainSankey = () => {
           {loading ? (
             <CustomLoader />
           ) : consumption > 0 || generation > 0 ? (
-            <SankeyChart data={data} id="MainSankey" />
+            <SankeyChart
+              data={data}
+              navigateLinks={navigationMap}
+              isGray={true}
+            />
           ) : (
             <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
               <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />

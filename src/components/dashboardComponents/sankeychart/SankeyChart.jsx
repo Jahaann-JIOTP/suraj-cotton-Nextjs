@@ -1,176 +1,248 @@
 "use client";
-
-import { useEffect, useRef } from "react";
-import * as am5 from "@amcharts/amcharts5";
-import * as am5flow from "@amcharts/amcharts5/flow";
-import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import React, { useRef, useEffect } from "react";
+import * as echarts from "echarts";
 import { useTheme } from "next-themes";
 
-const capitalizeWords = (str) => {
-  if (!str) return "";
-  return str.replace(/\b\w/g, (char) => char.toUpperCase());
-};
-
-const SankeyChart = ({ data, id }) => {
+const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
   const chartRef = useRef(null);
   const { resolvedTheme } = useTheme();
+
   useEffect(() => {
-    const container = document.getElementById(id);
-    if (!container || !(container instanceof HTMLElement)) return;
-    if (chartRef.current) {
-      chartRef.current.dispose();
-      chartRef.current = null;
-    }
+    if (!chartRef.current) return;
 
-    const root = am5.Root.new(container);
-    chartRef.current = root;
-    root._logo?.dispose();
-    root.setThemes([am5themes_Animated.new(root)]);
-
-    const isDark = resolvedTheme === "dark";
-    root.interfaceColors.set("text", am5.color(isDark ? 0xffffff : 0x000000));
-    root.interfaceColors.set("grid", am5.color(isDark ? 0x444444 : 0xcccccc));
-    const isSmallDevice = window.innerWidth <= 768;
-
-    root.container.setAll(
-      "background",
-      am5.color(isDark ? 0x1e293b : 0xffffff)
+    const chart = echarts.init(
+      chartRef.current,
+      resolvedTheme === "dark" ? "dark" : undefined
     );
 
-    const grayTailIds = [
-      "unit4Lt1Chart",
-      "unit4Lt2Chart",
-      "unit5Lt3Chart",
-      "unit5Lt4Chart",
+    const nodeColors = [
+      "#DC8C67",
+      "#67B7DC",
+      "#6771DC",
+      "#67DCBB",
+      "#6771DC",
+      "#DC6788",
+      "#DC67CE",
+      "#A367DC",
+      "#67DC75",
+      "#A0DC67",
+      "#DCD267",
+      "#DC8C67",
+      "#DC6788",
+      "#DC67CE",
+      "#A367DC",
+      "#67B7DC",
+      "#67DCBB",
+      "#67DC75",
     ];
 
-    const series = root.container.children.push(
-      am5flow.Sankey.new(root, {
-        sourceIdField: "from",
-        targetIdField: "to",
-        valueField: "value",
-        paddingRight: isSmallDevice ? 0 : 220,
-        paddingLeft: isSmallDevice ? 0 : 30,
-      })
-    );
+    // Helper: lighten or darken color
+    const lightenColor = (color, percent) => {
+      const num = parseInt(color.replace("#", ""), 16);
+      const amt = Math.round(2.55 * percent);
+      const R = (num >> 16) + amt;
+      const G = ((num >> 8) & 0x00ff) + amt;
+      const B = (num & 0x0000ff) + amt;
+      return `#${(
+        0x1000000 +
+        (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+        (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+        (B < 255 ? (B < 1 ? 0 : B) : 255)
+      )
+        .toString(16)
+        .slice(1)}`;
+    };
 
-    // Configure tooltips first
-    series.links.template.setAll({
-      tooltipText: "{sourceId}[/] → {targetId}[/]: {value}[/] kWh",
-      fillOpacity: 0.4,
+    // Collect all unique nodes
+    const allNodes = new Set();
+    const links = [];
+    const unaccountedEnergyNode = "Unaccounted Energy";
+
+    data.forEach((item) => {
+      allNodes.add(item.from);
+      allNodes.add(item.to);
     });
 
-    // Apply gray color for specific links in specified charts
-    if (grayTailIds.includes(id)) {
-      series.links.template.adapters.add("fill", (fill, target) => {
-        const dataContext = target.dataItem?.dataContext;
-        if (
-          dataContext?.from === "TotalLT3" &&
-          dataContext?.to === "Unaccounted Energy"
-        ) {
-          return am5.color(0x808080); // Gray color
-        }
-        return fill;
-      });
-    }
+    const nodeNames = Array.from(allNodes);
+    const nodes = nodeNames.map((name, index) => {
+      const colorIndex = index % nodeColors.length;
+      const baseColor = nodeColors[colorIndex];
 
-    series.links.template.get("tooltip")?.setAll({
-      pointerOrientation: "vertical",
-    });
-
-    series.links.template
-      .get("tooltip")
-      ?.adapters.add("fill", (fill, target) => {
-        const link = target.sprite;
-        if (link && link.get("fill")) {
-          return link.get("fill");
-        }
-        return fill;
-      });
-
-    series.links.template.get("tooltip")?.label.setAll({
-      fill: am5.color(0xffffff),
-    });
-
-    series.links.template.states.create("hover", {
-      fillOpacity: 0.8,
-    });
-
-    series.links.template.adapters.add("tooltipText", (text, target) => {
-      const dataContext = target.dataItem?.dataContext;
-      if (!dataContext) return text;
-
-      const source = capitalizeWords(
-        dataContext.from || dataContext.sourceId || ""
-      );
-      const targetName = capitalizeWords(
-        dataContext.to || dataContext.targetId || ""
-      );
-
-      // Check for negative value
-      if (dataContext.value < 0) {
-        return text
-          .replace("{sourceId}", source)
-          .replace("{targetId}", targetName)
-          .replace("{value}", "negative");
+      if (isGray && name === unaccountedEnergyNode) {
+        return {
+          name,
+          itemStyle: {
+            color: "#9ca3af",
+            borderColor: "#6b7280",
+            borderWidth: 1,
+          },
+        };
       }
 
-      return text
-        .replace("{sourceId}", source)
-        .replace("{targetId}", targetName)
-        .replace("{value}", dataContext.value?.toLocaleString() || "0");
+      return {
+        name,
+        itemStyle: { color: baseColor },
+      };
     });
 
-    series.events.once("datavalidated", () => {
-      series.nodes.labels.template.setAll({
-        fontSize: isSmallDevice ? 0 : 10,
-        visible: !isSmallDevice,
-        oversizedBehavior: "wrap",
-      });
-    });
+    // Build links with gradient
+    data.forEach((item) => {
+      const isUnaccounted =
+        item.to === unaccountedEnergyNode ||
+        item.from === unaccountedEnergyNode;
+      const isZeroValue = item.value === 0;
 
-    series.nodes.labels.template.adapters.add("x", (x, lbl) => {
-      const name = (lbl.dataItem?.get("name") || "").toLowerCase();
-      if (name.startsWith("total")) {
-        // lbl.setAll({
-        //   centerX: am5.percent(100),
-        //   fontSize:0,
-        //   paddingLeft: 0,
-        //   paddingRight: 0,
-        // });
-        // const GAP = 4;
-        // return -GAP;
-        lbl.set("visible", false);
-        return x;
-      }
-      return x;
-    });
+      let lineStyle = {};
 
-    series.nodes.labels.template.adapters.add("text", (text, target) => {
-      const dataItem = target.dataItem;
-      if (!dataItem) return "";
-      const name = capitalizeWords(dataItem.get("name"));
-
-      const incoming = dataItem.get("sumIncoming");
-      const outgoing = dataItem.get("sumOutgoing");
-
-      if (incoming > 0) {
-        return `${name} (${incoming.toLocaleString()} kWh)`;
+      if ((isGray && isUnaccounted) || isZeroValue) {
+        lineStyle = {
+          color: {
+            type: "linear",
+            x: 0,
+            y: 0,
+            x2: 1,
+            y2: 0,
+            colorStops: [
+              { offset: 0, color: "#d1d5db" },
+              { offset: 1, color: "#9ca3af" },
+            ],
+          },
+          opacity: 0.7,
+        };
       } else {
-        return `${name} (${outgoing.toLocaleString()} kWh)`;
+        const sourceNode = nodes.find((n) => n.name === item.from);
+        const targetNode = nodes.find((n) => n.name === item.to);
+        const sourceColor = sourceNode?.itemStyle?.color || "#3b82f6";
+        const targetColor = targetNode?.itemStyle?.color || "#8b5cf6";
+        const lightSourceColor = lightenColor(sourceColor, 30);
+        const lightTargetColor = lightenColor(targetColor, 30);
+
+        lineStyle = {
+          color: {
+            type: "linear",
+            x: 0,
+            y: 0,
+            x2: 1,
+            y2: 0,
+            colorStops: [
+              { offset: 0, color: lightSourceColor },
+              { offset: 1, color: lightTargetColor },
+            ],
+          },
+          opacity: 0.9,
+        };
+      }
+
+      links.push({
+        source: item.from,
+        target: item.to,
+        value: item.value,
+        lineStyle,
+      });
+    });
+
+    const option = {
+      backgroundColor: "transparent",
+      tooltip: {
+        trigger: "item",
+        formatter: (params) => {
+          if (params.dataType === "node") {
+            return `${params.name}: ${
+              params.value ? params.value.toLocaleString() + " kWh" : "N/A"
+            }`;
+          } else if (params.dataType === "edge") {
+            return `${params.data.source} → ${
+              params.data.target
+            }<br/>Value: ${params.data.value.toLocaleString()} kWh`;
+          }
+          return "";
+        },
+      },
+      series: [
+        {
+          type: "sankey",
+          layout: "none",
+          emphasis: {
+            focus: "none",
+            itemStyle: {
+              color: (params) => {
+                const baseColor = params?.data?.itemStyle?.color || "#6b7280";
+                return lightenColor(baseColor, -20);
+              },
+              opacity: 1,
+              borderWidth: 2,
+              borderColor: "#fff",
+            },
+          },
+          data: nodes,
+          links,
+          lineStyle: {
+            curveness: 0.5,
+            opacity: 0.9,
+            color: "gradient",
+          },
+          label: {
+            show: true,
+            formatter: (params) => {
+              const incomingValue = links
+                .filter((link) => link.target === params.name)
+                .reduce((sum, link) => sum + link.value, 0);
+
+              const outgoingValue = links
+                .filter((link) => link.source === params.name)
+                .reduce((sum, link) => sum + link.value, 0);
+
+              const totalValue = Math.max(incomingValue, outgoingValue);
+              return `${params.name} (${totalValue.toLocaleString()} kWh)`;
+            },
+            fontSize: 11,
+            color: resolvedTheme === "dark" ? "#ffffffff" : "#1E2939",
+          },
+          nodeAlign: "left",
+          nodeWidth: 16,
+          nodeGap: 10,
+          draggable: false,
+          focusNodeAdjacency: true,
+          blurState: {
+            itemStyle: { opacity: 1 },
+            lineStyle: { opacity: 1 },
+            label: { opacity: 1 },
+          },
+          itemStyle: {
+            borderWidth: 0,
+            borderColor: "#fff",
+            opacity: 0.9,
+          },
+        },
+      ],
+    };
+
+    chart.setOption(option);
+
+    // Handle node click
+    chart.on("click", (params) => {
+      if (params.componentType === "series" && params.dataType === "node") {
+        const nodeName = params.data.name;
+        const url = navigateLinks[nodeName];
+        if (url) window.location.href = url;
       }
     });
 
-    series.nodes.get("colors").set("step", 2);
-    series.data.setAll(data);
-    series.appear(1000, 100);
+    const handleResize = () => chart.resize();
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      root.dispose();
+      window.removeEventListener("resize", handleResize);
+      chart.dispose();
     };
-  }, [data, id, resolvedTheme]);
+  }, [data, navigateLinks, resolvedTheme, isGray]);
 
-  return <div className="w-full h-[55vh]" id={id} />;
+  return (
+    <div
+      ref={chartRef}
+      style={{ background: "transparent", height: "55vh", width: "100%" }}
+    />
+  );
 };
 
 export default SankeyChart;

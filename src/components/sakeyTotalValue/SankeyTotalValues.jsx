@@ -43,7 +43,7 @@ const SankeyTotalValues = ({ data, lt }) => {
 
   return (
     <div className="absolute bottom-3 left-3">
-      <div className="border border-gray-300 bg-white/80 backdrop-blur-md px-4 py-3 rounded shadow-sm flex flex-col gap-1">
+      <div className="border border-gray-300 bg-white/80 dark:bg-gray-700 backdrop-blur-md px-4 py-3 rounded shadow-sm flex flex-col gap-1">
         <span className="font-semibold text-sm">
           Total Generation:{" "}
           <span className="font-normal">{generation.toFixed(2)}</span>

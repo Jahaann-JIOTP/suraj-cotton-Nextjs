@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [u4Spindle, setU4Spindle] = useState(0);
   const [u5Spindle, setU5Spindle] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [spindleLoading, setSpindleLoading] = useState(false);
 
   const [dateRange, setDateRange] = useState({
     startDate: "",
@@ -56,7 +57,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      setLoading(true);
+      setSpindleLoading(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&unit=U4`,
         {
@@ -73,7 +74,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error(error.message);
     } finally {
-      setLoading(false);
+      setSpindleLoading(false);
     }
   };
   // ======================fetch unit 5 spindle ==============================
@@ -81,7 +82,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      setLoading(true);
+      setSpindleLoading(true);
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&unit=U5`,
         {
@@ -98,7 +99,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error(error.message);
     } finally {
-      setLoading(false);
+      setSpindleLoading(false);
     }
   };
   const u4EnergyPerSpindle =
@@ -224,7 +225,7 @@ const Dashboard = () => {
                 value={Number(u4EnergyPerSpindle || 0)
                   .toFixed(2)
                   .toLocaleString("en-US")}
-                loading={loading}
+                loading={spindleLoading}
                 unit="kWh"
               />
             </div>
@@ -234,7 +235,7 @@ const Dashboard = () => {
                 value={Number(u5EnergyPerSpindle || 0)
                   .toFixed(2)
                   .toLocaleString("en-US")}
-                loading={loading}
+                loading={spindleLoading}
                 unit="kWh"
               />
             </div>

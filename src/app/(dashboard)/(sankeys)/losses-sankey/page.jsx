@@ -10,16 +10,10 @@ import SankeyTotalValues, {
 import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
 import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
-const mainSanekyData = [
-  { from: "HT", to: "Total", value: 300 },
-  { from: "LT", to: "Total", value: 300 },
-  { from: "WAPDA", to: "Total", value: 100 },
-  { from: "SOLAR", to: "Total", value: 500 },
-  { from: "Total", to: "U4", value: 400 },
-  { from: "Total", to: "U5", value: 200 },
-  { from: "Total", to: "HFO Auxiliary", value: 300 },
-  { from: "Total", to: "LOSSES", value: 300 },
-];
+const navigationMap = {
+  LT1: "/unit-4-lt-1",
+  LT2: "/unit-4-lt-2",
+};
 const LossesSankeyPage = () => {
   const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);
@@ -108,7 +102,11 @@ const LossesSankeyPage = () => {
           {loading ? (
             <CustomLoader />
           ) : consumption > 0 || generation > 0 ? (
-            <SankeyChart data={data} id="unit4Sankey" />
+            <SankeyChart
+              data={data}
+              isGray={false}
+              navigateLinks={navigationMap}
+            />
           ) : (
             <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
               <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />

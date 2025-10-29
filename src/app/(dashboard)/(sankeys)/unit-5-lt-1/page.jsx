@@ -1,5 +1,4 @@
 "use client";
-import TimePeriodSelector from "@/components/dashboardComponents/timePeriodSelector/TimePeriodSelector";
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
 import { useEffect, useState } from "react";
 import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
@@ -99,7 +98,7 @@ const Unit5Lt3Page = () => {
           {loading ? (
             <CustomLoader />
           ) : consumption > 0 || generation > 0 ? (
-            <SankeyChart data={data} id="unit5Lt3Chart" />
+            <SankeyChart data={data} isGray={true} />
           ) : (
             <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
               <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />
