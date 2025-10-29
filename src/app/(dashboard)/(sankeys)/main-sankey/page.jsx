@@ -14,8 +14,8 @@ import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChar
 const navigationMap = {
   "Unit 4 Consumption": "/unit4-sankey",
   "Unit 5 Consumption": "/unit5-sankey",
-  Losses: "/losses-sankey",
 };
+// Losses: "/losses-sankey",
 const MainSankey = () => {
   const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);

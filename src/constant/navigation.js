@@ -179,12 +179,12 @@ export const sidebarLinksMap = {
           href: "/unit5-sankey",
           icon: Unit4Lt1,
         },
-        {
-          id: 3,
-          title: "Losses",
-          href: "/losses-sankey",
-          icon: Unit4Lt1,
-        },
+        // {
+        //   id: 3,
+        //   title: "Losses",
+        //   href: "/losses-sankey",
+        //   icon: Unit4Lt1,
+        // },
         {
           id: 4,
           title: "Unit 4 LT-1",
