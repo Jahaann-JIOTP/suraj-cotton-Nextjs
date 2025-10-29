@@ -183,7 +183,11 @@ const Login = () => {
               onClick={() => setShowPassword((prev) => !prev)}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300 cursor-pointer"
             >
-              {showPassword ? <FaEyeSlash className="" size={22} /> : <FaEye className="" size={22} />}
+              {showPassword ? (
+                <FaEyeSlash className="" size={22} />
+              ) : (
+                <FaEye className="" size={22} />
+              )}
             </button>
           </div>
           <button
