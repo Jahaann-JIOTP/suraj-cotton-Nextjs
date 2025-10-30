@@ -10,6 +10,7 @@ import SankeyTotalValues, {
 import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
 import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
+import MainSankeyTimeSelector from "@/components/dashboardComponents/timePeriodSelector/MainSankeyTimeSelector";
 const navigationMap = {
   LT1: "/unit-4-lt-1",
   LT2: "/unit-4-lt-2",
@@ -23,7 +24,12 @@ const MainSankey = () => {
   const formateDate = (date) => {
     return date.toISOString().split("T")[0];
   };
-
+  const [intervalsObj, setIntervalsObj] = useState({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+  });
   const [intervalPeriod, setIntervalPeriod] = useState({
     startDate: formateDate(today),
     endDate: formateDate(today),
@@ -55,7 +61,7 @@ const MainSankey = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(intervalPeriod),
+        body: JSON.stringify(intervalsObj),
       });
       const resResult = await response.json();
       if (response.ok) {
@@ -70,20 +76,14 @@ const MainSankey = () => {
   };
   useEffect(() => {
     fetchLt1SankyData();
-  }, [
-    unit4Lt1TimePeriod,
-    intervalPeriod.startDate,
-    intervalPeriod.endDate,
-    intervalPeriod.startTime,
-    intervalPeriod.endTime,
-  ]);
+  }, [intervalsObj]);
 
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-start md:items-center flex justify-between flex-col md:flex-row">
         <h2 className="text-[20px] font-600 font-inter">Unit 4</h2>
         <div className="flex items-center flex-col md:flex-row gap-2">
-          <DailyConsumptionTimePeriod
+          {/* <DailyConsumptionTimePeriod
             selected={unit4Lt1TimePeriod}
             setSelected={setUnit4Lt1TimePeriod}
           />
@@ -94,7 +94,8 @@ const MainSankey = () => {
                 setIntervalPeriod((prev) => ({ ...prev, ...updated }))
               }
             />
-          )}
+          )} */}
+          <MainSankeyTimeSelector onRangeChange={setIntervalsObj} />
         </div>
       </div>
       <div className=" w-full  flex items-center justify-center">

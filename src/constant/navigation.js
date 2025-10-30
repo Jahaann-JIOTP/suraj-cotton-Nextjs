@@ -82,7 +82,7 @@ export const privilegeConfig = {
     ],
   },
   Reports: {
-    href: "/energy-usage-report",
+    href: "/energy-comparison-report",
     icon: faBookOpen,
     label: "REPORTS",
     matchPaths: [
@@ -364,18 +364,18 @@ export const sidebarLinksMap = {
   ],
 
   Reports: [
-    {
-      title: "Energy Usage Report",
-      icon: PlantOverview,
-      href: "/energy-usage-report",
-    },
+    // {
+    //   title: "Energy Usage Report",
+    //   icon: PlantOverview,
+    //   href: "/energy-usage-report",
+    // },
     // {
     //   title: "Energy Summary Report",
     //   icon: PlantOverview,
     //   href: "/energy-summary-report",
     // },
     {
-      title: "Energy Comparison Report",
+      title: "Energy Usage Report",
       icon: PlantOverview,
       href: "/energy-comparison-report",
     },

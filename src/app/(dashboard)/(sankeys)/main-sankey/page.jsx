@@ -10,6 +10,7 @@ import SankeyTotalValues, {
 import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
 import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
+import MainSankeyTimeSelector from "@/components/dashboardComponents/timePeriodSelector/MainSankeyTimeSelector";
 
 const navigationMap = {
   "Unit 4 Consumption": "/unit4-sankey",
@@ -25,6 +26,12 @@ const MainSankey = () => {
   const formateDate = (date) => {
     return date.toISOString().split("T")[0];
   };
+  const [intervalsObj, setIntervalsObj] = useState({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+  });
 
   const [intervalPeriod, setIntervalPeriod] = useState({
     startDate: formateDate(today),
@@ -38,15 +45,20 @@ const MainSankey = () => {
   // time period selector
   let startDate = null;
   let endDate = null;
+  let startTime = "6:00";
+  let endTime = "18:00";
   if (unit4Lt1TimePeriod !== "custom") {
     ({ startDate, endDate } = getDateRangeFromString(unit4Lt1TimePeriod));
   }
   // 👉 build unified range
   const finalRange =
-    unit4Lt1TimePeriod === "custom" ? intervalPeriod : { startDate, endDate };
+    unit4Lt1TimePeriod === "custom"
+      ? intervalPeriod
+      : { startDate, endDate, startTime, endTime };
 
   // ==================fetch unit 4 lt 1 sankey daata
   const fetchLt1SankyData = async () => {
+    if (!intervalsObj.startDate) return;
     const token = localStorage.getItem("token");
     if (!token) return;
     setLoading(true);
@@ -57,7 +69,7 @@ const MainSankey = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(intervalPeriod),
+        body: JSON.stringify(intervalsObj),
       });
       const resResult = await response.json();
       if (response.ok) {
@@ -72,20 +84,14 @@ const MainSankey = () => {
   };
   useEffect(() => {
     fetchLt1SankyData();
-  }, [
-    unit4Lt1TimePeriod,
-    intervalPeriod.startDate,
-    intervalPeriod.endDate,
-    intervalPeriod.startTime,
-    intervalPeriod.endTime,
-  ]);
+  }, [intervalsObj]);
 
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-start md:items-center flex justify-between flex-col md:flex-row">
         <h2 className="text-[20px] font-600 font-inter">Main</h2>
         <div className="flex items-center flex-col md:flex-row gap-2">
-          <DailyConsumptionTimePeriod
+          {/* <DailyConsumptionTimePeriod
             selected={unit4Lt1TimePeriod}
             setSelected={setUnit4Lt1TimePeriod}
           />
@@ -96,7 +102,9 @@ const MainSankey = () => {
                 setIntervalPeriod((prev) => ({ ...prev, ...updated }))
               }
             />
-          )}
+          )} */}
+          <MainSankeyTimeSelector onRangeChange={setIntervalsObj} />
+          {/* <MainSankeyTimeSelector onRangeChange={handleRangeChange} /> */}
         </div>
       </div>
       <div className=" w-full  flex items-center justify-center">
