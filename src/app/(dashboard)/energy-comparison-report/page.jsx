@@ -20,8 +20,6 @@ const EnergyComparisonPage = () => {
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [unit4Spindle, setUnit4Spindle] = useState(null);
-  const [unit5Spindle, setUnit5Spindle] = useState(null);
   const [fetched, setFetched] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -42,6 +40,10 @@ const EnergyComparisonPage = () => {
     return h * 60 + m;
   };
   useEffect(() => {
+    const today = new Date();
+    const hour = today.getHours().toString().padStart(2, "0");
+    const minutes = today.getMinutes().toString().padStart(2, "0");
+    const currentTime = `${hour}:${minutes}`;
     if (usageReportTimePeriod !== "Custom Date") {
       const { startDate, endDate } = getDateRangeFromString(
         usageReportTimePeriod
@@ -50,11 +52,7 @@ const EnergyComparisonPage = () => {
       setEndDate(endDate);
       setStartTime("06:00");
 
-      if (usageReportTimePeriod === "Today") {
-        const today = new Date();
-        const hour = today.getHours().toString().padStart(2, "0");
-        const minutes = today.getMinutes().toString().padStart(2, "0");
-        const currentTime = `${hour}:${minutes}`;
+      if (startDate === endDate) {
         setEndTime(currentTime);
       } else {
         setEndTime("06:00");
@@ -111,18 +109,6 @@ const EnergyComparisonPage = () => {
       setUnit(unitClicked);
     }
   };
-  // fetch unit 4 spindles - simplified, no blocking
-
-  // format time to 12 hours
-  const convertTo12Hour = (time) => {
-    if (!time) return "";
-    let [hours, minutes] = time.split(":").map(Number);
-
-    let ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12;
-
-    return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -170,11 +156,6 @@ const EnergyComparisonPage = () => {
     } finally {
       setLoadingSubmit(false);
     }
-  };
-
-  // Helper function to get safe spindle values (default to 0 if null/undefined)
-  const getSafeSpindleValue = (value) => {
-    return value !== null && value !== undefined ? value : 0;
   };
 
   return (

@@ -3,12 +3,10 @@
 import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
-import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import SankeyTotalValues, {
   calculateSums,
 } from "@/components/sakeyTotalValue/SankeyTotalValues";
-import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
-import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
+
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
 import MainSankeyTimeSelector from "@/components/dashboardComponents/timePeriodSelector/MainSankeyTimeSelector";
 
@@ -18,14 +16,8 @@ const navigationMap = {
 };
 // Losses: "/losses-sankey",
 const MainSankey = () => {
-  const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);
-
   const [loading, setLoading] = useState(false);
-  const today = new Date();
-  const formateDate = (date) => {
-    return date.toISOString().split("T")[0];
-  };
   const [intervalsObj, setIntervalsObj] = useState({
     startDate: "",
     endDate: "",
@@ -33,28 +25,7 @@ const MainSankey = () => {
     endTime: "",
   });
 
-  const [intervalPeriod, setIntervalPeriod] = useState({
-    startDate: formateDate(today),
-    endDate: formateDate(today),
-    startTime: "06:00",
-    endTime: "18:00",
-  });
-
   const { generation, consumption } = calculateSums(data, "Total Generation");
-
-  // time period selector
-  let startDate = null;
-  let endDate = null;
-  let startTime = "6:00";
-  let endTime = "18:00";
-  if (unit4Lt1TimePeriod !== "custom") {
-    ({ startDate, endDate } = getDateRangeFromString(unit4Lt1TimePeriod));
-  }
-  // 👉 build unified range
-  const finalRange =
-    unit4Lt1TimePeriod === "custom"
-      ? intervalPeriod
-      : { startDate, endDate, startTime, endTime };
 
   // ==================fetch unit 4 lt 1 sankey daata
   const fetchLt1SankyData = async () => {
@@ -91,20 +62,7 @@ const MainSankey = () => {
       <div className="w-full items-start md:items-center flex justify-between flex-col md:flex-row">
         <h2 className="text-[20px] font-600 font-inter">Main</h2>
         <div className="flex items-center flex-col md:flex-row gap-2">
-          {/* <DailyConsumptionTimePeriod
-            selected={unit4Lt1TimePeriod}
-            setSelected={setUnit4Lt1TimePeriod}
-          />
-          {unit4Lt1TimePeriod === "custom" && (
-            <CustomDateAndTimeSelector
-              intervalPeriod={intervalPeriod}
-              onChange={(updated) =>
-                setIntervalPeriod((prev) => ({ ...prev, ...updated }))
-              }
-            />
-          )} */}
           <MainSankeyTimeSelector onRangeChange={setIntervalsObj} />
-          {/* <MainSankeyTimeSelector onRangeChange={handleRangeChange} /> */}
         </div>
       </div>
       <div className=" w-full  flex items-center justify-center">

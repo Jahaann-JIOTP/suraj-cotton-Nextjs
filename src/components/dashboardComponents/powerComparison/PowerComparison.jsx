@@ -588,7 +588,7 @@ const PowerComparison = ({ dateRange }) => {
       {!loading && stackChartData.length > 0 && (
         <div
           className={`w-full ${
-            isPowerComparisonFullView ? "h-[80vh]" : "h-10rem md:h-[9rem]"
+            isPowerComparisonFullView ? "h-[80vh]" : "h-10rem md:h-[10.5rem]"
           } overflow-hidden`}
         >
           <div
@@ -596,7 +596,7 @@ const PowerComparison = ({ dateRange }) => {
             className={`${
               isPowerComparisonFullView
                 ? "w-full h-[80vh]"
-                : "w-full h-[490px] md:h-[440px]"
+                : "w-full h-[490px] md:h-[455px]"
             }`}
           />
         </div>

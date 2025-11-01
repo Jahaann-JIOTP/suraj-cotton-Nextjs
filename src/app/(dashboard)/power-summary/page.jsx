@@ -129,6 +129,10 @@ const PowerSummaryPage = () => {
               powerSummaryData.T1andT2losses || 0
             ).toLocaleString("en-US")}
             lossesUnit="kWh"
+            lossesPercent={Number(
+              powerSummaryData.T1T2unit4percentage || 0
+            ).toLocaleString("en-US")}
+            lossesPercentUnit="%"
           />
         </div>
       </div>
@@ -151,6 +155,10 @@ const PowerSummaryPage = () => {
               powerSummaryData.Trafo3losses || 0
             ).toLocaleString("en-US")}
             lossesUnit="kWh"
+            lossesPercent={Number(
+              powerSummaryData.T1unit5percentage || 0
+            ).toLocaleString("en-US")}
+            lossesPercentUnit="%"
           />
         </div>
         <div className="w-full lg:w-[49.6%]">
@@ -169,6 +177,10 @@ const PowerSummaryPage = () => {
               powerSummaryData.Trafo4losses || 0
             ).toLocaleString("en-US")}
             lossesUnit="kWh"
+            lossesPercent={Number(
+              powerSummaryData.T2unit5percentage || 0
+            ).toLocaleString("en-US")}
+            lossesPercentUnit="%"
           />
         </div>
       </div>
@@ -226,21 +238,21 @@ const PowerSummaryPage = () => {
           />
         </div>
       </div>
-      {/* fifth section first of small divs */}
-      <div className="mt-3 md:mt-[0.9vw]  flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
-        <div className="w-full md:w-[23%] lg:w-[24.3%] ">
+      {/* Fifth section first of small divs */}
+      <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
+        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
           <SingleValueDiv
             title="WAPDA Energy Export"
+            loading={loading}
             value={Number(powerSummaryData.Wapdaexport || 0).toLocaleString(
               "en-US"
             )}
-            loading={loading}
             unit="kWh"
             height="6rem"
             valueColor="#019726"
           />
         </div>
-        <div className="w-full md:w-[23%] lg:w-[24.3%] ">
+        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
           <SingleValueDiv
             title="Unaccounted Energy"
             value={Number(
@@ -252,26 +264,38 @@ const PowerSummaryPage = () => {
             valueColor="#E40101"
           />
         </div>
-        <div className="w-full md:w-[23%] lg:w-[24.3%] ">
+        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
           <SingleValueDiv
-            title="Transformer losses"
+            title="Trasformer Losses"
             value={Number(
               powerSummaryData.TrasformerLosses || 0
             ).toLocaleString("en-US")}
+            loading={loading}
             unit="kWh"
             height="6rem"
-            loading={loading}
             valueColor="#E40101"
           />
         </div>
-        <div className="w-full md:w-[23%] lg:w-[24.3%] ">
+        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
+          <SingleValueDiv
+            title="Tranformer Losses (%)"
+            value={Number(
+              powerSummaryData.TotalTrasformepercentage || 0
+            ).toLocaleString("en-US")}
+            loading={loading}
+            unit="%"
+            height="6rem"
+            valueColor="#E40101"
+          />
+        </div>
+        <div className="w-full md:w-[18.5%] lg:w-[19%]">
           <SingleValueDiv
             title="HT Transmission Losses"
             value={Number(
               powerSummaryData.HT_Transmissioin_Losses || 0
             ).toLocaleString("en-US")}
-            unit="kWh"
             loading={loading}
+            unit="kWh"
             height="6rem"
             valueColor="#E40101"
           />

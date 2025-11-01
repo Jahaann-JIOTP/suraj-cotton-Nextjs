@@ -13,6 +13,8 @@ const TrafoCard = ({
   lossesValue,
   lossesUnit,
   loading,
+  lossesPercent,
+  lossesPercentUnit,
 }) => {
   const [mounted, setMounted] = useState(false);
   const theme = useTheme();
@@ -90,6 +92,29 @@ const TrafoCard = ({
               </span>
               <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
                 {lossesUnit}
+              </span>
+            </div>
+          )}
+        </div>
+        <Divider
+          orientation={isSmallScreen ? "horizontal" : "vertical"}
+          variant="middle"
+          flexItem
+          className="dark:bg-gray-200"
+        />
+        <div className="flex flex-col items-center justify-center">
+          <span className="text-[16.34px] text-[#1A68B2] font-500 font-inter">
+            Losses (%)
+          </span>
+          {loading ? (
+            <CustomLoader size="32px" />
+          ) : (
+            <div className="flex items-center gap-1">
+              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+                {lossesPercent}
+              </span>
+              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+                {lossesPercentUnit}
               </span>
             </div>
           )}
