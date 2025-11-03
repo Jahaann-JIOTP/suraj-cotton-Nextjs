@@ -7,6 +7,7 @@ import SankeyTotalValues, {
   calculateSums,
 } from "@/components/sakeyTotalValue/SankeyTotalValues";
 import MainSankeyTimeSelector from "@/components/dashboardComponents/timePeriodSelector/MainSankeyTimeSelector";
+import { ImArrowLeft2 } from "react-icons/im";
 
 const Unit5Lt4Page = () => {
   const [data, setData] = useState([]);
@@ -61,7 +62,20 @@ const Unit5Lt4Page = () => {
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-start md:items-center flex justify-between flex-col md:flex-row">
-        <h2 className="text-[20px] font-600 font-inter">Unit 5 LT-2</h2>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              history.back();
+            }}
+            className={`flex items-center gap-2 px-1 w-[30px] h-[30px] cursor-pointer bg-[#1F5897] overflow-hidden border-[3px] border-[#d8dfe7] dark:border-[#d8dfe738] text-white`}
+            style={{
+              borderRadius: "50%",
+            }}
+          >
+            <ImArrowLeft2 className="text-white shrink-0 text-[15px]" />
+          </button>
+          <h2 className="text-[20px] font-600 font-inter">Unit 5 LT-2</h2>
+        </div>
         <div className="flex items-center flex-col md:flex-row gap-2">
           <MainSankeyTimeSelector onRangeChange={handleRange} />
         </div>
