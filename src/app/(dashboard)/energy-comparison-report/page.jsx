@@ -170,7 +170,7 @@ const EnergyComparisonPage = () => {
 
       <div className="flex pb-3 items-center justify-between">
         <h1 className="text-[18.22px] text-raleway font-600">
-          Energy Comparison Report
+          Energy Usage Report
         </h1>
         {showResults && (
           <button
