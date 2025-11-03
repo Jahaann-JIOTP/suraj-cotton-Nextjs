@@ -1,50 +1,29 @@
 "use client";
-// import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
+
 import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
-import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
+
 import SankeyTotalValues, {
   calculateSums,
 } from "@/components/sakeyTotalValue/SankeyTotalValues";
-import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
-import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
+import MainSankeyTimeSelector from "@/components/dashboardComponents/timePeriodSelector/MainSankeyTimeSelector";
 const navigationMap = {
   LT1: "/unit-4-lt-1",
   LT2: "/unit-4-lt-2",
 };
 const LossesSankeyPage = () => {
-  const [unit4Lt1TimePeriod, setUnit4Lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);
-
   const [loading, setLoading] = useState(false);
-  const today = new Date();
-  const formateDate = (date) => {
-    return date.toISOString().split("T")[0];
+  const [range, setRange] = useState({});
+  const handleRange = (data) => {
+    setRange(data);
   };
-
-  const [intervalPeriod, setIntervalPeriod] = useState({
-    startDate: formateDate(today),
-    endDate: formateDate(today),
-    startTime: "06:00",
-    endTime: "18:00",
-  });
-
   const { generation, consumption } = calculateSums(data, "Losses");
 
-  // time period selector
-  let startDate = null;
-  let endDate = null;
-  if (unit4Lt1TimePeriod !== "custom") {
-    ({ startDate, endDate } = getDateRangeFromString(unit4Lt1TimePeriod));
-  }
-  // 👉 build unified range
-  const finalRange =
-    unit4Lt1TimePeriod === "custom" ? intervalPeriod : { startDate, endDate };
-
   // ==================fetch unit 4 lt 1 sankey daata
-  const fetchLt1SankyData = async () => {
+  const fetchLossesSankyData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     setLoading(true);
@@ -55,7 +34,7 @@ const LossesSankeyPage = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(intervalPeriod),
+        body: JSON.stringify(range),
       });
       const resResult = await response.json();
       if (response.ok) {
@@ -69,32 +48,22 @@ const LossesSankeyPage = () => {
     }
   };
   useEffect(() => {
-    fetchLt1SankyData();
-  }, [
-    unit4Lt1TimePeriod,
-    intervalPeriod.startDate,
-    intervalPeriod.endDate,
-    intervalPeriod.startTime,
-    intervalPeriod.endTime,
-  ]);
+    if (
+      !range.startDate ||
+      !range.endDate ||
+      !range.startTime ||
+      !range.endTime
+    )
+      return;
+    fetchLossesSankyData();
+  }, [range]);
 
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-start md:items-center flex justify-between flex-col md:flex-row">
         <h2 className="text-[20px] font-600 font-inter">Losses</h2>
         <div className="flex items-center flex-col md:flex-row gap-2">
-          <DailyConsumptionTimePeriod
-            selected={unit4Lt1TimePeriod}
-            setSelected={setUnit4Lt1TimePeriod}
-          />
-          {unit4Lt1TimePeriod === "custom" && (
-            <CustomDateAndTimeSelector
-              intervalPeriod={intervalPeriod}
-              onChange={(updated) =>
-                setIntervalPeriod((prev) => ({ ...prev, ...updated }))
-              }
-            />
-          )}
+          <MainSankeyTimeSelector onRangeChange={handleRange} />
         </div>
       </div>
       <div className=" w-full  flex items-center justify-center">
@@ -117,7 +86,7 @@ const LossesSankeyPage = () => {
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="Losses" />
+      <SankeyTotalValues data={data} lt="Losses" loading={loading} />
     </div>
   );
 };

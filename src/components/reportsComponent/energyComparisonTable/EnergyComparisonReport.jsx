@@ -22,8 +22,8 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
   const dailyConsumption = rawData?.consumptionDetail || [];
   const consumptionPerDept = rawData?.summarybydept || [];
   const summaryConsumption = rawData?.dailyConsumption || [];
-  console.log("summaryConsumption", consumptionPerDept);
   // Get all keys from first object (excluding 'date')
+
   const allKeys = Object.keys(dailyConsumption[0]).filter((k) => k !== "date");
 
   /// ==============convert 24 hour to 12 hour
@@ -64,56 +64,6 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
     const u5 = Number(dept.u5Consumption) || 0;
     return sum + u4 + u5;
   }, 0);
-
-  const unit4Total = availableUnits
-    .map((unit) => (unit === 4 ? unitTotals[unit] : 0))
-    .reduce((a, b) => a + b, 0);
-  const unit5Total = availableUnits
-    .map((unit) => (unit === 5 ? unitTotals[unit] : 0))
-    .reduce((a, b) => a + b, 0);
-  const unit4Lt1total = totalRow.Unit_4_LT1 || 0;
-  const unit4Lt2total = totalRow.Unit_4_LT2 || 0;
-  const unit5Lt1total = totalRow.Unit_5_LT1 || 0;
-  const unit5Lt2total = totalRow.Unit_5_LT2 || 0;
-  const unit4TotalPropstotal = {
-    unit4Total,
-    unit4Lt1total,
-    unit4Lt2total,
-  };
-  const unit5TotalPropstotal = {
-    unit5Total,
-    unit5Lt1total,
-    unit5Lt2total,
-  };
-  ///--------------------summary table calculation------------
-  // 🔹 Compute summary for Unit 4 and Unit 5
-  const unit4Incoming = dailyConsumption.reduce(
-    (sum, row) => sum + (Number(row.Unit_4_Total) || 0),
-    0
-  );
-  const unit5Incoming = dailyConsumption.reduce(
-    (sum, row) => sum + (Number(row.Unit_5_Total) || 0),
-    0
-  );
-
-  // 🔹 Compute consumption totals from summaryByDept
-  const unit4Consumption = consumptionPerDept.reduce(
-    (sum, dept) => sum + (dept.u4Consumption ? Number(dept.u4Consumption) : 0),
-    0
-  );
-  const unit5Consumption = consumptionPerDept.reduce(
-    (sum, dept) => sum + (dept.u5Consumption ? Number(dept.u5Consumption) : 0),
-    0
-  );
-
-  // 🔹 Unaccountable energy per unit
-  const unit4Unaccountable = unit4Incoming - unit4Consumption;
-  const unit5Unaccountable = unit5Incoming - unit5Consumption;
-
-  // 🔹 Grand totals
-  const totalIncoming = unit4Incoming + unit5Incoming;
-  const totalSummaryConsumption = unit4Consumption + unit5Consumption;
-  const totalUnaccountable = totalIncoming - totalSummaryConsumption;
 
   /////////////////================================================
   ////////////////export to pdf///////////////////////////////
@@ -821,6 +771,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
               },
               {
                 table: {
+                  headerRows: 1,
                   widths: [
                     "auto",
                     "*",

@@ -1,41 +1,22 @@
 "use client";
 import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChart";
 import { useEffect, useState } from "react";
-import { getDateRangeFromString } from "@/utils/dateRangeCalculator";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 import SankeyTotalValues, {
   calculateSums,
 } from "@/components/sakeyTotalValue/SankeyTotalValues";
-import DailyConsumptionTimePeriod from "@/components/dashboardComponents/timePeriodSelector/DailyConsumptionTimePeriod";
-import CustomDateAndTimeSelector from "@/components/dashboardComponents/timePeriodSelector/CustomDateAndTimeSelector";
+import MainSankeyTimeSelector from "@/components/dashboardComponents/timePeriodSelector/MainSankeyTimeSelector";
 
 const Unit5Lt3Page = () => {
-  const [Unit5lt1TimePeriod, setUnit5lt1TimePeriod] = useState("today");
   const [data, setData] = useState([]);
-
   const [loading, setLoading] = useState(false);
-  const today = new Date();
-  const formateDate = (date) => {
-    return date.toISOString().split("T")[0];
+  const [range, setRange] = useState({});
+  const handleRange = (data) => {
+    setRange(data);
   };
-  const [intervalPeriod, setIntervalPeriod] = useState({
-    startDate: formateDate(today),
-    endDate: formateDate(today),
-    startTime: "06:00",
-    endTime: "18:00",
-  });
-
-  let startDate = null;
-  let endDate = null;
-  if (Unit5lt1TimePeriod !== "custom") {
-    ({ startDate, endDate } = getDateRangeFromString(Unit5lt1TimePeriod));
-  }
 
   const { generation, consumption } = calculateSums(data, "TotalLT3");
-  // 👉 build unified range
-  const finalRange =
-    Unit5lt1TimePeriod === "custom" ? intervalPeriod : { startDate, endDate };
 
   const fetchSankeyData = async () => {
     const token = localStorage.getItem("token");
@@ -50,7 +31,7 @@ const Unit5Lt3Page = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(finalRange),
+          body: JSON.stringify(range),
         }
       );
       const resResult = await response.json();
@@ -66,31 +47,21 @@ const Unit5Lt3Page = () => {
     }
   };
   useEffect(() => {
+    if (
+      !range.startDate ||
+      !range.endDate ||
+      !range.startTime ||
+      !range.endTime
+    )
+      return;
     fetchSankeyData();
-  }, [
-    Unit5lt1TimePeriod,
-    intervalPeriod.startDate,
-    intervalPeriod.endDate,
-    intervalPeriod.startTime,
-    intervalPeriod.endTime,
-  ]);
+  }, [range]);
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-start md:items-center flex justify-between flex-col md:flex-row">
         <h2 className="text-[20px] font-600 font-inter">Unit 5 LT-1</h2>
         <div className="flex items-center flex-col md:flex-row gap-2">
-          <DailyConsumptionTimePeriod
-            selected={Unit5lt1TimePeriod}
-            setSelected={setUnit5lt1TimePeriod}
-          />
-          {Unit5lt1TimePeriod === "custom" && (
-            <CustomDateAndTimeSelector
-              intervalPeriod={intervalPeriod}
-              onChange={(updated) =>
-                setIntervalPeriod((prev) => ({ ...prev, ...updated }))
-              }
-            />
-          )}
+          <MainSankeyTimeSelector onRangeChange={handleRange} />
         </div>
       </div>
       <div className=" w-full  flex items-center justify-center">
@@ -109,7 +80,7 @@ const Unit5Lt3Page = () => {
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="TotalLT3" />
+      <SankeyTotalValues data={data} lt="TotalLT3" loading={loading} />
     </div>
   );
 };

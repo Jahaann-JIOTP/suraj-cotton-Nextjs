@@ -15,33 +15,21 @@ const options = [
   { label: "Custom", value: "custom" },
 ];
 
+//====================new data
 const getDateRangeFromString = (rangeType) => {
   const today = new Date();
   const start = new Date();
-  const formatDate = (d) => d.toISOString().split("T")[0];
-  const currentTime = `${String(today.getHours()).padStart(2, "0")}:${String(
-    today.getMinutes()
-  ).padStart(2, "0")}`;
 
-  switch (rangeType) {
+  const formatDate = (date) => date.toISOString().split("T")[0];
+
+  switch (rangeType.toLowerCase()) {
     case "today":
-      return {
-        startDate: formatDate(today),
-        endDate: formatDate(today),
-        startTime: "06:00",
-        endTime: currentTime, // ✅ current time for today
-      };
+      break;
 
-    case "yesterday": {
-      const y = new Date(today);
-      y.setDate(y.getDate() - 1);
-      return {
-        startDate: formatDate(y),
-        endDate: formatDate(today),
-        startTime: "06:00",
-        endTime: "06:00",
-      };
-    }
+    case "yesterday":
+      start.setDate(today.getDate() - 1);
+      today.setDate(today.getDate());
+      break;
 
     case "thisweek": {
       const day = today.getDay();
@@ -66,23 +54,79 @@ const getDateRangeFromString = (rangeType) => {
       start.setMonth(0);
       start.setDate(1);
       break;
+
+    default:
+      throw new Error(
+        `Invalid range type: "${rangeType}". Use one of: today, yesterday, thisWeek, last7Days, thisMonth, last30Days, or thisYear.`
+      );
   }
 
   return {
     startDate: formatDate(start),
     endDate: formatDate(today),
-    startTime: "06:00",
-    endTime: "06:00",
   };
 };
 
 const MainSankeyTimeSelector = ({ onRangeChange }) => {
   const [selected, setSelected] = useState("today");
-  const [range, setRange] = useState(getDateRangeFromString("today"));
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // handle outside click
+  const toMinutes = (time) => {
+    if (!time) return null;
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + m;
+  };
+  const today = new Date();
+  const hour = today.getHours().toString().padStart(2, "0");
+  const minutes = today.getMinutes().toString().padStart(2, "0");
+  const currentTime = `${hour}:${minutes}`;
+
+  useEffect(() => {
+    if (selected !== "custom") {
+      const { startDate, endDate } = getDateRangeFromString(selected);
+      setStartDate(startDate);
+      setEndDate(endDate);
+      setStartTime("06:00");
+      if (startDate === endDate) {
+        setEndTime(currentTime);
+      } else {
+        setEndTime("06:00");
+      }
+    }
+  }, [selected]);
+  useEffect(() => {
+    if (startDate === endDate && endTime) {
+      let startMins = toMinutes(startTime);
+      let endMins = toMinutes(endTime);
+      const diff = endMins - startMins;
+
+      if (endMins <= startMins || diff < 30) {
+        Swal.fire({
+          title: "Confirm Time",
+          html: `
+            End Time must be at least 30 minutes greater than Start Time for the same date.
+          `,
+          icon: "question",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#1A68B2",
+        });
+        setEndTime("");
+      }
+    }
+  }, [startTime, endTime, startDate, endDate]);
+  useEffect(() => {
+    // Ensure all values exist before notifying parent
+    if (!startDate || !endDate || !startTime || !endTime) return;
+
+    const range = { startDate, endDate, startTime, endTime };
+    onRangeChange?.(range);
+  }, [startDate, endDate, startTime, endTime]);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -93,60 +137,8 @@ const MainSankeyTimeSelector = ({ onRangeChange }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // update on dropdown change
-  useEffect(() => {
-    if (selected !== "custom") {
-      const newRange = getDateRangeFromString(selected);
-      setRange(newRange);
-      onRangeChange(newRange);
-    }
-  }, [selected]);
-
-  // handle custom inputs
-  const handleCustomChange = (key, value) => {
-    const updated = { ...range, [key]: value };
-
-    // ✅ If startDate and endDate are same → set endTime = current time automatically
-    if (
-      updated.startDate &&
-      updated.endDate &&
-      updated.startDate === updated.endDate
-    ) {
-      const now = new Date();
-      const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(
-        now.getMinutes()
-      ).padStart(2, "0")}`;
-      updated.endTime = currentTime;
-    }
-
-    const startDateTime = new Date(`${updated.startDate}T${updated.startTime}`);
-    const endDateTime = new Date(`${updated.endDate}T${updated.endTime}`);
-
-    if (updated.startDate === updated.endDate && startDateTime >= endDateTime) {
-      Swal.fire({
-        icon: "warning",
-        title: "Invalid Time Selection",
-        text: "End time must be later than start time for the same date.",
-      });
-      return;
-    }
-
-    const diffMinutes = (endDateTime - startDateTime) / (1000 * 60);
-    if (updated.startDate === updated.endDate && diffMinutes < 30) {
-      Swal.fire({
-        icon: "warning",
-        title: "Invalid Time Selection",
-        text: "Minimum 30-minute gap required for same date.",
-      });
-      return;
-    }
-
-    setRange(updated);
-    onRangeChange(updated);
-  };
-
   return (
-    <div className="flex gap-3 w-full">
+    <div className="flex items-center flex-wrap justify-end gap-3 w-full">
       {/* ====== Dropdown Section ====== */}
       <div ref={dropdownRef} className="relative flex items-center gap-2">
         <span className="text-[15px] font-medium">Select Date Range:</span>
@@ -186,21 +178,21 @@ const MainSankeyTimeSelector = ({ onRangeChange }) => {
 
       {/* ====== Custom Interval Section ====== */}
       {selected === "custom" && (
-        <div className="flex flex-wrap md:flex-nowrap items-center justify-start gap-4">
+        <div className="flex flex-wrap  items-center justify-end gap-4">
           {/* Date Range */}
           <div className="flex items-center gap-2">
             <label className="text-sm font-medium">Interval</label>
             <input
               type="date"
-              value={range.startDate}
-              onChange={(e) => handleCustomChange("startDate", e.target.value)}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
               className="border rounded p-1"
             />
             <span className="font-medium">to</span>
             <input
               type="date"
-              value={range.endDate}
-              onChange={(e) => handleCustomChange("endDate", e.target.value)}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
               className="border rounded p-1"
             />
           </div>
@@ -210,15 +202,15 @@ const MainSankeyTimeSelector = ({ onRangeChange }) => {
             <label className="text-sm font-medium">Time</label>
             <input
               type="time"
-              value={range.startTime}
-              onChange={(e) => handleCustomChange("startTime", e.target.value)}
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
               className="border rounded p-1"
             />
             <span className="font-medium">to</span>
             <input
               type="time"
-              value={range.endTime}
-              onChange={(e) => handleCustomChange("endTime", e.target.value)}
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
               className="border rounded p-1"
             />
           </div>

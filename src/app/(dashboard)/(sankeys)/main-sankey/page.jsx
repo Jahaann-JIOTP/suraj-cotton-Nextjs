@@ -18,18 +18,16 @@ const navigationMap = {
 const MainSankey = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [intervalsObj, setIntervalsObj] = useState({
-    startDate: "",
-    endDate: "",
-    startTime: "",
-    endTime: "",
-  });
+  const [range, setRange] = useState({});
+  const handleRange = (data) => {
+    setRange(data);
+  };
 
   const { generation, consumption } = calculateSums(data, "Total Generation");
 
   // ==================fetch unit 4 lt 1 sankey daata
-  const fetchLt1SankyData = async () => {
-    if (!intervalsObj.startDate) return;
+  const fetchMainSankyData = async () => {
+    if (!range.startDate) return;
     const token = localStorage.getItem("token");
     if (!token) return;
     setLoading(true);
@@ -40,7 +38,7 @@ const MainSankey = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(intervalsObj),
+        body: JSON.stringify(range),
       });
       const resResult = await response.json();
       if (response.ok) {
@@ -53,16 +51,24 @@ const MainSankey = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    fetchLt1SankyData();
-  }, [intervalsObj]);
+    if (
+      !range.startDate ||
+      !range.endDate ||
+      !range.startTime ||
+      !range.endTime
+    )
+      return;
+    fetchMainSankyData();
+  }, [range]);
 
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-start md:items-center flex justify-between flex-col md:flex-row">
         <h2 className="text-[20px] font-600 font-inter">Main</h2>
         <div className="flex items-center flex-col md:flex-row gap-2">
-          <MainSankeyTimeSelector onRangeChange={setIntervalsObj} />
+          <MainSankeyTimeSelector onRangeChange={handleRange} />
         </div>
       </div>
       <div className=" w-full  flex items-center justify-center">
@@ -85,7 +91,7 @@ const MainSankey = () => {
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="Total Generation" />
+      <SankeyTotalValues data={data} lt="Total Generation" loading={loading} />
     </div>
   );
 };
