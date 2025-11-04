@@ -5,6 +5,51 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { loadImageAsBase64 } from "@/utils/imageToBase64";
 import EnergyComparisonChart from "./EnergyComparisonChart";
 import { to12HourFormat } from "@/utils/To12HourFormate";
+const summaryTableoneObj = {
+  unit: "Unit No.",
+  totalIncomingFG: "Total Incoming From Generation",
+  totalIncomingFU: "Total Incoming From Other Unit",
+  totalCons: "Total Consumption",
+  totalTransfer: "Total Transferred to Other Unit",
+  unaccountable: "Total Unaccountable Energy",
+};
+const summaryTableone = [
+  "Unit No.",
+  "Total Incoming From Generation",
+  "Total Incoming From Other Unit",
+  "Total Consumption",
+  "Total Transferred to Other Unit",
+  "Total Unaccountable Energy",
+];
+const summarySecTabHName = {
+  unit: "Unit No.",
+  avgConLoad: "Total Avg Connected Load",
+  actualLoad: "Total Actual Connected Load",
+  utilization: "% Utilization.",
+};
+const consPerDeptHNme = {
+  sNo: "Sr #",
+  dept: "Department",
+  unit: "Unit",
+  mcs: "MCs",
+  loadPerDept: "Connected Load Per Department",
+  loadPerMachine: "Connected Load Per Machine",
+  runningLoad: "Running Load (kWh)/(HR/MC)",
+  avgDeptLoad: "Avg Department Load/HR",
+  totalConsumption: "Total Units Consumed",
+};
+
+const consPerDeptHNmearr = [
+  "Sr #",
+  "Department",
+  "Unit",
+  "MCs",
+  "Connected Load Per Department",
+  "Connected Load Per Machine",
+  "Running Load (kWh)/(HR/MC)",
+  "Avg Department Load/HR",
+  "Total Units Consumed",
+];
 
 const columnLabels = {
   Unit_4_LT1: "Unit 4 LT-1",
@@ -22,7 +67,22 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
   const dailyConsumption = rawData?.consumptionDetail || [];
   const consumptionPerDept = rawData?.summarybydept || [];
   const summaryConsumption = rawData?.dailyConsumption || [];
+  const utilization = rawData?.utilization || [];
   // Get all keys from first object (excluding 'date')
+  // ============get total of summary table
+  const { totalIcg, totalConsumptionValue, UnaccountedEnergyTotal } =
+    summaryConsumption.reduce(
+      (
+        acc,
+        { Total_I_C_G = 0, Total_Consumption = 0, Unaccounted_Energy = 0 }
+      ) => {
+        acc.totalIcg += Total_I_C_G;
+        acc.totalConsumptionValue += Total_Consumption;
+        acc.UnaccountedEnergyTotal += Unaccounted_Energy;
+        return acc;
+      },
+      { totalIcg: 0, totalConsumptionValue: 0, UnaccountedEnergyTotal: 0 }
+    );
 
   const allKeys = Object.keys(dailyConsumption[0]).filter((k) => k !== "date");
 
@@ -161,6 +221,15 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
             ],
           },
         ],
+        footer: function (currentPage, pageCount) {
+          return {
+            text: `${currentPage}`,
+            alignment: "center",
+            fontSize: 9,
+            margin: [0, 0, 0, 0], // [left, top, right, bottom]
+            color: "#555",
+          };
+        },
 
         content: [
           // --- (1) REPORT PARAMETERS — 50% width ---
@@ -257,30 +326,29 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   widths: ["10%", "18%", "18%", "18%", "18%", "18%"],
                   body: [
                     [
-                      { text: "Unit", style: "tableHeader" },
+                      { text: summaryTableoneObj.unit, style: "tableHeader" },
                       {
-                        text: "Total Incomming From Generation",
-                        style: "tableHeader",
-                        alignment: "center",
-                      },
-
-                      {
-                        text: "Total Incomming From Other Unit",
+                        text: summaryTableoneObj.totalIncomingFG,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "Total Consumption",
+                        text: summaryTableoneObj.totalIncomingFU,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "Total Transfered to Other Unit",
+                        text: summaryTableoneObj.totalCons,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "Total Unaccountable Energy",
+                        text: summaryTableoneObj.totalTransfer,
+                        style: "tableHeader",
+                        alignment: "center",
+                      },
+                      {
+                        text: summaryTableoneObj.unaccountable,
                         style: "tableHeader",
                         alignment: "center",
                       },
@@ -331,59 +399,99 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                         alignment: "right",
                       },
                     ]),
-                    // [
-                    //   { text: "Total", style: "tableHeader" },
-                    //   {
-                    //     text: summaryTotals.incoming.toLocaleString("en-US", {
-                    //       minimumFractionDigits: 2,
-                    //       maximumFractionDigits: 2,
-                    //     }),
-                    //     style: "tableCellRightBold",
-                    //   },
-                    //   {
-                    //     text: summaryTotals.consumption.toLocaleString(
-                    //       "en-US",
-                    //       {
-                    //         minimumFractionDigits: 2,
-                    //         maximumFractionDigits: 2,
-                    //       }
-                    //     ),
-                    //     style: "tableCellRightBold",
-                    //   },
-                    //   {
-                    //     text: summaryTotals.consumption.toLocaleString(
-                    //       "en-US",
-                    //       {
-                    //         minimumFractionDigits: 2,
-                    //         maximumFractionDigits: 2,
-                    //       }
-                    //     ),
-                    //     style: "tableCellRightBold",
-                    //   },
-                    //   {
-                    //     text: summaryTotals.consumption.toLocaleString(
-                    //       "en-US",
-                    //       {
-                    //         minimumFractionDigits: 2,
-                    //         maximumFractionDigits: 2,
-                    //       }
-                    //     ),
-                    //     style: "tableCellRightBold",
-                    //   },
-                    //   {
-                    //     text: summaryTotals.unaccountable.toLocaleString(
-                    //       "en-US",
-                    //       {
-                    //         minimumFractionDigits: 2,
-                    //         maximumFractionDigits: 2,
-                    //       }
-                    //     ),
-                    //     style: "tableCellRightBold",
-                    //   },
-                    // ],
+                    [
+                      {
+                        text: "Total",
+                        bold: true,
+                        padding: [4, 2],
+                        fontSize: 10,
+                        alignment: "left",
+                      },
+                      {
+                        text: totalIcg.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCellRightBold",
+                      },
+                      {},
+                      {
+                        text: totalConsumptionValue.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCellRightBold",
+                      },
+                      {},
+                      {
+                        text: UnaccountedEnergyTotal.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCellRightBold",
+                      },
+                    ],
                   ],
                 },
                 margin: [0, 5, 0, 20],
+              },
+              {
+                table: {
+                  widths: ["10%", "30%", "30%", "30%"],
+                  body: [
+                    [
+                      { text: summarySecTabHName.unit, style: "tableHeader" },
+                      {
+                        text: summarySecTabHName.avgConLoad,
+                        style: "tableHeader",
+                        alignment: "center",
+                      },
+
+                      {
+                        text: summarySecTabHName.actualLoad,
+                        style: "tableHeader",
+                        alignment: "center",
+                      },
+                      {
+                        text: summarySecTabHName.utilization,
+                        style: "tableHeader",
+                        alignment: "center",
+                      },
+                    ],
+                    ...utilization.map((row) => [
+                      { text: row.Unit.toString(), style: "tableCell" },
+                      {
+                        text: row.TotalAvgConsumption.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                      {
+                        text: row.TotalConnectedLoadPerDept.toLocaleString(
+                          "en-US",
+                          {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }
+                        ),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                      {
+                        text: row.UtilizationPercent.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                    ]),
+                  ],
+                },
+                margin: [0, 5, 0, 20],
+                pageBreak: "after",
               },
             ],
           },
@@ -461,295 +569,6 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
             ],
           },
 
-          // --- (4) CONSUMPTION SUMMARY BY DEPARTMENT — full width ---
-          // {
-          //   width: "100%",
-          //   stack: [
-          //     {
-          //       table: {
-          //         widths: ["*"],
-          //         body: [
-          //           [
-          //             {
-          //               text: "Consumption Summary by Department One The Entire Time Period",
-          //               style: "sectionHeader",
-          //             },
-          //           ],
-          //         ],
-          //       },
-          //       layout: "noBorders",
-          //     },
-          //     {
-          //       table: {
-          //         widths: [
-          //           "auto",
-          //           "*",
-          //           "auto",
-          //           "auto",
-          //           "auto",
-          //           "auto",
-          //           "auto",
-          //           "auto",
-          //           "auto",
-          //         ],
-          //         body: [
-          //           // --- Header row ---
-          //           [
-          //             {
-          //               text: "Sr #",
-          //               style: "tableHeader",
-          //               alignment: "center",
-          //             },
-          //             {
-          //               text: "Department",
-          //               style: "tableHeader",
-          //               alignment: "center",
-          //             },
-          //             {
-          //               text: "Unit",
-          //               style: "tableHeader",
-          //               alignment: "center",
-          //             },
-          //             {
-          //               text: "MCs",
-          //               style: "tableHeader",
-          //               alignment: "center",
-          //             },
-          //             {
-          //               text: "Connected Load per Depart",
-          //               style: "tableHeader",
-          //               alignment: "center",
-          //             },
-          //             {
-          //               text: "Connected Load per Machine",
-          //               style: "tableHeader",
-          //               alignment: "center",
-          //             },
-          //             {
-          //               text: "Running Load (kWh)",
-          //               style: "tableHeader",
-          //               alignment: "center",
-          //             },
-          //             {
-          //               text: "Avg Depart Load",
-          //               style: "tableHeader",
-          //               alignment: "center",
-          //             },
-          //             {
-          //               text: "Total Units Consumed",
-          //               style: "tableHeader",
-          //               alignment: "center",
-          //             },
-          //           ],
-
-          //           // --- Dynamic rows for departments ---
-          //           ...((consumptionPerDept || []).flatMap((dept, index) => {
-          //             const rows = [];
-          //             const hasU4 = "u4Consumption" in dept;
-          //             const hasU5 = "u5Consumption" in dept;
-
-          //             const rowSpan = hasU4 && hasU5 ? 3 : 2; // Unit4 + Unit5 + Total OR Unit + Total
-
-          //             // --- UNIT 4 ---
-          //             if (hasU4) {
-          //               rows.push([
-          //                 {
-          //                   text: (index + 1).toString(),
-          //                   rowSpan: rowSpan,
-          //                   style: "tableCell",
-          //                   alignment: "center",
-          //                   verticalAlignment: "middle", // Added vertical alignment
-          //                 },
-          //                 {
-          //                   text: dept.name || "-",
-          //                   style: "tableCell",
-          //                   alignment: "left",
-          //                 },
-          //                 {
-          //                   text: "4",
-          //                   style: "tableCell",
-          //                   alignment: "center",
-          //                 },
-          //                 {
-          //                   text: dept.u4Mcs || "-",
-          //                   style: "tableCell",
-          //                   alignment: "center",
-          //                 },
-          //                 {
-          //                   text: dept.u4ConectedLoadPerDept || "-",
-          //                   style: "tableCellRight",
-          //                 },
-          //                 {
-          //                   text: dept.u4ConectedLoadPerMcs || "-",
-          //                   style: "tableCellRight",
-          //                 },
-          //                 {
-          //                   text: dept.u4RunnigLoad || "-",
-          //                   style: "tableCellRight",
-          //                 },
-          //                 {
-          //                   text: dept.u4AvgConsumption || "-",
-          //                   style: "tableCellRight",
-          //                 },
-          //                 {
-          //                   text:
-          //                     dept.u4Consumption?.toLocaleString("en-US", {
-          //                       minimumFractionDigits: 2,
-          //                       maximumFractionDigits: 2,
-          //                     }) || "-",
-          //                   style: "tableCellRight",
-          //                 },
-          //               ]);
-          //             }
-
-          //             // --- UNIT 5 ---
-          //             if (hasU5) {
-          //               rows.push([
-          //                 hasU4
-          //                   ? {} // Empty object when Unit 4 exists (rowSpan covers this)
-          //                   : {
-          //                       text: (index + 1).toString(),
-          //                       rowSpan: rowSpan,
-          //                       style: "tableCell",
-          //                       alignment: "center",
-          //                       verticalAlignment: "middle", // Added vertical alignment
-          //                     },
-          //                 {
-          //                   text: dept.u5Name || "-",
-          //                   style: "tableCell",
-          //                   alignment: "left",
-          //                 },
-          //                 {
-          //                   text: "5",
-          //                   style: "tableCell",
-          //                   alignment: "center",
-          //                 },
-          //                 {
-          //                   text: dept.u5Mcs || "-",
-          //                   style: "tableCell",
-          //                   alignment: "center",
-          //                 },
-          //                 {
-          //                   text: dept.u5ConectedLoadPerDept || "-",
-          //                   style: "tableCellRight",
-          //                 },
-          //                 {
-          //                   text: dept.u5ConectedLoadPerMcs || "-",
-          //                   style: "tableCellRight",
-          //                 },
-          //                 {
-          //                   text: dept.u5RunningLoad || "-",
-          //                   style: "tableCellRight",
-          //                 },
-          //                 {
-          //                   text: dept.u5AvgConsumption || "-",
-          //                   style: "tableCellRight",
-          //                 },
-          //                 {
-          //                   text:
-          //                     dept.u5Consumption?.toLocaleString("en-US", {
-          //                       minimumFractionDigits: 2,
-          //                       maximumFractionDigits: 2,
-          //                     }) || "-",
-          //                   style: "tableCellRight",
-          //                 },
-          //               ]);
-          //             }
-
-          //             // --- TOTAL ---
-          //             rows.push([
-          //               hasU4 || hasU5
-          //                 ? {} // Empty object when units exist (rowSpan covers this)
-          //                 : {
-          //                     text: (index + 1).toString(),
-          //                     style: "tableCell",
-          //                     alignment: "center",
-          //                     verticalAlignment: "middle",
-          //                   },
-
-          //               { text: "", border: [false, false, false, true] },
-          //               { text: "", border: [false, false, false, true] },
-          //               { text: "", border: [false, false, false, true] },
-          //               { text: "", border: [false, false, false, true] },
-          //               { text: "", border: [false, false, false, true] },
-          //               { text: "", border: [false, false, false, true] },
-          //               {
-          //                 text: "Total",
-          //                 alignment: "center",
-          //                 bold: true,
-          //                 fontSize: 10,
-          //                 padding: [4, 2],
-          //               },
-          //               {
-          //                 text:
-          //                   dept.totalConsumption?.toLocaleString("en-US", {
-          //                     minimumFractionDigits: 2,
-          //                     maximumFractionDigits: 2,
-          //                   }) || "-",
-          //                 style: "tableCellRightBold",
-          //               },
-          //             ]);
-
-          //             // --- Small gap row ---
-          //             rows.push([
-          //               {
-          //                 text: "",
-          //                 colSpan: 9,
-          //                 border: [false, false, false, false],
-          //               },
-          //               ...Array(8).fill({
-          //                 text: "",
-          //                 border: [false, false, false, false],
-          //               }),
-          //             ]);
-
-          //             return rows;
-          //           }) || []),
-
-          //           // --- GRAND TOTAL ---
-          //           [
-          //             {
-          //               text: "",
-          //               colSpan: 6,
-          //               border: [false, false, false, false],
-          //             },
-          //             ...Array(5).fill({
-          //               text: "",
-          //               border: [false, false, false, false],
-          //             }),
-          //             {
-          //               text: "Total Consumption",
-          //               colSpan: 2,
-          //               bold: true,
-          //               fontSize: 10,
-          //               padding: [4, 2],
-          //               alignment: "center",
-          //             },
-          //             {},
-          //             {
-          //               text: (totalConsumption || 0).toLocaleString("en-US", {
-          //                 minimumFractionDigits: 2,
-          //                 maximumFractionDigits: 2,
-          //               }),
-          //               style: "tableCellRightBold",
-          //             },
-          //           ],
-          //         ],
-          //       },
-          //       layout: {
-          //         // ✅ Light inner borders, darker outer borders
-          //         hLineWidth: (i, node) =>
-          //           i === 0 || i === node.table.body.length ? 1.2 : 0.5,
-          //         vLineWidth: (i, node) =>
-          //           i === 0 || i === node.table.widths.length ? 1.2 : 0.5,
-          //         hLineColor: () => "#666",
-          //         vLineColor: () => "#666",
-          //       },
-          //       margin: [0, 5, 0, 20],
-          //     },
-          //   ],
-          // },
-
           //==========================================================================
           // --- (4) CONSUMPTION SUMMARY BY DEPARTMENT — full width ---
           {
@@ -761,7 +580,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   body: [
                     [
                       {
-                        text: "Consumption Summary by Department One The Entire Time Period",
+                        text: "Consumption Summary by Department For The Entire Time Period",
                         style: "sectionHeader",
                       },
                     ],
@@ -787,47 +606,47 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                     // --- Header row ---
                     [
                       {
-                        text: "Sr #",
+                        text: consPerDeptHNme.sNo,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "Department",
+                        text: consPerDeptHNme.dept,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "Unit",
+                        text: consPerDeptHNme.unit,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "MCs",
+                        text: consPerDeptHNme.mcs,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "Connected Load per Depart",
+                        text: consPerDeptHNme.loadPerDept,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "Connected Load per Machine",
+                        text: consPerDeptHNme.loadPerMachine,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "Running Load (kWh)",
+                        text: consPerDeptHNme.runningLoad,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "Avg Depart Load",
+                        text: consPerDeptHNme.avgDeptLoad,
                         style: "tableHeader",
                         alignment: "center",
                       },
                       {
-                        text: "Total Units Consumed",
+                        text: consPerDeptHNme.totalConsumption,
                         style: "tableHeader",
                         alignment: "center",
                       },
@@ -1026,6 +845,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                       },
                     ],
                   ],
+                  dontBreakRows: true,
                 },
                 layout: {
                   // ✅ Light inner borders, darker outer borders
@@ -1039,7 +859,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 // ✅ CRITICAL: Prevent rows from breaking across pages
                 dontBreakRows: true,
                 // ✅ Optional: Add some padding to ensure proper spacing
-                margin: [0, 5, 0, 20],
+                margin: [0, 5, 0, 30],
               },
             ],
           },
@@ -1241,24 +1061,11 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
           <table className="min-w-full border-collapse border border-gray-400 text-sm">
             <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[13px] md:text-[14px] font-inter">
-                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
-                  Unit No.
-                </th>
-                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
-                  Total Incoming From Generation
-                </th>
-                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
-                  Total Incoming From Other Unit
-                </th>
-                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
-                  Total Consumption
-                </th>
-                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
-                  Total Transferred to Other Unit
-                </th>
-                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
-                  Total Unaccountable Energy
-                </th>
+                {summaryTableone.map((item) => (
+                  <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
+                    {item}
+                  </th>
+                ))}
               </tr>
             </thead>
 
@@ -1297,6 +1104,74 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-right">
                     {row.Unaccounted_Energy?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                </tr>
+              ))}
+              <tr className="font-semibold text-[13px] md:text-[14px] font-inter hover:bg-gray-100 dark:hover:bg-gray-700">
+                <td className="py-2 px-3 border border-gray-400 text-center">
+                  Total
+                </td>
+                <td className="py-2 px-3 border border-gray-400 text-right">
+                  {totalIcg}
+                </td>
+                <td className="py-2 px-3 border border-gray-400 text-right"></td>
+                <td className="py-2 px-3 border border-gray-400 text-right">
+                  {totalConsumptionValue}
+                </td>
+                <td className="py-2 px-3 border border-gray-400 text-right"></td>
+                <td className="py-2 px-3 border border-gray-400 text-right">
+                  {UnaccountedEnergyTotal}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        {/* new table */}
+        <div className="w-full mt-5 overflow-x-auto">
+          <table className="min-w-full border-collapse border border-gray-400 text-sm">
+            <thead className="bg-[#E5F3FD] dark:bg-gray-600">
+              <tr className="text-[13px] md:text-[14px] font-inter">
+                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
+                  {summarySecTabHName.unit}
+                </th>
+                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
+                  {summarySecTabHName.avgConLoad}
+                </th>
+                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
+                  {summarySecTabHName.actualLoad}
+                </th>
+                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
+                  {summarySecTabHName.utilization}
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {utilization.map((row) => (
+                <tr
+                  key={row.Unit}
+                  className="text-[13px] md:text-[14px] font-inter hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <td className="py-2 px-3 border border-gray-400 text-center">
+                    {row.Unit}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 text-right">
+                    {row.TotalAvgConsumption.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 text-right">
+                    {row.TotalConnectedLoadPerDept.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 text-right">
+                    {row.UtilizationPercent.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
@@ -1383,41 +1258,19 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
       <div className="w-full mt-5">
         {/* Header */}
         <div className="w-full bg-[#1C4D82] text-white py-2 px-4 font-semibold text-[20px]">
-          Consumption Summary by Department One The Entire Time Period
+          Consumption Summary by Department For The Entire Time Period
         </div>
 
         {/* Responsive Table Wrapper */}
-        <div className="w-full mt-5 overflow-x-auto">
-          <table className="min-w-full border-collapse  text-sm">
+        <div className="w-full mt-5">
+          <table className="min-w-full overflow-x-auto">
             <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[13px] md:text-[14px] font-inter">
-                <th className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap">
-                  Sr #
-                </th>
-                <th className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap">
-                  Department
-                </th>
-                <th className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap">
-                  Unit
-                </th>
-                <th className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap">
-                  MCs
-                </th>
-                <th className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap">
-                  Connected Load / Dept
-                </th>
-                <th className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap">
-                  Connected Load / Machine
-                </th>
-                <th className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap">
-                  Running Load (kWh)
-                </th>
-                <th className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap">
-                  Avg Department Load
-                </th>
-                <th className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap">
-                  Total Units Consumption
-                </th>
+                {consPerDeptHNmearr.map((item) => (
+                  <th className="text-center border border-gray-700 px-3 py-2">
+                    {item}
+                  </th>
+                ))}
               </tr>
             </thead>
 
