@@ -5,38 +5,38 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { loadImageAsBase64 } from "@/utils/imageToBase64";
 import EnergyComparisonChart from "./EnergyComparisonChart";
 import { to12HourFormat } from "@/utils/To12HourFormate";
-const summaryTableoneObj = {
-  unit: "Unit No.",
-  totalIncomingFG: "Total Incoming From Generation",
-  totalIncomingFU: "Total Incoming From Other Unit",
-  totalCons: "Total Consumption",
-  totalTransfer: "Total Transferred to Other Unit",
-  unaccountable: "Total Unaccountable Energy",
+const sectionHeaders = {
+  rParams: "Report Parameters",
+  summary: "Summary",
+  utilization: "Utilization",
+  dailyConsumption: "Consumption Detail (Daily)",
+  consumptionPerDept:
+    "Consumption Summary by Department For The Entire Time Period",
 };
-const summaryTableone = [
+const summaryHeader = [
   "Unit No.",
-  "Total Incoming From Generation",
-  "Total Incoming From Other Unit",
-  "Total Consumption",
-  "Total Transferred to Other Unit",
-  "Total Unaccountable Energy",
+  "Total Incoming From Generation (kWh)",
+  "Total Incoming From Other Unit (kWh)",
+  "Total Consumption (kWh)",
+  "Total Transferred to Other Unit (kWh)",
+  "Total Unaccountable Energy (kWh)",
 ];
-const summarySecTabHName = {
-  unit: "Unit No.",
-  avgConLoad: "Total Avg Connected Load",
-  actualLoad: "Total Actual Connected Load",
-  utilization: "% Utilization.",
-};
+const summarySecTabHNamearr = [
+  "Unit No.",
+  "Total Actual Connected Load (kWh/h)",
+  "Total Connected Load (kWh/h)",
+  "Utilization",
+];
 const consPerDeptHNme = {
   sNo: "Sr #",
   dept: "Department",
   unit: "Unit",
   mcs: "MCs",
-  loadPerDept: "Connected Load Per Department",
-  loadPerMachine: "Connected Load Per Machine",
-  runningLoad: "Running Load (kWh)/(HR/MC)",
-  avgDeptLoad: "Avg Department Load/HR",
-  totalConsumption: "Total Units Consumed",
+  loadPerDept: "Connected Load Per Department (kWh/h)",
+  loadPerMachine: "Connected Load Per Machine (kWh/h/Mc)",
+  runningLoad: "Running Load (kWh/h/Mc)",
+  avgDeptLoad: "Avg Department Load (kWh/h)",
+  totalConsumption: "Total Units Consumed (kWh)",
 };
 
 const consPerDeptHNmearr = [
@@ -44,21 +44,28 @@ const consPerDeptHNmearr = [
   "Department",
   "Unit",
   "MCs",
-  "Connected Load Per Department",
-  "Connected Load Per Machine",
-  "Running Load (kWh)/(HR/MC)",
-  "Avg Department Load/HR",
-  "Total Units Consumed",
+  "Connected Load Per Department (kWh/h)",
+  "Connected Load Per Machine (kWh/h/Mc)",
+  "Running Load (kWh/h/Mc)",
+  "Avg Department Load (kWh/h)",
+  "Total Units Consumed (kWh)",
 ];
 
 const columnLabels = {
-  Unit_4_LT1: "Unit 4 LT-1",
-  Unit_4_LT2: "Unit 4 LT-2",
-  Unit_5_LT1: "Unit 5 LT-1",
-  Unit_5_LT2: "Unit 5 LT-2",
-  Unit_4_Total: "Total Unit 4",
-  Unit_5_Total: "Total Unit 5",
-  Grand_Total: "Grand Total",
+  Unit_4_LT1: "Unit 4 LT-1 (kWh)",
+  Unit_4_LT2: "Unit 4 LT-2 (kWh)",
+  Unit_5_LT1: "Unit 5 LT-1 (kWh)",
+  Unit_5_LT2: "Unit 5 LT-2 (kWh)",
+  Unit_4_Total: "Total Unit 4 (kWh)",
+  Unit_5_Total: "Total Unit 5 (kWh)",
+  Grand_Total: "Grand Total (kWh)",
+};
+export const SectionHeader = ({ title }) => {
+  return (
+    <div className="w-full bg-[#1C4D82] text-white py-2 px-4 font-semibold text-[20px]">
+      {title}
+    </div>
+  );
 };
 const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
   const { theme } = useTheme();
@@ -240,7 +247,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 table: {
                   widths: ["*"],
                   body: [
-                    [{ text: "Report Parameters", style: "sectionHeader" }],
+                    [{ text: sectionHeaders.rParams, style: "sectionHeader" }],
                   ],
                 },
                 layout: "noBorders",
@@ -317,7 +324,9 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
               {
                 table: {
                   widths: ["*"],
-                  body: [[{ text: "Summary", style: "sectionHeader" }]],
+                  body: [
+                    [{ text: sectionHeaders.summary, style: "sectionHeader" }],
+                  ],
                 },
                 layout: "noBorders",
               },
@@ -326,32 +335,11 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   widths: ["10%", "18%", "18%", "18%", "18%", "18%"],
                   body: [
                     [
-                      { text: summaryTableoneObj.unit, style: "tableHeader" },
-                      {
-                        text: summaryTableoneObj.totalIncomingFG,
+                      ...summaryHeader.map((col, index) => ({
+                        text: col,
                         style: "tableHeader",
-                        alignment: "center",
-                      },
-                      {
-                        text: summaryTableoneObj.totalIncomingFU,
-                        style: "tableHeader",
-                        alignment: "center",
-                      },
-                      {
-                        text: summaryTableoneObj.totalCons,
-                        style: "tableHeader",
-                        alignment: "center",
-                      },
-                      {
-                        text: summaryTableoneObj.totalTransfer,
-                        style: "tableHeader",
-                        alignment: "center",
-                      },
-                      {
-                        text: summaryTableoneObj.unaccountable,
-                        style: "tableHeader",
-                        alignment: "center",
-                      },
+                        alignment: index === 0 ? "left" : "center",
+                      })),
                     ],
                     ...summaryConsumption.map((row) => [
                       { text: row.Unit.toString(), style: "tableCell" },
@@ -435,39 +423,40 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 },
                 margin: [0, 5, 0, 20],
               },
+            ],
+          },
+          // utilization
+          {
+            width: "*",
+            stack: [
+              {
+                table: {
+                  widths: ["*"],
+                  body: [
+                    [
+                      {
+                        text: sectionHeaders.utilization,
+                        style: "sectionHeader",
+                      },
+                    ],
+                  ],
+                },
+                layout: "noBorders",
+              },
               {
                 table: {
                   widths: ["10%", "30%", "30%", "30%"],
                   body: [
                     [
-                      { text: summarySecTabHName.unit, style: "tableHeader" },
-                      {
-                        text: summarySecTabHName.avgConLoad,
+                      ...summarySecTabHNamearr.map((col, index) => ({
+                        text: col,
                         style: "tableHeader",
-                        alignment: "center",
-                      },
-
-                      {
-                        text: summarySecTabHName.actualLoad,
-                        style: "tableHeader",
-                        alignment: "center",
-                      },
-                      {
-                        text: summarySecTabHName.utilization,
-                        style: "tableHeader",
-                        alignment: "center",
-                      },
+                        alignment: index === 0 ? "left" : "center",
+                      })),
                     ],
                     ...utilization.map((row) => [
                       { text: row.Unit.toString(), style: "tableCell" },
-                      {
-                        text: row.TotalAvgConsumption.toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }),
-                        style: "tableCell",
-                        alignment: "right",
-                      },
+
                       {
                         text: row.TotalConnectedLoadPerDept.toLocaleString(
                           "en-US",
@@ -480,10 +469,19 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                         alignment: "right",
                       },
                       {
-                        text: row.UtilizationPercent.toLocaleString("en-US", {
+                        text: row.TotalAvgConsumption.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
                         }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                      {
+                        text:
+                          row.UtilizationPercent.toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }) + " %",
                         style: "tableCell",
                         alignment: "right",
                       },
@@ -491,7 +489,6 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   ],
                 },
                 margin: [0, 5, 0, 20],
-                pageBreak: "after",
               },
             ],
           },
@@ -506,7 +503,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   body: [
                     [
                       {
-                        text: "Consumption Detail (Daily)",
+                        text: sectionHeaders.dailyConsumption,
                         style: "sectionHeader",
                       },
                     ],
@@ -580,7 +577,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   body: [
                     [
                       {
-                        text: "Consumption Summary by Department For The Entire Time Period",
+                        text: sectionHeaders.consumptionPerDept,
                         style: "sectionHeader",
                       },
                     ],
@@ -593,7 +590,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   headerRows: 1,
                   widths: [
                     "auto",
-                    "*",
+                    "auto",
                     "auto",
                     "auto",
                     "auto",
@@ -607,47 +604,85 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                     [
                       {
                         text: consPerDeptHNme.sNo,
-                        style: "tableHeader",
+                        noWrap: false,
+                        bold: true,
+                        fontSize: 9,
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
                         alignment: "center",
                       },
+
                       {
                         text: consPerDeptHNme.dept,
-                        style: "tableHeader",
+                        noWrap: false,
+                        bold: true,
+                        fontSize: 9,
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
                         alignment: "center",
                       },
                       {
                         text: consPerDeptHNme.unit,
-                        style: "tableHeader",
+                        noWrap: false,
+                        bold: true,
+                        fontSize: 9,
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
                         alignment: "center",
                       },
                       {
                         text: consPerDeptHNme.mcs,
-                        style: "tableHeader",
+                        noWrap: false,
+                        bold: true,
+                        fontSize: 9,
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
+                        alignment: "center",
+                        noWrap: false,
+                      },
+                      {
+                        text: "Connected Load Per Department (kWh/h)",
+                        noWrap: false,
+                        bold: true,
+                        fontSize: 9,
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
                         alignment: "center",
                       },
                       {
-                        text: consPerDeptHNme.loadPerDept,
-                        style: "tableHeader",
+                        text: "Connected Load Per Machine (kWh/h/Mc)",
+                        noWrap: false,
+                        bold: true,
+                        fontSize: 9,
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
                         alignment: "center",
                       },
                       {
-                        text: consPerDeptHNme.loadPerMachine,
-                        style: "tableHeader",
+                        text: "Running Load (kWh/h/Mc)",
+                        noWrap: false,
+                        bold: true,
+                        fontSize: 9,
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
                         alignment: "center",
                       },
                       {
-                        text: consPerDeptHNme.runningLoad,
-                        style: "tableHeader",
+                        text: "Avg Department Load (kWh/h)",
+                        noWrap: false,
+                        bold: true,
+                        fontSize: 9,
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
                         alignment: "center",
                       },
                       {
-                        text: consPerDeptHNme.avgDeptLoad,
-                        style: "tableHeader",
-                        alignment: "center",
-                      },
-                      {
-                        text: consPerDeptHNme.totalConsumption,
-                        style: "tableHeader",
+                        text: "Total Units Consumed (kWh)",
+                        noWrap: false,
+                        bold: true,
+                        fontSize: 9,
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
                         alignment: "center",
                       },
                     ],
@@ -823,10 +858,12 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                         colSpan: 6,
                         border: [false, false, false, false],
                       },
-                      ...Array(5).fill({
-                        text: "",
-                        border: [false, false, false, false],
-                      }),
+                      {},
+                      {},
+                      {},
+                      {},
+                      {}, // fills the remaining of colSpan=6
+
                       {
                         text: "Total Consumption",
                         colSpan: 2,
@@ -835,7 +872,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                         padding: [4, 2],
                         alignment: "center",
                       },
-                      {},
+                      {}, // filler for colSpan=2
                       {
                         text: (totalConsumption || 0).toLocaleString("en-US", {
                           minimumFractionDigits: 2,
@@ -845,7 +882,6 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                       },
                     ],
                   ],
-                  dontBreakRows: true,
                 },
                 layout: {
                   // ✅ Light inner borders, darker outer borders
@@ -857,7 +893,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   vLineColor: () => "#666",
                 },
                 // ✅ CRITICAL: Prevent rows from breaking across pages
-                dontBreakRows: true,
+
                 // ✅ Optional: Add some padding to ensure proper spacing
                 margin: [0, 5, 0, 30],
               },
@@ -985,9 +1021,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
       </div>
       {/* intervals */}
       <div className="w-full mt-5">
-        <div className="w-full bg-[#1C4D82] text-white py-2 px-4 font-semibold text-[20px]">
-          Report Parameters
-        </div>
+        <SectionHeader title={sectionHeaders.rParams} />
         {/* parameters table */}
         <div className="w-full mt-5">
           <table className=" border w-full lg:w-[40%]   overflow-hidden">
@@ -1052,17 +1086,14 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
       {/* Summary */}
       <div className="w-full mt-5">
         {/* Header */}
-        <div className="w-full bg-[#1C4D82] text-white py-2 px-4 font-semibold text-[20px]">
-          Summary
-        </div>
-
+        <SectionHeader title={sectionHeaders.summary} />
         {/* Responsive Table Container */}
         <div className="w-full mt-5 overflow-x-auto">
           <table className="min-w-full border-collapse border border-gray-400 text-sm">
             <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[13px] md:text-[14px] font-inter">
-                {summaryTableone.map((item) => (
-                  <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
+                {summaryHeader.map((item) => (
+                  <th className="py-2 px-3 border border-gray-400 text-center">
                     {item}
                   </th>
                 ))}
@@ -1115,37 +1146,46 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   Total
                 </td>
                 <td className="py-2 px-3 border border-gray-400 text-right">
-                  {totalIcg}
+                  {totalIcg?.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </td>
                 <td className="py-2 px-3 border border-gray-400 text-right"></td>
                 <td className="py-2 px-3 border border-gray-400 text-right">
-                  {totalConsumptionValue}
+                  {totalConsumptionValue?.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </td>
                 <td className="py-2 px-3 border border-gray-400 text-right"></td>
                 <td className="py-2 px-3 border border-gray-400 text-right">
-                  {UnaccountedEnergyTotal}
+                  {UnaccountedEnergyTotal?.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+      </div>
+      {/* Utilization */}
+      <div className="w-full mt-5">
+        {/* Header */}
+        <SectionHeader title={sectionHeaders.utilization} />
+
+        {/* Responsive Table Container */}
         {/* new table */}
         <div className="w-full mt-5 overflow-x-auto">
           <table className="min-w-full border-collapse border border-gray-400 text-sm">
             <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[13px] md:text-[14px] font-inter">
-                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
-                  {summarySecTabHName.unit}
-                </th>
-                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
-                  {summarySecTabHName.avgConLoad}
-                </th>
-                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
-                  {summarySecTabHName.actualLoad}
-                </th>
-                <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
-                  {summarySecTabHName.utilization}
-                </th>
+                {summarySecTabHNamearr.map((col) => (
+                  <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
+                    {col}
+                  </th>
+                ))}
               </tr>
             </thead>
 
@@ -1159,13 +1199,13 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                     {row.Unit}
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-right">
-                    {row.TotalAvgConsumption.toLocaleString("en-US", {
+                    {row.TotalConnectedLoadPerDept.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-right">
-                    {row.TotalConnectedLoadPerDept.toLocaleString("en-US", {
+                    {row.TotalAvgConsumption.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
@@ -1174,7 +1214,8 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                     {row.UtilizationPercent.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
-                    })}
+                    })}{" "}
+                    %
                   </td>
                 </tr>
               ))}
@@ -1186,9 +1227,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
       {/* Comsumption Detail */}
       <div className="w-full mt-5">
         {/* Header */}
-        <div className="w-full bg-[#1C4D82] text-white py-2 px-4 font-semibold text-[20px]">
-          Consumption Detail (Daily)
-        </div>
+        <SectionHeader title={sectionHeaders.dailyConsumption} />
 
         {/* Responsive Table Container */}
         <div className="w-full mt-5 overflow-x-auto">
@@ -1257,18 +1296,17 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
       {/* Comsumption Detail by depratment */}
       <div className="w-full mt-5">
         {/* Header */}
-        <div className="w-full bg-[#1C4D82] text-white py-2 px-4 font-semibold text-[20px]">
-          Consumption Summary by Department For The Entire Time Period
-        </div>
+
+        <SectionHeader title={sectionHeaders.consumptionPerDept} />
 
         {/* Responsive Table Wrapper */}
         <div className="w-full mt-5">
           <table className="min-w-full overflow-x-auto">
             <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[13px] md:text-[14px] font-inter">
-                {consPerDeptHNmearr.map((item) => (
+                {consPerDeptHNmearr.map((col) => (
                   <th className="text-center border border-gray-700 px-3 py-2">
-                    {item}
+                    {col}
                   </th>
                 ))}
               </tr>
