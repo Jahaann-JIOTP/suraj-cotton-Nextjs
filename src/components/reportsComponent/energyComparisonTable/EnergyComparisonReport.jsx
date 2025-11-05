@@ -71,10 +71,31 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
   const { theme } = useTheme();
   // const [chartImages, setChartImages] = useState({ unit4: "", unit5: "" });
   //   extract data
-  const dailyConsumption = rawData?.consumptionDetail || [];
-  const consumptionPerDept = rawData?.summarybydept || [];
-  const summaryConsumption = rawData?.dailyConsumption || [];
-  const utilization = rawData?.utilization || [];
+  const dailyConsumption = Array.isArray(rawData?.consumptionDetail)
+    ? rawData.consumptionDetail
+    : [];
+  const consumptionPerDept = Array.isArray(rawData?.summarybydept)
+    ? rawData.summarybydept
+    : [];
+  const summaryConsumption = Array.isArray(rawData?.dailyConsumption)
+    ? rawData.dailyConsumption
+    : [];
+  const utilization = Array.isArray(rawData?.utilization)
+    ? rawData.utilization
+    : [];
+  const isEmpty =
+    dailyConsumption.length === 0 &&
+    consumptionPerDept.length === 0 &&
+    summaryConsumption.length === 0 &&
+    utilization.length === 0;
+  if (isEmpty) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[300px] text-gray-500">
+        <p className="text-lg font-semibold mb-2">No Data Available</p>
+        <p>Please select a valid time period or refresh your data.</p>
+      </div>
+    );
+  }
   // Get all keys from first object (excluding 'date')
   // ============get total of summary table
   const { totalIcg, totalConsumptionValue, UnaccountedEnergyTotal } =
@@ -83,37 +104,36 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
         acc,
         { Total_I_C_G = 0, Total_Consumption = 0, Unaccounted_Energy = 0 }
       ) => {
-        acc.totalIcg += Total_I_C_G;
-        acc.totalConsumptionValue += Total_Consumption;
-        acc.UnaccountedEnergyTotal += Unaccounted_Energy;
+        acc.totalIcg += Number(Total_I_C_G) || 0;
+        acc.totalConsumptionValue += Number(Total_Consumption) || 0;
+        acc.UnaccountedEnergyTotal += Number(Unaccounted_Energy) || 0;
         return acc;
       },
       { totalIcg: 0, totalConsumptionValue: 0, UnaccountedEnergyTotal: 0 }
     );
 
-  const allKeys = Object.keys(dailyConsumption[0]).filter((k) => k !== "date");
+  // ✅ Avoid "Cannot read property of undefined"
+  const firstRow = dailyConsumption.length > 0 ? dailyConsumption[0] : {};
+  const allKeys = Object.keys(firstRow).filter((k) => k !== "date");
 
-  /// ==============convert 24 hour to 12 hour
-
-  // Only include columns that exist in the response
   const visibleColumns = Object.keys(columnLabels).filter((key) =>
     allKeys.includes(key)
   );
-  // Calculate totals for each column
-  const totalRow = visibleColumns.reduce((acc, key) => {
-    const sum = dailyConsumption.reduce(
-      (total, row) => total + (Number(row[key]) || 0),
-      0
-    );
-    acc[key] = sum;
-    return acc;
-  }, {});
-
-  /// Summary table colculation
-  // Detect which unit totals exist (Unit_4_Total / Unit_5_Total)
+  const totalRow =
+    dailyConsumption.length > 0
+      ? visibleColumns.reduce((acc, key) => {
+          const sum = dailyConsumption.reduce(
+            (total, row) => total + (Number(row[key]) || 0),
+            0
+          );
+          acc[key] = sum;
+          return acc;
+        }, {})
+      : {};
+  // ✅ Handle available units dynamically
   const availableUnits = [];
-  if ("Unit_4_Total" in dailyConsumption[0]) availableUnits.push(4);
-  if ("Unit_5_Total" in dailyConsumption[0]) availableUnits.push(5);
+  if ("Unit_4_Total" in firstRow) availableUnits.push(4);
+  if ("Unit_5_Total" in firstRow) availableUnits.push(5);
 
   // Calculate total consumption for each unit
   const unitTotals = {};
@@ -1296,16 +1316,18 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
       {/* Comsumption Detail by depratment */}
       <div className="w-full mt-5">
         {/* Header */}
-
         <SectionHeader title={sectionHeaders.consumptionPerDept} />
 
-        {/* Responsive Table Wrapper */}
-        <div className="w-full mt-5">
-          <table className="min-w-full overflow-x-auto">
+        {/* ✅ Responsive Scrollable Wrapper */}
+        <div className="w-full mt-5 overflow-x-auto border border-gray-300">
+          <table className="min-w-max w-full border-collapse text-sm md:text-base">
             <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[13px] md:text-[14px] font-inter">
                 {consPerDeptHNmearr.map((col) => (
-                  <th className="text-center border border-gray-700 px-3 py-2">
+                  <th
+                    key={col}
+                    className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap"
+                  >
                     {col}
                   </th>
                 ))}
@@ -1323,12 +1345,11 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                     <tr className="text-[13px] md:text-[14px] border-t-2 border-x-2 border-gray-500 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                       <td
                         rowSpan={1 + (hasU4 ? 1 : 0) + (hasU5 ? 1 : 0)}
-                        className="border border-gray-300 font-medium text-center px-2 py-1 align-middle bg-gray-50 dark:bg-gray-800"
+                        className="border border-gray-300 font-medium text-center px-2 py-1 align-middle bg-gray-50 dark:bg-gray-800 sticky left-0"
                       >
                         {index + 1}
                       </td>
 
-                      {/* If Unit 4 exists */}
                       {hasU4 ? (
                         <>
                           <td className="border border-gray-300 font-medium px-2 py-1 align-middle whitespace-nowrap">
