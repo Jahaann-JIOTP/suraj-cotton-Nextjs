@@ -1320,13 +1320,13 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
 
         {/* ✅ Responsive Scrollable Wrapper */}
         <div className="w-full mt-5 overflow-x-auto border border-gray-300">
-          <table className="min-w-max w-full border-collapse text-sm md:text-base">
+          <table className="min-w-full w-full border-collapse text-sm md:text-base">
             <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[13px] md:text-[14px] font-inter">
                 {consPerDeptHNmearr.map((col) => (
                   <th
                     key={col}
-                    className="text-center border border-gray-700 px-3 py-2 whitespace-nowrap"
+                    className="text-center border border-gray-700 px-3 py-2"
                   >
                     {col}
                   </th>
@@ -1352,7 +1352,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
 
                       {hasU4 ? (
                         <>
-                          <td className="border border-gray-300 font-medium px-2 py-1 align-middle whitespace-nowrap">
+                          <td className="border border-gray-300 font-medium px-2 py-1 align-middle">
                             {dept.name || "-"}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-center">
@@ -1382,7 +1382,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                         </>
                       ) : hasU5 ? (
                         <>
-                          <td className="border border-gray-300 font-medium px-2 py-1 align-middle whitespace-nowrap">
+                          <td className="border border-gray-300 font-medium px-2 py-1 align-middle">
                             {dept.u5Name || "-"}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-center">
@@ -1416,7 +1416,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                     {/* --- UNIT 5 Row (If both Units Exist) --- */}
                     {hasU4 && hasU5 && (
                       <tr className="text-[13px] md:text-[14px] border-x-2 border-gray-500 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="border border-gray-300 font-medium px-2 py-1 align-middle whitespace-nowrap">
+                        <td className="border border-gray-300 font-medium px-2 py-1 align-middle">
                           {dept.u5Name || "-"}
                         </td>
                         <td className="border border-gray-300 px-2 py-1 text-center">
@@ -1450,11 +1450,11 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                     <tr className="text-[13px] md:text-[14px] border-b-2 border-x-2 border-gray-500 dark:border-gray-300 font-semibold bg-gray-100 dark:bg-gray-700">
                       <td
                         colSpan={7}
-                        className="text-right border border-gray-400 px-2 py-1 align-middle whitespace-nowrap"
+                        className="text-right border border-gray-400 px-2 py-1 align-middle"
                       >
                         Total
                       </td>
-                      <td className="text-right border border-gray-400 px-2 py-1 align-middle dark:text-white/80 whitespace-nowrap">
+                      <td className="text-right border border-gray-400 px-2 py-1 align-middle dark:text-white/80">
                         {dept.totalConsumption?.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
@@ -1475,11 +1475,11 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 <td colSpan={6}></td>
                 <td
                   colSpan={2}
-                  className="text-center border-2 border-gray-700 dark:border-gray-300 px-2 py-2 whitespace-nowrap"
+                  className="text-center border-2 border-gray-700 dark:border-gray-300 px-2 py-2"
                 >
                   Grand Total Consumption
                 </td>
-                <td className="dark:text-white/80 text-right border-2 border-gray-700 dark:border-gray-300 px-2 py-2 whitespace-nowrap">
+                <td className="dark:text-white/80 text-right border-2 border-gray-700 dark:border-gray-300 px-2 py-2">
                   {totalConsumption.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
