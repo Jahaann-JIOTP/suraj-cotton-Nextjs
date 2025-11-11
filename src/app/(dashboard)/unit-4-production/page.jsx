@@ -20,6 +20,7 @@ const Unit4Spindle = () => {
     unit: "U4",
     startDate: "",
     values: [],
+    avgcount: [],
   });
 
   const parseDateString = (dateStr) => {
@@ -32,7 +33,6 @@ const Unit4Spindle = () => {
       date = dateStr;
     }
 
-   
     const [year, month, day] = date.split("-").map(Number);
     return { year, month, day };
   };
@@ -69,7 +69,7 @@ const Unit4Spindle = () => {
 
       if (response.ok) {
         const grouped = {};
-        resResult.data.forEach(({ date, unit, value }) => {
+        resResult.data.forEach(({ date, unit, value, avgcount }) => {
           const {
             year: dateYear,
             month: dateMonth,
@@ -77,7 +77,13 @@ const Unit4Spindle = () => {
           } = parseDateString(date);
 
           const key = `${formatDateKey(dateYear, dateMonth, dateDay)}-${unit}`;
-          grouped[key] = (grouped[key] || 0) + value;
+          if (!grouped[key]) {
+            grouped[key] = { production: 0, avgcount: 0 };
+          }
+          grouped[key].production += value;
+          grouped[key].avgcount = avgcount ?? 0;
+
+          // grouped[key] = (grouped[key] || 0) + value;
         });
         setGetProductionData(grouped);
       }
@@ -246,18 +252,15 @@ const Unit4Spindle = () => {
     return result;
   };
 
-  const getProductionByDate = (dateStr) => {
+  const getProductionByDate = (dateStr, type = "production") => {
     const today = new Date();
     const [day, month, year] = dateStr.split("/").map(Number);
     const dateObj = new Date(year, month - 1, day);
+    const data = getProductionData[`${dateStr}-U4`] || {};
 
-    const unit4 = getProductionData[`${dateStr}-U4`] || 0;
-
-    if (dateObj > today && unit4 === 0) return " ";
-
-    if (productionData.unit === "U4") return unit4 !== 0 ? unit4 : "-";
-
-    return unit4 === 0 ? "-" : unit4;
+    const value = data[type] || 0;
+    if (dateObj > today && value === 0) return " ";
+    return value !== 0 ? value : "-";
   };
 
   const dayChunks = chunkArray(daysInMonth, chunkSize);
@@ -290,17 +293,31 @@ const Unit4Spindle = () => {
                 value={productionData.startDate}
               />
             </div>
-            <div className="flex flex-col items-center justify-center">
-              <label className="font-inter text-[15px] pt-5 text-black dark:text-white font-500">
-                Enter Production
-              </label>
-              <input
-                type="number"
-                name="values"
-                onChange={handleChange}
-                className="outline-none border-1 border-gray-300 dark:border-y-gray-500 rouded px-2 py-1.5 w-[12rem] rounded-sm"
-                value={productionData.values}
-              />
+            <div>
+              <div className="flex flex-col items-center justify-center">
+                <label className="font-inter text-[15px] pt-5 text-black dark:text-white font-500">
+                  Enter Production
+                </label>
+                <input
+                  type="number"
+                  name="values"
+                  onChange={handleChange}
+                  className="outline-none border-1 border-gray-300 dark:border-y-gray-500 rouded px-2 py-1.5 w-[12rem] rounded-sm"
+                  value={productionData.values}
+                />
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <label className="font-inter text-[15px] pt-5 text-black dark:text-white font-500">
+                  Enter Avg Count
+                </label>
+                <input
+                  type="number"
+                  name="avgcount"
+                  onChange={handleChange}
+                  className="outline-none border-1 border-gray-300 dark:border-y-gray-500 rouded px-2 py-1.5 w-[12rem] rounded-sm"
+                  value={productionData.avgcount}
+                />
+              </div>
             </div>
 
             <button
@@ -315,83 +332,100 @@ const Unit4Spindle = () => {
 
       {/* Slot Rows */}
       <div className="relative">
-
-    
-      <div className={`md:relative border-1 border-[#025697] px-3 mt-10`}>
-        <div className="absolute mb-4 top-1 flex items-center gap-2">
-          <label className="text-[12px]">Month:</label>
-          <select
-            value={month + 1}
-            onChange={(e) => setMonth(Number.parseInt(e.target.value) - 1)}
-            className="border p-1 rounded-sm shadow text-[12px] w-[95px] outline-none font-400"
-          >
-            {Array.from({ length: 12 }, (_, i) => (
-              <option key={i} value={i + 1}>
-                {new Date(0, i).toLocaleString("default", { month: "long" })}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="w-full flex items-center justify-center">
-          <h2
-            className="text-white capitalize bg-[#025697] px-10 py-1.5 text-[13px] md:text-[17.62px] font-inter font-500"
-            style={{ clipPath: "polygon(10% 0, 90% 0, 100% 100%, 0 100%)" }}
-          >
-            History of daily production
-          </h2>
-        </div>
-
-        {dayChunks.map((chunk, rowIndex) => (
-          <div
-            key={rowIndex}
-            className="mb-6 w-full flex flex-col overflow-hidden"
-          >
-            {/* Date Row */}
-            <div className="flex w-full items-center text-center">
-              <div
-                style={{ width: slotWidth }}
-                className="flex-shrink-0 border-1 h-[28px] border-[#025697] border-r-white py-1 bg-[#E5F3FD] dark:bg-gray-600 text-[10px] md:text-[12px] font-medium"
-              >
-                Date
-              </div>
-              {chunk.map((dateStr, index) => (
-                <div
-                  key={dateStr}
-                  className={`flex-shrink-0 border-1 h-[28px] border-y-[#025697] ${
-                    index === chunk.length - 1
-                      ? "border-r-[#025697]"
-                      : "border-r-white"
-                  } py-1 bg-[#E5F3FD] dark:bg-gray-600 text-[12px] font-medium`}
-                  style={{ width: slotWidth }}
-                >
-                  {dateStr}
-                </div>
+        <div className={`md:relative border-1 border-[#025697] px-3 mt-10`}>
+          <div className="absolute mb-4 top-1 flex items-center gap-2">
+            <label className="text-[12px]">Month:</label>
+            <select
+              value={month + 1}
+              onChange={(e) => setMonth(Number.parseInt(e.target.value) - 1)}
+              className="border p-1 rounded-sm shadow text-[12px] w-[95px] outline-none font-400"
+            >
+              {Array.from({ length: 12 }, (_, i) => (
+                <option key={i} value={i + 1}>
+                  {new Date(0, i).toLocaleString("default", { month: "long" })}
+                </option>
               ))}
-            </div>
-
-            {/* Production Row */}
-            <div className="flex w-full items-center text-center">
-              <div
-                style={{ width: slotWidth }}
-                className="flex-shrink-0 font-semibold h-[53px] border-[#025697] border-t-transparent py-4 border text-[12px]"
-              >
-                Production
-              </div>
-              {chunk.map((dateStr) => (
-                <div
-                  key={dateStr}
-                  className="flex-shrink-0 border py-4 h-[53px] border-r-[#025697] border-b-[#025697] border-t-transparent text-[12px]"
-                  style={{ width: slotWidth }}
-                >
-                  {getProductionByDate(dateStr)}
-                </div>
-              ))}
-            </div>
+            </select>
           </div>
-        ))}
-      </div>
+
+          <div className="w-full flex items-center justify-center">
+            <h2
+              className="text-white capitalize bg-[#025697] px-10 py-1.5 text-[13px] md:text-[17.62px] font-inter font-500"
+              style={{ clipPath: "polygon(10% 0, 90% 0, 100% 100%, 0 100%)" }}
+            >
+              History of daily production
+            </h2>
+          </div>
+
+          {dayChunks.map((chunk, rowIndex) => (
+            <div
+              key={rowIndex}
+              className="mb-6 w-full flex flex-col overflow-hidden"
+            >
+              {/* Date Row */}
+              <div className="flex w-full items-center text-center">
+                <div
+                  style={{ width: slotWidth }}
+                  className="flex-shrink-0 border-1 h-[28px] border-[#025697] border-r-white py-1 bg-[#E5F3FD] dark:bg-gray-600 text-[10px] md:text-[12px] font-medium"
+                >
+                  Date
+                </div>
+                {chunk.map((dateStr, index) => (
+                  <div
+                    key={dateStr}
+                    className={`flex-shrink-0 border-1 h-[28px] border-y-[#025697] ${
+                      index === chunk.length - 1
+                        ? "border-r-[#025697]"
+                        : "border-r-white"
+                    } py-1 bg-[#E5F3FD] dark:bg-gray-600 text-[12px] font-medium`}
+                    style={{ width: slotWidth }}
+                  >
+                    {dateStr}
+                  </div>
+                ))}
+              </div>
+
+              {/* Production Row */}
+              <div className="flex w-full items-center text-center">
+                <div
+                  style={{ width: slotWidth }}
+                  className="flex-shrink-0 font-semibold h-[53px] border-[#025697] border-t-transparent py-4 border text-[12px]"
+                >
+                  Production
+                </div>
+                {chunk.map((dateStr) => {
+                  return (
+                    <div
+                      key={dateStr}
+                      className="flex-shrink-0 border py-4 h-[53px] border-r-[#025697] border-b-[#025697] border-t-transparent text-[12px]"
+                      style={{ width: slotWidth }}
+                    >
+                      {getProductionByDate(dateStr)}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex w-full items-center text-center">
+                <div
+                  style={{ width: slotWidth }}
+                  className="flex-shrink-0 font-semibold h-[53px] border-[#025697] border-t-transparent py-4 border text-[12px]"
+                >
+                  Avg Count
+                </div>
+                {chunk.map((dateStr) => (
+                  <div
+                    key={dateStr}
+                    className="flex-shrink-0 border py-4 h-[53px] border-r-[#025697] border-b-[#025697] border-t-transparent text-[12px]"
+                    style={{ width: slotWidth }}
+                  >
+                    {getProductionByDate(dateStr, "avgcount")}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
+      </div>
     </div>
   );
 };

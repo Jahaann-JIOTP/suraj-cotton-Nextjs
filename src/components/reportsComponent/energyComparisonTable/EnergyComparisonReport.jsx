@@ -3,13 +3,17 @@ import React from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { loadImageAsBase64 } from "@/utils/imageToBase64";
-import EnergyComparisonChart from "./EnergyComparisonChart";
+// import EnergyComparisonChart from "./EnergyComparisonChart";
 import { to12HourFormat } from "@/utils/To12HourFormate";
 const sectionHeaders = {
   rParams: "Report Parameters",
-  summary: "Summary",
+  HTside: "High Voltage Side Summary",
+  lossesSummary: "Losses Summary",
+  summary: "Low Voltage Side Summary",
   utilization: "Utilization",
+  production: "Production Summary",
   dailyConsumption: "Consumption Detail (Daily)",
+  prodDetail: "Production Detail (Daily)",
   consumptionPerDept:
     "Consumption Summary by Department For The Entire Time Period",
 };
@@ -27,27 +31,33 @@ const summarySecTabHNamearr = [
   "Total Connected Load (kWh/h)",
   "Utilization",
 ];
-const consPerDeptHNme = {
-  sNo: "Sr #",
-  dept: "Department",
-  unit: "Unit",
-  mcs: "MCs",
-  loadPerDept: "Connected Load Per Department (kWh/h)",
-  loadPerMachine: "Connected Load Per Machine (kWh/h/Mc)",
-  runningLoad: "Running Load (kWh/h/Mc)",
-  avgDeptLoad: "Avg Department Load (kWh/h)",
-  totalConsumption: "Total Units Consumed (kWh)",
-};
+const productionHeaderlabels = [
+  "Unit No.",
+  "Total No. of Bags",
+  "Avg. Count",
+  "Total Consumption (kWh)",
+  "Consumption Per Bag (kWh/Bag)",
+];
 
+const prodDetailTabHeader = [
+  "Date",
+  "Unit 4 Bags",
+  "Unit 4 Avg Count",
+  "Unit 4 Consumption Per Bag",
+  "Unit 5 Bags",
+  "Unit 5 Avg Count",
+  "Unit 5 Consumption Per Bag",
+];
 const consPerDeptHNmearr = [
   "Sr #",
   "Department",
   "Unit",
   "MCs",
   "Connected Load Per Department (kWh/h)",
+  "Avg Running Load Per Department (kWh/h)",
+  "Utilization",
   "Connected Load Per Machine (kWh/h/Mc)",
-  "Running Load (kWh/h/Mc)",
-  "Avg Department Load (kWh/h)",
+  "Avg Running Load Per Machine (kWh/h/Mc)",
   "Total Units Consumed (kWh)",
 ];
 
@@ -83,6 +93,14 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
   const utilization = Array.isArray(rawData?.utilization)
     ? rawData.utilization
     : [];
+  const productionSummary = Array.isArray(rawData?.productionSummary)
+    ? rawData.productionSummary
+    : [];
+  const productionSummaryDaily = Array.isArray(rawData?.productionSummaryDaily)
+    ? rawData.productionSummaryDaily
+    : [];
+  const HTside = rawData?.HTside || {};
+  const lossesSummary = rawData?.lossesSummary || {};
   const isEmpty =
     dailyConsumption.length === 0 &&
     consumptionPerDept.length === 0 &&
@@ -337,7 +355,103 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
             ],
             margin: [0, 0, 0, 20],
           },
-          // summary
+          // --- HT side ---
+          {
+            width: "50%",
+            stack: [
+              {
+                table: {
+                  widths: ["*"],
+                  body: [
+                    [{ text: sectionHeaders.HTside, style: "sectionHeader" }],
+                  ],
+                },
+                layout: "noBorders",
+              },
+              {
+                table: {
+                  widths: ["25%", "25%"],
+                  body: [
+                    ...Object.entries(HTside).map(([key, value]) => {
+                      const isTotal = key === "Total";
+                      return [
+                        {
+                          text: key.replace(/_/g, " "),
+                          style: "tableHeader",
+                          bold: isTotal,
+                        },
+                        {
+                          text:
+                            value !== null && value !== undefined
+                              ? value.toLocaleString("en-US", {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }) + " (kWh)"
+                              : "-",
+                          style: "tableCell",
+                          bold: isTotal,
+                        },
+                      ];
+                    }),
+                  ],
+                },
+                margin: [0, 5, 0, 10],
+              },
+            ],
+            margin: [0, 0, 0, 20],
+            pageBreak: "after",
+          },
+          // --- Losses Summary ---
+          {
+            width: "50%",
+            stack: [
+              {
+                table: {
+                  widths: ["*"],
+                  body: [
+                    [
+                      {
+                        text: sectionHeaders.lossesSummary,
+                        style: "sectionHeader",
+                      },
+                    ],
+                  ],
+                },
+                layout: "noBorders",
+              },
+              {
+                table: {
+                  widths: ["25%", "25%"],
+                  body: [
+                    ...Object.entries(lossesSummary).map(([key, value]) => {
+                      const isTotal = key === "Total_Losses";
+                      return [
+                        {
+                          text: key.replace(/_/g, " "),
+                          style: "tableHeader",
+                          bold: isTotal,
+                        },
+                        {
+                          text:
+                            value !== null && value !== undefined
+                              ? value.toLocaleString("en-US", {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }) + " (kWh)"
+                              : "-",
+                          style: "tableCell",
+                          bold: isTotal,
+                        },
+                      ];
+                    }),
+                  ],
+                },
+                margin: [0, 5, 0, 10],
+              },
+            ],
+            margin: [0, 0, 0, 20],
+          },
+          // Low Voltage Side summary
           {
             width: "*",
             stack: [
@@ -509,11 +623,83 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   ],
                 },
                 margin: [0, 5, 0, 20],
+                pageBreak: "after",
+              },
+            ],
+          },
+          // Production
+          {
+            width: "*",
+            stack: [
+              {
+                table: {
+                  widths: ["*"],
+                  body: [
+                    [
+                      {
+                        text: sectionHeaders.production,
+                        style: "sectionHeader",
+                      },
+                    ],
+                  ],
+                },
+                layout: "noBorders",
+              },
+              {
+                table: {
+                  widths: ["10%", "22.5%", "22.5%", "22.5%", "22.5%"],
+                  body: [
+                    [
+                      ...productionHeaderlabels.map((col, index) => ({
+                        text: col,
+                        style: "tableHeader",
+                        alignment: index === 0 ? "left" : "center",
+                      })),
+                    ],
+                    ...productionSummary.map((row) => [
+                      { text: row.Unit.toString(), style: "tableCell" },
+
+                      {
+                        text: row.TotalProduction.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                      {
+                        text: row.TotalAvgCount.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                      {
+                        text: row.TotalConsumption.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                      {
+                        text: row.consumptionperbag.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                    ]),
+                  ],
+                },
+                margin: [0, 5, 0, 20],
               },
             ],
           },
 
-          // --- (3) CONSUMPTION DETAIL — full width ---
+          // ---CONSUMPTION DETAIL Daily ---
           {
             width: "100%",
             stack: [
@@ -585,7 +771,106 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
               },
             ],
           },
+          // ---  Production DETAIL Daily ---
+          {
+            width: "100%",
+            stack: [
+              {
+                table: {
+                  widths: ["*"],
+                  body: [
+                    [
+                      {
+                        text: sectionHeaders.prodDetail,
+                        style: "sectionHeader",
+                      },
+                    ],
+                  ],
+                },
+                layout: "noBorders",
+              },
+              {
+                table: {
+                  headerRows: 1,
+                  widths: ["10%", "10%", "15%", "20%", "10%", "15%", "20%"],
+                  body: [
+                    [
+                      // { text: "Date", style: "tableHeader" },
+                      ...(prodDetailTabHeader?.map((key) => ({
+                        text: key,
+                        style: "tableHeader",
+                        alignment: "center",
+                      })) || []),
+                    ],
+                    ...productionSummaryDaily.map((row) => [
+                      { text: row.date.toString(), style: "tableCell" },
 
+                      {
+                        text: row.Unit_4_Production.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                      {
+                        text: row.Unit_4_AvgCount.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                      {
+                        text: row.Unit_4_consumptionperbag.toLocaleString(
+                          "en-US",
+                          {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }
+                        ),
+                        style: "tableCell",
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
+                        alignment: "right",
+                      },
+                      {
+                        text: row.Unit_5_Production.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                      {
+                        text: row.Unit_5_AvgCount.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }),
+                        style: "tableCell",
+                        alignment: "right",
+                      },
+                      {
+                        text: row.Unit_5_consumptionperbag.toLocaleString(
+                          "en-US",
+                          {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }
+                        ),
+                        style: "tableCell",
+                        background: "#E5F3FD",
+                        fillColor: "#E5F3FD",
+                        alignment: "right",
+                      },
+                    ]),
+                  ],
+                },
+                margin: [0, 5, 0, 20],
+                dontBreakRows: true,
+              },
+            ],
+          },
           //==========================================================================
           // --- (4) CONSUMPTION SUMMARY BY DEPARTMENT — full width ---
           {
@@ -618,93 +903,16 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                     "auto",
                     "auto",
                     "auto",
+                    "auto",
                   ],
                   body: [
                     // --- Header row ---
                     [
-                      {
-                        text: consPerDeptHNme.sNo,
-                        noWrap: false,
-                        bold: true,
-                        fontSize: 9,
-                        background: "#E5F3FD",
-                        fillColor: "#E5F3FD",
+                      ...(consPerDeptHNmearr?.map((key) => ({
+                        text: key,
+                        style: "tableHeader",
                         alignment: "center",
-                      },
-
-                      {
-                        text: consPerDeptHNme.dept,
-                        noWrap: false,
-                        bold: true,
-                        fontSize: 9,
-                        background: "#E5F3FD",
-                        fillColor: "#E5F3FD",
-                        alignment: "center",
-                      },
-                      {
-                        text: consPerDeptHNme.unit,
-                        noWrap: false,
-                        bold: true,
-                        fontSize: 9,
-                        background: "#E5F3FD",
-                        fillColor: "#E5F3FD",
-                        alignment: "center",
-                      },
-                      {
-                        text: consPerDeptHNme.mcs,
-                        noWrap: false,
-                        bold: true,
-                        fontSize: 9,
-                        background: "#E5F3FD",
-                        fillColor: "#E5F3FD",
-                        alignment: "center",
-                        noWrap: false,
-                      },
-                      {
-                        text: "Connected Load Per Department (kWh/h)",
-                        noWrap: false,
-                        bold: true,
-                        fontSize: 9,
-                        background: "#E5F3FD",
-                        fillColor: "#E5F3FD",
-                        alignment: "center",
-                      },
-                      {
-                        text: "Connected Load Per Machine (kWh/h/Mc)",
-                        noWrap: false,
-                        bold: true,
-                        fontSize: 9,
-                        background: "#E5F3FD",
-                        fillColor: "#E5F3FD",
-                        alignment: "center",
-                      },
-                      {
-                        text: "Running Load (kWh/h/Mc)",
-                        noWrap: false,
-                        bold: true,
-                        fontSize: 9,
-                        background: "#E5F3FD",
-                        fillColor: "#E5F3FD",
-                        alignment: "center",
-                      },
-                      {
-                        text: "Avg Department Load (kWh/h)",
-                        noWrap: false,
-                        bold: true,
-                        fontSize: 9,
-                        background: "#E5F3FD",
-                        fillColor: "#E5F3FD",
-                        alignment: "center",
-                      },
-                      {
-                        text: "Total Units Consumed (kWh)",
-                        noWrap: false,
-                        bold: true,
-                        fontSize: 9,
-                        background: "#E5F3FD",
-                        fillColor: "#E5F3FD",
-                        alignment: "center",
-                      },
+                      })) || []),
                     ],
 
                     // --- Dynamic rows for departments ---
@@ -745,6 +953,14 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                             style: "tableCellRight",
                           },
                           {
+                            text: dept.u4AvgConsumption || "-",
+                            style: "tableCellRight",
+                          },
+                          {
+                            text: dept.u4UtilizationPercent + " %" || "-",
+                            style: "tableCellRight",
+                          },
+                          {
                             text: dept.u4ConectedLoadPerMcs || "-",
                             style: "tableCellRight",
                           },
@@ -752,10 +968,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                             text: dept.u4RunnigLoad || "-",
                             style: "tableCellRight",
                           },
-                          {
-                            text: dept.u4AvgConsumption || "-",
-                            style: "tableCellRight",
-                          },
+
                           {
                             text:
                               dept.u4Consumption?.toLocaleString("en-US", {
@@ -799,15 +1012,19 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                             style: "tableCellRight",
                           },
                           {
+                            text: dept.u5AvgConsumption || "-",
+                            style: "tableCellRight",
+                          },
+                          {
+                            text: dept.u5UtilizationPercent + " %" || "-",
+                            style: "tableCellRight",
+                          },
+                          {
                             text: dept.u5ConectedLoadPerMcs || "-",
                             style: "tableCellRight",
                           },
                           {
                             text: dept.u5RunningLoad || "-",
-                            style: "tableCellRight",
-                          },
-                          {
-                            text: dept.u5AvgConsumption || "-",
                             style: "tableCellRight",
                           },
                           {
@@ -838,6 +1055,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                         { text: "", border: [false, false, false, true] },
                         { text: "", border: [false, false, false, true] },
                         { text: "", border: [false, false, false, true] },
+                        { text: "", border: [false, false, false, true] },
                         {
                           text: "Total",
                           alignment: "center",
@@ -859,10 +1077,10 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                       rows.push([
                         {
                           text: "",
-                          colSpan: 9,
+                          colSpan: 10,
                           border: [false, false, false, false],
                         },
-                        ...Array(8).fill({
+                        ...Array(9).fill({
                           text: "",
                           border: [false, false, false, false],
                         }),
@@ -875,9 +1093,10 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                     [
                       {
                         text: "",
-                        colSpan: 6,
+                        colSpan: 7,
                         border: [false, false, false, false],
                       },
+                      {},
                       {},
                       {},
                       {},
@@ -957,18 +1176,18 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
 
         styles: {
           sectionHeader: {
-            fontSize: 16,
+            fontSize: 15,
             bold: true,
             background: "#1C4D82",
             fillColor: "#1C4D82",
             color: "#FFFFFF",
-            padding: [8, 4],
+            padding: [8, 3],
             margin: [8, 4],
             alignment: "left",
           },
           tableHeader: {
             bold: true,
-            fontSize: 10,
+            fontSize: 9,
             background: "#E5F3FD",
             fillColor: "#E5F3FD",
             padding: [4, 2],
@@ -1095,6 +1314,76 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                   <tr key={unit} className="text-[14px] font-inter">
                     <td className="py-1 px-3 border border-gray-400 dark:border-gray-500">
                       Unit {unit}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {/* Ht side */}
+      <div className="w-full mt-5">
+        <SectionHeader title={sectionHeaders.HTside} />
+        {/* parameters table */}
+        <div className="w-full mt-5">
+          <table className=" border w-full lg:w-[40%]   overflow-hidden">
+            <tbody>
+              {Object.entries(HTside).map(([key, value]) => {
+                const isTotal = key === "Total";
+                return (
+                  <tr className="text-[14px] font-inter">
+                    <td
+                      className={`bg-[#E5F3FD] w-[50%] dark:bg-gray-600 ${
+                        isTotal ? "font-bold" : "font-semibold"
+                      } py-1 px-2 border border-gray-400 dark:border-gray-500`}
+                    >
+                      {key.replace(/_/g, " ")}
+                    </td>
+                    <td
+                      className={`py-1 px-4 border w-[50%] ${
+                        isTotal ? "font-bold" : ""
+                      } border-gray-400 dark:border-gray-500`}
+                    >
+                      {value?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) + " (kWh)" ?? "-"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {/* Losses */}
+      <div className="w-full mt-5">
+        <SectionHeader title={sectionHeaders.lossesSummary} />
+        {/* parameters table */}
+        <div className="w-full mt-5">
+          <table className=" border w-full lg:w-[40%]   overflow-hidden">
+            <tbody>
+              {Object.entries(lossesSummary).map(([key, value]) => {
+                const isTotal = key === "Total_Losses";
+                return (
+                  <tr className="text-[14px] font-inter">
+                    <td
+                      className={`bg-[#E5F3FD] w-[50%] dark:bg-gray-600 ${
+                        isTotal ? "font-bold" : "font-semibold"
+                      } py-1 px-2 border border-gray-400 dark:border-gray-500`}
+                    >
+                      {key.replace(/_/g, " ")}
+                    </td>
+                    <td
+                      className={`py-1 px-4 border w-[50%] ${
+                        isTotal ? "font-bold" : ""
+                      } border-gray-400 dark:border-gray-500`}
+                    >
+                      {value?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) + " (kWh)" ?? "-"}
                     </td>
                   </tr>
                 );
@@ -1243,7 +1532,64 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
           </table>
         </div>
       </div>
+      {/* Production */}
+      <div className="w-full mt-5">
+        {/* Header */}
+        <SectionHeader title={sectionHeaders.production} />
 
+        {/* Responsive Table Container */}
+        {/* new table */}
+        <div className="w-full mt-5 overflow-x-auto">
+          <table className="min-w-full border-collapse border border-gray-400 text-sm">
+            <thead className="bg-[#E5F3FD] dark:bg-gray-600">
+              <tr className="text-[13px] md:text-[14px] font-inter">
+                {productionHeaderlabels.map((col) => (
+                  <th className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap">
+                    {col}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody>
+              {productionSummary.map((row) => (
+                <tr
+                  key={row.Unit}
+                  className="text-[13px] md:text-[14px] font-inter hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <td className="py-2 px-3 border border-gray-400 text-center">
+                    {row.Unit}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 text-right">
+                    {row.TotalProduction.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 text-right">
+                    {row.TotalAvgCount.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 text-right">
+                    {row.TotalConsumption.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 text-right">
+                    {row.consumptionperbag.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
       {/* Comsumption Detail */}
       <div className="w-full mt-5">
         {/* Header */}
@@ -1260,7 +1606,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
                 {visibleColumns.map((key) => (
                   <th
                     key={key}
-                    className="py-2 px-3 border border-gray-400 dark:border-gray-500 whitespace-nowrap text-right"
+                    className="py-2 px-3 border border-gray-400 dark:border-gray-500 whitespace-nowrap text-center"
                   >
                     {columnLabels[key]}
                   </th>
@@ -1312,6 +1658,96 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
           </table>
         </div>
       </div>
+      {/* production Detail */}
+      <div className="w-full mt-5">
+        {/* Header */}
+        <SectionHeader title={sectionHeaders.prodDetail} />
+
+        {/* Responsive Table Container */}
+        <div className="w-full mt-5 overflow-x-auto">
+          <table className="min-w-full border-collapse border border-gray-400 text-sm">
+            <thead className="bg-[#E5F3FD] dark:bg-gray-600">
+              <tr className="text-[13px] md:text-[14px] font-inter">
+                {prodDetailTabHeader.map((key) => (
+                  <th
+                    key={key}
+                    className="py-2 px-3 border border-gray-400 dark:border-gray-500 whitespace-nowrap text-center"
+                  >
+                    {key}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody>
+              {productionSummaryDaily.map((row, idx) => (
+                <tr
+                  key={idx}
+                  className="text-[13px] md:text-[14px] font-inter hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <td className="py-2 px-3 border border-gray-400 dark:border-gray-500 whitespace-nowrap">
+                    {row.date}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 dark:border-gray-500 text-right whitespace-nowrap">
+                    {row.Unit_4_Production?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }) ?? "-"}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 dark:border-gray-500 text-right whitespace-nowrap">
+                    {row.Unit_4_AvgCount?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }) ?? "-"}
+                  </td>
+                  <td className="py-2 px-3 border bg-[#E5F3FD] dark:bg-[#e5f3fd5d] border-gray-400 dark:border-gray-500 text-right whitespace-nowrap">
+                    {row.Unit_4_consumptionperbag?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }) ?? "-"}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 dark:border-gray-500 text-right whitespace-nowrap">
+                    {row.Unit_5_Production?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }) ?? "-"}
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 dark:border-gray-500 text-right whitespace-nowrap">
+                    {row.Unit_5_AvgCount?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }) ?? "-"}
+                  </td>
+                  <td className="py-2 px-3 bg-[#E5F3FD] dark:bg-[#e5f3fd5d] border border-gray-400 dark:border-gray-500 text-right whitespace-nowrap">
+                    {row.Unit_5_consumptionperbag?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }) ?? "-"}
+                  </td>
+                </tr>
+              ))}
+
+              {/* Total Row */}
+              {/* <tr className="font-semibold text-[13px] md:text-[14px] font-inter bg-gray-100 dark:bg-gray-700">
+                <td className="py-2 px-3 border border-gray-400 dark:border-gray-500 whitespace-nowrap">
+                  Total
+                </td>
+                {visibleColumns.map((key) => (
+                  <td
+                    key={key}
+                    className="dark:text-white/80 py-2 px-3 border border-gray-400 dark:border-gray-500 text-right whitespace-nowrap"
+                  >
+                    {totalRow[key]?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }) ?? "-"}
+                  </td>
+                ))}
+              </tr> */}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Comsumption Detail by depratment */}
       <div className="w-full mt-5">
@@ -1319,8 +1755,8 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
         <SectionHeader title={sectionHeaders.consumptionPerDept} />
 
         {/* ✅ Responsive Scrollable Wrapper */}
-        <div className="w-full mt-5 overflow-x-auto border border-gray-300">
-          <table className="min-w-full w-full border-collapse text-sm md:text-base">
+        <div className="w-full mt-5 overflow-x-auto">
+          <table className="min-w-full w-full  text-sm md:text-base">
             <thead className="bg-[#E5F3FD] dark:bg-gray-600">
               <tr className="text-[13px] md:text-[14px] font-inter">
                 {consPerDeptHNmearr.map((col) => (
@@ -1335,144 +1771,112 @@ const EnergyComparisonReport = ({ rawData, intervalsObj }) => {
             </thead>
 
             <tbody>
-              {consumptionPerDept.map((dept, index) => {
-                const hasU4 = "u4Consumption" in dept;
-                const hasU5 = "u5Consumption" in dept;
+              {consumptionPerDept.map((dept, index) => (
+                <React.Fragment key={index}>
+                  {/* --- UNIT 4 Row --- */}
+                  <tr className="text-[13px] md:text-[14px] border-t-2 border-x-2 border-gray-500 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    {/* Serial Number */}
+                    <td
+                      rowSpan={3}
+                      className="border border-gray-300 font-medium text-center px-2 py-1 align-middle bg-gray-50 dark:bg-gray-800"
+                    >
+                      {index + 1}
+                    </td>
 
-                return (
-                  <React.Fragment key={index}>
-                    {/* --- UNIT 4 or 5 (First Row) --- */}
-                    <tr className="text-[13px] md:text-[14px] border-t-2 border-x-2 border-gray-500 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                      <td
-                        rowSpan={1 + (hasU4 ? 1 : 0) + (hasU5 ? 1 : 0)}
-                        className="border border-gray-300 font-medium text-center px-2 py-1 align-middle bg-gray-50 dark:bg-gray-800 sticky left-0"
-                      >
-                        {index + 1}
-                      </td>
+                    <td className="border border-gray-300 font-medium px-2 py-1 align-middle">
+                      {dept.name || "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-center">
+                      4
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-center">
+                      {dept.u4Mcs ?? "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u4ConectedLoadPerDept ?? "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u4AvgConsumption ?? "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u4UtilizationPercent + " %" ?? "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u4ConectedLoadPerMcs ?? "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u4RunnigLoad ?? "-"}
+                    </td>
 
-                      {hasU4 ? (
-                        <>
-                          <td className="border border-gray-300 font-medium px-2 py-1 align-middle">
-                            {dept.name || "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-center">
-                            4
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-center">
-                            {dept.u4Mcs ?? "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            {dept.u4ConectedLoadPerDept ?? "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            {dept.u4ConectedLoadPerMcs ?? "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            {dept.u4RunnigLoad ?? "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            {dept.u4AvgConsumption ?? "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            {dept.u4Consumption?.toLocaleString("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            }) ?? "-"}
-                          </td>
-                        </>
-                      ) : hasU5 ? (
-                        <>
-                          <td className="border border-gray-300 font-medium px-2 py-1 align-middle">
-                            {dept.u5Name || "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-center">
-                            5
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-center">
-                            {dept.u5Mcs ?? "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            {dept.u5ConectedLoadPerDept ?? "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            {dept.u5ConectedLoadPerMcs ?? "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            {dept.u5RunningLoad ?? "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            {dept.u5AvgConsumption ?? "-"}
-                          </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            {dept.u5Consumption?.toLocaleString("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            }) ?? "-"}
-                          </td>
-                        </>
-                      ) : null}
-                    </tr>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u4Consumption?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) ?? "-"}
+                    </td>
+                  </tr>
 
-                    {/* --- UNIT 5 Row (If both Units Exist) --- */}
-                    {hasU4 && hasU5 && (
-                      <tr className="text-[13px] md:text-[14px] border-x-2 border-gray-500 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="border border-gray-300 font-medium px-2 py-1 align-middle">
-                          {dept.u5Name || "-"}
-                        </td>
-                        <td className="border border-gray-300 px-2 py-1 text-center">
-                          5
-                        </td>
-                        <td className="border border-gray-300 px-2 py-1 text-center">
-                          {dept.u5Mcs ?? "-"}
-                        </td>
-                        <td className="border border-gray-300 px-2 py-1 text-right">
-                          {dept.u5ConectedLoadPerDept ?? "-"}
-                        </td>
-                        <td className="border border-gray-300 px-2 py-1 text-right">
-                          {dept.u5ConectedLoadPerMcs ?? "-"}
-                        </td>
-                        <td className="border border-gray-300 px-2 py-1 text-right">
-                          {dept.u5RunningLoad ?? "-"}
-                        </td>
-                        <td className="border border-gray-300 px-2 py-1 text-right">
-                          {dept.u5AvgConsumption ?? "-"}
-                        </td>
-                        <td className="border border-gray-300 px-2 py-1 text-right">
-                          {dept.u5Consumption?.toLocaleString("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          }) ?? "-"}
-                        </td>
-                      </tr>
-                    )}
+                  {/* --- UNIT 5 Row --- */}
+                  <tr className="text-[13px] md:text-[14px] border-x-2 border-gray-500 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td className="border border-gray-300 font-medium px-2 py-1 align-middle">
+                      {dept.u5Name || "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-center">
+                      5
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-center">
+                      {dept.u5Mcs ?? "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u5ConectedLoadPerDept ?? "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u5AvgConsumption ?? "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u5UtilizationPercent + " %" ?? "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u5ConectedLoadPerMcs ?? "-"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u5RunningLoad ?? "-"}
+                    </td>
 
-                    {/* --- TOTAL Row --- */}
-                    <tr className="text-[13px] md:text-[14px] border-b-2 border-x-2 border-gray-500 dark:border-gray-300 font-semibold bg-gray-100 dark:bg-gray-700">
-                      <td
-                        colSpan={7}
-                        className="text-right border border-gray-400 px-2 py-1 align-middle"
-                      >
-                        Total
-                      </td>
-                      <td className="text-right border border-gray-400 px-2 py-1 align-middle dark:text-white/80">
-                        {dept.totalConsumption?.toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }) ?? "-"}
-                      </td>
-                    </tr>
+                    <td className="border border-gray-300 px-2 py-1 text-right">
+                      {dept.u5Consumption?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) ?? "-"}
+                    </td>
+                  </tr>
 
-                    {/* --- Spacing between Departments --- */}
-                    <tr>
-                      <td colSpan={9} className="h-2"></td>
-                    </tr>
-                  </React.Fragment>
-                );
-              })}
+                  {/* --- TOTAL Row --- */}
+                  <tr className="text-[13px] md:text-[14px] border-b-2 border-x-2 border-gray-500 dark:border-gray-300 font-semibold bg-gray-100 dark:bg-gray-700">
+                    <td
+                      colSpan={8}
+                      className="text-right border border-gray-400 px-2 py-1 align-middle"
+                    >
+                      Total
+                    </td>
+                    <td className="text-right border border-gray-400 px-2 py-1 align-middle dark:text-white/80">
+                      {dept.totalConsumption?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) ?? "-"}
+                    </td>
+                  </tr>
+
+                  {/* --- Spacer --- */}
+                  <tr>
+                    <td colSpan={10} className="h-2"></td>
+                  </tr>
+                </React.Fragment>
+              ))}
 
               {/* --- GRAND TOTAL --- */}
               <tr className="font-semibold text-[13px] md:text-[14px] dark:bg-gray-600">
-                <td colSpan={6}></td>
+                <td colSpan={7}></td>
                 <td
                   colSpan={2}
                   className="text-center border-2 border-gray-700 dark:border-gray-300 px-2 py-2"

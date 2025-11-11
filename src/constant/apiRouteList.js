@@ -68,6 +68,7 @@ const config = {
     GET_SINGLE_DAY_SPINDLE: "/production?",
     GET_SPINDLES: "/production-monthwise?month=",
     POWER_SUMMARY_REPORT: "/power_summary_report",
+    ENERGY_CONSUMPTION: "/energy-consumption-report",
   },
   METER_CONFIG: {
     ADD_METER_TOGGLE: "/meter/toggle",

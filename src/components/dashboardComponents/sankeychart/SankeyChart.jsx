@@ -201,7 +201,7 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
           nodeAlign: "left",
           nodeWidth: 16,
           nodeGap: 10,
-          draggable: false,
+          draggable: true,
           focusNodeAdjacency: true,
           blurState: {
             itemStyle: { opacity: 1 },
@@ -237,12 +237,7 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
     };
   }, [data, navigateLinks, resolvedTheme, isGray]);
 
-  return (
-    <div
-      ref={chartRef}
-      style={{ background: "transparent", height: "55vh", width: "100%" }}
-    />
-  );
+  return <div ref={chartRef} style={{ height: "55vh", width: "100%" }} />;
 };
 
 export default SankeyChart;

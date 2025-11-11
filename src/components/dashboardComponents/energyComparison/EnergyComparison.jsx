@@ -9,10 +9,7 @@ import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 
 const EnergyComparison = ({ dateRange }) => {
-  const today = new Date().toISOString().split("T")[0];
   const [loading, setLoading] = useState(false);
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(today);
   const [isEnergyComparisonFullView, setEnergyComparisonFullView] =
     useState(false);
   const { theme } = useTheme();

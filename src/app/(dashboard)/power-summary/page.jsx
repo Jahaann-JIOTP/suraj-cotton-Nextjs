@@ -17,6 +17,20 @@ const PowerSummaryPage = () => {
   const handleDateRangeChange = useCallback((range) => {
     setDateRange(range);
   }, []);
+  // unit 5 trafo 1 + 2
+  const u5incomming =
+    Number(powerSummaryData.Trafo4Incoming || 0) +
+    Number(powerSummaryData.Trafo3Incoming || 0);
+  const u5Outgoin =
+    Number(powerSummaryData.Trafo4outgoing || 0) +
+    Number(powerSummaryData.Trafo3outgoing || 0);
+  const u5Losses =
+    Number(powerSummaryData.Trafo4losses || 0) +
+    Number(powerSummaryData.Trafo3losses || 0);
+  const u5LossesPercent =
+    Number(powerSummaryData.T2unit5percentage || 0) +
+    Number(powerSummaryData.T1unit5percentage || 0);
+  console.log({ u5incomming, u5Outgoin, u5Losses, u5LossesPercent });
   const fetchPowerSummaryData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -68,52 +82,54 @@ const PowerSummaryPage = () => {
       {/* first section first of small divs */}
 
       {/* second section */}
-      <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
-        <div className="w-full flex flex-wrap gap-3 lg:gap-[0.7vw] lg:w-[49.5%]">
-          <div className="w-full md:w-[23.7%] lg:w-[49.1%] ">
-            <SingleValueDiv
-              title="WAPDA IC"
-              value={Number(powerSummaryData.Wapda1 || 0).toLocaleString(
-                "en-US"
-              )}
-              loading={loading}
-              unit="kWh"
-              height="6rem"
-            />
-          </div>
-          <div className="w-full md:w-[23.7%] lg:w-[49.1%] ">
-            <SingleValueDiv
-              title="WAPDA 2"
-              value={Number(powerSummaryData.Wapda2 || 0).toLocaleString(
-                "en-US"
-              )}
-              loading={loading}
-              unit="kWh"
-              height="6rem"
-            />
-          </div>
-          <div className="w-full md:w-[23.7%] lg:w-[49.1%] ">
-            <SingleValueDiv
-              title="Niigata HFO"
-              value={Number(powerSummaryData.Niigata || 0).toLocaleString(
-                "en-US"
-              )}
-              loading={loading}
-              unit="kWh"
-              height="6rem"
-            />
-          </div>
-          <div className="w-full md:w-[23.7%] lg:w-[49.1%] ">
-            <SingleValueDiv
-              title="JMS"
-              value={Number(powerSummaryData.JMS || 0).toLocaleString("en-US")}
-              loading={loading}
-              unit="kWh"
-              height="6rem"
-            />
-          </div>
+
+      <div className="mt-3 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="w-full ">
+          <SingleValueDiv
+            title="WAPDA IC"
+            value={Number(powerSummaryData.Wapda1 || 0).toLocaleString("en-US")}
+            loading={loading}
+            unit="kWh"
+            height="6rem"
+          />
         </div>
-        <div className="w-full lg:w-[49.6%]">
+
+        <div className="w-full ">
+          <SingleValueDiv
+            title="WAPDA 2"
+            value={Number(powerSummaryData.Wapda2 || 0).toLocaleString("en-US")}
+            loading={loading}
+            unit="kWh"
+            height="6rem"
+          />
+        </div>
+
+        <div className="w-full ">
+          <SingleValueDiv
+            title="Niigata HFO"
+            value={Number(powerSummaryData.Niigata || 0).toLocaleString(
+              "en-US"
+            )}
+            loading={loading}
+            unit="kWh"
+            height="6rem"
+          />
+        </div>
+
+        <div className="w-full ">
+          <SingleValueDiv
+            title="JMS"
+            value={Number(powerSummaryData.JMS || 0).toLocaleString("en-US")}
+            loading={loading}
+            unit="kWh"
+            height="6rem"
+          />
+        </div>
+      </div>
+
+      {/* Third section */}
+      <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
+        <div className="w-full lg:w-[49.5%]">
           <TrafoCard
             mainTitle="Unit 4 Transformer 1+2"
             icomingValue={Number(
@@ -135,76 +151,44 @@ const PowerSummaryPage = () => {
             lossesPercentUnit="%"
           />
         </div>
-      </div>
-
-      {/* Third section */}
-      <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
-        <div className="w-full lg:w-[49.5%]">
-          <TrafoCard
-            mainTitle="Unit 5 Transformer 1"
-            icomingValue={Number(
-              powerSummaryData.Trafo3Incoming || 0
-            ).toLocaleString("en-US")}
-            loading={loading}
-            iconmingUnit="kWh"
-            outgoingValue={Number(
-              powerSummaryData.Trafo3outgoing || 0
-            ).toLocaleString("en-US")}
-            outgoingUnit="kWh"
-            lossesValue={Number(
-              powerSummaryData.Trafo3losses || 0
-            ).toLocaleString("en-US")}
-            lossesUnit="kWh"
-            lossesPercent={Number(
-              powerSummaryData.T1unit5percentage || 0
-            ).toLocaleString("en-US")}
-            lossesPercentUnit="%"
-          />
-        </div>
         <div className="w-full lg:w-[49.6%]">
           <TrafoCard
-            mainTitle="Unit 5 Transformer 2"
-            icomingValue={Number(
-              powerSummaryData.Trafo4Incoming || 0
-            ).toLocaleString("en-US")}
+            mainTitle="Unit 5 Transformer 1+2"
+            icomingValue={Number(u5incomming || 0).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
-            outgoingValue={Number(
-              powerSummaryData.Trafo4outgoing || 0
-            ).toLocaleString("en-US")}
+            outgoingValue={Number(u5Outgoin || 0).toLocaleString("en-US")}
             outgoingUnit="kWh"
-            lossesValue={Number(
-              powerSummaryData.Trafo4losses || 0
-            ).toLocaleString("en-US")}
+            lossesValue={Number(u5Losses || 0).toLocaleString("en-US")}
             lossesUnit="kWh"
-            lossesPercent={Number(
-              powerSummaryData.T2unit5percentage || 0
-            ).toLocaleString("en-US")}
+            lossesPercent={Number(u5LossesPercent || 0).toLocaleString("en-US")}
             lossesPercentUnit="%"
           />
         </div>
       </div>
       {/* fourth section first of small divs */}
-      <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
-        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
+      <div className="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 lg:gap-[0.9vw]">
+        <div className="w-full">
           <SingleValueDiv
             title="Solar 1184.55 kW"
             loading={loading}
             value={Number(powerSummaryData.Solar1 || 0).toLocaleString("en-US")}
             unit="kWh"
-            height="6rem"
+            height="6.1rem"
           />
         </div>
-        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
+
+        <div className="w-full">
           <SingleValueDiv
             title="Solar 1066.985 kW"
             value={Number(powerSummaryData.Solar2 || 0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            height="6.5rem"
           />
         </div>
-        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
+
+        <div className="w-full">
           <SingleValueDiv
             title="Solar 352.50 kW"
             value={Number(powerSummaryData.solarunit4 || 0).toLocaleString(
@@ -212,10 +196,11 @@ const PowerSummaryPage = () => {
             )}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            height="6.5rem"
           />
         </div>
-        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
+
+        <div className="w-full">
           <SingleValueDiv
             title="Solar 52.17 kW"
             value={Number(powerSummaryData.solar52 || 0).toLocaleString(
@@ -223,10 +208,11 @@ const PowerSummaryPage = () => {
             )}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            height="6.5rem"
           />
         </div>
-        <div className="w-full md:w-[18.5%] lg:w-[19%]">
+
+        <div className="w-full">
           <SingleValueDiv
             title="Diesel and Gas Genset"
             value={Number(
@@ -234,13 +220,12 @@ const PowerSummaryPage = () => {
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            height="6.5rem"
           />
         </div>
-      </div>
-      {/* Fifth section first of small divs */}
-      <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
-        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
+        {/* </div> */}
+        {/* Fifth section first of small divs */}
+        <div className="w-full">
           <SingleValueDiv
             title="WAPDA Energy Export"
             loading={loading}
@@ -248,11 +233,11 @@ const PowerSummaryPage = () => {
               "en-US"
             )}
             unit="kWh"
-            height="6rem"
+            height="6.5rem"
             valueColor="#019726"
           />
         </div>
-        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
+        <div className="w-full">
           <SingleValueDiv
             title="Unaccounted Energy"
             value={Number(
@@ -260,11 +245,11 @@ const PowerSummaryPage = () => {
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            height="6.5rem"
             valueColor="#E40101"
           />
         </div>
-        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
+        <div className="w-full">
           <SingleValueDiv
             title="Trasformer Losses"
             value={Number(
@@ -272,11 +257,11 @@ const PowerSummaryPage = () => {
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            height="6.5rem"
             valueColor="#E40101"
           />
         </div>
-        <div className="w-full md:w-[18.5%] lg:w-[19.3%]">
+        <div className="w-full">
           <SingleValueDiv
             title="Tranformer Losses (%)"
             value={Number(
@@ -284,11 +269,12 @@ const PowerSummaryPage = () => {
             ).toLocaleString("en-US")}
             loading={loading}
             unit="%"
-            height="6rem"
+            height="6.5rem"
             valueColor="#E40101"
           />
         </div>
-        <div className="w-full md:w-[18.5%] lg:w-[19%]">
+
+        <div className="w-full">
           <SingleValueDiv
             title="HT Transmission Losses"
             value={Number(
@@ -296,7 +282,7 @@ const PowerSummaryPage = () => {
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            height="6.5rem"
             valueColor="#E40101"
           />
         </div>
