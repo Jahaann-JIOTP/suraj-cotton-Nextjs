@@ -58,7 +58,6 @@ const UnitLt41Page = () => {
     fetchLt1SankyData();
   }, [range]);
 
-  console.log(data);
   return (
     <div className="relative w-full bg-white dark:bg-gray-800 flex flex-col h-full md:h-[81vh] overflow-y-auto p-4 rounded-md border-t-3 border-[#025697] ">
       <div className="w-full items-start md:items-center flex justify-between flex-col md:flex-row">

@@ -34,8 +34,8 @@ const SankeyTotalValues = ({ data, lt, loading = false }) => {
 
   // only certain nodes hide the unaccounted field
   const isUnit =
-    lt === "Unit 4 Consumption" ||
-    lt === "Unit 5 Consumption" ||
+    lt === "Unit 4 Incomer" ||
+    lt === "Unit 5 Incomer" ||
     lt === "Losses" ||
     lt === "Total Generation";
 

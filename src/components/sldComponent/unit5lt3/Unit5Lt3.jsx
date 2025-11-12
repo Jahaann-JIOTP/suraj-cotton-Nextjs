@@ -13,98 +13,98 @@ const lt1MeterData = [
   {
     link: "U7_GW02",
     title: "Ring 1-3",
-    top: 299,
-    left: 145,
+    top: 303,
+    left: 139,
   },
   {
     link: "U8_GW02",
-    title: "AC Supply Fan",
-    top: 203,
-    left: 231,
+    title: "Ring A/C (Supply Fan)",
+    top: 205,
+    left: 227,
   },
   {
     link: "U9_GW02",
-    title: "Blow Room L1",
-    top: 299,
-    left: 317,
+    title: "Blow Room",
+    top: 303,
+    left: 315,
   },
   {
     link: "U10_GW02",
-    title: "Ring Frames 4-6",
-    top: 203,
-    left: 404,
+    title: "Ring 4-6",
+    top: 205,
+    left: 403,
   },
   {
     link: "U11_GW02",
-    title: "A/C Plant Blowing",
-    top: 299,
+    title: "A/C Back Process",
+    top: 303,
     left: 492,
   },
   {
     link: "U12_GW02",
-    title: "MLDB1 Blow Room card",
-    top: 203,
-    left: 603,
+    title: "Lighting Internal",
+    top: 205,
+    left: 604,
   },
   {
     link: "U14_GW02",
-    title: "Comber MCS 1-14",
-    top: 304,
-    left: 723,
+    title: "Comber 1-14 + Lap Former 1-3",
+    top: 303,
+    left: 725,
   },
   {
     link: "U15_GW02",
-    title: "AC Return Fan",
-    top: 207,
-    left: 852,
+    title: "Ring A/C (Return Fans)",
+    top: 205,
+    left: 857,
   },
   {
     link: "U16_GW02",
     title: "Water Chiller",
-    top: 493,
-    left: 163,
+    top: 501,
+    left: 159,
   },
   {
     link: "U17_GW02",
-    title: "Card M/C 8-14",
-    top: 596,
-    left: 250,
+    title: "Card 8-14",
+    top: 605,
+    left: 246,
   },
   {
     link: "U18_GW02",
-    title: "Auto Con 1-9",
-    top: 493,
-    left: 336,
+    title: "Winding 1-9",
+    top: 501,
+    left: 334,
   },
   {
     link: "U19_GW02",
-    title: "Card M/C 1-7",
-    top: 596,
+    title: "Card 1-7",
+    top: 605,
     left: 423,
   },
   {
     link: "U20_GW02",
-    title: "AC Plant Winding",
-    top: 493,
+    title: "Winding A/C",
+    top: 501,
     left: 510,
   },
   {
     link: "U21_GW02",
-    title: "Simplex M/C 1~5+1~3 Breaker Machines",
-    top: 596,
+    title: "Simplex 1-5 + Breaker 1-6",
+    top: 605,
     left: 598,
   },
   {
     link: "U22_GW02",
-    title: "Spare 2",
-    top: 493,
-    left: 684,
+    title: "Ring Unit 4 (17-20)",
+    top: 501,
+    left: 687,
   },
   {
     link: "U23_GW02",
-    title: "Draw Frame Finish 1~8",
-    top: 596,
-    left: 771,
+    title: "Drawing Finisher 1-8",
+    top: 605,
+    left: 775,
   },
 ];
 
@@ -117,39 +117,39 @@ const Unit5Lt3 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U7_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U7_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_GW02_Voltage_Avg,
-      top: 305,
-      left: 151,
+      top: 310,
+      left: 145,
     },
     // Ac Supply fan
     {
       activePowerTotalTag: roundedData?.U8_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U8_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U8_GW02_Voltage_Avg,
-      top: 209,
-      left: 238,
+      top: 213,
+      left: 233,
     },
     // blow room l1
     {
       activePowerTotalTag: roundedData?.U9_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U9_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U9_GW02_Voltage_Avg,
-      top: 305,
-      left: 323,
+      top: 310,
+      left: 320,
     },
     // ring frames 4-6
     {
       activePowerTotalTag: roundedData?.U10_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U10_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U10_GW02_Voltage_Avg,
-      top: 209,
-      left: 410,
+      top: 213,
+      left: 408,
     },
     // a/c plant blowing
     {
       activePowerTotalTag: roundedData?.U11_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U11_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U11_GW02_Voltage_Avg,
-      top: 305,
+      top: 310,
       left: 498,
     },
     // mldb1 blower room card
@@ -157,63 +157,63 @@ const Unit5Lt3 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U12_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U12_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U12_GW02_Voltage_Avg,
-      top: 209,
-      left: 609,
+      top: 213,
+      left: 610.5,
     },
     // comber 1 to 14
     {
       activePowerTotalTag: roundedData?.U14_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U14_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U14_GW02_Voltage_Avg,
-      top: 311,
-      left: 728,
+      top: 310.5,
+      left: 732,
     },
     // ac plant spining
     {
       activePowerTotalTag: roundedData?.U15_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U15_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U15_GW02_Voltage_Avg,
-      top: 214,
-      left: 858,
+      top: 213,
+      left: 863,
     },
     // water chiller
     {
       activePowerTotalTag: roundedData?.U16_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U16_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U16_GW02_Voltage_Avg,
-      top: 500,
-      left: 169,
+      top: 508.5,
+      left: 164,
     },
     // card mc 8-14
     {
       activePowerTotalTag: roundedData?.U17_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U17_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U17_GW02_Voltage_Avg,
-      top: 603,
-      left: 256,
+      top: 612.5,
+      left: 252,
     },
     // card m/c 8-14
     {
       activePowerTotalTag: roundedData?.U18_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U18_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U18_GW02_Voltage_Avg,
-      top: 499,
-      left: 342,
+      top: 507,
+      left: 340,
     },
     // auto con-link corner 1-9
     {
       activePowerTotalTag: roundedData?.U19_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_GW02_Voltage_Avg,
-      top: 603,
-      left: 429,
+      top: 612.5,
+      left: 427.5,
     },
     // card mc 1-7
     {
       activePowerTotalTag: roundedData?.U20_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U20_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U20_GW02_Voltage_Avg,
-      top: 499,
+      top: 507,
       left: 515,
     },
     // AC plant winding
@@ -221,8 +221,8 @@ const Unit5Lt3 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U21_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U21_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U21_GW02_Voltage_Avg,
-      top: 603,
-      left: 604,
+      top: 612.5,
+      left: 605,
     },
 
     // simplex m/c s1-5
@@ -230,16 +230,16 @@ const Unit5Lt3 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U22_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U22_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U22_GW02_Voltage_Avg,
-      top: 499,
-      left: 690,
+      top: 507,
+      left: 693,
     },
     // spare 2
     {
       activePowerTotalTag: roundedData?.U23_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U23_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U23_GW02_Voltage_Avg,
-      top: 603,
-      left: 777.5,
+      top: 612.5,
+      left: 781,
     },
   ];
 
@@ -289,7 +289,7 @@ const Unit5Lt3 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./sld/unit5lit1newsld.png"
+          src="./surajcotton-sld/unit5lt1.png"
           className=" h-full"
           style={{ width: "1100px" }}
           alt="unit 5 lt3 sld"
@@ -307,19 +307,19 @@ const Unit5Lt3 = ({ roundedData }) => {
             }}
           >
             <span
-              className="text-[11.5px] mt-[0px] font-fira-mono"
+              className="text-[11px] mt-[0px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activePowerTotalTag || "000"}
             </span>
             <span
-              className="text-[11.5px] mt-[0px] font-fira-mono"
+              className="text-[11px] mt-[0px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeCurrentAvgTag || "000"}
             </span>
             <span
-              className="text-[11.5px] mt-[0px] font-fira-mono"
+              className="text-[11px] mt-[1px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeVoltageAvgTag || "000"}

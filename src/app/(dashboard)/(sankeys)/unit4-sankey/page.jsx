@@ -23,7 +23,7 @@ const MainSankey = () => {
   const handleRange = (data) => {
     setRange(data);
   };
-  const { generation, consumption } = calculateSums(data, "Unit 4 Consumption");
+  const { generation, consumption } = calculateSums(data, "Unit 4 Incomer");
 
   // ==================fetch unit 4 lt 1 sankey daata
   const fetchUnit4SankyData = async () => {
@@ -102,11 +102,7 @@ const MainSankey = () => {
           )}
         </div>
       </div>
-      <SankeyTotalValues
-        data={data}
-        lt="Unit 4 Consumption"
-        loading={loading}
-      />
+      <SankeyTotalValues data={data} lt="Unit 4 Incomer" loading={loading} />
     </div>
   );
 };

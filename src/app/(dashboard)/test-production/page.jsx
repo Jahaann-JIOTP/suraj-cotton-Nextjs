@@ -24,7 +24,7 @@ export default function TestSpindlePage() {
     values: [],
     avgcount: [],
   });
-  console.log(productionData);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductionData((prev) => ({

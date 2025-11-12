@@ -7,30 +7,30 @@ import Link from "next/link";
 const unit4MeterData = [
   {
     link: "U6_GW02",
-    title: "Solar 1184.55 Kw",
-    top: 310,
-    left: 219,
+    title: "Solar 1185 kW",
+    top: 323,
+    left: 235,
     ltScheme: "LT_1",
   },
   {
     link: "U13_GW02",
     title: "T/F 1",
-    top: 310,
-    left: 381,
+    top: 323,
+    left: 390,
     ltScheme: "LT_1",
   },
   {
     link: "U16_GW03",
     title: "T/F 2",
-    top: 310,
-    left: 630,
+    top: 323,
+    left: 627,
     ltScheme: "LT_2",
   },
   {
     link: "U17_GW03",
-    title: "Solar 1066.985 Kw",
-    top: 310,
-    left: 791,
+    title: "Solar 1070 kW",
+    top: 323,
+    left: 781,
     ltScheme: "LT_2",
   },
 ];
@@ -43,32 +43,32 @@ const InitialSldUnit5 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U6_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U6_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U6_GW02_Voltage_Avg,
-      top: 320,
-      left: 225,
+      top: 332,
+      left: 242,
     },
     // TF #1
     {
       activePowerTotalTag: roundedData?.U13_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_GW02_Voltage_Avg,
-      top: 320,
-      left: 389,
+      top: 332,
+      left: 397,
     },
     // TF #2
     {
       activePowerTotalTag: roundedData?.U16_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U16_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U16_GW03_Voltage_Avg,
-      top: 320,
-      left: 637,
+      top: 332,
+      left: 635,
     },
     // Solar 2
     {
       activePowerTotalTag: roundedData?.U17_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U17_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U17_GW03_Voltage_Avg,
-      top: 320,
-      left: 798,
+      top: 332,
+      left: 788,
     },
   ];
 
@@ -105,10 +105,10 @@ const InitialSldUnit5 = ({ roundedData }) => {
               position: "absolute",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              width: "81px",
-              height: "79px",
+              width: "78px",
+              height: "75px",
               zIndex: 100,
-              borderRadius: "0.4.2rem", // rounded-md
+              borderRadius: "0.42rem", // rounded-md
               cursor: "pointer",
             }}
             className={`rounded-md`}
@@ -116,7 +116,7 @@ const InitialSldUnit5 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./sld/unit5main.png"
+          src="./surajcotton-sld/unit5main.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
@@ -127,10 +127,10 @@ const InitialSldUnit5 = ({ roundedData }) => {
           href={"/sld?area=Unit_5&LT_selections=LT_1"}
           className="absolute top-[548px] left-[193px] w-[301px] h-[44px] cursor-pointer"
           style={{
-            left: "202px",
-            top: "545px",
+            left: "218px",
+            top: "547px",
             height: "45px",
-            width: "276px",
+            width: "263px",
           }}
         ></Link>
         <Link
@@ -138,9 +138,9 @@ const InitialSldUnit5 = ({ roundedData }) => {
           className="absolute cursor-pointer"
           style={{
             left: "613px",
-            top: "545px",
-            height: "45px",
-            width: "276px",
+            top: "547px",
+            height: "43px",
+            width: "263px",
           }}
         ></Link>
 
@@ -152,13 +152,13 @@ const InitialSldUnit5 = ({ roundedData }) => {
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              width: "51px",
-              height: "59px",
+              width: "48.5px",
+              height: "58px",
             }}
           >
             <span
               className="text-[12px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500 }}
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "1px" }}
             >
               {meter.activePowerTotalTag || "00.00"}
             </span>

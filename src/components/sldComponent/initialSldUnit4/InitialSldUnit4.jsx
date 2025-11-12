@@ -8,42 +8,42 @@ const unit4MeterData = [
   {
     link: "U19_PLC",
     title: "Diesel+JGS Incomming",
-    top: 241,
+    top: 252,
     left: 90,
     ltScheme: "LT_1",
   },
   {
     link: "U21_PLC",
-    title: "Wapda + HFO + JMS Incomming",
-    top: 241,
+    title: "Wapda+HFO+JMS Incomming",
+    top: 252,
     left: 206,
     ltScheme: "LT_1",
   },
   {
     link: "U11_GW01",
     title: "Diesel+JGS Incomming",
-    top: 244,
+    top: 252,
     left: 570,
     ltScheme: "LT_2",
   },
   {
     link: "U13_GW01",
-    title: "WAPDA + HFO + JMS Inomming",
-    top: 243,
+    title: "WAPDA+HFO+JMS Inomming",
+    top: 252,
     left: 679,
     ltScheme: "LT_2",
   },
   {
     link: "U24_GW01",
-    title: "Solar 352.50kW",
-    top: 243,
+    title: "Solar 352.50 kW",
+    top: 252,
     left: 810,
     ltScheme: "LT_2",
   },
   {
     link: "U28_PLC",
-    title: "Solar 52.17kW",
-    top: 243,
+    title: "Solar 52.17 kW",
+    top: 252,
     left: 944,
     ltScheme: "LT_2",
   },
@@ -57,7 +57,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U19_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_PLC_Voltage_Avg,
-      top: 248,
+      top: 259,
       left: 96,
     },
     // wapda IC
@@ -65,7 +65,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U21_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U21_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U21_PLC_Voltage_Avg,
-      top: 248,
+      top: 259,
       left: 212,
     },
     // power house
@@ -73,7 +73,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U11_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U11_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U11_GW01_Voltage_Avg,
-      top: 250,
+      top: 259,
       left: 576,
     },
     // Wapda + HFO+ JMS Incomming
@@ -81,7 +81,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U13_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_GW01_Voltage_Avg,
-      top: 250,
+      top: 259,
       left: 685,
     },
     // Solar 352.50Kw
@@ -89,7 +89,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U24_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U24_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U24_GW01_Voltage_Avg,
-      top: 250,
+      top: 259,
       left: 816,
     },
     //Solar 52Kw
@@ -97,7 +97,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U28_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U28_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U28_PLC_Voltage_Avg,
-      top: 250,
+      top: 259,
       left: 950,
     },
   ];
@@ -145,7 +145,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../sld/uni4main.png"
+          src="../../../surajcotton-sld/unit4main.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
@@ -158,7 +158,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
           style={{
             width: "205px",
             height: "33px",
-            top: "403px",
+            top: "418px",
             left: "85px",
           }}
         ></Link>
@@ -169,7 +169,7 @@ const InitialSldUnit4 = ({ roundedData }) => {
           style={{
             width: "205px",
             height: "33px",
-            top: "403px",
+            top: "418px",
             left: "700px",
           }}
         ></Link>

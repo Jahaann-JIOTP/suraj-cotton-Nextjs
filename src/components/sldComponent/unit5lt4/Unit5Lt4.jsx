@@ -6,19 +6,19 @@ import Link from "next/link";
 const lt1MeterData = [
   {
     link: "U1_GW03",
-    title: "Ring Frame 7-9",
+    title: "Ring 7-9",
     top: 194,
     left: 140,
   },
   {
     link: "U2_GW03",
-    title: "Yarn conditioning M/C",
+    title: "conditioning Machine",
     top: 294,
     left: 226,
   },
   {
     link: "U3_GW03",
-    title: "MLDB3 single room quarter",
+    title: "Colony",
     top: 194,
     left: 316,
   },
@@ -30,20 +30,20 @@ const lt1MeterData = [
   },
   {
     link: "U5_GW03",
-    title: "Ring Frame 10-12",
+    title: "Ring 10-12",
     top: 194,
     left: 490,
   },
   {
     link: "U6_GW03",
-    title: "Spare 3",
-    top: 290,
+    title: "Spare 2",
+    top: 294,
     left: 587,
   },
   {
     link: "U7_GW03",
     title: "Spare 1",
-    top: 203,
+    top: 195,
     left: 699,
   },
   // {
@@ -54,13 +54,13 @@ const lt1MeterData = [
   // },
   {
     link: "U9_GW03",
-    title: "Ring Frame 13-15",
-    top: 289,
+    title: "Ring 13-15",
+    top: 294,
     left: 819,
   },
   {
     link: "U10_GW03",
-    title: "Auto con (10-18)",
+    title: "Winding 10-18",
     top: 508,
     left: 140,
   },
@@ -72,19 +72,19 @@ const lt1MeterData = [
   },
   {
     link: "U12_GW03",
-    title: "Ring Frame 16-18",
+    title: "Ring 16-18",
     top: 508,
     left: 317,
   },
   {
     link: "U13_GW03",
-    title: "Fiber Deposit Plant",
+    title: "B/Card+Comber Filter",
     top: 606,
     left: 400,
   },
   {
     link: "U14_GW03",
-    title: "MLDB2 Ring con (Lighting)",
+    title: "Lighting Internal",
     top: 508,
     left: 493,
   },
@@ -97,8 +97,8 @@ const lt1MeterData = [
   {
     link: "U18_GW03",
     title: "PF Panel",
-    top: 514,
-    left: 697,
+    top: 508,
+    left: 698,
   },
 ];
 
@@ -128,7 +128,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activeCurrentAvgTag: roundedData?.U3_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U3_GW03_Voltage_Avg,
       top: 202,
-      left: 322,
+      left: 323,
     },
     // roving transport system
     {
@@ -151,15 +151,15 @@ const Unit5Lt4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U6_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U6_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U6_GW03_Voltage_Avg,
-      top: 298,
-      left: 595,
+      top: 302,
+      left: 594,
     },
     // spare
     {
       activePowerTotalTag: roundedData?.U7_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U7_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_GW03_Voltage_Avg,
-      top: 209,
+      top: 202,
       left: 705,
     },
     // sapre 2
@@ -175,7 +175,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U9_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U9_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U9_GW03_Voltage_Avg,
-      top: 296.5,
+      top: 302,
       left: 825,
     },
     // auto con linker conner m/s 10-12
@@ -231,7 +231,7 @@ const Unit5Lt4 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U18_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U18_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U18_GW03_Voltage_Avg,
-      top: 521,
+      top: 516,
       left: 704.5,
     },
   ];
@@ -280,7 +280,7 @@ const Unit5Lt4 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./sld/unit5lt2.png"
+          src="./surajcotton-sld/unit5lt2.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
@@ -293,25 +293,25 @@ const Unit5Lt4 = ({ roundedData }) => {
               top: `${meter.top}px`,
               left: `${meter.left}px`,
               width: "42.5px",
-              height: "51px",
+              height: "50px",
             }}
             className={`absolute z-20 flex flex-col items-center`}
           >
             <span
-              className="text-[11.5px] mt-[-0.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500, marginTop: "0.7px" }}
+              className="text-[11px] mt-[-0.5px] font-fira-mono"
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "0px" }}
             >
               {meter.activePowerTotalTag || "000"}
             </span>
             <span
-              className="text-[11.5px] mt-[-0.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500 }}
+              className="text-[11px] mt-[-0.5px] font-fira-mono"
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "1px" }}
             >
               {meter.activeCurrentAvgTag || "000"}
             </span>
             <span
-              className="text-[11.5px] mt-[-0.5px] font-fira-mono"
-              style={{ color: "#05f805", fontWeight: 500 }}
+              className="text-[11px] mt-[-0.5px] font-fira-mono"
+              style={{ color: "#05f805", fontWeight: 500, marginTop: "0.3px" }}
             >
               {meter.activeVoltageAvgTag || "000"}
             </span>

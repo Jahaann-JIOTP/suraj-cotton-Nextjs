@@ -3,12 +3,12 @@ import React, { useRef, useEffect } from "react";
 import * as echarts from "echarts";
 import { useTheme } from "next-themes";
 
-const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
+const SankeyChart = ({ data = [], navigateLinks = {}, isGray = false }) => {
   const chartRef = useRef(null);
   const { resolvedTheme } = useTheme();
-
   useEffect(() => {
     if (!chartRef.current) return;
+    if (!Array.isArray(data) || data.length === 0) return; // ✅ Prevent crash if data is missing
 
     const chart = echarts.init(
       chartRef.current,
@@ -36,7 +36,6 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
       "#67DC75",
     ];
 
-    // Helper: lighten or darken color
     const lightenColor = (color, percent) => {
       const num = parseInt(color.replace("#", ""), 16);
       const amt = Math.round(2.55 * percent);
@@ -53,11 +52,11 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
         .slice(1)}`;
     };
 
-    // Collect all unique nodes
     const allNodes = new Set();
     const links = [];
     const unaccountedEnergyNode = "Unaccounted Energy";
 
+    // ✅ Safe because we checked data is an array
     data.forEach((item) => {
       allNodes.add(item.from);
       allNodes.add(item.to);
@@ -79,19 +78,14 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
         };
       }
 
-      return {
-        name,
-        itemStyle: { color: baseColor },
-      };
+      return { name, itemStyle: { color: baseColor } };
     });
 
-    // Build links with gradient
     data.forEach((item) => {
       const isUnaccounted =
         item.to === unaccountedEnergyNode ||
         item.from === unaccountedEnergyNode;
       const isZeroValue = item.value === 0;
-
       let lineStyle = {};
 
       if ((isGray && isUnaccounted) || isZeroValue) {
@@ -162,18 +156,6 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
         {
           type: "sankey",
           layout: "none",
-          emphasis: {
-            focus: "none",
-            itemStyle: {
-              color: (params) => {
-                const baseColor = params?.data?.itemStyle?.color || "#6b7280";
-                return lightenColor(baseColor, -20);
-              },
-              opacity: 1,
-              borderWidth: 2,
-              borderColor: "#fff",
-            },
-          },
           data: nodes,
           links,
           lineStyle: {
@@ -181,6 +163,11 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
             opacity: 0.9,
             color: "gradient",
           },
+          nodeAlign: "left",
+          nodeWidth: 16,
+          nodeGap: 10,
+          draggable: false,
+          focusNodeAdjacency: true,
           label: {
             show: true,
             formatter: (params) => {
@@ -196,22 +183,7 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
               return `${params.name} (${totalValue.toLocaleString()} kWh)`;
             },
             fontSize: 11,
-            color: resolvedTheme === "dark" ? "#ffffffff" : "#1E2939",
-          },
-          nodeAlign: "left",
-          nodeWidth: 16,
-          nodeGap: 10,
-          draggable: true,
-          focusNodeAdjacency: true,
-          blurState: {
-            itemStyle: { opacity: 1 },
-            lineStyle: { opacity: 1 },
-            label: { opacity: 1 },
-          },
-          itemStyle: {
-            borderWidth: 0,
-            borderColor: "#fff",
-            opacity: 0.9,
+            color: resolvedTheme === "dark" ? "#ffffff" : "#1E2939",
           },
         },
       ],
@@ -219,7 +191,6 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
 
     chart.setOption(option);
 
-    // Handle node click
     chart.on("click", (params) => {
       if (params.componentType === "series" && params.dataType === "node") {
         const nodeName = params.data.name;
@@ -237,7 +208,12 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
     };
   }, [data, navigateLinks, resolvedTheme, isGray]);
 
-  return <div ref={chartRef} style={{ height: "55vh", width: "100%" }} />;
+  return (
+    <div
+      ref={chartRef}
+      style={{ background: "transparent", height: "55vh", width: "100%" }}
+    />
+  );
 };
 
 export default SankeyChart;

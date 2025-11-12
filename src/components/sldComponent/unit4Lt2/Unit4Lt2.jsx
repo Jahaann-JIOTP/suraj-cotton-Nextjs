@@ -6,117 +6,117 @@ import { ImArrowLeft2 } from "react-icons/im";
 const lt2MeterData = [
   {
     link: "U1_GW01",
-    title: "A/C Back Process",
-    top: 203,
-    left: 67,
+    title: "Back Process A/C",
+    top: 217,
+    left: 92,
   },
   {
     link: "U2_GW01",
-    title: "Weikel cond",
-    top: 306,
-    left: 161,
+    title: "Conditioning Machine",
+    top: 316,
+    left: 181,
   },
   {
     link: "U3_GW01",
-    title: "Winding AC",
-    top: 203,
-    left: 253,
+    title: "Winding A/C",
+    top: 217,
+    left: 267,
   },
   {
     link: "U4_GW01",
-    title: "Mills RES-CLNY & Workshop",
-    top: 306,
-    left: 348,
+    title: "Mills Residential Colony & Workshop",
+    top: 316,
+    left: 357,
   },
   {
     link: "U5_GW01",
-    title: "Card (1-4)(9-12)",
-    top: 203,
-    left: 440,
+    title: "Card 1-4 + 9-12",
+    top: 217,
+    left: 444,
   },
   {
     link: "U18_GW01",
     title: "Colony",
-    top: 306,
-    left: 533,
+    top: 316,
+    left: 534,
   },
   {
     link: "U8_GW01",
     title: "Blow Room",
-    top: 203,
-    left: 626,
+    top: 217,
+    left: 621,
   },
   {
     link: "U9_GW01",
-    title: "Card (5-8)(13-14)",
-    top: 306,
-    left: 719,
+    title: "Card 5-8 + 13-14 + Breaker 5-6",
+    top: 316,
+    left: 710,
   },
   {
     link: "U10_GW01",
     title: "Winding 1-6",
-    top: 203,
-    left: 812,
+    top: 217,
+    left: 798,
   },
   {
     link: "U7_GW01",
-    title: "Power House 2nd Source (HFO)",
-    top: 306,
-    left: 905,
+    title: "Gas Plant Aux (2nd Source)",
+    top: 316,
+    left: 886,
   },
   {
     link: "U12_GW01",
-    title: "Card Filter (Bypass)",
+    title: "B/Card Filter + Comber Filter",
     top: 492,
-    left: 69,
+    left: 92,
   },
   {
     link: "U14_GW01",
-    title: "B/R card Filter",
-    top: 600,
-    left: 172,
+    title: "B/Card + Comber Filter Bypass",
+    top: 593,
+    left: 191,
   },
   {
     link: "U15_GW01",
     title: "Ring 5-8",
     top: 492,
-    left: 262,
+    left: 276,
   },
   {
     link: "U16_GW01",
     title: "Ring 13-16",
-    top: 600,
-    left: 358,
+    top: 593,
+    left: 367,
   },
   {
     link: "U17_GW01",
     title: "Ring 9-12",
     top: 492,
-    left: 449,
+    left: 453,
   },
   {
     link: "U6_GW01",
-    title: "Bale Press",
-    top: 600,
+    title: "Baling Press",
+    top: 593,
     left: 543,
   },
   {
     link: "U19_GW01",
-    title: "AC Lab",
+    title: "Lab A/C",
     top: 492,
-    left: 634,
+    left: 629,
   },
   {
     link: "U20_GW01",
     title: "Spare",
-    top: 600,
-    left: 729,
+    top: 593,
+    left: 720,
   },
   {
     link: "U21_GW01",
     title: "Spare 2",
     top: 492,
-    left: 818,
+    left: 803,
   },
 ];
 
@@ -129,152 +129,152 @@ const Unit4Lt2 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U1_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U1_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U1_GW01_Voltage_Avg,
-      top: 210.5,
-      left: 75,
+      top: 225,
+      left: 99,
     },
     // weikel cond
     {
       activePowerTotalTag: roundedData?.U2_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U2_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U2_GW01_Voltage_Avg,
-      top: 313,
-      left: 170,
+      top: 323,
+      left: 189,
     },
     // winding AC
     {
       activePowerTotalTag: roundedData?.U3_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U3_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U3_GW01_Voltage_Avg,
-      top: 210.5,
-      left: 261.5,
+      top: 225,
+      left: 275,
     },
     // mills res-clny & workshop
     {
       activePowerTotalTag: roundedData?.U4_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U4_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U4_GW01_Voltage_Avg,
-      top: 313,
-      left: 356,
+      top: 323,
+      left: 364.5,
     },
     // card 1
     {
       activePowerTotalTag: roundedData?.U5_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U5_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U5_GW01_Voltage_Avg,
-      top: 210.5,
-      left: 447.5,
+      top: 225,
+      left: 451.5,
     },
     // colony
     {
       activePowerTotalTag: roundedData?.U18_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U18_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U18_GW01_Voltage_Avg,
-      top: 313,
-      left: 542,
+      top: 323,
+      left: 540,
     },
     // blow room
     {
       activePowerTotalTag: roundedData?.U8_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U8_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U8_GW01_Voltage_Avg,
-      top: 210.5,
-      left: 635,
+      top: 225,
+      left: 629,
     },
     // card 2
     {
       activePowerTotalTag: roundedData?.U9_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U9_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U9_GW01_Voltage_Avg,
-      top: 314,
-      left: 728,
+      top: 323,
+      left: 717,
     },
     // winding 1
     {
       activePowerTotalTag: roundedData?.U10_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U10_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U10_GW01_Voltage_Avg,
-      top: 210.5,
-      left: 821,
+      top: 225,
+      left: 805,
     },
     // gas lt panel
     {
       activePowerTotalTag: roundedData?.U7_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U7_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_GW01_Voltage_Avg,
-      top: 313,
-      left: 914,
+      top: 323,
+      left: 893,
     },
     // card filter bypass
     {
       activePowerTotalTag: roundedData?.U12_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U12_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U12_GW01_Voltage_Avg,
-      top: 500,
-      left: 77,
+      top: 498.5,
+      left: 101,
     },
     // d/r card filter
     {
       activePowerTotalTag: roundedData?.U14_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U14_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U14_GW01_Voltage_Avg,
-      top: 608,
-      left: 180,
+      top: 601,
+      left: 198,
     },
     // ring 2
     {
       activePowerTotalTag: roundedData?.U15_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U15_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U15_GW01_Voltage_Avg,
-      top: 500,
-      left: 270,
+      top: 498.5,
+      left: 284,
     },
     // ring 4
     {
       activePowerTotalTag: roundedData?.U16_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U16_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U16_GW01_Voltage_Avg,
-      top: 608,
-      left: 367,
+      top: 601,
+      left: 375,
     },
     // ring 3
     {
       activePowerTotalTag: roundedData?.U17_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U17_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U17_GW01_Voltage_Avg,
-      top: 500,
-      left: 457.5,
+      top: 498.5,
+      left: 461,
     },
     // bale press
     {
       activePowerTotalTag: roundedData?.U6_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U6_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U6_GW01_Voltage_Avg,
-      top: 608,
-      left: 553,
+      top: 601,
+      left: 550,
     },
     // ac lab
     {
       activePowerTotalTag: roundedData?.U19_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U19_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U19_GW01_Voltage_Avg,
-      top: 500,
-      left: 643,
+      top: 498.5,
+      left: 636,
     },
     // spare
     {
       activePowerTotalTag: roundedData?.U20_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U20_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U20_GW01_Voltage_Avg,
-      top: 608,
-      left: 739,
+      top: 601,
+      left: 727,
     },
     // spare 2
     {
       activePowerTotalTag: roundedData?.U21_GW01_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U21_GW01_Current_Avg,
       activeVoltageAvgTag: roundedData?.U21_GW01_Voltage_Avg,
-      top: 500,
-      left: 826,
+      top: 498.5,
+      left: 810,
     },
   ];
   return (
@@ -310,8 +310,8 @@ const Unit4Lt2 = ({ roundedData }) => {
               position: "absolute",
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              width: "73px",
-              height: "68px",
+              width: "70px",
+              height: "66px",
               backgroundColor: "transparent",
               zIndex: 60,
               borderRadius: "0.375rem",
@@ -321,7 +321,7 @@ const Unit4Lt2 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../sld/unit4lt2-new.png"
+          src="../../../surajcotton-sld/unit4lt2.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
@@ -334,25 +334,25 @@ const Unit4Lt2 = ({ roundedData }) => {
             style={{
               top: `${meter.top}px`,
               left: `${meter.left}px`,
-              width: "46px",
-              height: "53px",
+              width: "43px",
+              height: "50px",
             }}
             className={`absolute z-20 flex flex-col items-center justify-between`}
           >
             <span
-              className="text-[11.5px]  font-fira-mono"
+              className="text-[11px]  font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activePowerTotalTag || "000"}
             </span>
             <span
-              className="text-[11.5px]  font-fira-mono"
+              className="text-[11px]  font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500, marginTop: "1px" }}
             >
               {meter.activeCurrentAvgTag || "000"}
             </span>
             <span
-              className="text-[11.5px] mt-[1px] font-fira-mono"
+              className="text-[11px] mt-[1px] font-fira-mono"
               style={{ color: "#05f805", fontWeight: 500 }}
             >
               {meter.activeVoltageAvgTag || "000"}

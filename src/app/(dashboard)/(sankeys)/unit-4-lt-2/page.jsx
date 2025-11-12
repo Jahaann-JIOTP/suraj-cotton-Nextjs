@@ -13,7 +13,7 @@ const UnitLt42Page = () => {
   const [data, setDAta] = useState([]);
   const [loading, setLoading] = useState(false);
   const [range, setRange] = useState({});
-  console.log(range);
+
   const handleRange = (data) => {
     setRange(data);
   };

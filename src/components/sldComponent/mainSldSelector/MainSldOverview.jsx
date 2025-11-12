@@ -19,7 +19,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U26_PLC",
-    title: "I-GG",
+    title: "JMS 620",
     top: 154,
     left: 548,
     area: "hfo",
@@ -27,7 +27,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U23_PLC",
-    title: "O/G 2 (Unit 5)",
+    title: "O/G 2 Unit 5",
     top: 322,
     left: 179,
     area: "hfo",
@@ -35,7 +35,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U24_PLC",
-    title: "O/G 1 (Unit 4)",
+    title: "O/G 1 Unit 4",
     top: 322,
     left: 271,
     area: "hfo",
@@ -43,7 +43,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U25_PLC",
-    title: "hfo aux",
+    title: "HFO AUX",
     top: 322,
     left: 366,
     area: "hfo",
@@ -76,7 +76,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U22_GW01",
-    title: "P/H IC (HFO)",
+    title: "P/H IC HFO",
     top: 607,
     left: 795,
     area: "ht",
@@ -84,7 +84,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U23_GW01",
-    title: "Wapda IC",
+    title: "Wapda 1",
     top: 605,
     left: 962,
     area: "ht",
@@ -205,7 +205,7 @@ const MainSldOverview = ({ roundedData }) => {
           ></Link>
         ))}
         <img
-          src="./sld/main-overview-new.png"
+          src="./surajcotton-sld/mainoverview.png"
           alt="Main Overview"
           className="mx-auto"
           style={{ width: "1200px" }}

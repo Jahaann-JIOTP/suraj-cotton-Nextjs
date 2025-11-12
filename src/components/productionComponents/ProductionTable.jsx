@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 /**
  * Reusable Production Table
@@ -15,11 +15,11 @@ export default function ProductionTable({
   days = [],
   data = {},
   rows = [],
-  chunkSize = 15,
   month,
   setMonth,
   unit = "",
 }) {
+  const [chunkSize, setChunkSize] = useState(15);
   const today = new Date();
 
   const chunkArray = (arr, size) => {
@@ -37,6 +37,24 @@ export default function ProductionTable({
     if (dateObj > today && value === 0) return "";
     return value !== 0 ? value : "-";
   };
+
+  const getChunkSize = (width) => {
+    if (width >= 1400) return 15;
+    if (width >= 1200) return 12;
+    if (width >= 992) return 10;
+    if (width >= 768) return 8;
+    if (width >= 576) return 6;
+    if (width >= 400) return 3;
+    if (width >= 340) return 2;
+    return 4;
+  };
+
+  useEffect(() => {
+    const handleResize = () => setChunkSize(getChunkSize(window.innerWidth));
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const dayChunks = chunkArray(days, chunkSize);
   const slotWidth = `${100 / (chunkSize + 1)}%`;

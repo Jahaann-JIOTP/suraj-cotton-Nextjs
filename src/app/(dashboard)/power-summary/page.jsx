@@ -30,7 +30,6 @@ const PowerSummaryPage = () => {
   const u5LossesPercent =
     Number(powerSummaryData.T2unit5percentage || 0) +
     Number(powerSummaryData.T1unit5percentage || 0);
-  console.log({ u5incomming, u5Outgoin, u5Losses, u5LossesPercent });
   const fetchPowerSummaryData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;

@@ -8,6 +8,7 @@ import { ImArrowLeft2 } from "react-icons/im";
 import Swal from "sweetalert2";
 import { getDateRangeFromString } from "@/utils/dateRangeForReports";
 import EnergyComparisonReport from "@/components/reportsComponent/energyComparisonTable/EnergyComparisonReport";
+import { to12HourFormat } from "@/utils/To12HourFormate";
 
 const EnergyComparisonPage = () => {
   const [usageReportTimePeriod, setUsageReportTimePeriod] =
@@ -21,12 +22,18 @@ const EnergyComparisonPage = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [resData, setResData] = useState([]);
   const intervalsObj = {
-    unit: "ALL",
     startDate,
     endDate,
     startTime,
     endTime,
     usageReportTimePeriod,
+  };
+  const NewIntervalsObj = {
+    "Selected Period": usageReportTimePeriod,
+    "Start Date":
+      startDate + (startTime ? " " + to12HourFormat(startTime) : ""),
+    "End Date": endDate + (endTime ? " " + to12HourFormat(endTime) : ""),
+    "Selected Timezone": "(UTC+05:00) Asia Karachi",
   };
 
   const toMinutes = (time) => {
@@ -313,7 +320,11 @@ const EnergyComparisonPage = () => {
           </form>
         </div>
       ) : showResults ? (
-        <EnergyComparisonReport rawData={resData} intervalsObj={intervalsObj} />
+        <EnergyComparisonReport
+          rawData={resData}
+          intervalsObj={intervalsObj}
+          newIntervalObj={NewIntervalsObj}
+        />
       ) : null}
     </div>
   );

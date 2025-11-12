@@ -23,7 +23,6 @@ const Card = ({
   const isLightingMeter = lightingMeter.includes(title.toLowerCase());
   const isPlantMeter = plantMeter.includes(title.toLowerCase());
   const isInfo = info.length > 0;
-  console.log("this is info", isInfo);
 
   return (
     <div className="w-full relative bg-white shadow-md rounded-lg border dark:bg-gray-800 border-gray-200 overflow-hidden !border-t-4 !border-t-[#1d5999]">
