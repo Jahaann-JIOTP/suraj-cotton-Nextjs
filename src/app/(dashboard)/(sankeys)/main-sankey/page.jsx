@@ -12,8 +12,8 @@ import MainSankeyTimeSelector from "@/components/dashboardComponents/timePeriodS
 import { ImArrowLeft2 } from "react-icons/im";
 
 const navigationMap = {
-  "Unit 4 Consumption": "/unit4-sankey",
-  "Unit 5 Consumption": "/unit5-sankey",
+  "Unit 4 Incomer": "/unit4-sankey",
+  "Unit 5 Incomer": "/unit5-sankey",
 };
 // Losses: "/losses-sankey",
 const MainSankey = () => {

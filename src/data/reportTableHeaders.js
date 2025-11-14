@@ -33,3 +33,49 @@ export const productionSummaryHeadings = [
   { key: "TotalConsumption", label: "Total Consumption (kWh)" },
   { key: "consumptionperbag", label: "Consumption Per Bag (kWh/Bag)" },
 ];
+
+//----------------------daily Production summary key &heading-----------------------
+export const dailyProductionHeaders = [
+  {
+    key: "date",
+    label: "Date",
+  },
+  {
+    key: "Unit_4_Production",
+    label: "Unit 4 Bags",
+  },
+  {
+    key: "Unit_4_AvgCount",
+    label: "Unit 4 Avg Count",
+  },
+  {
+    key: "Unit_4_consumptionperbag",
+    label: "Unit 4 Consumption Per Bag",
+  },
+  {
+    key: "Unit_5_Production",
+    label: "Unit 5 Bags",
+  },
+  {
+    key: "Unit_5_AvgCount",
+    label: "Unit 5 Avg Count",
+  },
+  {
+    key: "Unit_5_consumptionperbag",
+    label: "Unit 5 Consumption Per Bag",
+  },
+];
+
+//----------------------Consumption per dept headings-----------------------
+export const consPerDeptHNmearr = [
+  "Sr #",
+  "Department",
+  "Unit",
+  "MCs",
+  "Connected Load Per Department (kWh/h)",
+  "Avg Running Load Per Department (kWh/h)",
+  "Utilization",
+  "Connected Load Per Machine (kWh/h/Mc)",
+  "Avg Running Load Per Machine (kWh/h/Mc)",
+  "Total Units Consumed (kWh)",
+];

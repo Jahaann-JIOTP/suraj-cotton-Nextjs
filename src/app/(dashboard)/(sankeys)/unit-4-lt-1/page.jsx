@@ -3,21 +3,19 @@ import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChar
 import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
-import SankeyTotalValues, {
-  calculateSums,
-} from "@/components/sakeyTotalValue/SankeyTotalValues";
+
 import MainSankeyTimeSelector from "@/components/dashboardComponents/timePeriodSelector/MainSankeyTimeSelector";
 import { ImArrowLeft2 } from "react-icons/im";
+import ReadyTotal from "@/components/sakeyTotalValue/ReadyTotal";
 
 const UnitLt41Page = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
   const [range, setRange] = useState({});
   const handleRange = (data) => {
     setRange(data);
   };
-
-  const { generation, consumption } = calculateSums(data, "TotalLT1");
+  const totalSum = data?.sankeyData?.reduce((acc, cur) => acc + cur.value, 0);
 
   // ==================fetch unit 4 lt 1 sankey daata
   const fetchLt1SankyData = async () => {
@@ -79,14 +77,13 @@ const UnitLt41Page = () => {
           <MainSankeyTimeSelector onRangeChange={handleRange} />
         </div>
       </div>
-      {/* <div className=" w-full  flex items-center justify-center"> */}
+
       <div className=" w-full  flex items-center justify-center">
-        {/* <div className="w-full md:px-20 flex items-center justify-center mt-6"> */}
         <div className="w-full md:px-20 flex items-center justify-center mt-6">
           {loading ? (
             <CustomLoader />
-          ) : consumption > 0 || generation > 0 ? (
-            <SankeyChart data={data} isGray={true} />
+          ) : totalSum > 0 ? (
+            <SankeyChart data={data.sankeyData} isGray={true} />
           ) : (
             <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
               <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />
@@ -97,7 +94,8 @@ const UnitLt41Page = () => {
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="TotalLT1" loading={loading} />
+
+      <ReadyTotal loading={loading} data={data.totals} />
     </div>
   );
 };

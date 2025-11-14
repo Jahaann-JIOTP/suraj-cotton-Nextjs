@@ -11,9 +11,20 @@ export const buildKeyValuePdfTable = ({
     const labelStyle = "tableHeader";
     const valueStyle = "tableCell";
 
+    let fillColor;
+    if (isSingleCol) {
+      if (isFirst) {
+        fillColor = "#E5F3FD";
+      } else {
+        fillColor = "";
+      }
+    } else {
+      fillColor = "#E5F3FD";
+    }
+
     // Conditional background for first column
-    const fillColor =
-      isSingleCol && isFirst ? "#E5F3FD" : !isSingleCol ? "#E5F3FD" : null;
+    // let fillColor =
+    //   isSingleCol && isFirst ? "#E5F3FD" : !isSingleCol ? "#E5F3FD" : null;
 
     if (isSingleCol) {
       // Single column layout
@@ -21,7 +32,8 @@ export const buildKeyValuePdfTable = ({
         {
           text: key.replace(/_/g, " "),
           style: labelStyle,
-          fillColor,
+          fillColor: fillColor,
+          backgroundColor: "",
         },
       ];
     } else {
@@ -38,7 +50,8 @@ export const buildKeyValuePdfTable = ({
         {
           text: key.replace(/_/g, " "),
           style: labelStyle,
-          fillColor,
+          fillColor: fillColor,
+          backgroundColor: "",
         },
         {
           text: unit ? `${formattedValue} ${unit}` : formattedValue, // ✅ append unit if provided

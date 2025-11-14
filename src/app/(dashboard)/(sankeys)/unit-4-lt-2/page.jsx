@@ -3,14 +3,12 @@ import SankeyChart from "@/components/dashboardComponents/sankeychart/SankeyChar
 import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
-import SankeyTotalValues, {
-  calculateSums,
-} from "@/components/sakeyTotalValue/SankeyTotalValues";
 import MainSankeyTimeSelector from "@/components/dashboardComponents/timePeriodSelector/MainSankeyTimeSelector";
 import { ImArrowLeft2 } from "react-icons/im";
+import ReadyTotal from "@/components/sakeyTotalValue/ReadyTotal";
 
 const UnitLt42Page = () => {
-  const [data, setDAta] = useState([]);
+  const [data, setDAta] = useState({});
   const [loading, setLoading] = useState(false);
   const [range, setRange] = useState({});
 
@@ -18,7 +16,7 @@ const UnitLt42Page = () => {
     setRange(data);
   };
 
-  const { generation, consumption } = calculateSums(data, "TotalLT2");
+  const totalSum = data?.sankeyData?.reduce((acc, cur) => acc + cur.value, 0);
 
   const fetchUnit4Lt2Data = async () => {
     const token = localStorage.getItem("token");
@@ -84,8 +82,8 @@ const UnitLt42Page = () => {
         <div className="w-full md:px-20 flex items-center justify-center mt-6">
           {loading ? (
             <CustomLoader />
-          ) : consumption > 0 || generation > 0 ? (
-            <SankeyChart data={data} isGray={true} />
+          ) : totalSum > 0 ? (
+            <SankeyChart data={data.sankeyData} isGray={true} />
           ) : (
             <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
               <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />
@@ -96,7 +94,7 @@ const UnitLt42Page = () => {
           )}
         </div>
       </div>
-      <SankeyTotalValues data={data} lt="TotalLT2" loading={loading} />
+      <ReadyTotal loading={loading} data={data.totals} />
     </div>
   );
 };

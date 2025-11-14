@@ -193,7 +193,7 @@ const ConsumptionEnergy = () => {
       <div
         id="consumptionEnergyChart"
         className={`w-full ${
-          isConsumptionEnergyFullView ? "h-[90%]" : "h-[12rem lg:h-full"
+          isConsumptionEnergyFullView ? "h-[90%]" : "h-[12rem] lg:h-full"
         }`}
       />
     </div>

@@ -25,7 +25,7 @@ const StandardTable = ({
               {headers.map((head, idx) => (
                 <th
                   key={idx}
-                  className="py-2 px-3 border border-gray-400 text-center whitespace-nowrap"
+                  className="py-2 px-3 border border-gray-400 text-center"
                 >
                   {head.label}
                 </th>

@@ -48,7 +48,7 @@ const lt1MeterData = [
   },
   {
     link: "U8_PLC",
-    title: "Drawing Finisher 1-6+ Breaker 1-4",
+    title: "Drawing Finisher 1-6 + Breaker 1-4",
     top: 340,
     left: 680,
   },
@@ -102,13 +102,13 @@ const lt1MeterData = [
   },
   {
     link: "U17_PLC",
-    title: "Ring A/C (Supply & Return Fans)",
+    title: "Ring A/C (Supply %26 Return Fans)",
     top: 603,
     left: 590,
   },
   {
     link: "U18_PLC",
-    title: "Ring A/C (Supply & Return Fans) Bypass",
+    title: "Ring A/C (Supply %26 Return Fans) Bypass",
     top: 540,
     left: 680,
   },

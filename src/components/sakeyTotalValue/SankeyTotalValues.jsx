@@ -1,4 +1,3 @@
-import { load } from "@amcharts/amcharts4/.internal/core/utils/Net";
 import { Skeleton } from "@mui/material";
 import React from "react";
 

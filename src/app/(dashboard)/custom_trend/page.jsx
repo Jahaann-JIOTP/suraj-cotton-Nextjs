@@ -16,6 +16,8 @@ import { FaRegFileExcel, FaRegFilePdf } from "react-icons/fa";
 import { Tooltip } from "@mui/material";
 import DynamicEChart from "@/components/trendsComponents/EchartSample";
 import CustomTrendChart from "@/components/trendsComponents/CustomTrendsChart";
+import DynamicLineChart from "@/components/trendsComponents/NewTestingChart";
+import SimpleAm4Chart from "@/components/trendsComponents/NewTestingChart";
 function CustomTrend() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -614,6 +616,7 @@ function CustomTrend() {
         `trend_data_${selectedParameter}_${startDate}_to_${endDate}.pdf`
       );
   };
+  console.log(chartData.length);
   return (
     <div className="relative bg-white shadow dark:bg-gray-800 rounded-md border-t-3 border-[#025697] overflow-y-auto h-[87vh] md:h-[81vh] px-4 py-3">
       <div className="relative z-10 h-full flex flex-col">
@@ -797,73 +800,79 @@ function CustomTrend() {
               <CustomLoader />
             ) : (
               <div className="relative">
-                <div
-                  className="absolute z-20 top-[-12px] right-13 items-center group"
-                  style={{
-                    display: !showPdfBtn ? "none" : "flex",
-                  }}
-                >
-                  <Tooltip
-                    title={"Export PDF"}
-                    arrow
-                    placement="bottom-end"
-                    slotProps={{
-                      tooltip: {
-                        sx: {
-                          bgcolor: "#D81F26",
-                          color: "#ffffff",
-                          fontSize: "12px",
-                          fontWeight: 500,
-                        },
-                      },
-                      arrow: {
-                        sx: {
-                          color: "#D81F26",
-                        },
-                      },
+                {chartData.length > 0 && (
+                  <div
+                    className="absolute z-20 top-[-12px] right-13 items-center group"
+                    style={{
+                      display: !showPdfBtn ? "none" : "flex",
                     }}
                   >
-                    <button
-                      onClick={exportToPDF}
-                      className="p-1 rounded ml-2 bg-gray-300 cursor-pointer hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
-                    >
-                      <FaRegFilePdf className="w-5 h-5 text-[#D81F26]" />
-                    </button>
-                  </Tooltip>
-                  <Tooltip
-                    title={"Export EXCEL"}
-                    arrow
-                    placement="bottom-end"
-                    slotProps={{
-                      tooltip: {
-                        sx: {
-                          bgcolor: "#217346",
-                          color: "#ffffff",
-                          fontSize: "12px",
-                          fontWeight: 500,
+                    <Tooltip
+                      title={"Export PDF"}
+                      arrow
+                      placement="bottom-end"
+                      slotProps={{
+                        tooltip: {
+                          sx: {
+                            bgcolor: "#D81F26",
+                            color: "#ffffff",
+                            fontSize: "12px",
+                            fontWeight: 500,
+                          },
                         },
-                      },
-                      arrow: {
-                        sx: {
-                          color: "#217346",
+                        arrow: {
+                          sx: {
+                            color: "#D81F26",
+                          },
                         },
-                      },
-                    }}
-                  >
-                    <button
-                      onClick={exportToExcel}
-                      className="ml-3 p-1 rounded bg-gray-300 cursor-pointer hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+                      }}
                     >
-                      <FaRegFileExcel className="w-5 h-5 text-[#217346]" />
-                    </button>
-                  </Tooltip>
-                </div>
+                      <button
+                        onClick={exportToPDF}
+                        className="p-1 rounded ml-2 bg-gray-300 cursor-pointer hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+                      >
+                        <FaRegFilePdf className="w-5 h-5 text-[#D81F26]" />
+                      </button>
+                    </Tooltip>
+                    <Tooltip
+                      title={"Export EXCEL"}
+                      arrow
+                      placement="bottom-end"
+                      slotProps={{
+                        tooltip: {
+                          sx: {
+                            bgcolor: "#217346",
+                            color: "#ffffff",
+                            fontSize: "12px",
+                            fontWeight: 500,
+                          },
+                        },
+                        arrow: {
+                          sx: {
+                            color: "#217346",
+                          },
+                        },
+                      }}
+                    >
+                      <button
+                        onClick={exportToExcel}
+                        className="ml-3 p-1 rounded bg-gray-300 cursor-pointer hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+                      >
+                        <FaRegFileExcel className="w-5 h-5 text-[#217346]" />
+                      </button>
+                    </Tooltip>
+                  </div>
+                )}
 
                 <CustomTrendChart
                   data={chartData}
                   yAxisLabel={selectedParameter}
                 />
                 {/* <DynamicEChart data={chartData} param={selectedParameter} /> */}
+                {/* <SimpleAm4Chart
+                  data={chartData}
+                  yAxisLabel={selectedParameter}
+                /> */}
               </div>
             )}
           </div>

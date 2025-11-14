@@ -31,8 +31,8 @@ const EnergyComparison = ({ dateRange }) => {
   const isMobile = window.innerWidth < 768;
 
   const meterNameMap = {
-    U19_PLC_Del_ActiveEnergy: "Diesel + Gas Incoming",
-    U11_GW01_Del_ActiveEnergy: "Gas LT Panel",
+    U19_PLC_Del_ActiveEnergy: "Diesel+JGS Incoming LT 1",
+    U11_GW01_Del_ActiveEnergy: "Diesel+JGS Incomming LT 2",
     U6_GW02_Del_ActiveEnergy: "Solar 1184.55 Kw",
     U17_GW03_Del_ActiveEnergy: "Solar 1066.985 kW",
     U24_GW01_Del_ActiveEnergy: "Solar 352.50 kW",
@@ -243,7 +243,7 @@ const EnergyComparison = ({ dateRange }) => {
         y: am5.percent(90),
         layout: root.horizontalLayout,
         marginTop: 0,
-        paddingLeft: isMobile ? 0 : 320,
+        paddingLeft: isMobile ? 0 : 200,
       })
     );
     mainLegend.itemContainers.template.setAll({

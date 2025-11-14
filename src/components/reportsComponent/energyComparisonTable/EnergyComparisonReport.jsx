@@ -5,12 +5,13 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { loadImageAsBase64 } from "@/utils/imageToBase64";
 import { TiInfoLarge } from "react-icons/ti";
 // import EnergyComparisonChart from "./EnergyComparisonChart";
-import { to12HourFormat } from "@/utils/To12HourFormate";
-import ReportTables from "@/components/tables/ReportTables";
+import { MdOutlineInfo } from "react-icons/md";
 import KayValueTable from "@/components/tables/KayValueTable";
 import { SectionHeader } from "@/components/tables/SectionHeader";
 import StandardTable from "../../tables/StandardTable";
 import {
+  consPerDeptHNmearr,
+  dailyProductionHeaders,
   lowVoltageSummaryheadings,
   productionSummaryHeadings,
   utilizationHeadings,
@@ -20,7 +21,7 @@ import {
   pdfStyles,
 } from "@/components/tables/pdfStandardTable";
 import { buildKeyValuePdfTable } from "@/components/tables/pdfKayValue";
-import { Info } from "lucide-react";
+
 const sectionHeaders = {
   rParams: "Report Parameters",
   HTside: "High Voltage Side Summary",
@@ -33,49 +34,6 @@ const sectionHeaders = {
   consumptionPerDept:
     "Consumption Summary by Department For The Entire Time Period",
 };
-const summaryHeader = [
-  "Unit No.",
-  "Total Incoming From Generation (kWh)",
-  "Total Incoming From Other Unit (kWh)",
-  "Total Consumption (kWh)",
-  "Total Transferred to Other Unit (kWh)",
-  "Total Unaccountable Energy (kWh)",
-];
-const summarySecTabHNamearr = [
-  "Unit No.",
-  "Total Actual Connected Load (kWh/h)",
-  "Total Connected Load (kWh/h)",
-  "Utilization",
-];
-const productionHeaderlabels = [
-  "Unit No.",
-  "Total No. of Bags",
-  "Avg. Count",
-  "Total Consumption (kWh)",
-  "Consumption Per Bag (kWh/Bag)",
-];
-
-const prodDetailTabHeader = [
-  "Date",
-  "Unit 4 Bags",
-  "Unit 4 Avg Count",
-  "Unit 4 Consumption Per Bag",
-  "Unit 5 Bags",
-  "Unit 5 Avg Count",
-  "Unit 5 Consumption Per Bag",
-];
-const consPerDeptHNmearr = [
-  "Sr #",
-  "Department",
-  "Unit",
-  "MCs",
-  "Connected Load Per Department (kWh/h)",
-  "Avg Running Load Per Department (kWh/h)",
-  "Utilization",
-  "Connected Load Per Machine (kWh/h/Mc)",
-  "Avg Running Load Per Machine (kWh/h/Mc)",
-  "Total Units Consumed (kWh)",
-];
 
 const columnLabels = {
   Unit_4_LT1: "Unit 4 LT-1 (kWh)",
@@ -182,18 +140,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
     ...visibleColumns.map((key) => ({ key, label: columnLabels[key] })),
   ];
   //-----------------------production daily header-----------------
-  const dailyProductionHeaders = prodDetailTabHeader.map((label) => {
-    const keyMap = {
-      Date: "date",
-      "Unit 4 Bags": "Unit_4_Production",
-      "Unit 4 Avg Count": "Unit_4_AvgCount",
-      "Unit 4 Consumption Per Bag": "Unit_4_consumptionperbag",
-      "Unit 5 Bags": "Unit_5_Production",
-      "Unit 5 Avg Count": "Unit_5_AvgCount",
-      "Unit 5 Consumption Per Bag": "Unit_5_consumptionperbag",
-    };
-    return { key: keyMap[label], label };
-  });
+
   // Calculate total consumption for each unit
   const unitTotals = {};
   availableUnits.forEach((unit) => {
@@ -210,8 +157,12 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
     const u5 = Number(dept.u5Consumption) || 0;
     return sum + u4 + u5;
   }, 0);
-
   const totalafterAux = totalConsumption - hfoAux;
+  console.log({
+    "hfo aux": hfoAux,
+    Consumption: totalConsumption,
+    "after hfo": totalafterAux,
+  });
 
   /////////////////================================================
   ////////////////export to pdf///////////////////////////////
@@ -722,34 +673,6 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
         ],
 
         styles: pdfStyles,
-        // styles: {
-        //   sectionHeader: {
-        //     fontSize: 15,
-        //     bold: true,
-        //     background: "#1C4D82",
-        //     fillColor: "#1C4D82",
-        //     color: "#FFFFFF",
-        //     padding: [8, 3],
-        //     margin: [8, 4],
-        //     alignment: "left",
-        //   },
-        //   tableHeader: {
-        //     bold: true,
-        //     fontSize: 9,
-        //     background: "#E5F3FD",
-        //     fillColor: "#E5F3FD",
-        //     padding: [4, 2],
-        //   },
-        //   tableCell: { fontSize: 9, padding: [4, 2] },
-        //   tableCellRight: { fontSize: 9, padding: [4, 2], alignment: "right" },
-        //   tableCellRightBold: {
-        //     fontSize: 9,
-        //     bold: true,
-        //     padding: [4, 2],
-        //     alignment: "right",
-        //     color: "#000000",
-        //   },
-        // },
 
         defaultStyle: {
           font: "Roboto",
@@ -981,11 +904,11 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
               <tr className="font-semibold text-[13px] md:text-[14px] dark:bg-gray-600">
                 <td colSpan={7} className="dark:bg-gray-800">
                   <span className="flex items-center gap-5 text-gray-600 dark:text-gray-300">
-                    <TiInfoLarge
-                      className="text-[#1E538C] dark:text-[#E5F3FD] bg-[#1E538C]/40 dark:bg-[#E5F3FD]/40 rounded-full p-[3px]"
+                    <MdOutlineInfo
+                      className="text-[#1E538C] dark:text-[#E5F3FD] bg-[#1E538C]/20 dark:bg-[#E5F3FD]/40 rounded-full p-[3px]"
                       size={30}
                     />
-                    HFO + JMS Auxiliary not included in grand total.
+                    HFO + JMS Auxiliary not included in grand total consumption.
                   </span>
                 </td>
                 <td

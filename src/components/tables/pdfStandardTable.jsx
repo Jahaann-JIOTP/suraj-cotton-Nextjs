@@ -103,7 +103,7 @@ export const pdfStyles = {
   tableHeader: {
     bold: true,
     fontSize: 9,
-    background: "#E5F3FD",
+    // background: "#E5F3FD",
     fillColor: "#E5F3FD",
     padding: [4, 2],
   },

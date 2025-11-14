@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { getDateRangeFromString } from "@/utils/dateRangeForReports";
 import EnergyComparisonReport from "@/components/reportsComponent/energyComparisonTable/EnergyComparisonReport";
 import { to12HourFormat } from "@/utils/To12HourFormate";
+import { tableRawData } from "@/data/rawData";
 
 const EnergyComparisonPage = () => {
   const [usageReportTimePeriod, setUsageReportTimePeriod] =

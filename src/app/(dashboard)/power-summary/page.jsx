@@ -17,22 +17,12 @@ const PowerSummaryPage = () => {
   const handleDateRangeChange = useCallback((range) => {
     setDateRange(range);
   }, []);
-  // unit 5 trafo 1 + 2
-  const u5incomming =
-    Number(powerSummaryData.Trafo4Incoming || 0) +
-    Number(powerSummaryData.Trafo3Incoming || 0);
-  const u5Outgoin =
-    Number(powerSummaryData.Trafo4outgoing || 0) +
-    Number(powerSummaryData.Trafo3outgoing || 0);
-  const u5Losses =
-    Number(powerSummaryData.Trafo4losses || 0) +
-    Number(powerSummaryData.Trafo3losses || 0);
-  const u5LossesPercent =
-    Number(powerSummaryData.T2unit5percentage || 0) +
-    Number(powerSummaryData.T1unit5percentage || 0);
+  console.log(console.log(dateRange));
+
   const fetchPowerSummaryData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
+    if (!dateRange.startDate && !dateRange.endDate) return null;
     setLoading(true);
     try {
       const response = await fetch(
@@ -153,14 +143,22 @@ const PowerSummaryPage = () => {
         <div className="w-full lg:w-[49.6%]">
           <TrafoCard
             mainTitle="Unit 5 Transformer 1+2"
-            icomingValue={Number(u5incomming || 0).toLocaleString("en-US")}
+            icomingValue={Number(
+              powerSummaryData.T3andT4incoming || 0
+            ).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
-            outgoingValue={Number(u5Outgoin || 0).toLocaleString("en-US")}
+            outgoingValue={Number(
+              powerSummaryData.T3andT4outgoing || 0
+            ).toLocaleString("en-US")}
             outgoingUnit="kWh"
-            lossesValue={Number(u5Losses || 0).toLocaleString("en-US")}
+            lossesValue={Number(
+              powerSummaryData.T3andT4losses || 0
+            ).toLocaleString("en-US")}
             lossesUnit="kWh"
-            lossesPercent={Number(u5LossesPercent || 0).toLocaleString("en-US")}
+            lossesPercent={Number(
+              powerSummaryData.T3T4percentage || 0
+            ).toLocaleString("en-US")}
             lossesPercentUnit="%"
           />
         </div>
@@ -173,7 +171,7 @@ const PowerSummaryPage = () => {
             loading={loading}
             value={Number(powerSummaryData.Solar1 || 0).toLocaleString("en-US")}
             unit="kWh"
-            height="6.1rem"
+            height="6.5rem"
           />
         </div>
 

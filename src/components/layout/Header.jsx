@@ -111,7 +111,6 @@ const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
   const router = useRouter();
   const { theme } = useTheme();
-
   const notificationDropdownRef = useRef(null);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -146,7 +145,9 @@ const Header = ({ handleTabClick, activeTab }) => {
     if (hasAudibleAlarm) play();
     else stop();
   }, [play, stop]);
-
+  // store current url
+  const returnUrl = window.location.pathname + window.location.search;
+  localStorage.setItem("returnUrl", returnUrl);
   // Format date in Asia/Karachi
   const formatAlarmDate = (triggeredAt) => {
     const zonedDate = toZonedTime(new Date(triggeredAt), "Asia/Karachi");
@@ -166,7 +167,10 @@ const Header = ({ handleTabClick, activeTab }) => {
   };
   const saveSeen = () => {
     try {
-      localStorage.setItem(SEEN_KEY, JSON.stringify(Array.from(seenAlarms.current)));
+      localStorage.setItem(
+        SEEN_KEY,
+        JSON.stringify(Array.from(seenAlarms.current))
+      );
     } catch {}
   };
 
@@ -178,7 +182,8 @@ const Header = ({ handleTabClick, activeTab }) => {
 
   // Fetch user privileges
   const fetchUserDetails = async () => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (!token) return;
     try {
       const res = await fetch(`${config.BASE_URL}${config.USER.PROFILE}`, {
@@ -196,7 +201,8 @@ const Header = ({ handleTabClick, activeTab }) => {
 
   // Link status (Node-RED)
   const getMeterData = async () => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (!token) return;
     try {
       const response = await fetch(
@@ -214,8 +220,11 @@ const Header = ({ handleTabClick, activeTab }) => {
   const updateBellIcon = (fetchedAlarms) => {
     const enrichedAll = fetchedAlarms.map((a) => {
       const snooze = computeSnoozeFlags(a);
-      const baseStatus = seenAlarms.current.has(a.alarmOccurenceId) ? "old" : "new";
-      const status = snooze.snoozeStatus && !snooze.isSnoozeExpired ? "old" : baseStatus;
+      const baseStatus = seenAlarms.current.has(a.alarmOccurenceId)
+        ? "old"
+        : "new";
+      const status =
+        snooze.snoozeStatus && !snooze.isSnoozeExpired ? "old" : baseStatus;
       return { ...a, ...snooze, status };
     });
 
@@ -258,8 +267,10 @@ const Header = ({ handleTabClick, activeTab }) => {
     const alarmIv = setInterval(fetchAlarms, 40000);
 
     const handleClickOutside = (event) => {
-      if (notificationDropdownRef.current &&
-          !notificationDropdownRef.current.contains(event.target)) {
+      if (
+        notificationDropdownRef.current &&
+        !notificationDropdownRef.current.contains(event.target)
+      ) {
         setNotificationVisible(false);
         setOpenSnoozeFor(null);
       }
@@ -288,7 +299,10 @@ const Header = ({ handleTabClick, activeTab }) => {
         // Flip the visible list to "old"
         setAlarms((prev) => prev.map((a) => ({ ...a, status: "old" })));
         // Recompute bell state from full cache
-        const enrichedAllOld = lastFullFetchRef.current.map((a) => ({ ...a, status: "old" }));
+        const enrichedAllOld = lastFullFetchRef.current.map((a) => ({
+          ...a,
+          status: "old",
+        }));
         lastFullFetchRef.current = enrichedAllOld;
         const hasAny = enrichedAllOld.length > 0;
         setBellIcon(hasAny ? "yellow" : "none");
@@ -312,7 +326,12 @@ const Header = ({ handleTabClick, activeTab }) => {
       setAlarms((prev) =>
         prev.map((a) =>
           a.alarmOccurenceId === occurrenceId
-            ? { ...a, snoozeStatus: true, isSnoozeExpired: false, status: "old" }
+            ? {
+                ...a,
+                snoozeStatus: true,
+                isSnoozeExpired: false,
+                status: "old",
+              }
             : a
         )
       );
@@ -328,7 +347,9 @@ const Header = ({ handleTabClick, activeTab }) => {
       const hasNew = lastFullFetchRef.current.some((a) => a.status === "new");
       const hasOld = lastFullFetchRef.current.some((a) => a.status === "old");
       setBellIcon(hasNew ? "red" : hasOld ? "yellow" : "none");
-      setNewAlarmCount(lastFullFetchRef.current.filter((a) => a.status === "new").length);
+      setNewAlarmCount(
+        lastFullFetchRef.current.filter((a) => a.status === "new").length
+      );
 
       setOpenSnoozeFor(null);
 
@@ -357,7 +378,9 @@ const Header = ({ handleTabClick, activeTab }) => {
       >
         <p
           className={`px-2 py-1 uppercase font-inter cursor-pointer rounded-sm flex gap-1 items-center ${
-            isActive ? "bg-white text-black dark:bg-gray-700 dark:text-white" : ""
+            isActive
+              ? "bg-white text-black dark:bg-gray-700 dark:text-white"
+              : ""
           }`}
         >
           <FontAwesomeIcon icon={cfg.icon} style={{ fontSize: "1.1em" }} />
@@ -417,20 +440,25 @@ const Header = ({ handleTabClick, activeTab }) => {
         <div className="mr-4 w-[60px]">
           {realTimeData?.message === "Link is up" ? (
             <div className="flex flex-col items-center justify-center">
-              <img src={"../../../green_bl.gif"} className="w-[20px]"/>
+              <img src={"../../../green_bl.gif"} className="w-[20px]" />
               <span className="text-[10px]">Link Up</span>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center">
-              <img src={"../../../red_bl.gif"} className="w-[20px]"/>
-              <span className="text-[10px] animate-pulse duration-300">Link Down</span>
+              <img src={"../../../red_bl.gif"} className="w-[20px]" />
+              <span className="text-[10px] animate-pulse duration-300">
+                Link Down
+              </span>
             </div>
           )}
         </div>
 
         {/* Bell */}
         <div className="relative mr-4 mt-1" ref={notificationDropdownRef}>
-          <div className="relative inline-block cursor-pointer" onClick={toggleNotificationVisibility}>
+          <div
+            className="relative inline-block cursor-pointer"
+            onClick={toggleNotificationVisibility}
+          >
             {/* Inline SVG bell with dynamic fill */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -444,7 +472,13 @@ const Header = ({ handleTabClick, activeTab }) => {
                 fillRule="evenodd"
                 clipRule="evenodd"
                 d="M14.0829 3.25C14.0829 2.96268 13.9688 2.68713 13.7656 2.48397C13.5624 2.2808 13.2869 2.16666 12.9996 2.16666C12.7123 2.16666 12.4367 2.2808 12.2336 2.48397C12.0304 2.68713 11.9162 2.96268 11.9162 3.25V4.0625H11.3128C10.1515 4.06242 9.03385 4.50492 8.18733 5.29992C7.34081 6.09492 6.82909 7.18264 6.75633 8.34166L6.51692 12.1702C6.42436 13.6296 5.93435 15.036 5.09992 16.237C4.92727 16.4852 4.82178 16.7738 4.7937 17.0748C4.76563 17.3758 4.81593 17.6789 4.9397 17.9547C5.06348 18.2305 5.25653 18.4696 5.50006 18.6487C5.7436 18.8278 6.02934 18.9408 6.3295 18.9767L10.0204 19.4187V20.5833C10.0204 21.3735 10.3343 22.1312 10.893 22.6899C11.4517 23.2486 12.2095 23.5625 12.9996 23.5625C13.7897 23.5625 14.5475 23.2486 15.1062 22.6899C15.6649 22.1312 15.9787 21.3735 15.9787 20.5833V19.4187L19.6697 18.9757C19.9696 18.9396 20.2552 18.8266 20.4986 18.6475C20.742 18.4685 20.9349 18.2296 21.0587 17.9539C21.1824 17.6783 21.2328 17.3753 21.2048 17.0745C21.1769 16.7736 21.0716 16.4851 20.8992 16.237C20.0648 15.036 19.5748 13.6296 19.4822 12.1702L19.2428 8.34275C19.1703 7.18354 18.6587 6.09554 17.8122 5.30032C16.9656 4.50509 15.8478 4.06244 14.6863 4.0625H14.0829V3.25ZM11.6454 20.5833C11.6454 20.9425 11.7881 21.2869 12.042 21.5409C12.296 21.7948 12.6404 21.9375 12.9996 21.9375C13.3587 21.9375 13.7032 21.7948 13.9571 21.5409C14.2111 21.2869 14.3537 20.9425 14.3537 20.5833V19.7708H11.6454V20.5833Z"
-                fill={bellIcon === "red" ? "red" : bellIcon === "yellow" ? "yellow" : "white"}
+                fill={
+                  bellIcon === "red"
+                    ? "red"
+                    : bellIcon === "yellow"
+                    ? "yellow"
+                    : "white"
+                }
               />
             </svg>
 
@@ -465,24 +499,41 @@ const Header = ({ handleTabClick, activeTab }) => {
                 <span className="text-black dark:text-white">Alarms</span>
                 <button
                   className="absolute top-2 right-2 text-white text-2xl hover:text-red-500 transition-all mr-2 mt-2"
-                  onClick={() => { setNotificationVisible(false); setOpenSnoozeFor(null); }}
+                  onClick={() => {
+                    setNotificationVisible(false);
+                    setOpenSnoozeFor(null);
+                  }}
                   aria-label="Close alarms"
                 >
-                  <FontAwesomeIcon icon={faTimes} className="text-[20px] text-black dark:text-white cursor-pointer" />
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className="text-[20px] text-black dark:text-white cursor-pointer"
+                  />
                 </button>
               </div>
 
               <ul className="mt-4 text-sm text-gray-600">
-                {error && <p className="text-red-600 dark:text-red-400">{error}</p>}
+                {error && (
+                  <p className="text-red-600 dark:text-red-400">{error}</p>
+                )}
 
                 {alarms.length > 0 ? (
                   alarms.map((alarm) => (
-                    <li key={alarm.alarmOccurenceId} className="py-2 border-b flex items-start justify-between relative">
+                    <li
+                      key={alarm.alarmOccurenceId}
+                      className="py-2 border-b flex items-start justify-between relative"
+                    >
                       {/* Left: icon + details */}
                       <div className="flex items-start">
                         <Image
-                          src={alarm.status === "new" ? "/alert_red.gif" : "/yellowbell.gif"}
-                          alt={alarm.status === "new" ? "New alarm" : "Seen alarm"}
+                          src={
+                            alarm.status === "new"
+                              ? "/alert_red.gif"
+                              : "/yellowbell.gif"
+                          }
+                          alt={
+                            alarm.status === "new" ? "New alarm" : "Seen alarm"
+                          }
                           width={24}
                           height={24}
                           className="w-6 h-6 mr-2"
@@ -515,11 +566,16 @@ const Header = ({ handleTabClick, activeTab }) => {
                               ? "opacity-50 cursor-not-allowed dark:border-gray-600"
                               : "cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600"
                           }`}
-                          disabled={alarm.snoozeStatus && !alarm.isSnoozeExpired}
+                          disabled={
+                            alarm.snoozeStatus && !alarm.isSnoozeExpired
+                          }
                           onClick={() => {
-                            if (alarm.snoozeStatus && !alarm.isSnoozeExpired) return;
+                            if (alarm.snoozeStatus && !alarm.isSnoozeExpired)
+                              return;
                             setOpenSnoozeFor((prev) =>
-                              prev === alarm.alarmOccurenceId ? null : alarm.alarmOccurenceId
+                              prev === alarm.alarmOccurenceId
+                                ? null
+                                : alarm.alarmOccurenceId
                             );
                           }}
                         >
@@ -532,7 +588,9 @@ const Header = ({ handleTabClick, activeTab }) => {
                               <button
                                 key={opt}
                                 className="w-full px-4 py-2 text-left text-sm text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
-                                onClick={() => handleSnoozePick(alarm.alarmOccurenceId, opt)}
+                                onClick={() =>
+                                  handleSnoozePick(alarm.alarmOccurenceId, opt)
+                                }
                               >
                                 {opt}
                               </button>
@@ -551,7 +609,9 @@ const Header = ({ handleTabClick, activeTab }) => {
                       width={300}
                       height={300}
                     />
-                    <p className="text-center dark:text-white text-gray-500">No active alarms at the moment.</p>
+                    <p className="text-center dark:text-white text-gray-500">
+                      No active alarms at the moment.
+                    </p>
                   </div>
                 )}
 
