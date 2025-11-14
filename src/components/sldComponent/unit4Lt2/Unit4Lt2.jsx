@@ -95,7 +95,7 @@ const lt2MeterData = [
     left: 453,
   },
   {
-    link: "U6_GW01",
+    link: "U20_GW01",
     title: "Baling Press",
     top: 593,
     left: 543,
@@ -107,7 +107,7 @@ const lt2MeterData = [
     left: 629,
   },
   {
-    link: "U20_GW01",
+    link: "U6_GW01",
     title: "Spare",
     top: 593,
     left: 720,
@@ -246,9 +246,9 @@ const Unit4Lt2 = ({ roundedData }) => {
     },
     // bale press
     {
-      activePowerTotalTag: roundedData?.U6_GW01_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U6_GW01_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U6_GW01_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U20_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U20_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U20_GW01_Voltage_Avg,
       top: 601,
       left: 550,
     },
@@ -262,9 +262,9 @@ const Unit4Lt2 = ({ roundedData }) => {
     },
     // spare
     {
-      activePowerTotalTag: roundedData?.U20_GW01_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U20_GW01_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U20_GW01_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U6_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U6_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U6_GW01_Voltage_Avg,
       top: 601,
       left: 727,
     },
@@ -305,7 +305,9 @@ const Unit4Lt2 = ({ roundedData }) => {
         {lt2MeterData.map((meter) => (
           <Link
             key={meter.link}
-            href={`/meter?area=Unit_4&LT_selections=LT_2&page-type=sld&meter_id=${meter.link}&meter_name=${meter.title}`}
+            href={`/meter?area=Unit_4&LT_selections=LT_2&page-type=sld&meter_id=${
+              meter.link
+            }&meter_name=${encodeURIComponent(meter.title)}`}
             style={{
               position: "absolute",
               top: `${meter.top}px`,

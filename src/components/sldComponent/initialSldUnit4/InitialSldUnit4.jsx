@@ -130,7 +130,11 @@ const InitialSldUnit4 = ({ roundedData }) => {
         {unit4MeterData.map((meter) => (
           <Link
             key={meter.link}
-            href={`/meter?area=Unit_4&page-type=sld&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
+            href={`/meter?area=Unit_4&page-type=sld&LT_selections=${
+              meter.ltScheme
+            }&meter_id=${meter.link}&meter_name=${encodeURIComponent(
+              meter.title
+            )}`}
             style={{
               position: "absolute",
               top: `${meter.top}px`,

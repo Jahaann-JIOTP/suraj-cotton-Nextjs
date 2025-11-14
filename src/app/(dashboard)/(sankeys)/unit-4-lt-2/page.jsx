@@ -83,7 +83,7 @@ const UnitLt42Page = () => {
           {loading ? (
             <CustomLoader />
           ) : totalSum > 0 ? (
-            <SankeyChart data={data.sankeyData} isGray={true} />
+            <SankeyChart data={data.sankeyData} isGray={true} padRight={280} />
           ) : (
             <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">
               <img src="./sankeyEmpty.png" className="w-[300px]" alt="" />

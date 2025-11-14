@@ -102,13 +102,13 @@ const lt1MeterData = [
   },
   {
     link: "U17_PLC",
-    title: "Ring A/C (Supply %26 Return Fans)",
+    title: "Ring A/C (Supply & Return Fans)",
     top: 603,
     left: 590,
   },
   {
     link: "U18_PLC",
-    title: "Ring A/C (Supply %26 Return Fans) Bypass",
+    title: "Ring A/C (Supply & Return Fans) Bypass",
     top: 540,
     left: 680,
   },
@@ -308,7 +308,9 @@ const Unit4Lt1 = ({ roundedData }) => {
         {lt1MeterData.map((meter) => (
           <Link
             key={meter.link}
-            href={`/meter?area=Unit_4&page-type=sld&LT_selections=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`}
+            href={`/meter?area=Unit_4&page-type=sld&LT_selections=LT_1&meter_id=${
+              meter.link
+            }&meter_name=${encodeURIComponent(meter.title)}`}
             style={{
               position: "absolute",
               top: `${meter.top}px`,

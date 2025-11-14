@@ -27,7 +27,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U23_PLC",
-    title: "O/G 2 Unit 5",
+    title: "O/G 2 (Unit 5)",
     top: 322,
     left: 179,
     area: "hfo",
@@ -35,7 +35,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U24_PLC",
-    title: "O/G 1 Unit 4",
+    title: "O/G 1 (Unit 4)",
     top: 322,
     left: 271,
     area: "hfo",
@@ -189,7 +189,11 @@ const MainSldOverview = ({ roundedData }) => {
       <div className="relative mx-auto" style={{ width: "1200px" }}>
         {mainOverviewMeterData.map((meter) => (
           <Link
-            href={`/meter?area=${meter.area}&page-type=sld&LT_selections=${meter.lt_scheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
+            href={`/meter?area=${meter.area}&page-type=sld&LT_selections=${
+              meter.lt_scheme
+            }&meter_id=${meter.link}&meter_name=${encodeURIComponent(
+              meter.title
+            )}`}
             key={meter.link}
             style={{
               position: "absolute",

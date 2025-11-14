@@ -3,7 +3,12 @@ import React, { useRef, useEffect } from "react";
 import * as echarts from "echarts";
 import { useTheme } from "next-themes";
 
-const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
+const SankeyChart = ({
+  data,
+  navigateLinks = {},
+  padRight,
+  isGray = false,
+}) => {
   const chartRef = useRef(null);
   const { resolvedTheme } = useTheme();
 
@@ -208,6 +213,7 @@ const SankeyChart = ({ data, navigateLinks = {}, isGray = false }) => {
           nodeAlign: "left",
           nodeWidth: 16,
           nodeGap: 10,
+          right: padRight,
           draggable: true,
           focusNodeAdjacency: true,
           blurState: {

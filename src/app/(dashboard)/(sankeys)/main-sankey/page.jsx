@@ -94,6 +94,7 @@ const MainSankey = () => {
               data={data}
               navigateLinks={navigationMap}
               isGray={true}
+              padRight={200}
             />
           ) : (
             <div className="absolute top-19 left-0 h-[70%] w-full flex flex-col items-center justify-center rounded-md z-10">

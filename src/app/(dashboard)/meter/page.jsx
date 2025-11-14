@@ -19,7 +19,7 @@ const page = () => {
   const area = searchParams.get("area");
   const ltScheme = searchParams.get("LT_selections");
   const id = searchParams.get("meter_id");
-  const meterName = searchParams.get("meter_name");
+  const meterName = decodeURIComponent(searchParams.get("meter_name"));
   const finalArea =
     area !== "ht" && area !== "hfo"
       ? `${area.split("_").join("").toLowerCase()}_${ltScheme
@@ -712,7 +712,9 @@ const page = () => {
           title="Logs"
           onClick={() =>
             router.push(
-              `/logs?type=${activeTab}&page-type=${pageType}&LT_selections=${ltScheme}&area=${area}&val=${activeTab}&meter_id=${id}&meter_name=${meterName}`
+              `/logs?type=${activeTab}&page-type=${pageType}&LT_selections=${ltScheme}&area=${area}&val=${activeTab}&meter_id=${id}&meter_name=${encodeURIComponent(
+                meterName
+              )}`
             )
           }
           className={` border-1 border-[#1F5897] text-[#1F5897] dark:bg-gray-500 font-400 rounded text-[12px] flex flex-col items-center justify-center p-[7px] z-30  cursor-pointer`}

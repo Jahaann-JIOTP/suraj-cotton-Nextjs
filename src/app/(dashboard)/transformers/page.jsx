@@ -93,6 +93,7 @@ const TranformersPage = () => {
 
   const fetchTransformerTotalTag = async () => {
     const token = localStorage.getItem("token");
+    if (!dateRange.startDate && !dateRange.endDate) return null;
     if (!token) return;
     try {
       const response = await fetch(
@@ -115,6 +116,7 @@ const TranformersPage = () => {
   const fetchTransformerData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
+    if (!dateRange.startDate && !dateRange.endDate) return null;
     setLoading(true);
     try {
       const response = await fetch(

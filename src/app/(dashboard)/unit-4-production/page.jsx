@@ -19,7 +19,7 @@ const Unit4Spindle = () => {
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
   const [productionData, setProductionData] = useState({
-    unit: "U4",
+    unit: unit,
     startDate: "",
     values: [],
     avgcount: [],
@@ -174,12 +174,12 @@ const Unit4Spindle = () => {
       });
       if (response.ok) {
         setProductionData({
-          unit: "U4",
+          unit: unit,
           startDate: "",
           values: [],
           avgcount: [],
         });
-        toast.success("Unit 4 Bags Updated");
+        toast.success(" Bags Updated");
         setLoading(false);
         await fetchSpindleProduction();
       }
@@ -260,10 +260,10 @@ const Unit4Spindle = () => {
       <div className="w-full flex items-center justify-center mt-5">
         <form
           onSubmit={formMode === "create" ? handleSubmit : updateSpindle}
-          className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 items-start"
+          className="w-full grid grid-cols-1 md:grid-cols-4 gap-4 items-start"
         >
           {/* --- Select Unit --- */}
-          {/* <div className="flex flex-col w-full items-start justify-center">
+          <div className="flex flex-col w-full items-start justify-center">
             <span className="text-[15px] font-500 font-inter text-black dark:text-white">
               Select Plant Unit
             </span>
@@ -301,7 +301,7 @@ const Unit4Spindle = () => {
                 </div>
               )}
             </div>
-          </div> */}
+          </div>
 
           {/* --- Select Date --- */}
           <div className="flex flex-col items-start justify-center">

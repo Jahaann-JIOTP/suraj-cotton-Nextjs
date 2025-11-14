@@ -265,7 +265,9 @@ const Unit5Lt4 = ({ roundedData }) => {
         {lt1MeterData.map((meter) => (
           <Link
             key={meter.link}
-            href={`/meter?area=Unit_5&page-type=sld&LT_selections=LT_2&meter_id=${meter.link}&meter_name=${meter.title}`}
+            href={`/meter?area=Unit_5&page-type=sld&LT_selections=LT_2&meter_id=${
+              meter.link
+            }&meter_name=${encodeURIComponent(meter.title)}`}
             style={{
               position: "absolute",
               top: `${meter.top}px`,

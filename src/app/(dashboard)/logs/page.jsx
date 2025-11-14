@@ -14,7 +14,7 @@ const page = () => {
   const meterId = searchParams.get("meter_id");
   const type = searchParams.get("type");
   const area = searchParams.get("area");
-  const meterName = searchParams.get("meter_name");
+  const meterName = decodeURIComponent(searchParams.get("meter_name"));
   useBreadcrumb();
 
   const buttonConfigs = {
@@ -77,7 +77,11 @@ const page = () => {
             style={{ top: `${btn.top}px` }}
             onClick={() =>
               router.push(
-                `/log-detail?paramtype=${btn.paramtype}&type=${type}&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${meterName}`
+                `/log-detail?paramtype=${
+                  btn.paramtype
+                }&type=${type}&page-type=${pageType}&meter_id=${meterId}&area=${area}&LT_selections=${ltScheme}&meter_name=${encodeURIComponent(
+                  meterName
+                )}`
               )
             }
           />

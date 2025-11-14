@@ -21,7 +21,7 @@ const LogDetails = () => {
   const searchParams = useSearchParams();
   const type = searchParams.get("paramtype");
   const meter_id = searchParams.get("meter_id");
-  const meterName = searchParams.get("meter_name");
+  const meterName = decodeURIComponent(searchParams.get("meter_name"));
   const ltScheme = searchParams.get("LT_selections");
   const area = searchParams.get("area");
 

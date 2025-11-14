@@ -16,12 +16,12 @@ export const mainMeterMapping = [
     area: "HFO",
   },
   {
-    meterName: "O/G 2 Unit 5",
+    meterName: "O/G 2 (Unit 5)",
     meterId: "U23_PLC",
     area: "HFO",
   },
   {
-    meterName: "O/G 1 Unit 4",
+    meterName: "O/G 1 (Unit 4)",
     meterId: "U24_PLC",
     area: "HFO",
   },
@@ -86,7 +86,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_1",
   },
   {
-    meterName: "Turbine",
+    meterName: "Deep Valve Turbine",
     meterId: "U6_PLC",
     area: "Unit 4 LT_1",
   },
@@ -126,7 +126,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_1",
   },
   {
-    meterName: "Compressor 119kw",
+    meterName: "Compressor (119 kW)",
     meterId: "U14_PLC",
     area: "Unit 4 LT_1",
   },
@@ -136,7 +136,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_1",
   },
   {
-    meterName: "Compressor 303kw",
+    meterName: "Compressor (303 kW)",
     meterId: "U16_PLC",
     area: "Unit 4 LT_1",
   },
@@ -156,7 +156,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_1",
   },
   {
-    meterName: "Compressor 119kw",
+    meterName: "Compressor (119kW)",
     meterId: "U20_PLC",
     area: "Unit 4 LT_1",
   },

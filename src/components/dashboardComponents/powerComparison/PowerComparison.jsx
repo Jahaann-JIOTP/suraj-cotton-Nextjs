@@ -25,6 +25,7 @@ const PowerComparison = ({ dateRange }) => {
   const fetchPowerComparisonData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
+    if (!dateRange.startDate && !dateRange.endDate) return null;
     setLoading(true);
     try {
       const response = await fetch(

@@ -272,7 +272,9 @@ const Unit5Lt3 = ({ roundedData }) => {
       <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
         {lt1MeterData.map((meter) => (
           <Link
-            href={`/meter?area=Unit_5&page-type=sld&LT_selections=LT_1&meter_id=${meter.link}&meter_name=${meter.title}`}
+            href={`/meter?area=Unit_5&page-type=sld&LT_selections=LT_1&meter_id=${
+              meter.link
+            }&meter_name=${encodeURIComponent(meter.title)}`}
             key={meter.link}
             style={{
               position: "absolute",

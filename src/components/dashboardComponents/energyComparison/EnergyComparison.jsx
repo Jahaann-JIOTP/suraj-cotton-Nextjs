@@ -33,19 +33,21 @@ const EnergyComparison = ({ dateRange }) => {
   const meterNameMap = {
     U19_PLC_Del_ActiveEnergy: "Diesel+JGS Incoming LT 1",
     U11_GW01_Del_ActiveEnergy: "Diesel+JGS Incomming LT 2",
-    U6_GW02_Del_ActiveEnergy: "Solar 1184.55 Kw",
-    U17_GW03_Del_ActiveEnergy: "Solar 1066.985 kW",
+    U6_GW02_Del_ActiveEnergy: "Solar 1185 kW",
+    U17_GW03_Del_ActiveEnergy: "Solar 1070 kW",
     U24_GW01_Del_ActiveEnergy: "Solar 352.50 kW",
     U28_PLC_Del_ActiveEnergy: "Solar 52.17 kW",
-    U23_GW01_Del_ActiveEnergy: "Wapda IC",
+    U23_GW01_Del_ActiveEnergy: "Wapda 1",
     U27_PLC_Del_ActiveEnergy: "Wapda 2",
-    U22_PLC_Del_ActiveEnergy: "HFO/1",
-    U26_PLC_Del_ActiveEnergy: "I-GG",
+    U22_PLC_Del_ActiveEnergy: "HFO 1",
+    U26_PLC_Del_ActiveEnergy: "JMS 620",
   };
 
   const fetchPieChartData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
+    if (!dateRange.startDate && !dateRange.endDate) return null;
+
     setLoading(true);
     try {
       const response = await fetch(
