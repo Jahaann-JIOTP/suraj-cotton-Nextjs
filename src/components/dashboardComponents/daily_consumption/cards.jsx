@@ -56,7 +56,7 @@ const Card = ({
       )}
       {/* Title */}
       <div className="text-center p-3">
-        <h2 className="inline-block uppercase font-inter text-[#025697] font-semibold text-[17px] tracking-wide relative">
+        <h2 className="inline-block font-inter text-[#025697] font-semibold text-[17px] tracking-wide relative">
           {title}
           <span
             className="block h-[0.2vh] mt-1 rounded-full"

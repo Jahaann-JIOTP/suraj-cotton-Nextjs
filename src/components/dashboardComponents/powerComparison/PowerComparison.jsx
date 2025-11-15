@@ -297,7 +297,7 @@ const PowerComparison = ({ dateRange }) => {
 
     // Cluster 0: SUPPLY
     makeSeries("HT", "HT", "#F8B257", CLUSTER_GROUPS.SUPPLY, true);
-    makeSeries("WAPDA", "wapda", "#FF714E", CLUSTER_GROUPS.SUPPLY, true);
+    makeSeries("Wapda", "wapda", "#FF714E", CLUSTER_GROUPS.SUPPLY, true);
     makeSeries("Solar", "solar", "#63F4B7", CLUSTER_GROUPS.SUPPLY, true);
     makeSeries("LT", "LT", "#B0B2B6", CLUSTER_GROUPS.SUPPLY, true);
 

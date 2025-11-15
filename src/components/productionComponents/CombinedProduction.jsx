@@ -1,27 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-/**
- * Reusable Production Table
- * @param {Array} days - Array of date strings (e.g. ["1/11/2025", "2/11/2025"])
- * @param {Object} data - Object of formatted production data keyed by date-unit
- * @param {Array} rows - Array of row labels like [{label:'Production', key:'production'}]
- * @param {number} chunkSize - Number of columns per row group
- * @param {number} month - Selected month (0–11)
- * @param {Function} setMonth - Setter for month
- * @param {String} unit - Unit name e.g. "U4"
- */
-export default function ProductionTable({
+export default function CombinedProduction({
   days = [],
   data = {},
-  rows = [],
   month,
   setMonth,
-  unit = "",
   title = "",
 }) {
   const [chunkSize, setChunkSize] = useState(15);
   const today = new Date();
+
+  // FIXED 5 ROWS
+  const fixedRows = [
+    { label: "U4 Production", unit: "U4", type: "production" },
+    { label: "U4 Avg Count", unit: "U4", type: "avgcount" },
+    { label: "U5 Production", unit: "U5", type: "production" },
+    { label: "U5 Avg Count", unit: "U5", type: "avgcount" },
+  ];
 
   const chunkArray = (arr, size) => {
     const result = [];
@@ -30,11 +26,13 @@ export default function ProductionTable({
     return result;
   };
 
-  const getValueByDate = (dateStr, type) => {
+  const getValueByDate = (dateStr, unit, type) => {
     const [day, month, year] = dateStr.split("/").map(Number);
     const dateObj = new Date(year, month - 1, day);
+
     const entry = data[`${dateStr}-${unit}`] || {};
     const value = entry[type] ?? 0;
+
     if (dateObj > today && value === 0) return "";
     return value !== 0 ? value : "-";
   };
@@ -61,8 +59,8 @@ export default function ProductionTable({
   const slotWidth = `${100 / (chunkSize + 1)}%`;
 
   return (
-    <div className="relative w-full  border border-[#025697]">
-      {/* Month selector */}
+    <div className="relative w-full border border-[#025697]">
+      {/* Month Selector */}
       <div className="absolute mb-4 top-1 left-3 flex items-center gap-2">
         <label className="text-[12px]">Month:</label>
         <select
@@ -88,28 +86,31 @@ export default function ProductionTable({
         </h2>
       </div>
 
-      {/* Rows */}
+      {/* TABLE */}
       {dayChunks.map((chunk, rowIndex) => (
         <div
           key={rowIndex}
           className="mb-6 px-4 w-full flex flex-col overflow-hidden"
         >
-          {/* Date Row */}
-          <div className="flex w-full items-center  text-center">
+          {/* DATE ROW */}
+          <div className="flex w-full items-center text-center">
             <div
               style={{ width: slotWidth }}
-              className="flex-shrink-0 border h-[28px] border-y-[#025697] border-l-[#025697] border-r-white flex items-center justify-center bg-[#E5F3FD] dark:bg-gray-600 text-[10px] md:text-[12px] font-medium"
+              className="flex-shrink-0 border h-[28px] border-y-[#025697] 
+              border-l-[#025697] border-r-white py-1 bg-[#E5F3FD] 
+              dark:bg-gray-600 text-[10px] md:text-[12px] font-medium"
             >
               Date
             </div>
+
             {chunk.map((dateStr, index) => (
               <div
                 key={dateStr}
-                className={`flex-shrink-0 border h-[28px] border-y-[#025697] ${
+                className={`flex-shrink-0 border flex items-center justify-center h-[28px] border-y-[#025697] ${
                   index === chunk.length - 1
                     ? "border-r-[#025697]"
                     : "border-r-white"
-                } flex items-center justify-center bg-[#E5F3FD] dark:bg-gray-600 text-[12px] font-medium`}
+                } py-1 bg-[#E5F3FD] dark:bg-gray-600 text-[12px] font-medium`}
                 style={{ width: slotWidth }}
               >
                 {dateStr}
@@ -117,22 +118,29 @@ export default function ProductionTable({
             ))}
           </div>
 
-          {/* Dynamic data rows */}
-          {rows.map((row) => (
-            <div key={row.key} className="flex w-full items-center text-center">
+          {/* FIXED 4 DATA ROWS */}
+          {fixedRows.map((row) => (
+            <div
+              key={row.label}
+              className="flex w-full items-center text-center"
+            >
+              {/* LABEL CELL */}
               <div
                 style={{ width: slotWidth }}
-                className="flex-shrink-0 font-semibold h-[40px] border-[#025697] border-t-transparent flex items-center justify-center border text-[12px]"
+                className="flex-shrink-0 font-semibold flex items-center justify-center h-[60px] border-[#025697] 
+                border-t-transparent border text-[12px]"
               >
                 {row.label}
               </div>
+
+              {/* VALUE CELLS */}
               {chunk.map((dateStr) => (
                 <div
-                  key={dateStr + row.key}
-                  className="flex-shrink-0 border flex items-center justify-center h-[40px] border-r-[#025697] border-b-[#025697] border-t-transparent text-[12px]"
+                  key={dateStr + row.label}
+                  className="flex-shrink-0 border h-[60px] flex items-center justify-center border-r-[#025697] border-b-[#025697] border-t-transparent text-[12px]"
                   style={{ width: slotWidth }}
                 >
-                  {getValueByDate(dateStr, row.key)}
+                  {getValueByDate(dateStr, row.unit, row.type)}
                 </div>
               ))}
             </div>

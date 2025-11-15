@@ -26,7 +26,7 @@ const EnergyComparison = ({ dateRange }) => {
     "Solar Generation": "#63F4B7",
     "LT Generation": "#FF714E",
     "HT Generation": "#F8B257",
-    "WAPDA Import": "#1261a0",
+    "Wapda Import": "#1261a0",
   };
   const isMobile = window.innerWidth < 768;
 

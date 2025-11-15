@@ -6,7 +6,7 @@ export const mainMeterMapping = [
     area: "HFO",
   },
   {
-    meterName: "HFO",
+    meterName: "HFO 1",
     meterId: "U22_PLC",
     area: "HFO",
   },
@@ -44,7 +44,7 @@ export const mainMeterMapping = [
   //====================HT Room 2==================
 
   {
-    meterName: "Main Incoming Unit 5",
+    meterName: "Main Incoming (Unit 5)",
     meterId: "U21_GW03",
     area: "HT_Room2",
   },
@@ -156,7 +156,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_1",
   },
   {
-    meterName: "Compressor (119kW)",
+    meterName: "Compressor (119kW) Bypass",
     meterId: "U20_PLC",
     area: "Unit 4 LT_1",
   },
@@ -183,7 +183,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_2",
   },
   {
-    meterName: "Colony",
+    meterName: "MIlls Residential Colony & Workshop",
     meterId: "U4_GW01",
     area: "Unit 4 LT_2",
   },
@@ -194,7 +194,7 @@ export const mainMeterMapping = [
   },
   {
     meterName: "Bailing press",
-    meterId: "U6_GW01",
+    meterId: "U20_GW01",
     area: "Unit 4 LT_2",
   },
   {
@@ -264,28 +264,33 @@ export const mainMeterMapping = [
   },
   {
     meterName: "Spare",
-    meterId: "U20_GW01",
+    meterId: "U6_GW01",
     area: "Unit 4 LT_2",
   },
   {
-    meterName: "Solar 352.50 kw",
+    meterName: "Spare 2",
+    meterId: "U21_GW01",
+    area: "Unit 4 LT_2",
+  },
+  {
+    meterName: "Solar 352.50 kW",
     meterId: "U24_GW01",
     area: "Unit 4 LT_2",
   },
   {
-    meterName: "Solar 52.17 kw",
+    meterName: "Solar 52.17 kW",
     meterId: "U28_PLC",
     area: "Unit 4 LT_2",
   },
 
   //========================unit 5 lt 1========================
+  // {
+  //   meterName: "PF Panel",
+  //   meterId: "U5_GW02",
+  //   area: "Unit 5 LT_1",
+  // },
   {
-    meterName: "PF Panel",
-    meterId: "U5_GW02",
-    area: "Unit 5 LT_1",
-  },
-  {
-    meterName: "Solar 1185 Kw",
+    meterName: "Solar 1185 KW",
     meterId: "U6_GW02",
     area: "Unit 5 LT_1",
   },
@@ -320,7 +325,7 @@ export const mainMeterMapping = [
     area: "Unit 5 LT_1",
   },
   {
-    meterName: "TF # 1",
+    meterName: "T/F 1",
     meterId: "U13_GW02",
     area: "Unit 5 LT_1",
   },
@@ -365,7 +370,7 @@ export const mainMeterMapping = [
     area: "Unit 5 LT_1",
   },
   {
-    meterName: "Ring Unit 4 17-20",
+    meterName: "Ring Unit 4 (17-20)",
     meterId: "U22_GW02",
     area: "Unit 5 LT_1",
   },
@@ -441,17 +446,17 @@ export const mainMeterMapping = [
     area: "Unit 5 LT_2",
   },
   {
-    meterName: "Turbine",
+    meterName: "Deep Valve Turbine",
     meterId: "U15_GW03",
     area: "Unit 5 LT_2",
   },
   {
-    meterName: "TF # 2",
+    meterName: "T/F 2",
     meterId: "U16_GW03",
     area: "Unit 5 LT_2",
   },
   {
-    meterName: "Solar 1070 Kw",
+    meterName: "Solar 1070 KW",
     meterId: "U17_GW03",
     area: "Unit 5 LT_2",
   },

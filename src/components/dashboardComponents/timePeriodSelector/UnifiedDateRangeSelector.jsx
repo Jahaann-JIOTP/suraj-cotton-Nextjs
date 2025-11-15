@@ -96,15 +96,17 @@ export const DateRangePicker = ({
       finalRange = {
         ...customRange,
         // If time is not shown, set default times
-        ...(!showTime && { startTime: "00:00", endTime: "23:59" }),
+        ...(!showTime && { startTime: "06:00", endTime: "06:00" }),
+        selectedPeriod,
       };
     } else {
       const { startDate, endDate } = getDateRangeFromString(selectedPeriod);
       finalRange = {
         startDate,
         endDate,
-        startTime: "00:00",
-        endTime: "23:59",
+        startTime: "06:00",
+        endTime: "06:00",
+        selectedPeriod,
       };
     }
 

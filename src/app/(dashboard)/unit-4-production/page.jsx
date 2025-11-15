@@ -1,5 +1,6 @@
 "use client";
 
+import CombinedProduction from "@/components/productionComponents/CombinedProduction";
 import ProductionTable from "@/components/productionComponents/ProductionTable";
 import config from "@/constant/apiRouteList";
 import { useEffect, useRef, useState } from "react";
@@ -361,8 +362,10 @@ const Unit4Spindle = () => {
           </div>
         </form>
       </div>
+      {/* =======================singel table based on unit selection=================== */}
       <div className="p-3 mt-5 flex flex-col gap-3">
         <ProductionTable
+          title="History of daily production"
           days={daysInMonth}
           data={getProductionData}
           rows={rows}
@@ -371,6 +374,41 @@ const Unit4Spindle = () => {
           unit={productionData.unit}
         />
       </div>
+      {/* =======================separated tables for both unit 4 and 5=================== */}
+      {/* <div className="p-3 mt-5 flex flex-col gap-3">
+        <ProductionTable
+          title="Unit 4 History of daily production"
+          days={daysInMonth}
+          data={getProductionData}
+          rows={rows}
+          month={month}
+          setMonth={setMonth}
+          // unit={productionData.unit}
+          unit={"U4"}
+        />
+      </div>
+      <div className="p-3 mt-5 flex flex-col gap-3">
+        <ProductionTable
+          title="Unit 5 History of daily production"
+          days={daysInMonth}
+          data={getProductionData}
+          rows={rows}
+          month={month}
+          setMonth={setMonth}
+          // unit={productionData.unit}
+          unit={"U5"}
+        />
+      </div> */}
+      {/* =================================singel table with multiple rows=========================== */}
+      {/* <div className="p-3 mt-5 flex flex-col gap-3">
+        <CombinedProduction
+          title="Unit 5 History of daily production"
+          days={daysInMonth}
+          data={getProductionData}
+          month={month}
+          setMonth={setMonth}
+        />
+      </div> */}
     </div>
   );
 };

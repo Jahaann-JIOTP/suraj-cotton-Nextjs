@@ -16,13 +16,22 @@ const Dashboard = () => {
   const [u5Spindle, setU5Spindle] = useState(0);
   const [loading, setLoading] = useState(false);
   const [spindleLoading, setSpindleLoading] = useState(false);
-
+  const [unitCLoading, setUnitCLoading] = useState(false);
+  const [unitConsumption, setUnitConsumption] = useState({});
   const [dateRange, setDateRange] = useState({
     startDate: "",
     endDate: "",
     startTime: "",
     endTime: "",
+    selectedPeriod: "today",
   });
+  const [timeRange, setTimeRange] = useState({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+  });
+  console.log(unitConsumption);
   const handleDateRangeChange = useCallback((range) => {
     setDateRange(range);
   }, []);
@@ -102,23 +111,127 @@ const Dashboard = () => {
       setSpindleLoading(false);
     }
   };
+  // =====================fetch unit 4 and u5 consumption========================
+  const fetchUnitConsumption = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    // BLOCK API IF DATE MISSING
+    if (!timeRange.startDate || !timeRange.endDate) return null;
+
+    setUnitCLoading(true);
+
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}/energy-consumption-report/unit-only`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            start_date: timeRange.startDate,
+            end_date: timeRange.endDate,
+            start_time: timeRange.startTime,
+            end_time: timeRange.endTime,
+            suffixes: ["Del_ActiveEnergy"],
+            area: "ALL",
+          }),
+        }
+      );
+
+      const resResult = await response.json();
+      if (response.ok) {
+        setUnitConsumption(resResult);
+        setUnitCLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setUnitCLoading(false);
+    }
+  };
+
   const u4EnergyPerSpindle =
     u4Spindle > 0 ? singleDivData.U4_Consumption / u4Spindle : 0;
 
   const u5EnergyPerSpindle =
     u5Spindle > 0 ? singleDivData.U5_Consumption / u5Spindle : 0;
+  const totalEnerOutput =
+    unitConsumption?.Unit_4_Consumption +
+    unitConsumption?.Unit_5_Consumption +
+    Number(singleDivData?.Aux_consumption || 0);
+
+  console.log("toatl output", totalEnerOutput);
+  // time rnage effect
+  const updateTimeRange = (dateRange) => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    const currentTime = today.toTimeString().slice(0, 5); // HH:MM
+
+    // 1. If both dates same AND period = today
+    if (
+      dateRange.startDate === dateRange.endDate &&
+      dateRange.selectedPeriod === "today"
+    ) {
+      setTimeRange({
+        startDate: dateRange.startDate,
+        endDate: dateRange.endDate,
+        startTime: "06:00",
+        endTime: currentTime,
+      });
+      return;
+    }
+
+    // 2. If both dates same AND period = yesterday
+    if (
+      dateRange.startDate === dateRange.endDate &&
+      dateRange.selectedPeriod === "yesterday"
+    ) {
+      setTimeRange({
+        startDate: yesterday.toISOString().split("T")[0],
+        endDate: today.toISOString().split("T")[0],
+        startTime: "06:00",
+        endTime: "06:00",
+      });
+      return;
+    }
+
+    // 3. If dates NOT same
+    setTimeRange({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      startTime: "06:00",
+      endTime: "06:00",
+    });
+  };
+  useEffect(() => {
+    updateTimeRange(dateRange);
+  }, [dateRange]);
 
   useEffect(() => {
     fetchU4Spindles();
+    fetchUnitConsumption();
     fetchU5Spindles();
     fetchSingleValueData();
     const interval = setInterval(() => {
       fetchU4Spindles();
+      fetchUnitConsumption();
       fetchU5Spindles();
       fetchSingleValueData();
     }, 900000);
     return () => clearInterval(interval);
   }, [dateRange]);
+  useEffect(() => {
+    fetchUnitConsumption();
+    const interval = setInterval(() => {
+      fetchUnitConsumption();
+    }, 900000);
+    return () => clearInterval(interval);
+  }, [timeRange]);
 
   return (
     <div className="h-[81vh] overflow-y-auto relative">
@@ -149,7 +262,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="LT Generation"
-            value={Number(singleDivData.LTGeneration || 0).toLocaleString(
+            value={Number(singleDivData?.LTGeneration || 0).toLocaleString(
               "en-US"
             )}
             loading={loading}
@@ -159,7 +272,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Solar Generation"
-            value={Number(singleDivData.SolarGeneration || 0).toLocaleString(
+            value={Number(singleDivData?.SolarGeneration || 0).toLocaleString(
               "en-US"
             )}
             loading={loading}
@@ -169,7 +282,7 @@ const Dashboard = () => {
         <div className="w-full md:w-[23%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="WAPDA Import"
-            value={Number(singleDivData.WapdaImport || 0).toLocaleString(
+            value={Number(singleDivData?.WapdaImport || 0).toLocaleString(
               "en-US"
             )}
             loading={loading}
@@ -189,7 +302,7 @@ const Dashboard = () => {
                 // title="Total Generation"
                 title="In-house Generation"
                 value={Number(
-                  singleDivData.Total_Generation || 0
+                  singleDivData?.Total_Generation || 0
                 ).toLocaleString("en-US")}
                 loading={loading}
                 unit="kWh"
@@ -199,7 +312,7 @@ const Dashboard = () => {
               <SingleValueDiv
                 title="Total Energy Input"
                 value={Number(
-                  singleDivData.total_energy_input || 0
+                  singleDivData?.total_energy_input || 0
                 ).toLocaleString("en-US")}
                 loading={loading}
                 unit="kWh"
@@ -247,9 +360,12 @@ const Dashboard = () => {
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="U4 Consumption"
-            value={Number(singleDivData.U4_Consumption || 0).toLocaleString(
-              "en-US"
-            )}
+            value={
+              unitConsumption?.Unit_4_Consumption?.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }) || 0
+            }
             loading={loading}
             unit="kWh"
           />
@@ -257,9 +373,12 @@ const Dashboard = () => {
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="U5 Consumption"
-            value={Number(singleDivData.U5_Consumption || 0).toLocaleString(
-              "en-US"
-            )}
+            value={
+              unitConsumption?.Unit_5_Consumption?.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }) || 0
+            }
             loading={loading}
             unit="kWh"
           />
@@ -268,7 +387,7 @@ const Dashboard = () => {
           <SingleValueDiv
             title="HFO + JMS Auxiliary"
             loading={loading}
-            value={Number(singleDivData.Aux_consumption || 0).toLocaleString(
+            value={Number(singleDivData?.Aux_consumption || 0).toLocaleString(
               "en-US"
             )}
             unit="kWh"
@@ -277,9 +396,10 @@ const Dashboard = () => {
         <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
           <SingleValueDiv
             title="Total Energy Output"
-            value={Number(singleDivData.totalenergyoutput || 0).toLocaleString(
-              "en-US"
-            )}
+            value={(totalEnerOutput || 0).toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
             loading={loading}
             unit="kWh"
           />

@@ -347,3 +347,25 @@ input::-ms-clear {
 * {
    font-family: "Inter";
 } */
+
+
+/* ===============sliding text on header========================= */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.track {
+  display: inline-block;
+  animation: marquee 12s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
