@@ -131,7 +131,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_1",
   },
   {
-    meterName: "Drawing Simplex 1-6",
+    meterName: "Simplex",
     meterId: "U15_PLC",
     area: "Unit 4 LT_1",
   },
@@ -365,7 +365,7 @@ export const mainMeterMapping = [
     area: "Unit 5 LT_1",
   },
   {
-    meterName: "Simplex 1-5 + Breaker 1-6",
+    meterName: "Simplex + Drawing Breaker",
     meterId: "U21_GW02",
     area: "Unit 5 LT_1",
   },

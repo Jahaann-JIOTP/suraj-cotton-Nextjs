@@ -90,7 +90,7 @@ const lt1MeterData = [
   },
   {
     link: "U15_PLC",
-    title: "Drawing Simplex 1-6",
+    title: "Simplex",
     top: 603,
     left: 424,
   },
@@ -325,7 +325,7 @@ const Unit4Lt1 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../surajcotton-sld/unit4lt1.png"
+          src="../../../surajcotton-sld/unit-4-lt1-sld.png"
           className=" h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"

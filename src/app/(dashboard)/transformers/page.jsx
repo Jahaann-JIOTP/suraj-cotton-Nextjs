@@ -8,6 +8,7 @@ import { useMaintenanceCountdown } from "@/components/dashboardComponents/heatMa
 import { DateRangePicker } from "@/components/dashboardComponents/timePeriodSelector/UnifiedDateRangeSelector";
 import TestingHeatmapchart from "@/components/dashboardComponents/heatMapCharts/TestingHeatMapChart";
 import HeatmapTrafo from "@/components/dashboardComponents/heatMapCharts/TestingHeatMapChart";
+import CustomLoader from "@/components/customLoader/CustomLoader";
 
 const intervalPeriod = 60 * 60 * 1000;
 const TranformersPage = () => {
@@ -150,7 +151,6 @@ const TranformersPage = () => {
     800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000,
     2100, 2200, 2300, 2400, 2500,
   ];
-  console.log(trafo1);
   const loadMaintenanceHrs = (transformerName) => {
     const apiMap = {
       T1: {
@@ -178,7 +178,6 @@ const TranformersPage = () => {
       console.warn(`Unknown transformerName: ${transformerName}`);
     }
   };
-
   useEffect(() => {
     // Initial load for all transformers
     ["T1", "T2", "T3", "T4"].forEach(loadMaintenanceHrs);
@@ -210,7 +209,7 @@ const TranformersPage = () => {
             onChange={handleDateRangeChange}
           />
         </div>
-        {/* <HeatmapTrafo data={trafo1} /> */}
+        {/* <HeatmapTrafo data={trafo4} meter="Trafo4" loading={loading} /> */}
         <div className="flex w-full flex-wrap gap-2 mb-2">
           {/* transformer 1 */}
           <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-700 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
@@ -226,7 +225,7 @@ const TranformersPage = () => {
             <div>
               <div className="flex">
                 <div className="w-[70%] flex items-center justify-center">
-                  <HeatMapChart
+                  {/* <HeatMapChart
                     TransformerData={trafo1}
                     id="transformer1"
                     dataKey="Trafo1"
@@ -234,7 +233,18 @@ const TranformersPage = () => {
                     startRange={600}
                     endRage={2000}
                     stepGap={-8.23}
-                  />
+                  /> */}
+                  {loading === true ? (
+                    <div>
+                      <CustomLoader size="50px" />
+                    </div>
+                  ) : (
+                    <HeatmapTrafo
+                      data={trafo1}
+                      meter="Trafo1"
+                      loading={loading}
+                    />
+                  )}
                 </div>
                 <div className="w-[30%]">
                   <TransformerSide
@@ -293,7 +303,7 @@ const TranformersPage = () => {
             <div>
               <div className="flex">
                 <div className="w-[70%] flex items-center justify-center">
-                  <HeatMapChart
+                  {/* <HeatMapChart
                     TransformerData={trafo2}
                     id="transformer2"
                     dataKey="Trafo2"
@@ -301,7 +311,18 @@ const TranformersPage = () => {
                     startRange={600}
                     endRage={2000}
                     stepGap={-8.23}
-                  />
+                  /> */}
+                  {loading === true ? (
+                    <div>
+                      <CustomLoader size="50px" />
+                    </div>
+                  ) : (
+                    <HeatmapTrafo
+                      data={trafo2}
+                      meter="Trafo2"
+                      loading={loading}
+                    />
+                  )}
                 </div>
                 <div className="w-[30%]">
                   <TransformerSide
@@ -360,7 +381,7 @@ const TranformersPage = () => {
             <div>
               <div className="flex">
                 <div className="w-[70%] flex items-center justify-center">
-                  <HeatMapChart
+                  {/* <HeatMapChart
                     TransformerData={trafo3}
                     id="transformer3"
                     dataKey="Trafo3"
@@ -368,7 +389,18 @@ const TranformersPage = () => {
                     startRange={800}
                     endRage={2500}
                     stepGap={-10}
-                  />
+                  /> */}
+                  {loading === true ? (
+                    <div>
+                      <CustomLoader size="50px" />
+                    </div>
+                  ) : (
+                    <HeatmapTrafo
+                      data={trafo3}
+                      meter="Trafo3"
+                      loading={loading}
+                    />
+                  )}
                 </div>
                 <div className="w-[30%]">
                   <TransformerSide
@@ -428,7 +460,7 @@ const TranformersPage = () => {
               <div className="flex">
                 <div className="w-[70%] flex items-center justify-center">
                   {/* <HeatMapChart TransformerData={trafo4} id="transforme4" /> */}
-                  <HeatMapChart
+                  {/* <HeatMapChart
                     TransformerData={trafo4}
                     id="transformer4"
                     dataKey="Trafo4"
@@ -436,7 +468,18 @@ const TranformersPage = () => {
                     startRange={800}
                     endRage={2500}
                     stepGap={-10}
-                  />
+                  /> */}
+                  {loading === true ? (
+                    <div>
+                      <CustomLoader size="50px" />
+                    </div>
+                  ) : (
+                    <HeatmapTrafo
+                      data={trafo4}
+                      meter="Trafo4"
+                      loading={loading}
+                    />
+                  )}
                 </div>
                 <div className="w-[30%]">
                   <TransformerSide

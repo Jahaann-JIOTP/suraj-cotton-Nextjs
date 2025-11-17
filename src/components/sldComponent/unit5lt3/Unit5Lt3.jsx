@@ -90,7 +90,7 @@ const lt1MeterData = [
   },
   {
     link: "U21_GW02",
-    title: "Simplex 1-5 + Breaker 1-6",
+    title: "Simplex + Drawing Breaker",
     top: 605,
     left: 598,
   },
@@ -291,7 +291,7 @@ const Unit5Lt3 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./surajcotton-sld/unit5lt1.png"
+          src="./surajcotton-sld/unit-5-lt1-sld.png"
           className=" h-full"
           style={{ width: "1100px" }}
           alt="unit 5 lt3 sld"
