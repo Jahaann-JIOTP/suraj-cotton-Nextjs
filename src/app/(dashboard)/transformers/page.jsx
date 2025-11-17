@@ -6,7 +6,8 @@ import TransformerSide from "@/components/dashboardComponents/heatMapCharts/Tran
 import config from "@/constant/apiRouteList";
 import { useMaintenanceCountdown } from "@/components/dashboardComponents/heatMapCharts/useCountdonwTimer";
 import { DateRangePicker } from "@/components/dashboardComponents/timePeriodSelector/UnifiedDateRangeSelector";
-// import TestingHeatmapchart from "@/components/dashboardComponents/heatMapCharts/TestingHeatMapChart";
+import TestingHeatmapchart from "@/components/dashboardComponents/heatMapCharts/TestingHeatMapChart";
+import HeatmapTrafo from "@/components/dashboardComponents/heatMapCharts/TestingHeatMapChart";
 
 const intervalPeriod = 60 * 60 * 1000;
 const TranformersPage = () => {
@@ -149,7 +150,7 @@ const TranformersPage = () => {
     800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000,
     2100, 2200, 2300, 2400, 2500,
   ];
-
+  console.log(trafo1);
   const loadMaintenanceHrs = (transformerName) => {
     const apiMap = {
       T1: {
@@ -209,6 +210,7 @@ const TranformersPage = () => {
             onChange={handleDateRangeChange}
           />
         </div>
+        {/* <HeatmapTrafo data={trafo1} /> */}
         <div className="flex w-full flex-wrap gap-2 mb-2">
           {/* transformer 1 */}
           <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-700 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">

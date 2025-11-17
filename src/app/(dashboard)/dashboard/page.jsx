@@ -192,15 +192,26 @@ const Dashboard = () => {
       dateRange.selectedPeriod === "yesterday"
     ) {
       setTimeRange({
-        startDate: yesterday.toISOString().split("T")[0],
-        endDate: today.toISOString().split("T")[0],
+        startDate: dateRange.startDate, // Keep start date as it is
+        endDate: today.toISOString().split("T")[0], // End date should be today
         startTime: "06:00",
         endTime: "06:00",
       });
       return;
     }
 
-    // 3. If dates NOT same
+    // 3. If both dates same (for other cases like this week, this month)
+    if (dateRange.startDate === dateRange.endDate) {
+      setTimeRange({
+        startDate: dateRange.startDate,
+        endDate: dateRange.endDate,
+        startTime: "06:00",
+        endTime: currentTime, // Current time for today
+      });
+      return;
+    }
+
+    // 4. If dates NOT same
     setTimeRange({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
