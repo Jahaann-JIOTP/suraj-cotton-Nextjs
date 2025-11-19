@@ -66,7 +66,7 @@ const lt1MeterData = [
   },
   {
     link: "U11_GW03",
-    title: "Baling Press",
+    title: "Bailing Press",
     top: 606,
     left: 225,
   },
@@ -282,7 +282,8 @@ const Unit5Lt4 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./surajcotton-sld/unit5lt2.png"
+          // src="./surajcotton-sld/unit5lt2.png"
+          src="./surajcotton-sld/u5lt2updated.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"

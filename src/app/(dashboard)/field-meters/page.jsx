@@ -3,51 +3,8 @@ import config from "@/constant/apiRouteList";
 import Link from "next/link";
 
 import React, { useEffect, useState } from "react";
-const fieldMetersBtn = [
-  {
-    link: "U1_GW02",
-    title: "PDB1 CD1 (Field)",
-    top: 315,
-    left: 75,
-    ltScheme: "LT_1",
-  },
-  {
-    link: "U2_GW02",
-    title: "PDB2 CD2 (Field)",
-    top: 315,
-    left: 257,
-    ltScheme: "LT_1",
-  },
-  {
-    link: "U3_GW02",
-    title: "Card PDB 01 (Field)",
-    top: 315,
-    left: 430,
-    ltScheme: "LT_1",
-  },
-  {
-    link: "U4_GW02",
-    title: "PDB 08 (Field)",
-    top: 315,
-    left: 605,
-    ltScheme: "LT_1",
-  },
-  {
-    link: "U22_GW03",
-    title: "PDB 07 (Field)",
-    top: 315,
-    left: 780,
-    ltScheme: "LT_2",
-  },
-  {
-    link: "U23_GW03",
-    title: "PDB 010 (Field)",
-    top: 315,
-    left: 955,
-    ltScheme: "LT_2",
-  },
-];
-const FieldMeters = () => {
+
+const NewFieldMeter = () => {
   const [realtime, setRealtime] = useState([]);
   const [currentArea, setCurrentArea] = useState({});
   const [consumptionPerArea, setConumptionPerArea] = useState({});
@@ -58,7 +15,7 @@ const FieldMeters = () => {
   const tomorrow = nextDate.toISOString().split("T")[0];
 
   const token = localStorage.getItem("token");
-
+  console.log("current area", currentArea);
   // fetch meter area status
   const fetchMeterAreaStatus = async () => {
     if (!token) return;
@@ -135,145 +92,180 @@ const FieldMeters = () => {
   const roundedData = roundNumbersInJson(realtime);
 
   // helper function to fix to 2 decimals
-  const fix2decimals = (meter) => Number(meter.toFixed(0));
+  const fix2decimals = (meter = 0) => Number(meter.toFixed(2));
 
   const fieldMetersTags = [
+    // pdbcd1 and pdb08 meters
     {
+      title: "Card 1-4+9-12",
+      link: "U5_GW01",
+      activePowerTotalTag: roundedData?.U5_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U5_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U5_GW01_Voltage_Avg,
+      mtop: 124,
+      mleft: 55,
+      linktop: 116,
+      linkleft: 48,
+      ltScheme: "LT_1",
+    },
+    {
+      title: "Comber 1-14+Lap Former 1-3",
+      link: "U14_GW02",
+      activePowerTotalTag: roundedData?.U14_GW02_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U14_GW02_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U14_GW02_Voltage_Avg,
+      mtop: 124,
+      mleft: 291.5,
+      linktop: 116,
+      linkleft: 284,
+      ltScheme: "LT_1",
+    },
+    {
+      title: "PDBCD1",
+      link: "U1_GW02",
       activePowerTotalTag: roundedData?.U1_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U1_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U1_GW02_Voltage_Avg,
-      top: 322,
-      left: 81,
+      mtop: 346,
+      mleft: 55,
+      linktop: 338,
+      linkleft: 48,
+      ltScheme: "LT_1",
     },
     {
-      activePowerTotalTag: roundedData?.U2_GW02_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U2_GW02_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U2_GW02_Voltage_Avg,
-      top: 322,
-      left: 263,
-    },
-    {
-      activePowerTotalTag: roundedData?.U3_GW02_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U3_GW02_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U3_GW02_Voltage_Avg,
-      top: 322,
-      left: 437,
-    },
-    {
+      title: "PDB08",
+      link: "U4_GW02",
       activePowerTotalTag: roundedData?.U4_GW02_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U4_GW02_Current_Avg,
       activeVoltageAvgTag: roundedData?.U4_GW02_Voltage_Avg,
-      top: 322,
-      left: 612,
+      mtop: 346,
+      mleft: 291.5,
+      linktop: 338,
+      linkleft: 284,
+      ltScheme: "LT_1",
+    },
+    // // pdbcd2 and pdb01
+    {
+      title: "Card 5-8+13-14+Breaker 5-6",
+      link: "U9_GW01",
+      activePowerTotalTag: roundedData?.U9_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U9_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U9_GW01_Voltage_Avg,
+      mtop: 124,
+      mleft: 565.5,
+      linktop: 116,
+      linkleft: 559,
+      ltScheme: "LT_1",
     },
     {
-      activePowerTotalTag: roundedData?.U22_GW03_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U22_GW03_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U22_GW03_Voltage_Avg,
-      top: 322,
-      left: 787,
+      title: "Card 8-14",
+      link: "U17_GW02",
+      activePowerTotalTag: roundedData?.U17_GW02_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U17_GW02_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U17_GW02_Voltage_Avg,
+      mtop: 124,
+      mleft: 801,
+      linktop: 116,
+      linkleft: 794,
+      ltScheme: "LT_1",
     },
     {
+      title: "PDBCD2",
+      link: "U2_GW02",
+      activePowerTotalTag: roundedData?.U2_GW02_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U2_GW02_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U2_GW02_Voltage_Avg,
+      mtop: 346.5,
+      mleft: 565.5,
+      linktop: 338,
+      linkleft: 559,
+      ltScheme: "LT_1",
+    },
+    {
+      title: "PDB 01",
+      link: "U3_GW02",
+      activePowerTotalTag: roundedData?.U3_GW02_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U3_GW02_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U3_GW02_Voltage_Avg,
+      mtop: 346.5,
+      mleft: 801,
+      linktop: 338,
+      linkleft: 794,
+      ltScheme: "LT_1",
+    },
+    // // pdb 10 meters
+    {
+      title: "Ring 5-8",
+      link: "U15_GW01",
+      activePowerTotalTag: roundedData?.U15_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U15_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U15_GW01_Voltage_Avg,
+      mtop: 124,
+      mleft: 1108.5,
+      linktop: 116,
+      linkleft: 1102,
+      ltScheme: "LT_1",
+    },
+    {
+      title: "Winding 10-18",
+      link: "U10_GW03",
+      activePowerTotalTag: roundedData?.U10_GW03_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U10_GW03_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U10_GW03_Voltage_Avg,
+      mtop: 122,
+      mleft: 1356.5,
+      linktop: 114,
+      linkleft: 1349.5,
+      ltScheme: "LT_1",
+    },
+    {
+      title: "PDB 10",
+      link: "U23_GW03",
       activePowerTotalTag: roundedData?.U23_GW03_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U23_GW03_Current_Avg,
       activeVoltageAvgTag: roundedData?.U23_GW03_Voltage_Avg,
-      top: 322,
-      left: 962,
+      mtop: 350,
+      mleft: 1260,
+      linktop: 343,
+      linkleft: 1252,
+      ltScheme: "LT_1",
     },
-  ];
-  const unitConsumption = [
+    // // PDB 07 meters
     {
-      unit4Consumption: consumptionPerArea?.U4_U1_GW02_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U1_GW02_Del_ActiveEnergy ?? 0,
-      unit4Top: 228.4,
-      unit4Left: 36,
-      unit5Top: 228.4,
-      unit5Left: 114.5,
-    },
-    {
-      unit4Consumption: consumptionPerArea?.U4_U2_GW02_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U2_GW02_Del_ActiveEnergy ?? 0,
-      unit4Top: 228.4,
-      unit4Left: 226,
-      unit5Top: 228.4,
-      unit5Left: 304,
+      title: "Ring 21-24",
+      link: "U12_PLC",
+      activePowerTotalTag: roundedData?.U12_PLC_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U12_PLC_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U12_PLC_Voltage_Avg,
+      mtop: 124,
+      mleft: 1570.5,
+      linktop: 116,
+      linkleft: 1564,
+      ltScheme: "LT_1",
     },
     {
-      unit4Consumption: consumptionPerArea?.U4_U3_GW02_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U3_GW02_Del_ActiveEnergy ?? 0,
-      unit4Top: 228.4,
-      unit4Left: 397.5,
-      unit5Top: 228.4,
-      unit5Left: 477,
+      title: "Winding 1-9",
+      link: "U18_GW02",
+      activePowerTotalTag: roundedData?.U18_GW02_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U18_GW02_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U18_GW02_Voltage_Avg,
+      mtop: 122,
+      mleft: 1817.5,
+      linktop: 114,
+      linkleft: 1810,
+      ltScheme: "LT_1",
     },
     {
-      unit4Consumption: consumptionPerArea?.U4_U4_GW02_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U4_GW02_Del_ActiveEnergy ?? 0,
-      unit4Top: 228.4,
-      unit4Left: 567.8,
-      unit5Top: 228,
-      unit5Left: 650.3,
-    },
-    {
-      unit4Consumption: consumptionPerArea?.U4_U22_GW03_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U22_GW03_Del_ActiveEnergy ?? 0,
-      unit4Top: 228,
-      unit4Left: 746.6,
-      unit5Top: 228,
-      unit5Left: 826,
-    },
-    {
-      unit4Consumption: consumptionPerArea?.U4_U23_GW03_Del_ActiveEnergy ?? 0,
-      unit5Consumption: consumptionPerArea?.U5_U23_GW03_Del_ActiveEnergy ?? 0,
-      unit4Top: 228,
-      unit4Left: 922.2,
-      unit5Top: 228,
-      unit5Left: 1002,
-    },
-  ];
-
-  const areaOnOffStatusLabels = [
-    {
-      key: "U1_GW02",
-      slots: [
-        { id: 1, top: 105, leftOn: 54, leftOff: 130, w: 25 },
-        { id: 2, top: 260, leftOn: 71, leftOff: 107, w: 36 },
-      ],
-    },
-    {
-      key: "U2_GW02",
-      slots: [
-        { id: 1, top: 105, leftOn: 243, leftOff: 320, w: 25 },
-        { id: 2, top: 260, leftOn: 254, leftOff: 289, w: 36 },
-      ],
-    },
-    {
-      key: "U3_GW02",
-      slots: [
-        { id: 1, top: 105, leftOn: 412, leftOff: 492, w: 25 },
-        { id: 2, top: 260, leftOn: 427, leftOff: 463, w: 36 },
-      ],
-    },
-    {
-      key: "U4_GW02",
-      slots: [
-        { id: 1, top: 105, leftOn: 585, leftOff: 665, w: 25 },
-        { id: 2, top: 260, leftOn: 602, leftOff: 638, w: 36 },
-      ],
-    },
-    {
-      key: "U22_GW03",
-      slots: [
-        { id: 1, top: 105, leftOn: 762, leftOff: 840, w: 25 },
-        { id: 2, top: 260, leftOn: 777, leftOff: 813, w: 36 },
-      ],
-    },
-    {
-      key: "U23_GW03",
-      slots: [
-        { id: 1, top: 105, leftOn: 938, leftOff: 1015, w: 25 },
-        { id: 2, top: 260, leftOn: 953, leftOff: 989, w: 36 },
-      ],
+      title: "PDB 07",
+      link: "U22_GW03",
+      activePowerTotalTag: roundedData?.U22_GW03_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U22_GW03_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U22_GW03_Voltage_Avg,
+      mtop: 351,
+      mleft: 1719.5,
+      linktop: 343,
+      linkleft: 1712,
+      ltScheme: "LT_1",
     },
   ];
 
@@ -317,133 +309,43 @@ const FieldMeters = () => {
   }, []);
   return (
     <div className="w-full h-[81vh] bg-white dark:bg-gray-800 rounded-md border-t-3 p-5 border-[#1F5897] overflow-auto ">
-      <div className="relative h-full mx-auto" style={{ width: "1100px" }}>
-        {fieldMetersBtn.map((meter) => {
+      <div className="relative h-full mx-auto" style={{ width: "1900px" }}>
+        {fieldMetersTags.map((meter) => {
           return (
             <Link
               key={meter.link}
               href={`/meter?area=Unit_5&page-type=field-meter&LT_selections=${meter.ltScheme}&meter_id=${meter.link}&meter_name=${meter.title}`}
               style={{
                 position: "absolute",
-                top: `${meter.top}px`,
-                left: `${meter.left}px`,
-                width: "64px",
-                height: "59px",
+                top: `${meter.linktop}px`,
+                left: `${meter.linkleft}px`,
+                width: "72px",
+                height: "68px",
                 zIndex: 100,
-                borderRadius: "0.4.2rem", // rounded-md
+                borderRadius: "0.4.2rem",
                 cursor: "pointer",
               }}
               className={`rounded-md`}
             ></Link>
           );
         })}
-        {/* Diagram Image */}
         <img
-          src="./sld/fieldmeternew.png"
+          src="./fieldMeterStatus/fmsldupdated.png"
           className=""
-          style={{ width: "1100px" }}
+          style={{ width: "1900px" }}
           alt="unit 4 sld"
         />
 
-        {/* //============================= */}
-
-        {areaOnOffStatusLabels.map(({ key, slots }) => (
-          <React.Fragment key={key}>
-            {slots.map(({ id, top, leftOn, leftOff, w }) => {
-              const areaValue = currentArea[key]; // 4 or 5
-
-              // Default images
-              let imgOn = `offmeter${id}.png`;
-              let imgOff = `offmeter${id}.png`;
-
-              // Assign correct images
-              if (areaValue === 4) {
-                imgOn = `onmeter${id}.png`;
-              } else if (areaValue === 5) {
-                imgOff = `onmeter${id}.png`;
-              }
-
-              // ✅ Rotate only meter2 images on unit 5 (X axis)
-              const needsRotation = areaValue === 5 && id === 2;
-
-              const rotationStyle = needsRotation
-                ? { transform: "rotateY(180deg)" }
-                : {};
-
-              return (
-                <React.Fragment key={`${key}-${id}`}>
-                  {/* First slot (ON side) */}
-                  <div
-                    className="absolute"
-                    style={{ top: `${top}px`, left: `${leftOn}px` }}
-                  >
-                    <img
-                      src={`./fieldMeterStatus/${imgOn}`}
-                      style={{ width: `${w}px`, ...rotationStyle }}
-                      alt=""
-                    />
-                  </div>
-
-                  {/* Second slot (OFF side) */}
-                  <div
-                    className="absolute"
-                    style={{ top: `${top}px`, left: `${leftOff}px` }}
-                  >
-                    <img
-                      src={`./fieldMeterStatus/${imgOff}`}
-                      style={{ width: `${w}px`, ...rotationStyle }}
-                      alt=""
-                    />
-                  </div>
-                </React.Fragment>
-              );
-            })}
-          </React.Fragment>
-        ))}
-
-        {/* per unit reading */}
-        {unitConsumption.map((unit, index) => (
-          <div key={index}>
-            <div
-              className="absolute font-fira-mono mt-[1px] flex items-center justify-center"
-              style={{
-                fontSize: "11px",
-                color: "#05f805",
-                fontWeight: 500,
-                left: unit.unit4Left,
-                top: unit.unit4Top,
-                width: "42.2px",
-                height: "19px",
-              }}
-            >
-              {fix2decimals(unit.unit4Consumption ?? 0) || "00.00"}
-            </div>
-            <div
-              className="absolute font-fira-mono mt-[1px] flex items-center justify-center"
-              style={{
-                fontSize: "11px",
-                color: "#05f805",
-                fontWeight: 500,
-                left: unit.unit5Left,
-                top: unit.unit5Top,
-                width: "42.2px",
-                height: "19px",
-              }}
-            >
-              {fix2decimals(unit.unit5Consumption) || "00.00"}
-            </div>
-          </div>
-        ))}
         {/* Meter Readings */}
         {fieldMetersTags.map((meter, index) => (
           <div
             key={index}
             className="absolute flex flex-col items-center justify-between z-40"
             style={{
-              top: `${meter.top}px`,
-              left: `${meter.left}px`,
-              width: "40.5px",
-              height: "47px",
+              top: `${meter.mtop}px`,
+              left: `${meter.mleft}px`,
+              width: "45px",
+              height: "53px",
             }}
           >
             <span
@@ -455,7 +357,7 @@ const FieldMeters = () => {
                 marginTop: "",
               }}
             >
-              {meter.activePowerTotalTag || "00.00"}
+              {fix2decimals(meter.activePowerTotalTag) || "00.00"}
             </span>
             <span
               className="font-fira-mono mt-[-0.5px]"
@@ -466,7 +368,7 @@ const FieldMeters = () => {
                 marginTop: "",
               }}
             >
-              {meter.activeCurrentAvgTag || "00.00"}
+              {fix2decimals(meter.activeCurrentAvgTag) || "00.00"}
             </span>
             <span
               className="font-fira-mono"
@@ -477,13 +379,114 @@ const FieldMeters = () => {
                 marginTop: "",
               }}
             >
-              {meter.activeVoltageAvgTag || "00.00"}
+              {fix2decimals(meter.activeVoltageAvgTag) || "00.00"}
             </span>
           </div>
         ))}
+        {/* meter status */}
+
+        <div>
+          {/* card 1-4 + 9-12 */}
+          <img
+            src={`./fieldMeterStatus/${
+              currentArea.U1_GW02 === 4 ? "g" : "r"
+            }1.png`}
+            className="w-[38px] absolute top-[184px] left-[65px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              // currentArea.U4_GW02 === 4 ? "g" : "r"
+              currentArea.U1_GW02 === 5 ? "g" : "r"
+            }1.png`}
+            className="w-[38px] absolute top-[184px] left-[302px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              currentArea.U2_GW02 === 4 ? "g" : "r"
+            }1.png`}
+            className="w-[38px] absolute top-[184px] left-[575px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              // currentArea.U3_GW02 === 4 ? "g" : "r"
+              currentArea.U2_GW02 === 5 ? "g" : "r"
+            }1.png`}
+            className="w-[38px] absolute top-[184px] left-[812px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              currentArea.U23_GW03 === 4 ? "g" : "r"
+            }5.png`}
+            className="h-[179.5px] absolute top-[233px] left-[1002.5px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              currentArea.U23_GW03 === 4 ? "g" : "r"
+            }4.png`}
+            className="w-[120px] h-[51px] absolute top-[185px] left-[1018px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              currentArea.U23_GW03 === 4 ? "g" : "r"
+            }4.png`}
+            className="w-[155px] h-[51px] absolute rotate-y-180 top-[185px] left-[1134.5px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/g6.png`}
+            className="h-[107px] absolute rotate-y-180 top-[233px] left-[1270px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              currentArea.U23_GW03 === 5 ? "g" : "r"
+            }4.png`}
+            className="w-[98px] h-[53px] absolute top-[183px] left-[1288px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              currentArea.U22_GW03 === 4 ? "g" : "r"
+            }5.png`}
+            className="h-[179.5px] absolute top-[233px] left-[1463px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              currentArea.U22_GW03 === 4 ? "g" : "r"
+            }4.png`}
+            className="w-[120px] h-[51px] absolute top-[185px] left-[1478px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              currentArea.U22_GW03 === 4 ? "g" : "r"
+            }4.png`}
+            className="w-[155px] h-[51px] absolute rotate-y-180 top-[185px] left-[1594.5px]"
+            alt=""
+          />
+          <img
+            src="./fieldMeterStatus/g6.png"
+            className="h-[107px] absolute rotate-y-180 top-[233px] left-[1730px]"
+            alt=""
+          />
+          <img
+            src={`./fieldMeterStatus/${
+              currentArea.U22_GW03 === 5 ? "g" : "r"
+            }4.png`}
+            className="w-[98px] h-[53px] absolute top-[183px] left-[1748px]"
+            alt=""
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-export default FieldMeters;
+export default NewFieldMeter;

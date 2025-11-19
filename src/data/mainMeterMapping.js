@@ -131,7 +131,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_1",
   },
   {
-    meterName: "Simplex",
+    meterName: "Simplex 1-6",
     meterId: "U15_PLC",
     area: "Unit 4 LT_1",
   },
@@ -224,7 +224,7 @@ export const mainMeterMapping = [
   },
   {
     meterName: "B/Card + Comber Filter",
-    meterId: "U12_GW01",
+    meterId: "U14_GW01",
     area: "Unit 4 LT_2",
   },
   {
@@ -234,7 +234,7 @@ export const mainMeterMapping = [
   },
   {
     meterName: "B/Card + Comber Filter Bypass",
-    meterId: "U14_GW01",
+    meterId: "U12_GW01",
     area: "Unit 4 LT_2",
   },
   {
@@ -426,7 +426,7 @@ export const mainMeterMapping = [
     area: "Unit 5 LT_2",
   },
   {
-    meterName: "Baling Press",
+    meterName: "Bailing Press",
     meterId: "U11_GW03",
     area: "Unit 5 LT_2",
   },

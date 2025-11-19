@@ -6,30 +6,40 @@ import Swal from "sweetalert2";
 // Meters with display name and ID
 const meters = [
   {
-    name: "PDB1 CD1 + PDB 08",
+    name: "PDB1 CD1",
     id: "U1_GW02",
-    u4buttonText: "LT2-Card (1-4)(9-12)",
-    u5buttonText: "LT1-Comber M/C 1-14",
+    u4buttonText: "LT2-Card 1-4+9-12",
+    u5buttonText: "LT1-Comber 1-14+Lap former 1-3",
   },
   {
-    name: "PDB2 CD2 + Card PDB 01",
+    name: "PDB2 CD2",
     id: "U2_GW02",
-    u4buttonText: "LT2-Card (5-8)(13-14)",
-    u5buttonText: "LT1-Card M/C 8-14",
+    u4buttonText: "LT2-Card 5-8+13-14+Breaker 5-6",
+    u5buttonText: "LT1-Card 8-14",
   },
-  // { name: "Card PDB 01", id: "U3_GW02" },
-  // { name: "PDB 08", id: "U4_GW02" },
+  {
+    u4buttonText: "LT2-Card 5-8+13-14+Breaker 5-6",
+    u5buttonText: "LT1-Card 8-14",
+    name: "Card PDB 01",
+    id: "U3_GW02",
+  },
+  {
+    u4buttonText: "  LT1-Ring 21-24",
+    u5buttonText: "LT1-Winding 1-9",
+    name: "PDB 08",
+    id: "U4_GW02",
+  },
   {
     name: "PDB 07",
     id: "U22_GW03",
     u4buttonText: "LT1-Ring 21-24",
-    u5buttonText: "LT1-Auto Cone 1-9",
+    u5buttonText: "LT1-Winding 1-9",
   },
   {
     name: "PDB 10",
     id: "U23_GW03",
     u4buttonText: "LT2-Ring 5-8",
-    u5buttonText: "LT2-Auto Cone 10-18",
+    u5buttonText: "LT2-Winding 10-18",
   },
 ];
 

@@ -12,10 +12,7 @@ import { DateRangePicker } from "@/components/dashboardComponents/timePeriodSele
 
 const Dashboard = () => {
   const [singleDivData, setSingleDivData] = useState({});
-  const [u4Spindle, setU4Spindle] = useState(0);
-  const [u5Spindle, setU5Spindle] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [spindleLoading, setSpindleLoading] = useState(false);
   const [unitCLoading, setUnitCLoading] = useState(false);
   const [unitConsumption, setUnitConsumption] = useState({});
   const [dateRange, setDateRange] = useState({
@@ -61,56 +58,6 @@ const Dashboard = () => {
       console.error(error.message);
     }
   };
-  // ======================fetch unit 4 spindle===========================
-  const fetchU4Spindles = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      setSpindleLoading(true);
-      const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&unit=U4`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const resResult = await response.json();
-      if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
-        setU4Spindle(resResult[0].totalProduction);
-      }
-    } catch (error) {
-      console.error(error.message);
-    } finally {
-      setSpindleLoading(false);
-    }
-  };
-  // ======================fetch unit 5 spindle ==============================
-  const fetchU5Spindles = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      setSpindleLoading(true);
-      const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.GET_SPINDLES}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&unit=U5`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const resResult = await response.json();
-      if (response.ok && Array.isArray(resResult) && resResult.length > 0) {
-        setU5Spindle(resResult[0].totalProduction);
-      }
-    } catch (error) {
-      console.error(error.message);
-    } finally {
-      setSpindleLoading(false);
-    }
-  };
   // =====================fetch unit 4 and u5 consumption========================
   const fetchUnitConsumption = async () => {
     const token = localStorage.getItem("token");
@@ -153,11 +100,6 @@ const Dashboard = () => {
     }
   };
 
-  const u4EnergyPerSpindle =
-    u4Spindle > 0 ? singleDivData.U4_Consumption / u4Spindle : 0;
-
-  const u5EnergyPerSpindle =
-    u5Spindle > 0 ? singleDivData.U5_Consumption / u5Spindle : 0;
   const totalEnerOutput =
     unitConsumption?.Unit_4_Consumption +
     unitConsumption?.Unit_5_Consumption +
@@ -224,14 +166,10 @@ const Dashboard = () => {
   }, [dateRange]);
 
   useEffect(() => {
-    fetchU4Spindles();
     fetchUnitConsumption();
-    fetchU5Spindles();
     fetchSingleValueData();
     const interval = setInterval(() => {
-      fetchU4Spindles();
       fetchUnitConsumption();
-      fetchU5Spindles();
       fetchSingleValueData();
     }, 900000);
     return () => clearInterval(interval);
@@ -346,20 +284,32 @@ const Dashboard = () => {
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
                 title="Energy/Bags(U4)"
-                value={Number(u4EnergyPerSpindle || 0)
-                  .toFixed(2)
-                  .toLocaleString("en-US")}
-                loading={spindleLoading}
+                value={
+                  unitConsumption?.Unit_4_ConsumptionPerBag?.toLocaleString(
+                    "en-US",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  ) || 0
+                }
+                loading={loading}
                 unit="kWh"
               />
             </div>
             <div className="w-full md:w-[48.7%]">
               <SingleValueDiv
                 title="Energy/Bags(U5)"
-                value={Number(u5EnergyPerSpindle || 0)
-                  .toFixed(2)
-                  .toLocaleString("en-US")}
-                loading={spindleLoading}
+                value={
+                  unitConsumption?.Unit_5_ConsumptionPerBag?.toLocaleString(
+                    "en-US",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  ) || 0
+                }
+                loading={loading}
                 unit="kWh"
               />
             </div>

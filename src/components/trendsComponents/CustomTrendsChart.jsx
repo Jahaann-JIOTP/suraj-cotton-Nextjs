@@ -16,9 +16,9 @@ const predefinedColors = [
   "#ff7f0e",
   "#2ca02c",
   "#B0C01A",
-  "#d62727ff",
+  "#9b0202ff",
   "#FFB000",
-  "#8b043cff",
+  "#50048bff",
 ];
 
 const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {

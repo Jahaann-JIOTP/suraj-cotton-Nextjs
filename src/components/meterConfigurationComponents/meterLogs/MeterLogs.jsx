@@ -3,12 +3,12 @@ import config from "@/constant/apiRouteList";
 import React, { useEffect, useState } from "react";
 
 const meters = [
-   { name: "Autocone 10-18", id: "U22_GW03" },
-  { name: "Autoconde 1-9", id: "U23_GW03" },
-  { name: "Carding DB 1~14", id: "U3_GW02" },
-  { name: "Card DB 01", id: "U1_GW02" },
-  { name: "Card DB 02", id: "U2_GW02" },
-  { name: "Comber 1-14", id: "U4_GW02" },
+  { name: "PDB1 CD1", id: "U1_GW02" },
+  { name: "PDB2 CD2", id: "U2_GW02" },
+  { name: "Card PDB 01", id: "U3_GW02" },
+  { name: "PDB 08", id: "U4_GW02" },
+  { name: "PDB 07", id: "U22_GW03" },
+  { name: "PDB 010", id: "U23_GW03" },
 ];
 
 const MeterLogs = () => {
@@ -73,7 +73,7 @@ const MeterLogs = () => {
                     <th className="border-1 border-gray-300 dark:border-gray-500  w-[10%] py-1 text-[12px] font-inter font-semibold">
                       No.
                     </th>
-                     <th className="border-1 border-gray-300 dark:border-gray-500 w-[20%] py-1 text-[12px] font-inter font-semibold">
+                    <th className="border-1 border-gray-300 dark:border-gray-500 w-[20%] py-1 text-[12px] font-inter font-semibold">
                       Updated At
                     </th>
                     {/* <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[15%] py-1">
@@ -91,7 +91,6 @@ const MeterLogs = () => {
                     {/* <th className="border-1 border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-400 w-[25%] py-1">
                       User Email
                     </th> */}
-                   
                   </tr>
                 </thead>
                 <tbody>
@@ -114,7 +113,17 @@ const MeterLogs = () => {
                             {getMeterName(log.meterId)}
                           </td> */}
                           <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 w-[50%] text-center text-[12px] font-inter font-400">
-                            <strong className="text-[#1F5897]">{getMeterName(log.meterId)}</strong> switched from <strong className="text-[#1F5897]">{log.area ==="unit4"? "Unit 5" :"Unit 4"}</strong> to <strong className="text-[#1F5897]">{log.area ==="unit4"? "Unit 4" :"Unit 5"}</strong>
+                            <strong className="text-[#1F5897]">
+                              {getMeterName(log.meterId)}
+                            </strong>{" "}
+                            switched from{" "}
+                            <strong className="text-[#1F5897]">
+                              {log.area === "unit4" ? "Unit 5" : "Unit 4"}
+                            </strong>{" "}
+                            to{" "}
+                            <strong className="text-[#1F5897]">
+                              {log.area === "unit4" ? "Unit 4" : "Unit 5"}
+                            </strong>
                           </td>
                           {/* <td className="border-1 border-gray-300 capitalize dark:border-gray-500 py-1 text-center">
                             {log.area === "unit4" ? "Unit 4" : "Unit 5"}
@@ -125,7 +134,6 @@ const MeterLogs = () => {
                           {/* <td className="border-1 border-gray-300 dark:border-gray-500 py-1 text-center">
                             {log.email}
                           </td> */}
-                          
                         </tr>
                       );
                     })

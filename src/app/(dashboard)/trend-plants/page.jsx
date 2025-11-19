@@ -9,26 +9,25 @@ import VoltageChart from "@/components/trendsComponents/VoltageChart";
 
 import { useState } from "react";
 
-
 const Plants = () => {
   const today = new Date().toISOString().split("T")[0];
   const [chartStates, setChartStates] = useState({
-  energy: { start: today, end: today, fullscreen: false },
-  power: { start: today, end: today, fullscreen: false },
-  voltage: { start: today, end: today, fullscreen: false },
-  current: { start: today, end: today, fullscreen: false },
-  powerFactor: { start: today, end: today, fullscreen: false },
-  harmonics: { start: today, end: today, fullscreen: false },
-});
+    energy: { start: today, end: today, fullscreen: false },
+    power: { start: today, end: today, fullscreen: false },
+    voltage: { start: today, end: today, fullscreen: false },
+    current: { start: today, end: today, fullscreen: false },
+    powerFactor: { start: today, end: today, fullscreen: false },
+    harmonics: { start: today, end: today, fullscreen: false },
+  });
 
-const updateChartState = (key, field, value)=>{
-  setChartStates((prev)=>({
-    ...prev,
-    [key]:{...prev[key],[field]:value}
-  }))
-}
+  const updateChartState = (key, field, value) => {
+    setChartStates((prev) => ({
+      ...prev,
+      [key]: { ...prev[key], [field]: value },
+    }));
+  };
 
- const charts = [
+  const charts = [
     { id: "energy", title: "PLANTS - ENERGY USAGE", Chart: EnergyChart },
     {
       id: "power",
@@ -49,21 +48,20 @@ const updateChartState = (key, field, value)=>{
     },
   ];
 
-
   return (
     <div className="h-[81vh] py-[1px] overflow-y-auto space-y-3">
       {charts.map(({ id, title, Chart }) => (
-              <ChartCard
-              area="Plants"
-                key={id}
-                id={id}
-                chartId={id}
-                title={title}
-                ChartComponent={Chart}
-                state={chartStates[id]}
-                onChange={updateChartState}
-              />
-            ))}
+        <ChartCard
+          area="Plants"
+          key={id}
+          id={id}
+          chartId={id}
+          title={title}
+          ChartComponent={Chart}
+          state={chartStates[id]}
+          onChange={updateChartState}
+        />
+      ))}
     </div>
   );
 };

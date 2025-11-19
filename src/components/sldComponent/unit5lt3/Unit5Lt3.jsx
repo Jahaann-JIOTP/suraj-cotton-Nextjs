@@ -60,7 +60,7 @@ const lt1MeterData = [
   },
   {
     link: "U16_GW02",
-    title: "Water Chiller",
+    title: "PF Panel",
     top: 501,
     left: 159,
   },
@@ -291,7 +291,7 @@ const Unit5Lt3 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="./surajcotton-sld/unit-5-lt1-sld.png"
+          src="./surajcotton-sld/u5lt1updated.png"
           className=" h-full"
           style={{ width: "1100px" }}
           alt="unit 5 lt3 sld"

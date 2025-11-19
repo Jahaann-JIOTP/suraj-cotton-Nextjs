@@ -263,6 +263,12 @@ export const sidebarLinksMap = {
           href: "/field-meters",
           icon: BsFillDiagram3Fill,
         },
+        // {
+        //   id: 2,
+        //   title: "New Field Meters",
+        //   href: "/new-field-meter",
+        //   icon: BsFillDiagram3Fill,
+        // },
       ],
     },
   ],

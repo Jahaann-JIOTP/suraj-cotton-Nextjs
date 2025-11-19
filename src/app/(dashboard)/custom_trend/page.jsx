@@ -14,10 +14,11 @@ import CustomLoader from "@/components/customLoader/CustomLoader";
 import { loadImageAsBase64 } from "@/utils/imageToBase64";
 import { FaRegFileExcel, FaRegFilePdf } from "react-icons/fa";
 import { Tooltip } from "@mui/material";
-import DynamicEChart from "@/components/trendsComponents/EchartSample";
+
 import CustomTrendChart from "@/components/trendsComponents/CustomTrendsChart";
-import DynamicLineChart from "@/components/trendsComponents/NewTestingChart";
-import SimpleAm4Chart from "@/components/trendsComponents/NewTestingChart";
+
+import ReusableTrendChart from "@/components/trendsComponents/NewTestingChart";
+
 function CustomTrend() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -616,7 +617,7 @@ function CustomTrend() {
         `trend_data_${selectedParameter}_${startDate}_to_${endDate}.pdf`
       );
   };
-  console.log(chartData.length);
+  console.log(chartData);
   return (
     <div className="relative bg-white shadow dark:bg-gray-800 rounded-md border-t-3 border-[#025697] overflow-y-auto h-[87vh] md:h-[81vh] px-4 py-3">
       <div className="relative z-10 h-full flex flex-col">
@@ -868,10 +869,10 @@ function CustomTrend() {
                   data={chartData}
                   yAxisLabel={selectedParameter}
                 />
-                {/* <DynamicEChart data={chartData} param={selectedParameter} /> */}
-                {/* <SimpleAm4Chart
+
+                {/* <ReusableTrendChart
+                  yAxisTitle={selectedParameter}
                   data={chartData}
-                  yAxisLabel={selectedParameter}
                 /> */}
               </div>
             )}

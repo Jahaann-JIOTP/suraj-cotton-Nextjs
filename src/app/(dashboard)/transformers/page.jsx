@@ -209,10 +209,9 @@ const TranformersPage = () => {
             onChange={handleDateRangeChange}
           />
         </div>
-        {/* <HeatmapTrafo data={trafo4} meter="Trafo4" loading={loading} /> */}
         <div className="flex w-full flex-wrap gap-2 mb-2">
           {/* transformer 1 */}
-          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-700 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
+          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
             <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
@@ -225,15 +224,6 @@ const TranformersPage = () => {
             <div>
               <div className="flex">
                 <div className="w-[70%] flex items-center justify-center">
-                  {/* <HeatMapChart
-                    TransformerData={trafo1}
-                    id="transformer1"
-                    dataKey="Trafo1"
-                    loading={loading}
-                    startRange={600}
-                    endRage={2000}
-                    stepGap={-8.23}
-                  /> */}
                   {loading === true ? (
                     <div>
                       <CustomLoader size="50px" />
@@ -242,7 +232,8 @@ const TranformersPage = () => {
                     <HeatmapTrafo
                       data={trafo1}
                       meter="Trafo1"
-                      loading={loading}
+                      startRange={600}
+                      endRange={2200}
                     />
                   )}
                 </div>
@@ -290,7 +281,7 @@ const TranformersPage = () => {
             </div>
           </div>
           {/* transformer 2 */}
-          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-700 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
+          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
             <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
@@ -303,15 +294,6 @@ const TranformersPage = () => {
             <div>
               <div className="flex">
                 <div className="w-[70%] flex items-center justify-center">
-                  {/* <HeatMapChart
-                    TransformerData={trafo2}
-                    id="transformer2"
-                    dataKey="Trafo2"
-                    loading={loading}
-                    startRange={600}
-                    endRage={2000}
-                    stepGap={-8.23}
-                  /> */}
                   {loading === true ? (
                     <div>
                       <CustomLoader size="50px" />
@@ -320,7 +302,8 @@ const TranformersPage = () => {
                     <HeatmapTrafo
                       data={trafo2}
                       meter="Trafo2"
-                      loading={loading}
+                      startRange={600}
+                      endRange={2200}
                     />
                   )}
                 </div>
@@ -368,7 +351,7 @@ const TranformersPage = () => {
             </div>
           </div>
           {/* transformer 3 */}
-          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-700 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
+          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
             <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
@@ -381,15 +364,6 @@ const TranformersPage = () => {
             <div>
               <div className="flex">
                 <div className="w-[70%] flex items-center justify-center">
-                  {/* <HeatMapChart
-                    TransformerData={trafo3}
-                    id="transformer3"
-                    dataKey="Trafo3"
-                    loading={loading}
-                    startRange={800}
-                    endRage={2500}
-                    stepGap={-10}
-                  /> */}
                   {loading === true ? (
                     <div>
                       <CustomLoader size="50px" />
@@ -398,7 +372,8 @@ const TranformersPage = () => {
                     <HeatmapTrafo
                       data={trafo3}
                       meter="Trafo3"
-                      loading={loading}
+                      startRange={800}
+                      endRange={2500}
                     />
                   )}
                 </div>
@@ -446,7 +421,7 @@ const TranformersPage = () => {
             </div>
           </div>
           {/* transformer 4 */}
-          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-700 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
+          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
             <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
               <img src="../../../heatmapIcon.png" alt="" />
               <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
@@ -459,16 +434,6 @@ const TranformersPage = () => {
             <div>
               <div className="flex">
                 <div className="w-[70%] flex items-center justify-center">
-                  {/* <HeatMapChart TransformerData={trafo4} id="transforme4" /> */}
-                  {/* <HeatMapChart
-                    TransformerData={trafo4}
-                    id="transformer4"
-                    dataKey="Trafo4"
-                    loading={loading}
-                    startRange={800}
-                    endRage={2500}
-                    stepGap={-10}
-                  /> */}
                   {loading === true ? (
                     <div>
                       <CustomLoader size="50px" />
@@ -477,7 +442,8 @@ const TranformersPage = () => {
                     <HeatmapTrafo
                       data={trafo4}
                       meter="Trafo4"
-                      loading={loading}
+                      startRange={800}
+                      endRange={2500}
                     />
                   )}
                 </div>

@@ -65,13 +65,13 @@ const lt2MeterData = [
     left: 886,
   },
   {
-    link: "U12_GW01",
+    link: "U14_GW01",
     title: "B/Card Filter + Comber Filter",
     top: 492,
     left: 92,
   },
   {
-    link: "U14_GW01",
+    link: "U12_GW01",
     title: "B/Card + Comber Filter Bypass",
     top: 593,
     left: 191,
@@ -96,7 +96,7 @@ const lt2MeterData = [
   },
   {
     link: "U20_GW01",
-    title: "Baling Press",
+    title: "Bailing Press",
     top: 593,
     left: 543,
   },
@@ -206,17 +206,17 @@ const Unit4Lt2 = ({ roundedData }) => {
     },
     // card filter bypass
     {
-      activePowerTotalTag: roundedData?.U12_GW01_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U12_GW01_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U12_GW01_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U14_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U14_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U14_GW01_Voltage_Avg,
       top: 498.5,
       left: 101,
     },
     // d/r card filter
     {
-      activePowerTotalTag: roundedData?.U14_GW01_ActivePower_Total,
-      activeCurrentAvgTag: roundedData?.U14_GW01_Current_Avg,
-      activeVoltageAvgTag: roundedData?.U14_GW01_Voltage_Avg,
+      activePowerTotalTag: roundedData?.U12_GW01_ActivePower_Total,
+      activeCurrentAvgTag: roundedData?.U12_GW01_Current_Avg,
+      activeVoltageAvgTag: roundedData?.U12_GW01_Voltage_Avg,
       top: 601,
       left: 198,
     },
@@ -323,7 +323,7 @@ const Unit4Lt2 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../surajcotton-sld/unit4lt2.png"
+          src="../../../surajcotton-sld/u4lt2updated.png"
           className="h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"

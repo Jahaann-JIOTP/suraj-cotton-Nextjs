@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import * as am5exporting from "@amcharts/amcharts5/plugins/exporting";
-import { useTheme } from "next-themes";
-import { FileImage } from "lucide-react";
 import { Tooltip } from "@mui/material";
+import { FileImage } from "lucide-react";
+import { useTheme } from "next-themes";
 
 const predefinedColors = [
   "#b4801fff",
@@ -16,173 +16,257 @@ const predefinedColors = [
   "#ff7f0e",
   "#2ca02c",
   "#B0C01A",
-  "#d62727ff",
+  "#9b0202ff",
   "#FFB000",
-  "#8b043cff",
+  "#50048bff",
 ];
 
-const SimpleAm4Chart = ({ data = [], yAxisLabel = "" }) => {
-  const { theme } = useTheme();
+export default function SimpleAm4Chart({ data = [], yAxisTitle = "" }) {
   const chartRef = useRef(null);
   const exportBtnRef = useRef(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
-    if (!chartRef.current || !data.length) return;
-
-    const root = am5.Root.new(chartRef.current);
-    root._logo?.dispose();
-    root.setThemes([am5themes_Animated.new(root)]);
-
-    const myColors = predefinedColors.map((c) => am5.color(c));
-    const myColorSet = am5.ColorSet.new(root, {
-      colors: myColors,
-      reuse: true,
-      step: 0,
-    });
-
-    root.setThemes([am5themes_Animated.new(root)]);
-    root.interfaceColors.setAll({
-      text: theme === "dark" ? am5.color("#fff") : am5.color("#000"),
-      grid: theme === "dark" ? am5.color("#444") : am5.color("#ccc"),
-      background: theme === "dark" ? am5.color("#0f172a") : am5.color("#fff"),
-    });
-
-    const chart = root.container.children.push(
-      am5xy.XYChart.new(root, {
-        focusable: true,
-        panX: false,
-        panY: false,
-        wheelX: "panX",
-        wheelY: "zoomX",
-        pinchZoomX: true,
-        layout: root.verticalLayout,
-        colors: myColorSet,
-      })
-    );
-
-    const cursor = chart.set(
-      "cursor",
-      am5xy.XYCursor.new(root, { behavior: "zoomX" })
-    );
-    cursor.lineY.set("visible", false);
+    if (!data || data.length === 0) return;
 
     const formattedData = data.map((d) => ({
       ...d,
       Date: new Date(d.Date).getTime(),
     }));
 
-    const dates = formattedData.map((d) => d.Date);
-    const minDate = Math.min(...dates);
-    const maxDate = Math.max(...dates);
-    const dateRangeMs = maxDate - minDate;
-    const dateRangeDays = dateRangeMs / (1000 * 60 * 60 * 24);
-
-    const shouldShowDate = dateRangeDays > 1;
-
-    const xAxis = chart.xAxes.push(
-      am5xy.DateAxis.new(root, {
-        baseInterval: { timeUnit: "minute", count: 15 },
-        renderer: am5xy.AxisRendererX.new(root, {
-          minorGridEnabled: true,
-          minGridDistance: 60,
-        }),
-        tooltip: am5.Tooltip.new(root, {}),
-        startLocation: 0,
-        endLocation: 0,
-        strictMinMax: true, // strictMinMax: true to ensure full range is shown
-        min: minDate,
-        max: maxDate,
-        dateFormats: {
-          minute: shouldShowDate ? "HH:mm" : "HH:mm",
-          hour: shouldShowDate ? "HH:mm" : "HH:mm",
-          day: shouldShowDate ? "MMM dd" : "HH:mm",
-        },
-        periodChangeDateFormats: {
-          day: "MMM dd",
-          month: "MMM yyyy",
-        },
-      })
-    );
-
-    const yAxis = chart.yAxes.push(
-      am5xy.ValueAxis.new(root, {
-        renderer: am5xy.AxisRendererY.new(root, {}),
-      })
-    );
-
-    yAxis.children.unshift(
-      am5.Label.new(root, {
-        rotation: -90,
-        text: yAxisLabel,
-        y: am5.p50,
-        centerX: am5.p50,
-        fill: theme === "dark" ? am5.color("#fff") : am5.color("#000"),
-      })
-    );
-
-    const keys = Object.keys(data[0]).filter(
+    const seriesKeys = Object.keys(data[0]).filter(
       (k) => k !== "Date" && k !== "Time"
     );
 
-    keys.forEach((key, index) => {
-      const colorIndex = index % myColors.length;
-      const color = myColors[colorIndex];
+    const root = am5.Root.new(chartRef.current);
+    root._logo?.dispose();
+    root.setThemes([am5themes_Animated.new(root)]);
 
-      const tooltip = am5.Tooltip.new(root, {
-        labelText: `[bold]{name}:[/] {valueY}`,
-        getFillFromSprite: false,
-        getStrokeFromSprite: false,
-        autoTextColor: false,
+    const isDark = theme === "dark";
+    root.interfaceColors.set(
+      "background",
+      isDark ? am5.color(0x121212) : am5.color(0xffffff)
+    );
+    root.interfaceColors.set(
+      "grid",
+      isDark ? am5.color(0x444444) : am5.color(0xe0e0e0)
+    );
+    root.interfaceColors.set(
+      "text",
+      isDark ? am5.color(0xffffff) : am5.color(0x000000)
+    );
+
+    const chart = root.container.children.push(
+      am5xy.XYChart.new(root, {
+        layout: root.verticalLayout,
+        panX: false,
+        wheelX: "zoomX",
+        pinchZoomX: true,
+      })
+    );
+
+    /* -----------------------------
+     * SCROLLBAR (SIMPLE GREY)
+     * ----------------------------- */
+    const scrollbar = am5xy.XYChartScrollbar.new(root, {
+      orientation: "horizontal",
+      height: 20,
+    });
+
+    scrollbar.get("background").setAll({
+      fill: am5.color("#e0e0e0"),
+      fillOpacity: 1,
+      strokeOpacity: 0,
+      cornerRadius: 10,
+    });
+
+    scrollbar.chart.set("visible", false);
+
+    chart.set("scrollbarX", scrollbar);
+    chart.topAxesContainer.children.push(scrollbar);
+
+    /* -----------------------------
+     * X & Y AXES
+     * ----------------------------- */
+    const xAxis = chart.xAxes.push(
+      am5xy.DateAxis.new(root, {
+        baseInterval: { timeUnit: "minute", count: 1 },
+        renderer: am5xy.AxisRendererX.new(root, { minGridDistance: 60 }),
+      })
+    );
+
+    const yAxisRenderer = am5xy.AxisRendererY.new(root, { opposite: false });
+    yAxisRenderer.labels.template.setAll({ paddingRight: 10 }); // fix label cut off
+
+    const yAxis = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        renderer: yAxisRenderer,
+      })
+    );
+
+    // Y-axis title properly
+    if (yAxisTitle) {
+      yAxis.get("renderer").labels.template.setAll({
+        paddingRight: 10,
       });
 
-      tooltip.get("background").setAll({
-        fill: color,
-        stroke: color,
-        fillOpacity: 1,
-      });
-      tooltip.label.setAll({ fill: am5.color("#fff") });
+      yAxis.children.unshift(
+        am5.Label.new(root, {
+          text: yAxisTitle,
+          rotation: -90,
+          fontSize: 14,
+          fill: root.interfaceColors.get("text"),
+          centerX: am5.p50,
+          centerY: am5.p50,
+          y: am5.p50,
+          x: am5.p50,
+        })
+      );
+    }
+
+    /* -----------------------------
+     * CURSOR (snap + drag zoom)
+     * ----------------------------- */
+    const cursor = chart.set(
+      "cursor",
+      am5xy.XYCursor.new(root, { behavior: "zoomX" })
+    );
+    cursor.lineY.set("visible", false);
+
+    /* -----------------------------
+     * SERIES + TOOLTIP
+     * ----------------------------- */
+    const seriesTooltips = new Map();
+    const seriesList = [];
+
+    seriesKeys.forEach((key, index) => {
+      const color = am5.color(predefinedColors[index]);
 
       const series = chart.series.push(
         am5xy.LineSeries.new(root, {
           name: key,
           xAxis,
           yAxis,
-          valueYField: key,
           valueXField: "Date",
-          strokeWidth: 2,
+          valueYField: key,
           stroke: color,
-          tooltip,
-          connect: true,
+          fill: color,
+          tooltip: null,
         })
       );
 
-      series.strokes.template.setAll({
-        stroke: color,
-        strokeWidth: 2,
-      });
-      series.fills.template.setAll({ fillOpacity: 0, visible: false });
-      series.setAll({ locationX: 0 });
-
       series.data.setAll(formattedData);
-      series.appear(1000);
+      series.strokes.template.setAll({ stroke: color, strokeWidth: 2 });
+      series.fills.template.setAll({ visible: false });
+
+      // bullets
+      series.bullets.push(() =>
+        am5.Bullet.new(root, {
+          sprite: am5.Circle.new(root, {
+            radius: 0,
+            fill: color,
+            stroke: root.interfaceColors.get("background"),
+            strokeWidth: 2,
+          }),
+        })
+      );
+
+      // tooltip
+      const tooltip = am5.Tooltip.new(root, {
+        getFillFromSprite: false,
+        autoTextColor: false,
+        pointerOrientation: "horizontal",
+      });
+
+      tooltip.get("background").setAll({
+        fill: color,
+        fillOpacity: 0.85,
+        cornerRadius: 6,
+      });
+
+      tooltip.label.setAll({
+        fill: am5.color(0xffffff),
+        fontSize: 13,
+        textAlign: "left",
+      });
+
+      seriesTooltips.set(series, tooltip);
+      seriesList.push(series);
     });
 
+    cursor.set("snapToSeries", seriesList);
+
+    /* -----------------------------
+     * STACKED TOOLTIP + HIDE ON LEAVE
+     * ----------------------------- */
+    cursor.events.on("cursormoved", () => {
+      const pos = cursor.getPrivate("positionX");
+      if (pos == null) {
+        // hide all tooltips when leaving chart
+        seriesList.forEach((series) => {
+          const tooltip = seriesTooltips.get(series);
+          tooltip?.hide();
+        });
+        return;
+      }
+
+      const timestamp = xAxis.positionToValue(pos);
+      let verticalOffset = 0;
+
+      seriesList.forEach((series) => {
+        const tooltip = seriesTooltips.get(series);
+        if (!tooltip) return;
+
+        const nearest = series.dataItems.reduce((prev, curr) =>
+          Math.abs(curr.get("valueX") - timestamp) <
+          Math.abs(prev.get("valueX") - timestamp)
+            ? curr
+            : prev
+        );
+
+        if (!nearest) return;
+
+        const y = nearest.get("valueY");
+        const name = series.get("name");
+
+        if (y != null) {
+          const dateStr = new Date(nearest.get("valueX")).toLocaleString();
+
+          tooltip.label.set("text", `${name}: ${y}\n${dateStr}`);
+          tooltip.show();
+
+          tooltip.set("pointTo", {
+            x: cursor.getPrivate("point").x + 20,
+            y: cursor.getPrivate("point").y + verticalOffset,
+          });
+
+          verticalOffset += 28;
+        } else {
+          tooltip.hide();
+        }
+      });
+    });
+    // Hide tooltips when mouse leaves chart
+    chart.root.events.on("pointerout", () => {
+      seriesList.forEach((series) => {
+        const tooltip = seriesTooltips.get(series);
+        tooltip?.hide();
+      });
+    });
+
+    /* -----------------------------
+     * LEGEND
+     * ----------------------------- */
     const legend = chart.children.push(
       am5.Legend.new(root, {
         centerX: am5.p50,
         x: am5.p50,
-        marginTop: 20,
       })
     );
     legend.data.setAll(chart.series.values);
-
-    chart.set(
-      "scrollbarX",
-      am5.Scrollbar.new(root, { orientation: "horizontal" })
-    );
-
+    // ✅ Export
     const exporting = am5exporting.Exporting.new(root, {
-      filePrefix: "dynamic_chart",
+      filePrefix: "custom_trends_chart",
       dataSource: formattedData,
     });
 
@@ -193,10 +277,10 @@ const SimpleAm4Chart = ({ data = [], yAxisLabel = "" }) => {
     chart.appear(1000, 100);
 
     return () => root.dispose();
-  }, [data, yAxisLabel, theme]);
+  }, [data, yAxisTitle, theme]);
 
   return (
-    <div className="relative w-full bg-transparent">
+    <div>
       {data.length !== 0 && (
         <Tooltip
           title={"Export PNG"}
@@ -226,12 +310,9 @@ const SimpleAm4Chart = ({ data = [], yAxisLabel = "" }) => {
           </button>
         </Tooltip>
       )}
-
       <div className="mt-5">
-        <div ref={chartRef} className="w-full h-[58vh]" />
+        <div ref={chartRef} style={{ width: "100%", height: "60vh" }} />
       </div>
     </div>
   );
-};
-
-export default SimpleAm4Chart;
+}

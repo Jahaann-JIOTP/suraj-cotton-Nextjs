@@ -4,8 +4,19 @@ import CustomLoader from "../customLoader/CustomLoader";
 import { useTrendsChart } from "../hooks/useChartData";
 import ReusableTrendChart from "./ReusableTrendChart";
 
-const HarmonicsChart = ({area, chartId, startDate, endDate,isFullscreen, }) => {
-  const { data, loading } = useTrendsChart(area, "harmonics", startDate, endDate);
+const HarmonicsChart = ({
+  area,
+  chartId,
+  startDate,
+  endDate,
+  isFullscreen,
+}) => {
+  const { data, loading } = useTrendsChart(
+    area,
+    "harmonics",
+    startDate,
+    endDate
+  );
 
   return (
     <>
@@ -26,7 +37,7 @@ const HarmonicsChart = ({area, chartId, startDate, endDate,isFullscreen, }) => {
           {
             type: "line",
             yKey: "hormonics",
-            name: "Hormonics",
+            name: "Harmonics",
             color: "#2DDE04",
             strokeWidth: 3,
           },
@@ -34,7 +45,7 @@ const HarmonicsChart = ({area, chartId, startDate, endDate,isFullscreen, }) => {
         yLeftTitle="Volts"
         legend={true}
         cursor={true}
-          isFullscreen={isFullscreen}
+        isFullscreen={isFullscreen}
       />
     </>
   );
