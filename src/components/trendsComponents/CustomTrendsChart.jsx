@@ -10,16 +10,27 @@ import { FileImage } from "lucide-react";
 import { Tooltip } from "@mui/material";
 
 const predefinedColors = [
-  "#b4801fff",
+  "#c2410c",
   "#1f77b4",
   "#5B9486",
-  "#ff7f0e",
+  // "#4d7c0f",
   "#2ca02c",
-  "#B0C01A",
-  "#9b0202ff",
+  "#134e4a",
+  "#b91c1c",
   "#FFB000",
-  "#50048bff",
+  "#6b21a8",
 ];
+// const predefinedColors = [
+//   "#b45309",
+//   "#1f77b4",
+//   "#5B9486",
+//   "#ff7f0e",
+//   "#2ca02c",
+//   "#B0C01A",
+//   "#991b1b",
+//   "#FFB000",
+//   "#6b21a8",
+// ];
 
 const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
   const { theme } = useTheme();
@@ -33,14 +44,12 @@ const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
     root._logo?.dispose();
     root.setThemes([am5themes_Animated.new(root)]);
 
-    // ✅ Your custom colors only — prevent any auto color like #FF1FFF
     const myColors = predefinedColors.map((c) => am5.color(c));
     const myColorSet = am5.ColorSet.new(root, {
       colors: myColors,
-      reuse: true,
-      step: 0,
+      reuse: false,
+      step: 1,
     });
-
     // ✅ Set theme-related UI colors (text, grid, bg)
     root.interfaceColors.setAll({
       text: theme === "dark" ? am5.color("#fff") : am5.color("#000"),
@@ -58,7 +67,7 @@ const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
         wheelY: "zoomX",
         pinchZoomX: true,
         layout: root.verticalLayout,
-        colors: myColorSet, // ✅ this is where colorSet belongs!
+        // colors: myColorSet, // ✅ this is where colorSet belongs!
       })
     );
 
@@ -68,6 +77,8 @@ const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
       am5xy.XYCursor.new(root, { behavior: "zoomX" })
     );
     cursor.lineY.set("visible", false);
+    // cursor.set("snapToSeries", chart.series?.values || []);
+    // cursor.set("snapToSeriesBy", "x");
 
     // ✅ Format Data
     const formattedData = data.map((d) => ({
@@ -79,23 +90,7 @@ const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
     const xAxis = chart.xAxes.push(
       am5xy.DateAxis.new(root, {
         baseInterval: { timeUnit: "minute", count: 15 },
-        renderer: am5xy.AxisRendererX.new(root, {
-          minorGridEnabled: true,
-          minGridDistance: 60,
-        }),
-        tooltip: am5.Tooltip.new(root, {}),
-        startLocation: 0,
-        endLocation: 1,
-        strictMinMax: false,
-        dateFormats: {
-          minute: "HH:mm",
-          hour: "HH:mm",
-          day: "MMM dd",
-        },
-        periodChangeDateFormats: {
-          day: "MMM dd",
-          month: "MMM yyyy",
-        },
+        renderer: am5xy.AxisRendererX.new(root, { minGridDistance: 60 }),
       })
     );
 
@@ -122,10 +117,16 @@ const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
     );
 
     keys.forEach((key, index) => {
-      const color = am5.color(myColors[index % myColors.length]);
+      // const color = am5.color(myColors[index % myColors.length]);
+      const color = am5.color(
+        predefinedColors[index % predefinedColors.length]
+      );
 
       const tooltip = am5.Tooltip.new(root, {
-        labelText: `[bold]{name}:[/] {valueY}`,
+        pointerOrientation: "left", // <<< ALIGN LEFT
+        forceHidden: false,
+        keepTargetHover: true,
+        labelText: `{valueX.formatDate("dd-MM-yyyy")}:{valueX.formatDate("HH:mm")} [bold]{name}:[/] {valueY}`,
         getFillFromSprite: false,
         getStrokeFromSprite: false,
         autoTextColor: false,
@@ -147,11 +148,16 @@ const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
           valueXField: "Date",
           strokeWidth: 2,
           stroke: color,
+          fill: color,
           tooltip,
           connect: true,
         })
       );
+      // Bind tooltip to series
+      series.set("tooltip", tooltip);
 
+      // Ensure tooltip shows ANYWHERE on hover
+      // cursor.set("snapToSeries", [series]);
       series.strokes.template.setAll({
         stroke: color,
         strokeWidth: 2,
@@ -162,6 +168,9 @@ const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
       series.data.setAll(formattedData);
       series.appear(1000);
     });
+    // cursor.set("snapMode", "nearest");
+    // cursor.set("snapToSeries", chart.series.values);
+    // cursor.set("snapToSeriesBy", "x");
 
     // ✅ Legend
     const legend = chart.children.push(

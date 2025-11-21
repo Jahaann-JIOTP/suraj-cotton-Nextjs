@@ -1,18 +1,16 @@
 import React from "react";
 import { SectionHeader } from "./SectionHeader";
 
-/**
- * Generic reusable table component
- * Supports: custom header order, total row, percent suffix, and highlighted columns
- */
 const StandardTable = ({
   title = "",
-  headers = [], // e.g. [{ key: "Total_I_C_G", label: "Total Incoming From Generation (kWh)" }]
+  headers = [],
   data = [],
-  totalRow = null, // optional
-  percentKeys = [], // e.g. ["UtilizationPercent"]
-  highlightKeys = [], // e.g. ["Unit_4_consumptionperbag", "Unit_5_consumptionperbag"]
-  firstColAlign = "center", // alignment for first column
+  totalRow = null,
+  percentKeys = [],
+  highlightKeys = [],
+  formatNumberKeys = [],
+  firstColAlign = "center",
+  cellWidth = "",
 }) => {
   return (
     <div className="w-full mt-5">
@@ -25,7 +23,10 @@ const StandardTable = ({
               {headers.map((head, idx) => (
                 <th
                   key={idx}
-                  className="py-2 px-3 border border-gray-400 text-center"
+                  className={`py-2 px-3 border border-gray-400 text-center `}
+                  style={{
+                    width: idx === 0 ? "10%" : cellWidth,
+                  }}
                 >
                   {head.label}
                 </th>
@@ -44,8 +45,18 @@ const StandardTable = ({
                   const value = row[h.key];
                   const isPercent = percentKeys.includes(h.key);
                   const isHighlighted = highlightKeys.includes(h.key);
-                  const alignClass =
-                    cIdx === 0 ? `text-${firstColAlign}` : "text-right";
+                  const alignClass = cIdx === 0 ? `text-center` : "text-right";
+                  const shouldFormatNumber =
+                    typeof value === "number" &&
+                    formatNumberKeys.includes(h.key);
+                  const displayValue = shouldFormatNumber
+                    ? value.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) + (isPercent ? " %" : "")
+                    : isPercent
+                    ? value + " %"
+                    : value ?? "-";
                   const bgClass = isHighlighted
                     ? "bg-[#E5F3FD] dark:bg-[#e5f3fd5d]"
                     : "";
@@ -54,13 +65,11 @@ const StandardTable = ({
                     <td
                       key={h.key}
                       className={`py-2 px-3 border border-gray-400 ${alignClass} ${bgClass}`}
+                      style={{
+                        width: cIdx === 0 ? "5%" : cellWidth,
+                      }}
                     >
-                      {typeof value === "number"
-                        ? value.toLocaleString("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          }) + (isPercent ? " %" : "")
-                        : value ?? "-"}
+                      {displayValue}
                     </td>
                   );
                 })}
@@ -72,8 +81,7 @@ const StandardTable = ({
               <tr className="font-semibold text-[13px] md:text-[14px] font-inter bg-gray-100 dark:bg-gray-700">
                 {headers.map((h, idx) => {
                   const value = totalRow[h.key];
-                  const alignClass =
-                    idx === 0 ? `text-${firstColAlign}` : "text-right";
+                  const alignClass = idx === 0 ? `text-center` : "text-right";
                   const isHighlighted = highlightKeys.includes(h.key);
                   const bgClass = isHighlighted
                     ? "bg-[#E5F3FD] dark:bg-[#e5f3fd5d]"
@@ -81,7 +89,10 @@ const StandardTable = ({
                   return (
                     <td
                       key={h.key}
-                      className={`py-2 px-3 border border-gray-400 ${alignClass} ${bgClass}`}
+                      className={`py-2 px-3 text-center border border-gray-400 ${alignClass} ${bgClass}`}
+                      style={{
+                        width: idx === 0 ? "5%" : cellWidth,
+                      }}
                     >
                       {typeof value === "number"
                         ? value.toLocaleString("en-US", {

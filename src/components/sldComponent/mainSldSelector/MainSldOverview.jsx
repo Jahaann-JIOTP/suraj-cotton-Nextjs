@@ -51,7 +51,7 @@ const mainOverviewMeterData = [
   },
   {
     link: "U21_GW03",
-    title: "Main Incomming (Unit 5)",
+    title: "Main Incoming (Unit 5)",
     top: 449,
     left: 181,
     area: "ht",

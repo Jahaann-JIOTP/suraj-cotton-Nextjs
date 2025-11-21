@@ -9,51 +9,74 @@ export const buildStandardPdfTable = ({
   totalRow = null,
   percentKeys = [],
   highlightKeys = [],
-  firstColAlign = "left",
+  formatNumberKeys = [], // <-- NEW
+  firstColAlign = "center", // <-- UPDATED default
+  cellWidth = "",
   widths = [],
   pageBreakAfter = false,
 }) => {
+  // --- WIDTH LOGIC ---
+  const pdfWidths = headers.map((_, idx) => (idx === 0 ? "10%" : cellWidth));
+
+  // --- HEADER ROW ---
   const headerRow = headers.map((h, idx) => ({
     text: h.label,
     style: "tableHeader",
     alignment: idx === 0 ? firstColAlign : "center",
   }));
 
+  // --- BODY ROWS ---
   const bodyRows = data.map((row) =>
     headers.map((h, idx) => {
       const value = row[h.key];
       const isPercent = percentKeys.includes(h.key);
       const isHighlighted = highlightKeys.includes(h.key);
 
+      const shouldFormat =
+        typeof value === "number" && formatNumberKeys.includes(h.key);
+
+      const displayValue = shouldFormat
+        ? value.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }) + (isPercent ? " %" : "")
+        : isPercent
+        ? value + " %"
+        : value ?? "-";
+
       return {
-        text:
-          typeof value === "number"
-            ? value.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }) + (isPercent ? " %" : "")
-            : value ?? "-",
-        style: idx === 0 ? "tableCell" : "tableCellRight",
+        text: displayValue,
+        style: idx === 0 ? "tableCellCenter" : "tableCellRight", // <-- CENTER FIRST COLUMN
+        alignment: idx === 0 ? "center" : "right", // <-- CENTER FIRST COLUMN
         fillColor: isHighlighted ? "#E5F3FD" : null,
       };
     })
   );
 
+  // --- TOTAL ROW (optional) ---
   if (totalRow) {
     const totalCells = headers.map((h, idx) => {
       const value = totalRow[h.key];
+      const isHighlighted = highlightKeys.includes(h.key);
+
+      const shouldFormat =
+        typeof value === "number" && formatNumberKeys.includes(h.key);
+
+      const displayValue = shouldFormat
+        ? value.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+        : value ?? "-";
+
       return {
-        text:
-          typeof value === "number"
-            ? value.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
-            : value ?? "-",
-        style: idx === 0 ? "tableCell" : "tableCellRightBold",
-        fillColor: "#f5f5f5",
+        text: displayValue,
+        style: idx === 0 ? "tableCellCenterBold" : "tableCellRightBold",
+        alignment: idx === 0 ? "center" : "right",
+        fillColor: isHighlighted ? "#f5f5f5" : "#f5f5f5",
       };
     });
+
     bodyRows.push(totalCells);
   }
 
@@ -72,7 +95,7 @@ export const buildStandardPdfTable = ({
       {
         table: {
           headerRows: 1,
-          widths: widths.length ? widths : Array(headers.length).fill("*"),
+          widths: widths.length ? widths : pdfWidths,
           body: [headerRow, ...bodyRows],
         },
         layout: {
@@ -83,6 +106,7 @@ export const buildStandardPdfTable = ({
         },
         margin: [0, 5, 0, 20],
         dontBreakRows: true,
+        fontSize: 9,
         pageBreak: pageBreakAfter ? "after" : undefined,
       },
     ].filter(Boolean),

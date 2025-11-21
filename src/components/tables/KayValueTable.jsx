@@ -28,6 +28,14 @@ const KayValueTable = ({
               } else {
                 hilightedCell = "bg-[#E5F3FD] dark:bg-gray-600";
               }
+              let displayUnit = "";
+              if (unit.length > 0) {
+                if (typeof value === "number") {
+                  displayUnit = unit;
+                } else {
+                  displayUnit = "";
+                }
+              }
               return (
                 <tr key={idx} className="text-[14px] font-inter">
                   <td
@@ -44,7 +52,7 @@ const KayValueTable = ({
                             maximumFractionDigits: 2,
                           })
                         : value ?? "-"}{" "}
-                      {unit.length > 0 ? unit : ""}
+                      {displayUnit}
                     </td>
                   )}
                 </tr>

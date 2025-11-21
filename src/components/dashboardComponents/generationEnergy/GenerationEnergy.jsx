@@ -8,15 +8,16 @@ import { useTheme } from "next-themes";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
+import ChartComponent from "../consumptionEnergy/ChartComponent";
 
 export default function GenerationEnergy() {
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("today");
+  const [loading, setLoading] = useState(false);
+  const [isFullView, setIsFullView] = useState(false);
   const chartRef = useRef(null);
   const rootRef = useRef(null);
   const { theme } = useTheme();
 
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState("today");
-  const [loading, setLoading] = useState(false);
-  const [isFullView, setIsFullView] = useState(false);
   const [chartData, setChartData] = useState([]);
 
   const toggleFullView = () => setIsFullView((prev) => !prev);
@@ -276,11 +277,24 @@ export default function GenerationEnergy() {
         </div>
       )}
 
-      <div
+      {/* <div
         ref={chartRef}
         className={`w-full ${
           isFullView ? "h-[90%]" : "h-[12rem] pb-2 lg:h-full"
         }`}
+      /> */}
+      {/* <ChartComponent
+        data={chartData}
+        chartId="GenerationChartCustomcomponent"
+        selectedTimePeriod={selectedTimePeriod}
+        theme={theme}
+      /> */}
+      <ChartComponent
+        data={chartData}
+        selectedTimePeriod={selectedTimePeriod}
+        chartId="GenerationChartID"
+        theme={theme}
+        loading={loading}
       />
     </div>
   );

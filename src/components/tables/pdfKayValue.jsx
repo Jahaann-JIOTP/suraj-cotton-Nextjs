@@ -54,7 +54,9 @@ export const buildKeyValuePdfTable = ({
           backgroundColor: "",
         },
         {
-          text: unit ? `${formattedValue} ${unit}` : formattedValue, // ✅ append unit if provided
+          text: unit
+            ? `${formattedValue} ${typeof value === "number" ? unit : ""}`
+            : formattedValue, // ✅ append unit if provided
           style: valueStyle,
           fillColor: null, // no background
         },

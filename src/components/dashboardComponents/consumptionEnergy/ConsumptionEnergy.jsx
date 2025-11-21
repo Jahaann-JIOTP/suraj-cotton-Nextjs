@@ -7,11 +7,13 @@ import { useTheme } from "next-themes";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import config from "@/constant/apiRouteList";
 import CustomLoader from "@/components/customLoader/CustomLoader";
+import ChartComponent from "./ChartComponent";
 
 am4core.useTheme(am4themes_animated);
 
 const ConsumptionEnergy = () => {
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("today");
+  const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isConsumptionEnergyFullView, setConsumptionEnergyFullView] =
     useState(false);
@@ -41,6 +43,7 @@ const ConsumptionEnergy = () => {
         if (Array.isArray(resResult) && resResult.length > 0) {
           requestAnimationFrame(() => {
             updateChart(resResult, selectedTimePeriod);
+            setChartData(resResult);
             setLoading(false);
           });
         } else {
@@ -190,11 +193,18 @@ const ConsumptionEnergy = () => {
         </div>
       )}
 
-      <div
+      {/* <div
         id="consumptionEnergyChart"
         className={`w-full ${
-          isConsumptionEnergyFullView ? "h-[90%]" : "h-[12rem] lg:h-full"
+          isConsumptionEnergyFullView ? "h-[90%]" : "h-[12rem] pb-2 lg:h-full"
         }`}
+      /> */}
+      <ChartComponent
+        data={chartData}
+        selectedTimePeriod={selectedTimePeriod}
+        chartId="ConsumptionChartID"
+        theme={theme}
+        loading={loading}
       />
     </div>
   );

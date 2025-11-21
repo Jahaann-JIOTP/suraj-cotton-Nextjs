@@ -105,7 +105,6 @@ const Dashboard = () => {
     unitConsumption?.Unit_5_Consumption +
     Number(singleDivData?.Aux_consumption || 0);
 
-  console.log("toatl output", totalEnerOutput);
   // time rnage effect
   const updateTimeRange = (dateRange) => {
     const today = new Date();
@@ -270,14 +269,14 @@ const Dashboard = () => {
           </div>
           {/* graph card one */}
           <div className="">
-            <ConsumptionEnergy />
+            <GenerationEnergy />
           </div>
         </div>
         {/* right side */}
         <div className="w-full lg:w-[49.5%] flex flex-col gap-3 md:gap-[0.7vw]">
           {/* graph card one */}
           <div className="">
-            <GenerationEnergy />
+            <ConsumptionEnergy />
           </div>
           {/* small card two */}
           <div className="flex flex-wrap gap-3 md:gap-[0.7vw] items-center  justify-between">

@@ -26,6 +26,7 @@ export default function SimpleAm4Chart({ data = [], yAxisTitle = "" }) {
   const exportBtnRef = useRef(null);
   const { theme } = useTheme();
 
+  console.log(yAxisTitle);
   useEffect(() => {
     if (!data || data.length === 0) return;
 
@@ -90,7 +91,7 @@ export default function SimpleAm4Chart({ data = [], yAxisTitle = "" }) {
      * ----------------------------- */
     const xAxis = chart.xAxes.push(
       am5xy.DateAxis.new(root, {
-        baseInterval: { timeUnit: "minute", count: 1 },
+        baseInterval: { timeUnit: "minute", count: 15 },
         renderer: am5xy.AxisRendererX.new(root, { minGridDistance: 60 }),
       })
     );
@@ -136,12 +137,26 @@ export default function SimpleAm4Chart({ data = [], yAxisTitle = "" }) {
     /* -----------------------------
      * SERIES + TOOLTIP
      * ----------------------------- */
-    const seriesTooltips = new Map();
     const seriesList = [];
 
+    /* -----------------------------
+     * SERIES + TOOLTIP  (FROM FIRST CODE)
+     * ----------------------------- */
     seriesKeys.forEach((key, index) => {
-      const color = am5.color(predefinedColors[index]);
+      const color = am5.color(
+        predefinedColors[index % predefinedColors.length]
+      );
 
+      // Use a series-attached tooltip so amCharts can snap and align them
+      const tooltip = am5.Tooltip.new(root, {
+        pointerOrientation: "horizontal",
+        labelText: "{name}: {valueY}",
+        getFillFromSprite: true,
+        getStrokeFromSprite: true,
+        autoTextColor: false,
+      });
+
+      // ---- Line series ----
       const series = chart.series.push(
         am5xy.LineSeries.new(root, {
           name: key,
@@ -150,109 +165,31 @@ export default function SimpleAm4Chart({ data = [], yAxisTitle = "" }) {
           valueXField: "Date",
           valueYField: key,
           stroke: color,
-          fill: color,
-          tooltip: null,
+          tooltip,
+          strokeWidth: 2,
+          connect: true,
         })
       );
+
+      series.strokes.template.setAll({
+        stroke: color,
+        strokeWidth: 2,
+      });
+
+      series.fills.template.setAll({
+        fillOpacity: 0,
+        visible: false,
+      });
 
       series.data.setAll(formattedData);
-      series.strokes.template.setAll({ stroke: color, strokeWidth: 2 });
-      series.fills.template.setAll({ visible: false });
-
-      // bullets
-      series.bullets.push(() =>
-        am5.Bullet.new(root, {
-          sprite: am5.Circle.new(root, {
-            radius: 0,
-            fill: color,
-            stroke: root.interfaceColors.get("background"),
-            strokeWidth: 2,
-          }),
-        })
-      );
-
-      // tooltip
-      const tooltip = am5.Tooltip.new(root, {
-        getFillFromSprite: false,
-        autoTextColor: false,
-        pointerOrientation: "horizontal",
-      });
-
-      tooltip.get("background").setAll({
-        fill: color,
-        fillOpacity: 0.85,
-        cornerRadius: 6,
-      });
-
-      tooltip.label.setAll({
-        fill: am5.color(0xffffff),
-        fontSize: 13,
-        textAlign: "left",
-      });
-
-      seriesTooltips.set(series, tooltip);
+      series.appear(1000);
+      // Register series so cursor can snap to them
       seriesList.push(series);
     });
 
     cursor.set("snapToSeries", seriesList);
-
-    /* -----------------------------
-     * STACKED TOOLTIP + HIDE ON LEAVE
-     * ----------------------------- */
-    cursor.events.on("cursormoved", () => {
-      const pos = cursor.getPrivate("positionX");
-      if (pos == null) {
-        // hide all tooltips when leaving chart
-        seriesList.forEach((series) => {
-          const tooltip = seriesTooltips.get(series);
-          tooltip?.hide();
-        });
-        return;
-      }
-
-      const timestamp = xAxis.positionToValue(pos);
-      let verticalOffset = 0;
-
-      seriesList.forEach((series) => {
-        const tooltip = seriesTooltips.get(series);
-        if (!tooltip) return;
-
-        const nearest = series.dataItems.reduce((prev, curr) =>
-          Math.abs(curr.get("valueX") - timestamp) <
-          Math.abs(prev.get("valueX") - timestamp)
-            ? curr
-            : prev
-        );
-
-        if (!nearest) return;
-
-        const y = nearest.get("valueY");
-        const name = series.get("name");
-
-        if (y != null) {
-          const dateStr = new Date(nearest.get("valueX")).toLocaleString();
-
-          tooltip.label.set("text", `${name}: ${y}\n${dateStr}`);
-          tooltip.show();
-
-          tooltip.set("pointTo", {
-            x: cursor.getPrivate("point").x + 20,
-            y: cursor.getPrivate("point").y + verticalOffset,
-          });
-
-          verticalOffset += 28;
-        } else {
-          tooltip.hide();
-        }
-      });
-    });
-    // Hide tooltips when mouse leaves chart
-    chart.root.events.on("pointerout", () => {
-      seriesList.forEach((series) => {
-        const tooltip = seriesTooltips.get(series);
-        tooltip?.hide();
-      });
-    });
+    // Let amCharts handle showing/hiding and aligning tooltips when
+    // `snapToSeries` is set on the cursor.
 
     /* -----------------------------
      * LEGEND

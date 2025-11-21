@@ -217,7 +217,7 @@ export default function HeatmapTrafo({
     const option = {
       backgroundColor: "transparent",
       tooltip: {
-        position: "right",
+        position: "top",
         formatter: (p) =>
           p.data && p.data.realDateTime
             ? `${p.data.realDateTime}<br>${meter}: <b>${p.value[2]}</b>`

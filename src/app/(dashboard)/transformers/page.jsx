@@ -223,9 +223,9 @@ const TranformersPage = () => {
             </div>
             <div>
               <div className="flex">
-                <div className="w-[70%] flex items-center justify-center">
+                <div className="w-[100%] flex items-center justify-center">
                   {loading === true ? (
-                    <div>
+                    <div className="w-full h-[18rem] flex items-center">
                       <CustomLoader size="50px" />
                     </div>
                   ) : (
@@ -237,7 +237,7 @@ const TranformersPage = () => {
                     />
                   )}
                 </div>
-                <div className="w-[30%]">
+                {/* <div className="w-[30%]">
                   <TransformerSide
                     onMaintenanceUpdated={loadMaintenanceHrs}
                     transformerReading={"2.0 MVA"}
@@ -247,11 +247,11 @@ const TranformersPage = () => {
                     losses={trafo1Losses.toFixed(2)}
                     trafoName="T1"
                   />
-                </div>
+                </div> */}
               </div>
               {!loading && (
-                <div className="w-full px-5 mt-[-10px] md:mt-[-17px]">
-                  <div className="flex w-[93%] items-center justify-between flex-wrap">
+                <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
+                  <div className="flex w-[86.5%] items-center justify-between flex-wrap">
                     {trafo1and2.map((item, index, array) => {
                       const isFirst = index === 0;
                       const isLast = index === array.length - 1;
@@ -270,7 +270,7 @@ const TranformersPage = () => {
                     })}
                   </div>
                   <div
-                    className="w-[93%] h-[20px]"
+                    className="w-[86.5%] h-[20px]"
                     style={{
                       background:
                         "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
@@ -292,10 +292,10 @@ const TranformersPage = () => {
               </h2>
             </div>
             <div>
-              <div className="flex">
-                <div className="w-[70%] flex items-center justify-center">
+              <div className="flex items-center  justify-center">
+                <div className="w-[100%] flex items-center  justify-center">
                   {loading === true ? (
-                    <div>
+                    <div className="w-full h-[18rem] flex items-center">
                       <CustomLoader size="50px" />
                     </div>
                   ) : (
@@ -307,7 +307,7 @@ const TranformersPage = () => {
                     />
                   )}
                 </div>
-                <div className="w-[30%]">
+                {/* <div className="w-[30%]">
                   <TransformerSide
                     onMaintenanceUpdated={loadMaintenanceHrs}
                     transformerReading={"2.0 MVA"}
@@ -317,11 +317,11 @@ const TranformersPage = () => {
                     losses={trafo2Losses.toFixed(2)}
                     trafoName="T2"
                   />
-                </div>
+                </div> */}
               </div>
               {!loading && (
-                <div className="w-full px-5 mt-[-10px] md:mt-[-17px]">
-                  <div className="flex w-[93%] items-center justify-between flex-wrap">
+                <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
+                  <div className="flex w-[86.5%] items-center justify-between flex-wrap">
                     {trafo1and2.map((item, index, array) => {
                       const isFirst = index === 0;
                       const isLast = index === array.length - 1;
@@ -340,7 +340,7 @@ const TranformersPage = () => {
                     })}
                   </div>
                   <div
-                    className="w-[93%] h-[20px]"
+                    className="w-[86.5%] h-[20px]"
                     style={{
                       background:
                         "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
@@ -363,9 +363,9 @@ const TranformersPage = () => {
             </div>
             <div>
               <div className="flex">
-                <div className="w-[70%] flex items-center justify-center">
+                <div className="w-[100%] flex items-center justify-center">
                   {loading === true ? (
-                    <div>
+                    <div className="w-full h-[18rem] flex items-center">
                       <CustomLoader size="50px" />
                     </div>
                   ) : (
@@ -377,7 +377,7 @@ const TranformersPage = () => {
                     />
                   )}
                 </div>
-                <div className="w-[30%]">
+                {/* <div className="w-[30%]">
                   <TransformerSide
                     onMaintenanceUpdated={loadMaintenanceHrs}
                     transformerReading={"2.5 MVA"}
@@ -387,11 +387,11 @@ const TranformersPage = () => {
                     losses={trafo3Losses.toFixed(2)}
                     trafoName="T3"
                   />
-                </div>
+                </div> */}
               </div>
               {!loading && (
-                <div className="w-full px-5 mt-[-10px] md:mt-[-17px]">
-                  <div className="flex w-[93%] items-center justify-between flex-wrap">
+                <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
+                  <div className="flex w-[86.5%] items-center justify-between flex-wrap">
                     {trafo3and4.map((item, index, array) => {
                       const isFirst = index === 0;
                       const isLast = index === array.length - 1;
@@ -410,7 +410,7 @@ const TranformersPage = () => {
                     })}
                   </div>
                   <div
-                    className="w-[93%] h-[20px]"
+                    className="w-[86.5%] h-[20px]"
                     style={{
                       background:
                         "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
@@ -433,9 +433,9 @@ const TranformersPage = () => {
             </div>
             <div>
               <div className="flex">
-                <div className="w-[70%] flex items-center justify-center">
+                <div className="w-[100%] flex items-center justify-center">
                   {loading === true ? (
-                    <div>
+                    <div className="w-full h-[18rem] flex items-center">
                       <CustomLoader size="50px" />
                     </div>
                   ) : (
@@ -447,7 +447,7 @@ const TranformersPage = () => {
                     />
                   )}
                 </div>
-                <div className="w-[30%]">
+                {/* <div className="w-[30%]">
                   <TransformerSide
                     onMaintenanceUpdated={loadMaintenanceHrs}
                     transformerReading={"2.5 MVA"}
@@ -457,11 +457,11 @@ const TranformersPage = () => {
                     losses={trafo4Losses.toFixed(2)}
                     trafoName="T4"
                   />
-                </div>
+                </div> */}
               </div>
               {!loading && (
-                <div className="w-full px-5 mt-[-10px] md:mt-[-17px]">
-                  <div className="flex w-[93%] items-center justify-between flex-wrap">
+                <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
+                  <div className="flex w-[86.5%] items-center justify-between flex-wrap">
                     {trafo3and4.map((item, index, array) => {
                       const isFirst = index === 0;
                       const isLast = index === array.length - 1;
@@ -481,7 +481,7 @@ const TranformersPage = () => {
                     })}
                   </div>
                   <div
-                    className="w-[93%] h-[20px]"
+                    className="w-[86.5%] h-[20px]"
                     style={{
                       background:
                         "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",

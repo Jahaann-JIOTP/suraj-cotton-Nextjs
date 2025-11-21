@@ -42,6 +42,22 @@ const EnergyComparison = ({ dateRange }) => {
     U22_PLC_Del_ActiveEnergy: "HFO 1",
     U26_PLC_Del_ActiveEnergy: "JMS 620",
   };
+  const subColorMap = {
+    // LT Generation
+    "Diesel+JGS Incoming LT 1": "#3498DB",
+    "Diesel+JGS Incomming LT 2": "#E67E22",
+    // Solar Generation
+    "Solar 1185 kW": "#75C063",
+    "Solar 1070 kW": "#609EEC",
+    "Solar 352.50 kW": "#E5BC00",
+    "Solar 52.17 kW": "#D669AF",
+    // Wapda Import
+    "Wapda 1": "#0d4c7e",
+    "Wapda 2": "#4FD3C4",
+    // HT Generation
+    "HFO 1": "#2ECC71",
+    "JMS 620": "#ff5a30",
+  };
 
   const fetchPieChartData = async () => {
     const token = localStorage.getItem("token");
@@ -319,9 +335,14 @@ const EnergyComparison = ({ dateRange }) => {
 
       if (dataContext) {
         const baseColor = am5.color(colorMap[category] || "#cccccc");
-        const subData = dataContext.subData.map((d, i) => ({
+        // const subData = dataContext.subData.map((d, i) => ({
+        //   ...d,
+        //   fill: am5.Color.brighten(baseColor, i * 0.5),
+        // }));
+
+        const subData = dataContext.subData.map((d) => ({
           ...d,
-          fill: am5.Color.brighten(baseColor, i * 1),
+          fill: am5.color(subColorMap[d.category] || "#cccccc"),
         }));
 
         subSeries.data.setAll(subData);

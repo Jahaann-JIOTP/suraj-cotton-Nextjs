@@ -24,7 +24,7 @@ import { buildKeyValuePdfTable } from "@/components/tables/pdfKayValue";
 
 const sectionHeaders = {
   rParams: "Report Parameters",
-  HTside: "High Voltage Side Summary",
+  HTside: "Generation Summary",
   lossesSummary: "Losses Summary",
   summary: "Low Voltage Side Summary",
   utilization: "Utilization",
@@ -32,7 +32,7 @@ const sectionHeaders = {
   dailyConsumption: "Consumption Detail (Daily)",
   prodDetail: "Production Detail (Daily)",
   consumptionPerDept:
-    "Consumption Summary by Department For The Entire Time Period",
+    "Consumption Summary by Department for the Entire Time Period",
 };
 
 const columnLabels = {
@@ -51,6 +51,7 @@ const sourcesData = {
 };
 const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
   const { theme } = useTheme();
+  console.log(rawData);
   // const [chartImages, setChartImages] = useState({ unit4: "", unit5: "" });
   //   extract data
   const dailyConsumption = Array.isArray(rawData?.consumptionDetail)
@@ -158,11 +159,6 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
     return sum + u4 + u5;
   }, 0);
   const totalafterAux = totalConsumption - hfoAux;
-  console.log({
-    "hfo aux": hfoAux,
-    Consumption: totalConsumption,
-    "after hfo": totalafterAux,
-  });
 
   /////////////////================================================
   ////////////////export to pdf///////////////////////////////
@@ -303,6 +299,14 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
             title: sectionHeaders.summary,
             headers: lowVoltageSummaryheadings,
             data: summaryConsumption,
+            cellWidth: "18%",
+            formatNumberKeys: [
+              "Total_I_C_G",
+              "I_C_OU",
+              "Total_Consumption",
+              "Total_Tranferred_to_OU",
+              "Unaccounted_Energy",
+            ],
             totalRow: {
               Unit: "Total",
               Total_I_C_G: totalIcg,
@@ -316,6 +320,12 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
             title: sectionHeaders.utilization,
             headers: utilizationHeadings,
             data: utilization,
+            cellWidth: "30%",
+            formatNumberKeys: [
+              "TotalConnectedLoadPerDept",
+              "TotalAvgConsumption",
+              "UtilizationPercent",
+            ],
             percentKeys: ["UtilizationPercent"],
             pageBreakAfter: true,
           }),
@@ -325,6 +335,12 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
             title: sectionHeaders.production,
             headers: productionSummaryHeadings,
             data: productionSummary,
+            formatNumberKeys: [
+              "TotalAvgCount",
+              "TotalConsumption",
+              "consumptionperbag",
+            ],
+            cellWidth: "22.5%",
           }),
           // ---CONSUMPTION DETAIL Daily ---
 
@@ -333,7 +349,17 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
             headers: dailyConsumptionHeaders,
             data: dailyConsumption,
             totalRow: { date: "Total", ...totalRow },
-            firstColAlign: "left",
+            firstColAlign: "center",
+            cellWidth: "12.85%",
+            formatNumberKeys: [
+              "Unit_4_LT1",
+              "Unit_4_LT2",
+              "Unit_4_Total",
+              "Unit_5_LT1",
+              "Unit_5_LT2",
+              "Unit_5_Total",
+              "Grand_Total",
+            ],
           }),
           // ---  Production DETAIL Daily ---
 
@@ -345,6 +371,13 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
               "Unit_4_consumptionperbag",
               "Unit_5_consumptionperbag",
             ],
+            formatNumberKeys: [
+              "Unit_4_AvgCount",
+              "Unit_5_AvgCount",
+              "Unit_4_consumptionperbag",
+              "Unit_5_consumptionperbag",
+            ],
+            cellWidth: "15%",
           }),
           //==========================================================================
           // --- (4) CONSUMPTION SUMMARY BY DEPARTMENT — full width ---
@@ -396,17 +429,27 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
                       const hasU4 = "u4Consumption" in dept;
                       const hasU5 = "u5Consumption" in dept;
 
-                      const rowSpan = hasU4 && hasU5 ? 3 : 2; // Unit4 + Unit5 + Total OR Unit + Total
+                      // const rowSpan = hasU4 && hasU5 ? 3 : 2; // Unit4 + Unit5 + Total OR Unit + Total
 
                       // --- UNIT 4 ---
+                      // {
+                      //   text: (index + 1).toString(),
+                      //   // rowSpan: rowSpan,
+                      //   style: "tableCell",
+                      //   alignment: "center",
+                      //   verticalAlignment: "middle",
+                      //   horizontalAlignment: "middle",
+                      // },
                       if (hasU4) {
                         rows.push([
                           {
-                            text: (index + 1).toString(),
-                            rowSpan: rowSpan,
-                            style: "tableCell",
+                            text: "",
+                            // rowSpan: 2,
+                            // style: "tableCell",
                             alignment: "center",
+                            border: [true, true, false, false],
                             verticalAlignment: "middle",
+                            horizontalAlignment: "middle",
                           },
                           {
                             text: dept.name || "-",
@@ -434,6 +477,8 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
                           {
                             text: dept.u4UtilizationPercent + " %" || "-",
                             style: "tableCellRight",
+                            background: "#E5F3FD",
+                            fillColor: "#E5F3FD",
                           },
                           {
                             text: dept.u4ConectedLoadPerMcs || "-",
@@ -458,15 +503,17 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
                       // --- UNIT 5 ---
                       if (hasU5) {
                         rows.push([
-                          hasU4
-                            ? {} // Empty object when Unit 4 exists (rowSpan covers this)
-                            : {
-                                text: (index + 1).toString(),
-                                rowSpan: rowSpan,
-                                style: "tableCell",
-                                alignment: "center",
-                                verticalAlignment: "middle",
-                              },
+                          // hasU4
+                          //   ? {} // Empty object when Unit 4 exists (rowSpan covers this)
+                          //   :
+                          {
+                            text: (index + 1).toString(),
+                            rowSpan: 2,
+                            style: "tableCell",
+                            alignment: "center",
+                            border: [true, false, true, true],
+                            verticalAlignment: "middle",
+                          },
                           {
                             text: dept.u5Name || "-",
                             style: "tableCell",
@@ -493,6 +540,8 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
                           {
                             text: dept.u5UtilizationPercent + " %" || "-",
                             style: "tableCellRight",
+                            background: "#E5F3FD",
+                            fillColor: "#E5F3FD",
                           },
                           {
                             text: dept.u5ConectedLoadPerMcs || "-",
@@ -515,14 +564,15 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
 
                       // --- TOTAL ---
                       rows.push([
-                        hasU4 || hasU5
-                          ? {} // Empty object when units exist (rowSpan covers this)
-                          : {
-                              text: (index + 1).toString(),
-                              style: "tableCell",
-                              alignment: "center",
-                              verticalAlignment: "middle",
-                            },
+                        // hasU4 || hasU5
+                        //   ? {} // Empty object when units exist (rowSpan covers this)
+                        //   :
+                        {
+                          text: "",
+                          style: "tableCell",
+                          alignment: "center",
+                          verticalAlignment: "middle",
+                        },
 
                         { text: "", border: [false, false, false, true] },
                         { text: "", border: [false, false, false, true] },
@@ -747,6 +797,14 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
         title={sectionHeaders.summary}
         headers={lowVoltageSummaryheadings}
         data={summaryConsumption}
+        formatNumberKeys={[
+          "Total_I_C_G",
+          "I_C_OU",
+          "Total_Consumption",
+          "Total_Tranferred_to_OU",
+          "Unaccounted_Energy",
+        ]}
+        cellWidth="18%"
         totalRow={{
           Unit: "Total",
           Total_I_C_G: totalIcg,
@@ -757,6 +815,12 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
       {/* ==============Utlization=============== */}
       <StandardTable
         title={sectionHeaders.utilization}
+        formatNumberKeys={[
+          "TotalConnectedLoadPerDept",
+          "TotalAvgConsumption",
+          "UtilizationPercent",
+        ]}
+        cellWidth="30%"
         headers={utilizationHeadings}
         data={utilization}
         percentKeys={["UtilizationPercent"]}
@@ -764,12 +828,28 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
       {/* ==============Production Summary=============== */}
       <StandardTable
         title={sectionHeaders.production}
+        formatNumberKeys={[
+          "TotalAvgCount",
+          "TotalConsumption",
+          "consumptionperbag",
+        ]}
+        cellWidth="22.5%"
         headers={productionSummaryHeadings}
         data={productionSummary}
       />
       {/* ==============Daily Consumption Summary=============== */}
       <StandardTable
         title={sectionHeaders.dailyConsumption}
+        formatNumberKeys={[
+          "Unit_4_LT1",
+          "Unit_4_LT2",
+          "Unit_4_Total",
+          "Unit_5_LT1",
+          "Unit_5_LT2",
+          "Unit_5_Total",
+          "Grand_Total",
+        ]}
+        cellWidth="12.85%"
         headers={dailyConsumptionHeaders}
         data={dailyConsumption}
         totalRow={{ date: "Total", ...totalRow }}
@@ -778,6 +858,13 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
       {/* ==============Daily production Summary=============== */}
       <StandardTable
         title={sectionHeaders.prodDetail}
+        formatNumberKeys={[
+          "Unit_4_AvgCount",
+          "Unit_5_AvgCount",
+          "Unit_4_consumptionperbag",
+          "Unit_5_consumptionperbag",
+        ]}
+        cellWidth="15%"
         headers={dailyProductionHeaders}
         data={productionSummaryDaily}
         highlightKeys={["Unit_4_consumptionperbag", "Unit_5_consumptionperbag"]}
@@ -828,7 +915,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
                     <td className="border border-gray-300 px-2 py-1 text-right">
                       {dept.u4AvgConsumption ?? "-"}
                     </td>
-                    <td className="border border-gray-300 px-2 py-1 text-right">
+                    <td className="border border-gray-300 px-2 py-1 text-right bg-[#E5F3FD] dark:bg-[#e5f3fd5d]">
                       {dept.u4UtilizationPercent + " %" ?? "-"}
                     </td>
                     <td className="border border-gray-300 px-2 py-1 text-right">
@@ -862,7 +949,7 @@ const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
                     <td className="border border-gray-300 px-2 py-1 text-right">
                       {dept.u5AvgConsumption ?? "-"}
                     </td>
-                    <td className="border border-gray-300 px-2 py-1 text-right">
+                    <td className="border border-gray-300 px-2 py-1 text-right bg-[#E5F3FD] dark:bg-[#e5f3fd5d]">
                       {dept.u5UtilizationPercent + " %" ?? "-"}
                     </td>
                     <td className="border border-gray-300 px-2 py-1 text-right">
