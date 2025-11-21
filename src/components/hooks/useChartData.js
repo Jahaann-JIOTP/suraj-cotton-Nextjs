@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import config from "@/constant/apiRouteList";
 
-export function useTrendsChart(area,type, startDate, endDate) {
+export function useTrendsChart(area, type, startDate, endDate) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -35,7 +35,7 @@ export function useTrendsChart(area,type, startDate, endDate) {
     };
 
     fetchData();
-  }, [area,type, startDate, endDate]);
+  }, [area, type, startDate, endDate]);
 
   return { data, loading, error };
 }

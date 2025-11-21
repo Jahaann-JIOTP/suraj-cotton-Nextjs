@@ -294,6 +294,7 @@ export default function GenerationEnergy() {
         selectedTimePeriod={selectedTimePeriod}
         chartId="GenerationChartID"
         theme={theme}
+        isFullView={isFullView}
         loading={loading}
       />
     </div>

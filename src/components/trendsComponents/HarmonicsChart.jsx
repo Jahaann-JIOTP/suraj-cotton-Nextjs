@@ -29,14 +29,15 @@ const HarmonicsChart = ({
         id={`${area}-${chartId}`}
         data={data.map((item) => ({
           time: new Date(item.timestamp).getTime(), // ✅ directly valid
-          hormonics: item.sumHarmonics,
+          // time: item.timestamp, // ✅ directly valid
+          harmonics: item.sumHarmonics,
         }))}
         xKey="time"
         xType="date"
         series={[
           {
             type: "line",
-            yKey: "hormonics",
+            yKey: "harmonics",
             name: "Harmonics",
             color: "#2DDE04",
             strokeWidth: 3,

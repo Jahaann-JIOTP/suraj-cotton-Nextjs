@@ -21,10 +21,18 @@ const ReusableTrendChart = ({
   minGridDistance = 80,
   isFullscreen = false,
 }) => {
+  console.log("new formate data", data);
   const chartRef = useRef(null);
   const rootRef = useRef(null);
   const { theme } = useTheme();
-
+  const convertTimestampToISO = (data) => {
+    return data.map((item) => ({
+      ...item,
+      time: new Date(item.time).toISOString(),
+    }));
+  };
+  // const convertedData = convertTimestampToISO(originalTimestampData);
+  // console.log(convertedData);
   // Initialize chart
   useEffect(() => {
     if (!chartRef.current) return;
@@ -51,8 +59,8 @@ const ReusableTrendChart = ({
     // Create chart
     const chart = root.container.children.push(
       am5xy.XYChart.new(root, {
-        panX: true,
-        panY: true,
+        panX: false,
+        panY: false,
         wheelX: "panX",
         wheelY: "zoomX",
         pinchZoomX: true,
@@ -69,9 +77,18 @@ const ReusableTrendChart = ({
           renderer: am5xy.AxisRendererX.new(root, {
             minGridDistance: minGridDistance,
           }),
+          // tooltip: am5.Tooltip.new(root, {
+          //   labelText: "{valueX}",
+          // }),
           tooltip: am5.Tooltip.new(root, {
-            labelText: "{valueX}",
+            labelText: "{valueX.formatDate('dd/MM/yyyy - HH:mm')}",
           }),
+        })
+      );
+      xAxis.set(
+        "tooltip",
+        am5.Tooltip.new(root, {
+          labelText: "{valueX.formatDate('dd/MM/yyyy - HH:mm')}",
         })
       );
     } else {
@@ -149,7 +166,7 @@ const ReusableTrendChart = ({
             labelText: "{name}: {valueY}",
           }),
         });
-
+        console.log("axis", xAxis);
         if (seriesConfig.color) {
           const lineColor = am5.color(seriesConfig.color);
           chartSeries.strokes.template.setAll({
@@ -232,25 +249,54 @@ const ReusableTrendChart = ({
     }
 
     // Add cursor
-if (cursor) {
-  const chartCursor = chart.set(
-    "cursor",
-    am5xy.XYCursor.new(root, {
-      behavior: "zoomX",
-    })
-  );
-  chartCursor.set("snapToSeries", chart.series.values);
-  chartCursor.lineY.set("visible", true);
-}
-// Add scrollbar if needed
-if (scrollbarX) {
-  chart.set(
-    "scrollbarX",
-    am5.Scrollbar.new(root, {
-      orientation: "horizontal",
-    })
-  );
-}
+    // if (cursor) {
+    //   const chartCursor = chart.set(
+    //     "cursor",
+    //     am5xy.XYCursor.new(root, {
+    //       behavior: "zoomX",
+    //     })
+    //   );
+    //   chartCursor.set("snapToSeries", chart.series.values);
+
+    //   chartCursor.lineY.set("visible", true);
+    //   xAxis.set("cursorTooltipEnabled", true); // enable tooltip on cursor
+
+    //   xAxis.get("tooltip").label.set(
+    //     "text",
+    //     "{valueX.formatDate('dd/MM/yyyy - HH:mm')}" // format cursor tooltip
+    //   );
+    // }
+
+    if (cursor) {
+      const chartCursor = chart.set(
+        "cursor",
+        am5xy.XYCursor.new(root, { behavior: "zoomX" })
+      );
+      chartCursor.set("snapToSeries", chart.series.values);
+      chartCursor.lineY.set("visible", true);
+
+      if (xAxis && xType === "date") {
+        xAxis
+          .get("tooltip")
+          .label.set("text", "{valueX.formatDate('dd/MM/yyyy - HH:mm')}");
+      }
+    }
+    xAxis.set(
+      "tooltip",
+      am5.Tooltip.new(root, {
+        forceHidden: false,
+      })
+    );
+
+    // Add scrollbar if needed
+    if (scrollbarX) {
+      chart.set(
+        "scrollbarX",
+        am5.Scrollbar.new(root, {
+          orientation: "horizontal",
+        })
+      );
+    }
 
     // Cleanup function - dispose only if this is the same chart
     return () => {
@@ -288,3 +334,258 @@ if (scrollbarX) {
 };
 
 export default ReusableTrendChart;
+/////////////====================================================================
+// "use client";
+// import { useEffect, useRef } from "react";
+// import * as am5 from "@amcharts/amcharts5";
+// import * as am5xy from "@amcharts/amcharts5/xy";
+// import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+// import am5themes_Dark from "@amcharts/amcharts5/themes/Dark";
+// import { useTheme } from "next-themes";
+
+// const ReusableTrendChart = ({
+//   id,
+//   data = [],
+//   xKey = "time",
+//   xType = "date",
+//   series = [],
+//   legend = true,
+//   cursor = true,
+//   scrollbarX = false,
+//   yLeftTitle,
+//   yRightTitle,
+//   minGridDistance = 80,
+//   isFullscreen = false,
+// }) => {
+//   const chartRef = useRef(null);
+//   const rootRef = useRef(null);
+//   const { theme } = useTheme();
+
+//   useEffect(() => {
+//     if (!chartRef.current) return;
+
+//     // Dispose previous chart if exists
+//     if (rootRef.current && rootRef.current.id === id) {
+//       rootRef.current.root.dispose();
+//       rootRef.current = null;
+//     }
+
+//     const root = am5.Root.new(chartRef.current);
+//     rootRef.current = { root, id };
+
+//     // Set theme
+//     const themes = [am5themes_Animated.new(root)];
+//     if (theme === "dark") themes.push(am5themes_Dark.new(root));
+//     root.setThemes(themes);
+//     root._logo?.dispose();
+
+//     const chart = root.container.children.push(
+//       am5xy.XYChart.new(root, {
+//         panX: false,
+//         panY: false,
+//         wheelX: "panX",
+//         wheelY: "zoomX",
+//         pinchZoomX: true,
+//         layout: root.verticalLayout,
+//       })
+//     );
+
+//     // X Axis
+//     let xAxis;
+//     if (xType === "date") {
+//       xAxis = chart.xAxes.push(
+//         am5xy.DateAxis.new(root, {
+//           baseInterval: { timeUnit: "minute", count: 1 },
+//           renderer: am5xy.AxisRendererX.new(root, { minGridDistance }),
+//           tooltip: am5.Tooltip.new(root, {
+//             labelText: "{valueX.formatDate('dd/MM/yyyy - HH:mm')}",
+//           }),
+//         })
+//       );
+//     } else {
+//       xAxis = chart.xAxes.push(
+//         am5xy.CategoryAxis.new(root, {
+//           categoryField: xKey,
+//           renderer: am5xy.AxisRendererX.new(root, { minGridDistance }),
+//         })
+//       );
+//       xAxis.data.setAll(data);
+//     }
+
+//     // Y axes
+//     const leftYAxis = chart.yAxes.push(
+//       am5xy.ValueAxis.new(root, {
+//         renderer: am5xy.AxisRendererY.new(root, {}),
+//       })
+//     );
+//     if (yLeftTitle)
+//       leftYAxis.set(
+//         "title",
+//         am5.Label.new(root, { text: yLeftTitle, fontSize: 12 })
+//       );
+
+//     let rightYAxis;
+//     if (series.some((s) => s.yAxis === "right")) {
+//       rightYAxis = chart.yAxes.push(
+//         am5xy.ValueAxis.new(root, {
+//           renderer: am5xy.AxisRendererY.new(root, { opposite: true }),
+//         })
+//       );
+//       if (yRightTitle)
+//         rightYAxis.set(
+//           "title",
+//           am5.Label.new(root, { text: yRightTitle, fontSize: 12 })
+//         );
+//     }
+
+//     // Series
+//     series.forEach((s) => {
+//       const yAxis = s.yAxis === "right" ? rightYAxis : leftYAxis;
+//       let chartSeries;
+
+//       if (s.type === "line") {
+//         chartSeries = am5xy.LineSeries.new(root, {
+//           name: s.name,
+//           xAxis,
+//           yAxis,
+//           valueYField: s.yKey,
+//           valueXField: xType === "date" ? xKey : undefined,
+//           categoryXField: xType === "category" ? xKey : undefined,
+//           tooltip: am5.Tooltip.new(root, {
+//             pointerOrientation: "horizontal",
+//             getFillFromSprite: true,
+//             getStrokeFromSprite: true,
+//             autoTextColor: false,
+//             labelText:
+//               "{name}: {valueY}\n{valueX.formatDate('dd/MM/yyyy - HH:mm')}",
+//           }),
+//         });
+
+//         if (s.color) {
+//           const lineColor = am5.color(s.color);
+//           chartSeries.strokes.template.setAll({
+//             stroke: lineColor,
+//             strokeWidth: s.strokeWidth || 2,
+//           });
+//           chartSeries.fills.template.setAll({
+//             fill: lineColor,
+//             fillOpacity: 0.1,
+//           });
+//         }
+//       } else if (s.type === "column") {
+//         chartSeries = am5xy.ColumnSeries.new(root, {
+//           name: s.name,
+//           xAxis,
+//           yAxis,
+//           valueYField: s.yKey,
+//           valueXField: xType === "date" ? xKey : undefined,
+//           categoryXField: xType === "category" ? xKey : undefined,
+//           tooltip: am5.Tooltip.new(root, {
+//             pointerOrientation: "horizontal",
+//             labelText:
+//               "{name}: {valueY}\n{valueX.formatDate('dd/MM/yyyy - HH:mm')}",
+//           }),
+//         });
+
+//         chartSeries.columns.template.setAll({
+//           width: am5.percent(70),
+//           cornerRadiusTL: 3,
+//           cornerRadiusTR: 3,
+//         });
+
+//         if (s.color) {
+//           const colColor = am5.color(s.color);
+//           chartSeries.columns.template.setAll({
+//             fill: colColor,
+//             stroke: colColor,
+//           });
+//         }
+//       }
+
+//       if (chartSeries) {
+//         chart.series.push(chartSeries);
+//         chartSeries.data.setAll(data); // use raw numeric timestamps!
+//       }
+//     });
+
+//     // Legend
+//     if (legend) {
+//       const chartLegend = chart.children.push(
+//         am5.Legend.new(root, {
+//           centerX: am5.p50,
+//           x: am5.p50,
+//           layout: root.horizontalLayout,
+//         })
+//       );
+//       chartLegend.data.setAll(chart.series.values);
+//       chartLegend.labels.template.setAll({
+//         fill: theme === "dark" ? am5.color(0xffffff) : am5.color(0x000000),
+//       });
+//     }
+
+//     // Cursor
+//     if (cursor) {
+//       const chartCursor = chart.set(
+//         "cursor",
+//         am5xy.XYCursor.new(root, { behavior: "zoomX" })
+//       );
+//       chartCursor.set("snapToSeries", chart.series.values);
+//       chartCursor.lineY.set("visible", true);
+
+//       if (xAxis && xType === "date") {
+//         xAxis
+//           .get("tooltip")
+//           .label.set("text", "{valueX.formatDate('dd/MM/yyyy - HH:mm')}");
+//       }
+//     }
+//     xAxis.set(
+//       "tooltip",
+//       am5.Tooltip.new(root, {
+//         forceHidden: false,
+//       })
+//     );
+
+//     // Scrollbar
+//     if (scrollbarX) {
+//       chart.set(
+//         "scrollbarX",
+//         am5.Scrollbar.new(root, { orientation: "horizontal" })
+//       );
+//     }
+
+//     // Cleanup
+//     return () => {
+//       if (rootRef.current && rootRef.current.id === id) {
+//         rootRef.current.root.dispose();
+//         rootRef.current = null;
+//       }
+//     };
+//   }, [
+//     id,
+//     data,
+//     xKey,
+//     xType,
+//     series,
+//     legend,
+//     cursor,
+//     scrollbarX,
+//     yLeftTitle,
+//     yRightTitle,
+//     minGridDistance,
+//     isFullscreen,
+//     theme,
+//   ]);
+
+//   return (
+//     <div className="w-full">
+//       <div
+//         ref={chartRef}
+//         id={id}
+//         style={{ height: isFullscreen ? "90vh" : "33vh" }}
+//         className="w-full"
+//       />
+//     </div>
+//   );
+// };
+
+// export default ReusableTrendChart;
