@@ -152,12 +152,12 @@ export const sidebarLinksMap = {
         },
         // {
         //   id: 2,
-        //   title: "Transformers",
+        //   title: "Cockpit Dashbaord",
         //   href: "/cockpit-dashbaord",
-        //   icon: TransformerIcon,
+        //   icon: MeterIcon,
         // },
         {
-          id: 2,
+          id: 3,
           title: "Transformers",
           href: "/transformers",
           icon: TransformerIcon,
