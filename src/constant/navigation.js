@@ -42,6 +42,7 @@ export const privilegeConfig = {
       "/dailyconsumption-u4-lt2",
       "/dailyconsumption-u5-lt1",
       "/dailyconsumption-u5-lt2",
+      "/cockpit-dashbaord",
     ],
     tab: "Home",
   },
@@ -149,6 +150,12 @@ export const sidebarLinksMap = {
           href: "/power-summary",
           icon: PlantOverview,
         },
+        // {
+        //   id: 2,
+        //   title: "Transformers",
+        //   href: "/cockpit-dashbaord",
+        //   icon: TransformerIcon,
+        // },
         {
           id: 2,
           title: "Transformers",

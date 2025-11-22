@@ -26,17 +26,6 @@ export default function HeatmapTrafo({
 
     return () => chartInstance.current?.dispose();
   }, []);
-  function rgbToHex(rgb) {
-    // extract numbers from "rgb(255,190,90)"
-    const match = rgb.match(/\d+/g);
-    if (!match) return "#000000";
-
-    let [r, g, b] = match.map(Number);
-
-    const toHex = (n) => n.toString(16).padStart(2, "0");
-
-    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-  }
 
   /* -----------------------------------------------
       UTILITY: COLOR GRADIENT
@@ -107,7 +96,7 @@ export default function HeatmapTrafo({
       originalDateString: row.date,
       value: row[meter],
     }));
-
+    console.log("heatmap data", records);
     const allDates = records.map((r) => r.dt.toISOString().split("T")[0]);
     const minDateStr = allDates.reduce((a, b) => (a < b ? a : b));
     const maxDateStr = allDates.reduce((a, b) => (a > b ? a : b));
@@ -131,15 +120,24 @@ export default function HeatmapTrafo({
       return { start, end };
     });
 
+    // const yHours = [];
+    // for (let i = 8; i < 32; i++) {
+    //   const h = i % 24;
+    //   const hour12 = h % 12 || 12;
+    //   const ampm = h >= 12 ? "pm" : "am";
+    //   yHours.push(`${hour12}${ampm}`);
+    // }
+    // const showHour = (i) => i % 3 === 0;
+
     const yHours = [];
-    for (let i = 8; i < 30; i++) {
-      const h = i % 24;
-      const hour12 = h % 12 || 12;
-      const ampm = h >= 12 ? "pm" : "am";
+    for (let i = 0; i < 24; i++) {
+      const hour = (6 + i) % 24;
+      const hour12 = hour % 12 || 12;
+      const ampm = hour >= 12 ? "pm" : "am";
       yHours.push(`${hour12}${ampm}`);
     }
-    const showHour = (i) => i % 3 === 0;
 
+    const showHour = (i) => i % 2 === 0; // every 2 hours (clearer)
     /* -----------------------------------------------
         GRID BUILD (col-hour)
     ------------------------------------------------ */

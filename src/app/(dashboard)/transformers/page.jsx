@@ -204,6 +204,7 @@ const TranformersPage = () => {
             showLabels={true}
             dateRangeLabel="Select Date Range:"
             intervalLabel="From"
+            defaultSelected="last7days"
             toLabel="To"
             timeLabel="Time"
             onChange={handleDateRangeChange}

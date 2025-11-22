@@ -151,7 +151,6 @@ const SankeyChart = ({
       tooltip: {
         trigger: "item",
         formatter: (params) => {
-          console.log("Params->", { Name: params.name, value: params.value });
           if (params.dataType === "node") {
             return `${params.name}: ${
               params.value

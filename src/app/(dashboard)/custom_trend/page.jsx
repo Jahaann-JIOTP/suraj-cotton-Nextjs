@@ -617,7 +617,6 @@ function CustomTrend() {
         `trend_data_${selectedParameter}_${startDate}_to_${endDate}.pdf`
       );
   };
-  console.log(chartData);
   return (
     <div className="relative bg-white shadow dark:bg-gray-800 rounded-md border-t-3 border-[#025697] overflow-y-auto h-[87vh] md:h-[81vh] px-4 py-3">
       <div className="relative z-10 h-full flex flex-col">

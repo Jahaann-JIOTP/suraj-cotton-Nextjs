@@ -26,7 +26,6 @@ export default function SimpleAm4Chart({ data = [], yAxisTitle = "" }) {
   const exportBtnRef = useRef(null);
   const { theme } = useTheme();
 
-  console.log(yAxisTitle);
   useEffect(() => {
     if (!data || data.length === 0) return;
 

@@ -21,7 +21,6 @@ const ReusableTrendChart = ({
   minGridDistance = 80,
   isFullscreen = false,
 }) => {
-  console.log("new formate data", data);
   const chartRef = useRef(null);
   const rootRef = useRef(null);
   const { theme } = useTheme();

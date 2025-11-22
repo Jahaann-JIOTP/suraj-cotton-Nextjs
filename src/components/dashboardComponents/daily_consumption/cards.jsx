@@ -77,7 +77,7 @@ const Card = ({
             isLightingMeter ? "Lighting" : isPlantMeter ? "Plants" : "Machines"
           }`}</div>
           <div className="text-[#025697]  font-inter font-semibold text-center">
-            {pad2(machines)}
+            {machines}
           </div>
         </div>
         <div>
@@ -85,7 +85,7 @@ const Card = ({
             Load Connected
           </div>
           <div className="text-[#025697] font-inter font-semibold text-center">
-            {fmt2(loadConnected)} kW
+            {loadConnected} kW
           </div>
         </div>
       </div>

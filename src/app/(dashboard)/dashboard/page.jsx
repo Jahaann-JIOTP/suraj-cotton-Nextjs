@@ -28,7 +28,6 @@ const Dashboard = () => {
     startTime: "",
     endTime: "",
   });
-  console.log(unitConsumption);
   const handleDateRangeChange = useCallback((range) => {
     setDateRange(range);
   }, []);

@@ -51,7 +51,7 @@ const sourcesData = {
 };
 const EnergyComparisonReport = ({ rawData, intervalsObj, newIntervalObj }) => {
   const { theme } = useTheme();
-  console.log(rawData);
+
   // const [chartImages, setChartImages] = useState({ unit4: "", unit5: "" });
   //   extract data
   const dailyConsumption = Array.isArray(rawData?.consumptionDetail)

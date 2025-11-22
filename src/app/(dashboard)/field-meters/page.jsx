@@ -15,7 +15,6 @@ const NewFieldMeter = () => {
   const tomorrow = nextDate.toISOString().split("T")[0];
 
   const token = localStorage.getItem("token");
-  console.log("current area", currentArea);
   // fetch meter area status
   const fetchMeterAreaStatus = async () => {
     if (!token) return;

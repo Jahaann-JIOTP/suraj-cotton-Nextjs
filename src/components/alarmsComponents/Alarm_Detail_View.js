@@ -635,7 +635,6 @@ export default function ViewDetailsModal({
                       const checked = isChecked(key); // multi-select (checkbox)
                       const anyChecked = checkedKeys.size > 0;
                       const highlight = anyChecked ? checked : isSelected;
-                      console.log(">>>>>>>>>>>>>>>>>>>>>", r);
 
                       // Skip rendering or disable checkbox if acknowledged
                       if (r.ack === "Acknowledged") {
