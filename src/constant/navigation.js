@@ -152,8 +152,8 @@ export const sidebarLinksMap = {
         },
         {
           id: 2,
-          title: "Cockpit Dashbaord",
-          href: "/cockpit-dashbaord",
+          title: "Cockpit",
+          href: "/cockpit",
           icon: MeterIcon,
         },
         {
