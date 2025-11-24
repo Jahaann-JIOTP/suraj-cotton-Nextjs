@@ -460,7 +460,7 @@ const cockpitDashboard = () => {
                   innerMaxRange={-1}
                   outerMinRange={0}
                   title="Wapda"
-                  outerMaxRange={4000}
+                  outerMaxRange={2200}
                 />
               </div>
               {/* TF 2 */}
@@ -482,7 +482,7 @@ const cockpitDashboard = () => {
                   innerMaxRange={-1}
                   outerMinRange={0}
                   title="Wapda"
-                  outerMaxRange={4000}
+                  outerMaxRange={2200}
                 />
               </div>
               {/* Solar 1185 kW */}
@@ -506,7 +506,7 @@ const cockpitDashboard = () => {
                   innerMaxRange={-1}
                   outerMinRange={0}
                   title="Wapda"
-                  outerMaxRange={2500}
+                  outerMaxRange={1500}
                 />
               </div>
               {/* Solar 1070 kW */}
