@@ -11,7 +11,7 @@ import {
 import AlarmBellIcon from "../../public/sidebarIcons/AlarmBell";
 import ListIcon from "../../public/sidebarIcons/ListIcon";
 import AlarmSubMenuIcon from "../../public/sidebarIcons/AlarmSubmenu";
-
+import MeterIcon from "../../public/sidebarIcons/MeterIcon";
 import PowerIcon from "../../public/sidebarIcons/PowerIcon";
 import TransformerIcon from "../../public/sidebarIcons/Transformer";
 import EnergySankey from "../../public/sidebarIcons/energySankey";

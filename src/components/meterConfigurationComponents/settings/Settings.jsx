@@ -9,7 +9,7 @@ const meters = [
     name: "PDB1 CD1",
     id: "U1_GW02",
     u4buttonText: "LT2-Card 1-4+9-12",
-    u5buttonText: "LT1-Comber 1-14+Lap former 1-3",
+    u5buttonText: "LT1-Comber 1-14+Lap Former 1-3",
   },
   {
     name: "PDB2 CD2",
@@ -24,8 +24,8 @@ const meters = [
     id: "U3_GW02",
   },
   {
-    u4buttonText: "  LT1-Ring 21-24",
-    u5buttonText: "LT1-Winding 1-9",
+    u4buttonText: "LT2-Card 1-4+9-12",
+    u5buttonText: "LT1-Comber 1-14+Lap Former 1-3",
     name: "PDB 08",
     id: "U4_GW02",
   },

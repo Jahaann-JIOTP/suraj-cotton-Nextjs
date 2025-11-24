@@ -40,6 +40,7 @@ const Dashboard = () => {
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
+        // `${config.BASE_URL}/dashbaord/consumption?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
         {
           method: "GET",
           headers: {
