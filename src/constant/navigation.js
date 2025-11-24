@@ -150,12 +150,12 @@ export const sidebarLinksMap = {
           href: "/power-summary",
           icon: PlantOverview,
         },
-        // {
-        //   id: 2,
-        //   title: "Cockpit Dashbaord",
-        //   href: "/cockpit-dashbaord",
-        //   icon: MeterIcon,
-        // },
+        {
+          id: 2,
+          title: "Cockpit Dashbaord",
+          href: "/cockpit-dashbaord",
+          icon: MeterIcon,
+        },
         {
           id: 3,
           title: "Transformers",

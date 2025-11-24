@@ -191,7 +191,7 @@ export default function CockpitChart({
           max: outerMaxRange,
           startAngle: 180,
           endAngle: 0,
-          splitNumber: 15,
+          splitNumber: 10,
           radius: outerRadiousProp,
           axisLine: {
             lineStyle: {
@@ -251,7 +251,7 @@ export default function CockpitChart({
           left: "30%",
           top: "45%",
           style: {
-            text: "Lead",
+            text: "Lag",
             fill: textColor,
             fontSize: 14,
           },
@@ -261,7 +261,7 @@ export default function CockpitChart({
           right: "30%",
           top: "45%",
           style: {
-            text: "Lag",
+            text: "Lead",
             fill: textColor,
             fontSize: 14,
           },
