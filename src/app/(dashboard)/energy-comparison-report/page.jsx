@@ -57,24 +57,16 @@ const UsageReport = () => {
     p2startTime: "06:00",
     p2endTime: "06:00",
   });
-  console.log("selected unit:", unit);
   const [resData, setResData] = useState([]);
   const [resData2, setResData2] = useState([]);
-  console.log("Response 1:", resData);
-  console.log("Response 2:", resData2);
+
   const period1Ref = useRef(null);
   const period2Ref = useRef(null);
   const dropdownRef = useRef(null);
   const intervalDropdownRef = useRef(null);
   const [period1, setPeriod1] = useState([null, null]); // [start, end]
   const [period2, setPeriod2] = useState([null, null]); // [start, end]
-  const intervalsObj = {
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-    usageReportTimePeriod,
-  };
+
   const NewIntervalsObj = {
     "Selected Period": usageReportTimePeriod,
     "Start Date":
@@ -98,7 +90,7 @@ const UsageReport = () => {
   const fixKarachiOffset = (date) => {
     if (!date) return null;
     const d = new Date(date);
-    d.setHours(d.getHours() + 5); // add 5 hours to prevent shifting backward
+    d.setHours(d.getHours()); // add 5 hours to prevent shifting backward
     return d;
   };
 
@@ -128,7 +120,6 @@ const UsageReport = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // console.log("time intervals:", p1EndDate);
   const [p2PreviewRange, setP2PreviewRange] = useState([]); // highlight days
   const isPeriod1Complete = period1[0] && period1[1];
   const calculateDays = (start, end) => {
@@ -404,6 +395,7 @@ const UsageReport = () => {
   }, []);
 
   // ///////===============================Handle all data processing start=================================
+
   const intervalObj = {
     Range: { p1: "Range 1", p2: "Range 2" },
     "Start Date": {
@@ -415,7 +407,139 @@ const UsageReport = () => {
       p2: toLocalISODate(dateRanges.period2.end),
     },
   };
+  const HTside1 = resData?.HTside || {};
+  const HTside2 = resData2?.HTside || {};
+  // fomate ht side function
+  function mergeHTSideData(ht1, ht2) {
+    const finalObj = {
+      Period: {
+        p1: "Range 1",
+        p2: "Range 2",
+      },
+    };
+    Object.keys(ht1).forEach((key) => {
+      finalObj[key] = {
+        p1: ht1[key],
+        p2: ht2[key],
+      };
+    });
+    return finalObj;
+  }
+  const mergedHTSideFinalData = mergeHTSideData(HTside1, HTside2);
+  // ///////////////losses summary data ////////////////////
+  const lossesSummary1 = resData?.lossesSummary || {};
+  const lossesSummary2 = resData2?.lossesSummary || {};
+  function mergeLossesObjects(loss1, loss2) {
+    const deltaKey = "Δ Generation / Consumption";
 
+    const mergedSummary = {
+      Period: { p1: "Range 1", p2: "Range 2" },
+    };
+
+    Object.keys(loss1).forEach((key) => {
+      // Skip delta key here
+      if (key !== deltaKey) {
+        mergedSummary[key] = {
+          p1: loss1[key],
+          p2: loss2[key],
+        };
+      }
+    });
+
+    // delta-only object
+    const deltaOnly = {
+      [deltaKey]: {
+        p1: loss1[deltaKey],
+        p2: loss2[deltaKey],
+      },
+    };
+
+    return { mergedSummary, deltaOnly };
+  }
+
+  const { mergedSummary, deltaOnly } = mergeLossesObjects(
+    lossesSummary1,
+    lossesSummary2
+  );
+
+  // low voltage side summary
+  const lowVoltageSideSummary1 = Array.isArray(resData?.dailyConsumption)
+    ? resData.dailyConsumption
+    : [];
+  const lowVoltageSideSummary2 = Array.isArray(resData2?.dailyConsumption)
+    ? resData2.dailyConsumption
+    : [];
+  function mergeLowVoltageData(arr1, arr2) {
+    const map = new Map();
+
+    // Insert P1 values
+    arr1.forEach((item) => {
+      map.set(item.Unit, { unit: item.Unit });
+
+      Object.keys(item).forEach((key) => {
+        if (key !== "Unit") {
+          if (!map.get(item.Unit)[key]) {
+            map.get(item.Unit)[key] = {};
+          }
+          map.get(item.Unit)[key].p1 = item[key];
+        }
+      });
+    });
+
+    // Insert P2 values
+    arr2.forEach((item) => {
+      if (!map.has(item.Unit)) {
+        map.set(item.Unit, { unit: item.Unit });
+      }
+
+      Object.keys(item).forEach((key) => {
+        if (key !== "Unit") {
+          if (!map.get(item.Unit)[key]) {
+            map.get(item.Unit)[key] = {};
+          }
+          map.get(item.Unit)[key].p2 = item[key];
+        }
+      });
+    });
+
+    // Convert map to array
+    return Array.from(map.values());
+  }
+
+  const merged = mergeLowVoltageData(
+    lowVoltageSideSummary1,
+    lowVoltageSideSummary2
+  );
+  //  total row
+  const { totalIcg, totalConsumptionValue, UnaccountedEnergyTotal } =
+    merged.reduce(
+      (
+        acc,
+        { Total_I_C_G = {}, Total_Consumption = {}, Unaccounted_Energy = {} }
+      ) => {
+        acc.totalIcg.p1 += Number(Total_I_C_G.p1) || 0;
+        acc.totalIcg.p2 += Number(Total_I_C_G.p2) || 0;
+
+        acc.totalConsumptionValue.p1 += Number(Total_Consumption.p1) || 0;
+        acc.totalConsumptionValue.p2 += Number(Total_Consumption.p2) || 0;
+
+        acc.UnaccountedEnergyTotal.p1 += Number(Unaccounted_Energy.p1) || 0;
+        acc.UnaccountedEnergyTotal.p2 += Number(Unaccounted_Energy.p2) || 0;
+
+        return acc;
+      },
+      {
+        totalIcg: { p1: 0, p2: 0 },
+        totalConsumptionValue: { p1: 0, p2: 0 },
+        UnaccountedEnergyTotal: { p1: 0, p2: 0 },
+      }
+    );
+  const totalRowLowvoltageSummary = {
+    totalIcg,
+    totalConsumptionValue,
+    UnaccountedEnergyTotal,
+  };
+  console.log("merged data", totalIcg);
   // ///////===============================Handle all data processing end=================================
 
   //  handle minimum end time
@@ -745,6 +869,12 @@ const UsageReport = () => {
           rawData={tableRawData}
           rawData2={tableRawData2}
           intervalObj={intervalObj}
+          htSideData={mergedHTSideFinalData}
+          lowVoltageSide={merged}
+          lowVoltageTotla={totalRowLowvoltageSummary}
+          unit={unit}
+          mergedSummary={mergedSummary}
+          deltaOnly={deltaOnly}
         />
       ) : null}
     </div>
