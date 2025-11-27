@@ -6,6 +6,8 @@ const KayValueTable = ({
   data = {},
   isSingleCol = false,
   unit = "",
+  hiligthValueCell = false,
+  boldKeys = [],
 }) => {
   return (
     <div className="w-full mt-5">
@@ -36,6 +38,8 @@ const KayValueTable = ({
                   displayUnit = "";
                 }
               }
+              const shouldBold = boldKeys.includes(key);
+              const boldClass = shouldBold ? "font-bold" : "";
               return (
                 <tr key={idx} className="text-[14px] font-inter">
                   <td
@@ -45,7 +49,11 @@ const KayValueTable = ({
                     {key.replace(/_/g, " ")}
                   </td>
                   {!isSingleCol && (
-                    <td className="py-1 px-4 border border-gray-400 dark:border-gray-500 text-left">
+                    <td
+                      className={`py-1 px-4 border border-gray-400 dark:border-gray-500 text-left ${
+                        hiligthValueCell ? hilightedCell : ""
+                      } ${boldClass}`}
+                    >
                       {typeof value === "number"
                         ? value.toLocaleString("en-US", {
                             minimumFractionDigits: 2,

@@ -1,18 +1,11 @@
 "use client";
 import CardHeader from "@/components/cockpitComponent/CardHeader";
 import CockpitChart from "@/components/cockpitComponent/CockpitChart";
+import MainSourcesChart from "@/components/cockpitComponent/MainSourcesChart";
 import config from "@/constant/apiRouteList";
+import { Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
-const data = {
-  wapdaKw: 100.12,
-  wapdaPf: 0.4,
-  hfo1Kw: 1100.12,
-  hfo1Pf: 0.8,
-  jmsKw: 1020,
-  jmsPf: -0.4,
-  hfoAuxKw: 900,
-  hfoAuxPf: 0.1,
-};
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 const cockpitDashboard = () => {
   const [meterData, setMeterData] = useState([]);
@@ -37,7 +30,34 @@ const cockpitDashboard = () => {
       console.error(error.message);
     }
   };
+
+  // /============info messages===================
+  const inforMessages = {
+    TotalPlant:
+      "Total Plant Sum (MW) = Below meters are included; total kW sum converted to MW by dividing by 1000:\n Wapda 2, HFO 1, JMS 620, Diesel+JGS I/C LT1, Diesel+JGS I/C LT2, Solar 352.50, Solar 52.17, Solar 1185, Solar 1070, Unit 4 HT Room Wapda 1",
+    DieselJGS:
+      "Both Diesel+JGS I/C LT1 and LT2 meters are included in Diesel+JGS I/C",
+    WapdaHfoJms:
+      "Both Wapda+HFO+JMS I/C LT1 and LT2 meters are included in Wapda+HFO+JMS I/C",
+  };
   //===============calculating toatl of unit 4 main
+  // total of main sources
+  let totalMainSourcesActivePower =
+    (Number(meterData.U27_PLC_ActivePower_Total) ||
+      0 + Number(meterData.U22_PLC_ActivePower_Total) ||
+      0 + Number(meterData.U26_PLC_ActivePower_Total) ||
+      0 + Number(meterData.U24_GW01_ActivePower_Total) ||
+      0 + Number(meterData.U28_PLC_ActivePower_Total) ||
+      0 + Number(meterData.U6_GW02_ActivePower_Total) ||
+      0 + Number(meterData.U17_GW03_ActivePower_Total) ||
+      0 + Number(meterData.U19_PLC_ActivePower_Total) ||
+      0 + Number(meterData.U11_GW01_ActivePower_Total) ||
+      0 + Number(meterData.U23_GW01_ActivePower_Total) ||
+      0) / 1000;
+  console.log(
+    "totalMainSourcesActivePower",
+    totalMainSourcesActivePower.toFixed(2)
+  );
   // diesel jgs
   let dieselJGSTotalActivePower =
     Number(meterData.U19_PLC_ActivePower_Total) +
@@ -54,32 +74,7 @@ const cockpitDashboard = () => {
     (Number(meterData.U21_PLC_PowerFactor_Avg) +
       Number(meterData.U13_GW01_PowerFactor_Avg)) /
     2;
-  // function roundNumbersInJson(obj) {
-  //   const newObj = { ...obj };
 
-  //   for (let key in newObj) {
-  //     const value = newObj[key];
-
-  //     if (typeof value === "number") {
-  //       if (Math.abs(value) > 1e5) {
-  //         newObj[key] = 0;
-  //       } else if (value >= 1000) {
-  //         // No decimal
-  //         newObj[key] = Math.round(value);
-  //       }
-  //       // else if (value >= 100 && value < 1000) {
-  //       //   // 1 decimal
-  //       //   newObj[key] = Math.round(value * 10) / 10;
-  //       // } else if (value < 100) {
-  //       //   // 2 decimals
-  //       //   newObj[key] = Math.round(value * 100) / 100;
-  //       // }
-  //     }
-  //   }
-
-  //   return newObj;
-  // }
-  // const roundedData = roundNumbersInJson(meterData);
   const meterIds = {
     wapda: {
       activePowerTotal: meterData.U27_PLC_ActivePower_Total || 0,
@@ -150,13 +145,84 @@ const cockpitDashboard = () => {
   return (
     <div className="overflow-hidden scroll:pt-[180px]">
       <div className="overflow-y-auto h-[81vh]">
+        {/* <div className="w-full bg-white dark:bg-gray-800 border-t-3 shadow border-[#1D4F86] mb-3 space-y-2 rounded-md p-3"> */}
+        {/* <div className="w-full text-center font-inter py-2 text-[18px] font-semibold">
+            Main Sources
+          </div>
+          <div className="flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
+            <MainSourcesChart
+              value={totalMainSourcesActivePower.toFixed(2)}
+              min={0}
+              max={24}
+              width="500px"
+              height="500px"
+              unit="MW"
+            />
+          </div> */}
+
+        {/* </div> */}
         <div className="w-full bg-white dark:bg-gray-800 border-t-3 shadow border-[#1D4F86] space-y-2 rounded-md p-3">
           <div className="w-full text-center font-inter py-2 text-[18px] font-semibold">
             MAIN OVERVIEW
           </div>
+          {/* main Sources */}
+
           {/* first row of overview */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-            {/* wapda chart */}
+            {/* Total plant */}
+            <div className="relative flex flex-col rounded items-center bg-[#fef9c3] dark:bg-[#d9f99d]/30 justify-center">
+              <CardHeader
+                title="Total Plant Load"
+                activePower={totalMainSourcesActivePower}
+                showPowerFactor={false}
+                totalPowerUnit="MW"
+              />
+              <div>
+                <Tooltip
+                  // title={inforMessages.TotalPlant}
+                  title={<div>{inforMessages.TotalPlant}</div>}
+                  arrow
+                  placement="bottom-end"
+                  slotProps={{
+                    tooltip: {
+                      sx: {
+                        bgcolor: "#025697",
+                        color: "#ffffff",
+                        fontSize: "12px",
+                        fontWeight: 500,
+                      },
+                    },
+                    arrow: {
+                      sx: {
+                        color: "#025697",
+                      },
+                    },
+                  }}
+                >
+                  <IoMdInformationCircleOutline
+                    className="absolute top-4 right-2 p-[3px] text-[#025697] dark:text-white cursor-pointer bg-[#025697]/30 rounded-full"
+                    size={30}
+                  />
+                </Tooltip>
+              </div>
+              <CockpitChart
+                outerValue={totalMainSourcesActivePower.toFixed(2)}
+                // innerValue={Number(meterIds.wapda.powerFactor).toFixed(2)}
+                width="290px"
+                height="300px"
+                containerHeight="200px"
+                outerRadiousProp="76%"
+                innerRadiousProp="70%"
+                innerMinRange={1}
+                innerMaxRange={-1}
+                outerMinRange={0}
+                showInner={false}
+                outerlineWidth={9}
+                outerSplitNumberRange={6}
+                title="Main Sources"
+                outerMaxRange={6}
+              />
+            </div>
             <div className="flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
               <CardHeader
                 title="Wapda 2"
@@ -223,6 +289,9 @@ const cockpitDashboard = () => {
                 outerMaxRange={4000}
               />
             </div>
+          </div>
+          {/* second row of overview */}
+          <div className="grid items-center justify-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
             {/* hfo aux chart */}
             <div className="flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
               <CardHeader
@@ -245,9 +314,6 @@ const cockpitDashboard = () => {
                 outerMaxRange={4000}
               />
             </div>
-          </div>
-          {/* second row of overview */}
-          <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-3 gap-2">
             {/* main incoming meter */}
             <div className="flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
               <CardHeader
@@ -300,7 +366,7 @@ const cockpitDashboard = () => {
                 outerMaxRange={4000}
               />
             </div>
-            {/* ? unit 4 ht room wapda 1 */}
+            {/* unit 4 ht room wapda 1 */}
             <div className="flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
               <CardHeader
                 title="Unit 4 HT Room Wapda 1"
@@ -336,12 +402,37 @@ const cockpitDashboard = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-center justify-center p-3">
               {/* Diesel+JGS I/C-1 */}
-              <div className="flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
+              <div className="relative flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
                 <CardHeader
-                  title="Diesel+JGS I/C-1"
+                  title="Diesel+JGS I/C"
                   activePower={meterIds.dieselJgs.activePowerTotal}
                   powerFactor={meterIds.dieselJgs.powerFactor}
                 />
+                <Tooltip
+                  title={inforMessages.DieselJGS}
+                  arrow
+                  placement="bottom-end"
+                  slotProps={{
+                    tooltip: {
+                      sx: {
+                        bgcolor: "#025697",
+                        color: "#ffffff",
+                        fontSize: "12px",
+                        fontWeight: 500,
+                      },
+                    },
+                    arrow: {
+                      sx: {
+                        color: "#025697",
+                      },
+                    },
+                  }}
+                >
+                  <IoMdInformationCircleOutline
+                    className="absolute top-4 right-2 p-[3px] text-[#025697] dark:text-white cursor-pointer bg-[#025697]/30 rounded-full"
+                    size={30}
+                  />
+                </Tooltip>
                 <CockpitChart
                   outerValue={Number(
                     meterIds.dieselJgs.activePowerTotal
@@ -360,12 +451,37 @@ const cockpitDashboard = () => {
                 />
               </div>
               {/* Wapda+HFO+JMS I/C-1 */}
-              <div className="flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
+              <div className="relative flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
                 <CardHeader
-                  title="Wapda+HFO+JMS I/C-1"
+                  title="Wapda+HFO+JMS I/C"
                   activePower={meterIds.wapdaHfoJms.activePowerTotal}
                   powerFactor={meterIds.wapdaHfoJms.powerFactor}
                 />
+                <Tooltip
+                  title={inforMessages.WapdaHfoJms}
+                  arrow
+                  placement="bottom-end"
+                  slotProps={{
+                    tooltip: {
+                      sx: {
+                        bgcolor: "#025697",
+                        color: "#ffffff",
+                        fontSize: "12px",
+                        fontWeight: 500,
+                      },
+                    },
+                    arrow: {
+                      sx: {
+                        color: "#025697",
+                      },
+                    },
+                  }}
+                >
+                  <IoMdInformationCircleOutline
+                    className="absolute top-4 right-2 p-[3px] text-[#025697] dark:text-white cursor-pointer bg-[#025697]/30 rounded-full"
+                    size={30}
+                  />
+                </Tooltip>
                 <CockpitChart
                   outerValue={Number(
                     meterIds.wapdaHfoJms.activePowerTotal

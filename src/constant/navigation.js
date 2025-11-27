@@ -42,7 +42,7 @@ export const privilegeConfig = {
       "/dailyconsumption-u4-lt2",
       "/dailyconsumption-u5-lt1",
       "/dailyconsumption-u5-lt2",
-      "/cockpit-dashbaord",
+      "/cockpit",
     ],
     tab: "Home",
   },
@@ -84,7 +84,7 @@ export const privilegeConfig = {
     ],
   },
   Reports: {
-    href: "/energy-comparison-report",
+    href: "/energy-usage-report",
     icon: faBookOpen,
     label: "REPORTS",
     matchPaths: [
@@ -379,11 +379,6 @@ export const sidebarLinksMap = {
 
   Reports: [
     // {
-    //   title: "Energy Usage Report",
-    //   icon: PlantOverview,
-    //   href: "/energy-usage-report",
-    // },
-    // {
     //   title: "Energy Summary Report",
     //   icon: PlantOverview,
     //   href: "/energy-summary-report",
@@ -391,8 +386,13 @@ export const sidebarLinksMap = {
     {
       title: "Energy Usage Report",
       icon: PlantOverview,
-      href: "/energy-comparison-report",
+      href: "/energy-usage-report",
     },
+    // {
+    //   title: "Energy Comparison Report",
+    //   icon: PlantOverview,
+    //   href: "/energy-comparison-report",
+    // },
   ],
 
   Settings: [

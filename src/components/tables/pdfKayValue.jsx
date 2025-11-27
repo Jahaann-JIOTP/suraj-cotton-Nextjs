@@ -3,7 +3,9 @@ export const buildKeyValuePdfTable = ({
   data = {},
   isSingleCol = false,
   pageBreakAfter = false,
-  unit = "", // optional unit (e.g. "(kWh)")
+  unit = "",
+  boldKeys = [],
+  hiligthValueCell = false, // optional unit (e.g. "(kWh)")
 }) => {
   // Build table rows
   const body = Object.entries(data).map(([key, value], idx) => {
@@ -25,7 +27,8 @@ export const buildKeyValuePdfTable = ({
     // Conditional background for first column
     // let fillColor =
     //   isSingleCol && isFirst ? "#E5F3FD" : !isSingleCol ? "#E5F3FD" : null;
-
+    const shouldBold = boldKeys.includes(key);
+    const boldStyle = shouldBold ? { bold: true } : {};
     if (isSingleCol) {
       // Single column layout
       return [
@@ -34,6 +37,7 @@ export const buildKeyValuePdfTable = ({
           style: labelStyle,
           fillColor: fillColor,
           backgroundColor: "",
+          ...boldStyle,
         },
       ];
     } else {
@@ -52,13 +56,16 @@ export const buildKeyValuePdfTable = ({
           style: labelStyle,
           fillColor: fillColor,
           backgroundColor: "",
+          ...boldStyle,
         },
         {
           text: unit
             ? `${formattedValue} ${typeof value === "number" ? unit : ""}`
             : formattedValue, // ✅ append unit if provided
           style: valueStyle,
-          fillColor: null, // no background
+          // fillColor: null, // no background
+          fillColor: hiligthValueCell ? "#E5F3FD" : null, // no background
+          ...boldStyle,
         },
       ];
     }

@@ -1,27 +1,65 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import config from "@/constant/apiRouteList";
 import { CircularProgress } from "@mui/material";
 import { ImArrowLeft2 } from "react-icons/im";
 import Swal from "sweetalert2";
 import { getDateRangeFromString } from "@/utils/dateRangeForReports";
-import EnergyComparisonReport from "@/components/reportsComponent/energyComparisonTable/EnergyComparisonReport";
+import DatePicker from "react-datepicker";
 import { to12HourFormat } from "@/utils/To12HourFormate";
-import { tableRawData } from "@/data/rawData";
+import { tableRawData, tableRawData2 } from "@/data/rawData";
+import { IoChevronDownOutline } from "react-icons/io5";
+import "react-datepicker/dist/react-datepicker.css";
+import EnergyComparisonReport from "@/components/reportsComponent/energyComparisonTable/EnergyComparisonReport";
+import { FaRegCalendarAlt } from "react-icons/fa";
 
-const EnergyComparisonPage = () => {
-  const [usageReportTimePeriod, setUsageReportTimePeriod] =
-    useState("Yesterday");
+const intervalOptions = [
+  {
+    id: 0,
+    label: "Today Over Yesterday",
+    value: "Today",
+  },
+  {
+    id: 2,
+    label: "This Week Over Previous Week",
+    value: "This Week",
+  },
+  {
+    id: 3,
+    label: "This Month Over Previous Month",
+    value: "This Month",
+  },
+  {
+    id: 4,
+    label: "Custom Range",
+    value: "Custom Date",
+  },
+];
+
+const UsageReport = () => {
+  // const [usageReportTimePeriod] = useState("Custom Date");
+  const [usageReportTimePeriod, setUsageReportTimePeriod] = useState("Today");
+  const [isOpen, setIsOpen] = useState(false);
+  const [intervalDropdown, setIntervalDropdown] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [unit, setUnit] = useState("");
   const [isHovered, setIsHovered] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [timeIntervals, setTimeIntervals] = useState({
+    p1startTime: "06:00",
+    p1endTime: "06:00",
+    p2startTime: "06:00",
+    p2endTime: "06:00",
+  });
   const [resData, setResData] = useState([]);
+  const dropdownRef = useRef(null);
+  const intervalDropdownRef = useRef(null);
   const intervalsObj = {
     startDate,
     endDate,
@@ -29,6 +67,7 @@ const EnergyComparisonPage = () => {
     endTime,
     usageReportTimePeriod,
   };
+
   const NewIntervalsObj = {
     "Selected Period": usageReportTimePeriod,
     "Start Date":
@@ -36,11 +75,275 @@ const EnergyComparisonPage = () => {
     "End Date": endDate + (endTime ? " " + to12HourFormat(endTime) : ""),
     "Selected Timezone": "(UTC+05:00) Asia Karachi",
   };
+  // /=============================================================================
+  const [period1, setPeriod1] = useState([null, null]); // [start, end]
+  const [period2, setPeriod2] = useState([null, null]); // [start, end]
+  const fixKarachiOffset = (date) => {
+    if (!date) return null;
+    const d = new Date(date);
+    d.setHours(d.getHours() + 5); // add 5 hours to prevent shifting backward
+    return d;
+  };
+
+  const normalizeLocalDate = (date) => {
+    if (!date) return null;
+    const d = fixKarachiOffset(date);
+    d.setHours(0, 0, 0, 0); // set midnight after offset fix
+    return d;
+  };
+  const dateRanges = {
+    period1: {
+      start: normalizeLocalDate(period1[0]),
+      end: normalizeLocalDate(period1[1]),
+    },
+    period2: {
+      start: normalizeLocalDate(period2[0]),
+      end: normalizeLocalDate(period2[1]),
+    },
+  };
+  console.log("dateRanges:", dateRanges);
+  console.log("time intervals:", timeIntervals);
+  const [p2PreviewRange, setP2PreviewRange] = useState([]); // highlight days
+  const isPeriod1Complete = period1[0] && period1[1];
+  const calculateDays = (start, end) => {
+    if (!start || !end) return 0;
+    return Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+  };
+
+  const isToday = (date) => {
+    if (!date) return false;
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  };
+
+  const generateNextDays = (start, totalDays) => {
+    const arr = [];
+    for (let i = 0; i < totalDays; i++) {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      arr.push(d);
+    }
+    return arr;
+  };
+
+  const handlePeriod1Change = (dates) => {
+    const [start, end] = dates.map((d) => normalizeLocalDate(d));
+
+    if (start && end) {
+      if (!isToday(start) && start.getTime() === end.getTime()) {
+        Swal.fire({
+          title: "Invalid Range",
+          text: "You must select at least 2 days.",
+          icon: "error",
+        });
+        return;
+      }
+
+      const days = calculateDays(start, end);
+      Swal.fire({
+        title: `${days} Day(s) Selected`,
+        text: "Please select the same number of days in Period 2.",
+        icon: "info",
+      });
+    }
+
+    setPeriod1([start, end]);
+  };
+
+  const handlePeriod2Change = (dates) => {
+    const [rawStart, rawEnd] = dates;
+
+    const start = normalizeLocalDate(rawStart);
+    const end = normalizeLocalDate(rawEnd);
+
+    const [p1Start, p1End] = period1.map((d) => normalizeLocalDate(d));
+
+    const p1Days = calculateDays(p1Start, p1End);
+
+    if (start && !end && p1Days > 0) {
+      setP2PreviewRange(generateNextDays(start, p1Days));
+    } else {
+      setP2PreviewRange([]);
+    }
+
+    if (start && end) {
+      if (!isToday(start) && start.getTime() === end.getTime()) {
+        Swal.fire({
+          title: "Invalid Range",
+          text: "You must select at least 2 days.",
+          icon: "error",
+        });
+        return;
+      }
+
+      const p2Days = calculateDays(start, end);
+
+      if (p2Days !== p1Days) {
+        Swal.fire({
+          title: "Invalid Date Range",
+          text: `Period 2 must be exactly ${p1Days} day(s).`,
+          icon: "error",
+        });
+        return;
+      }
+    }
+
+    setPeriod2([start, end]);
+  };
+
+  //========================handle period changes based on preset time period========================
+  useEffect(() => {
+    const now = new Date();
+
+    const setToday = () => {
+      const today = normalizeLocalDate(now);
+      const yesterday = normalizeLocalDate(
+        new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)
+      );
+
+      setPeriod1([today, today]);
+      setPeriod2([yesterday, today]);
+    };
+
+    const setThisWeek = () => {
+      const today = normalizeLocalDate(now);
+
+      const currentDay = now.getDay(); // 0=Sun, 1=Mon...
+      const mondayThisWeek = normalizeLocalDate(
+        new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() - (currentDay === 0 ? 6 : currentDay - 1)
+        )
+      );
+
+      const mondayPrevWeek = normalizeLocalDate(
+        new Date(
+          mondayThisWeek.getFullYear(),
+          mondayThisWeek.getMonth(),
+          mondayThisWeek.getDate() - 7
+        )
+      );
+
+      const sameDayPrevWeek = normalizeLocalDate(
+        new Date(
+          mondayPrevWeek.getFullYear(),
+          mondayPrevWeek.getMonth(),
+          mondayPrevWeek.getDate() + (now.getDate() - mondayThisWeek.getDate())
+        )
+      );
+
+      setPeriod1([mondayThisWeek, today]);
+      setPeriod2([mondayPrevWeek, sameDayPrevWeek]);
+    };
+
+    const setThisMonth = () => {
+      const today = normalizeLocalDate(now);
+
+      const firstThisMonth = normalizeLocalDate(
+        new Date(now.getFullYear(), now.getMonth(), 1)
+      );
+      const firstPrevMonth = normalizeLocalDate(
+        new Date(now.getFullYear(), now.getMonth() - 1, 1)
+      );
+
+      const sameDatePrevMonth = normalizeLocalDate(
+        new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())
+      );
+
+      setPeriod1([firstThisMonth, today]);
+      setPeriod2([firstPrevMonth, sameDatePrevMonth]);
+    };
+
+    if (usageReportTimePeriod === "Today") {
+      setToday();
+    } else if (usageReportTimePeriod === "This Week") {
+      setThisWeek();
+    } else if (usageReportTimePeriod === "This Month") {
+      setThisMonth();
+    }
+    // Custom Date → DO NOTHING
+  }, [usageReportTimePeriod]);
+
+  //============================handle time change=========================
+  const formatCurrentTime = () => {
+    const now = new Date();
+    return now.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
+  useEffect(() => {
+    const currentTime = formatCurrentTime();
+
+    let p1Start = "06:00";
+    let p1End = "06:00";
+    let p2Start = "06:00";
+    let p2End = "06:00";
+
+    // ----- PERIOD 1 -----
+    if (period1[0] && period1[1]) {
+      const sameDay =
+        period1[0].getFullYear() === period1[1].getFullYear() &&
+        period1[0].getMonth() === period1[1].getMonth() &&
+        period1[0].getDate() === period1[1].getDate();
+
+      if (sameDay) {
+        p1Start = "06:00";
+        p1End = currentTime;
+      }
+    }
+
+    // ----- PERIOD 2 -----
+    if (period2[0] && period2[1]) {
+      const sameDay =
+        period2[0].getFullYear() === period2[1].getFullYear() &&
+        period2[0].getMonth() === period2[1].getMonth() &&
+        period2[0].getDate() === period2[1].getDate();
+
+      if (sameDay) {
+        p2Start = "06:00";
+        p2End = currentTime;
+      }
+    }
+
+    setTimeIntervals({
+      p1startTime: p1Start,
+      p1endTime: p1End,
+      p2startTime: p2Start,
+      p2endTime: p2End,
+    });
+  }, [period1, period2]);
+  // /=============================================================================
 
   const toMinutes = (time) => {
     if (!time) return null;
     const [h, m] = time.split(":").map(Number);
     return h * 60 + m;
+  };
+
+  //==================handle unit change===================
+  const handleUnitChange = (unitClicked) => {
+    if (unitClicked === "ALL") {
+      setUnit("ALL");
+    } else if (unit === "ALL") {
+      setUnit(unitClicked);
+    } else if (unit === unitClicked) {
+      setUnit("");
+    } else if (
+      (unit === "Unit_4" && unitClicked === "Unit_5") ||
+      (unit === "Unit_5" && unitClicked === "Unit_4")
+    ) {
+      setUnit("ALL");
+    } else {
+      setUnit(unitClicked);
+    }
   };
   useEffect(() => {
     const today = new Date();
@@ -62,26 +365,43 @@ const EnergyComparisonPage = () => {
       }
     }
   }, [usageReportTimePeriod]);
-  useEffect(() => {
-    if (startDate === endDate && endTime) {
-      let startMins = toMinutes(startTime);
-      let endMins = toMinutes(endTime);
-      const diff = endMins - startMins;
+  // useEffect(() => {
+  //   if (startDate === endDate && endTime) {
+  //     let startMins = toMinutes(startTime);
+  //     let endMins = toMinutes(endTime);
+  //     const diff = endMins - startMins;
 
-      if (endMins <= startMins || diff < 30) {
-        Swal.fire({
-          title: "Confirm Time",
-          html: `
-          End Time must be at least 30 minutes greater than Start Time for the same date.
-        `,
-          icon: "question",
-          confirmButtonText: "OK",
-          confirmButtonColor: "#1A68B2",
-        });
-        setEndTime("");
+  //     if (endMins <= startMins || diff < 30) {
+  //       Swal.fire({
+  //         title: "Confirm Time",
+  //         html: `
+  //         End Time must be at least 30 minutes greater than Start Time for the same date.
+  //       `,
+  //         icon: "question",
+  //         confirmButtonText: "OK",
+  //         confirmButtonColor: "#1A68B2",
+  //       });
+  //       setEndTime("");
+  //     }
+  //   }
+  // }, [startTime, endTime, startDate, endDate]);
+  const toggleDropdown = () => setIsOpen(!isOpen);
+  const toggleIntervalDropdown = () => setIntervalDropdown(!intervalDropdown);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
       }
-    }
-  }, [startTime, endTime, startDate, endDate]);
+      if (
+        intervalDropdownRef.current &&
+        !intervalDropdownRef.current.contains(event.target)
+      ) {
+        setIntervalDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   //  handle minimum end time
 
@@ -140,7 +460,7 @@ const EnergyComparisonPage = () => {
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
       <div className="flex pb-3 items-center justify-between">
         <h1 className="text-[18.22px] text-raleway font-600">
-          Energy Usage Report
+          Energy Comparison Report
         </h1>
         {showResults && (
           <button
@@ -173,134 +493,163 @@ const EnergyComparisonPage = () => {
       {!showResults ? (
         <div>
           <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
-            <div className="w-full grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {/* area selector dropdown */}
+            <div className="grid grid-cols-2 gap-8">
+              {/* unit selector dropdonw */}
+              <div className="flex flex-col w-full items-start justify-center gap-1">
+                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
+                  Select Plants Units
+                </span>
+                <div className="relative inline-block w-full" ref={dropdownRef}>
+                  <button
+                    type="button"
+                    onClick={toggleDropdown}
+                    className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
+                  >
+                    {unit === "ALL"
+                      ? "ALL Units"
+                      : unit === "Unit_4"
+                      ? "Unit 4"
+                      : unit === "Unit_5"
+                      ? "Unit 5"
+                      : "Select Area"}
+                    <IoChevronDownOutline
+                      className={`transition-all duration-300 ${
+                        isOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
 
-              <div className="flex flex-col w-full items-start justify-start gap-1">
-                <label className="text-[13.51px] font-500 font-inter">
+                  {isOpen && (
+                    <div className="absolute z-20 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
+                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                        <input
+                          type="checkbox"
+                          checked={unit === "Unit_4" || unit === "ALL"}
+                          onChange={() => handleUnitChange("Unit_4")}
+                        />
+                        Unit 4
+                      </label>
+                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                        <input
+                          type="checkbox"
+                          checked={unit === "Unit_5" || unit === "ALL"}
+                          onChange={() => handleUnitChange("Unit_5")}
+                        />
+                        Unit 5
+                      </label>
+                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                        <input
+                          type="checkbox"
+                          checked={unit === "ALL"}
+                          onChange={() => handleUnitChange("ALL")}
+                        />
+                        All
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* Interval selector dropdown */}
+              <div className="flex flex-col w-full items-start justify-center gap-1">
+                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
                   Interval
-                </label>
-                <select
-                  value={usageReportTimePeriod}
-                  onChange={(e) => setUsageReportTimePeriod(e.target.value)}
-                  className="w-full outline-none border border-gray-300 dark:border-gray-600 dark:bg-gray-800 rounded px-4 py-2"
+                </span>
+                <div
+                  className="relative inline-block w-full"
+                  ref={intervalDropdownRef}
                 >
-                  <option value="Today">Today</option>
-                  <option value="Yesterday">Yesterday</option>
-                  <option value="This Week">This Week</option>
-                  <option value="This Month">This Month</option>
-                  <option value="Custom Date">Custom Date</option>
-                </select>
+                  <button
+                    type="button"
+                    onClick={toggleIntervalDropdown}
+                    className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
+                  >
+                    {/* Find and display the label instead of the value */}
+                    {intervalOptions.find(
+                      (option) => option.value === usageReportTimePeriod
+                    )?.label || usageReportTimePeriod}
+                    <IoChevronDownOutline
+                      className={`transition-all duration-300 ${
+                        intervalDropdown ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {intervalDropdown && (
+                    <div className="absolute z-20 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
+                      {intervalOptions.map((option) => (
+                        <label
+                          key={option.id}
+                          className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white"
+                        >
+                          <input
+                            type="radio"
+                            checked={usageReportTimePeriod === option.value}
+                            value={option.value}
+                            onChange={(e) => {
+                              setIntervalDropdown(false);
+                              setUsageReportTimePeriod(e.target.value);
+                            }}
+                          />
+                          {option.label}
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* start date selector */}
-
-              <div className="flex flex-col w-full items-start justify-start gap-1">
-                <label
-                  htmlFor="startDate"
-                  className={`text-[13.51px] font-500 font-inter ${
-                    usageReportTimePeriod !== "Custom Date" &&
-                    "text-gray-300 dark:text-gray-700"
-                  }`}
-                >
-                  Start Date
-                </label>
-                <input
-                  type="date"
-                  value={startDate}
-                  id="startDate"
-                  name="startDate"
-                  readOnly={usageReportTimePeriod !== "Custom Date"}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className={`w-full outline-none border-1 rounded px-4 py-2 ${
-                    usageReportTimePeriod === "Custom Date"
-                      ? "border-gray-300 dark:border-gray-600"
-                      : "border-gray-150 dark:border-gray-700 text-gray-400 dark:text-gray-700"
-                  }`}
-                />
-              </div>
-              {/* end date selector */}
-
-              <div className="flex flex-col w-full items-start justify-start gap-1">
-                <label
-                  htmlFor="endDate"
-                  className={`text-[13.51px] font-500 font-inter ${
-                    usageReportTimePeriod !== "Custom Date" &&
-                    "text-gray-300 dark:text-gray-700"
-                  }`}
-                >
-                  End Date
-                </label>
-                <input
-                  type="date"
-                  value={endDate}
-                  id="endDate"
-                  name="endDate"
-                  min={startDate}
-                  readOnly={usageReportTimePeriod !== "Custom Date"}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className={`w-full outline-none border-1 rounded px-4 py-2 ${
-                    usageReportTimePeriod === "Custom Date"
-                      ? "border-gray-300 dark:border-gray-600"
-                      : "border-gray-150 dark:border-gray-700 text-gray-400 dark:text-gray-700"
-                  }`}
-                />
+              {/* Period 1 */}
+              <div className="">
+                <h3 className="text-lg font-semibold text-gray-700">
+                  Period 1
+                </h3>
+                <div className="flex items-center justify-between px-4  w-full border rounded">
+                  <DatePicker
+                    selectsRange
+                    startDate={period1[0]}
+                    endDate={period1[1]}
+                    onChange={handlePeriod1Change}
+                    disabled={usageReportTimePeriod !== "Custom Date"}
+                    className="w-full border flex px-3 py-2 rounded-md text-sm outline-none"
+                    placeholderText="Select date range"
+                  />
+                  <FaRegCalendarAlt />
+                </div>
               </div>
 
-              {/* start Time Selector */}
-
-              <div className="flex flex-col w-full items-start justify-start gap-1">
-                <label
-                  htmlFor="startDate"
-                  className={`text-[13.51px] font-500 font-inter ${
-                    usageReportTimePeriod !== "Custom Date" &&
-                    "text-gray-300 dark:text-gray-700"
-                  }`}
-                >
-                  Start Time
-                </label>
-                <input
-                  type="time"
-                  value={startTime}
-                  id="startTime"
-                  name="startTime"
-                  readOnly={usageReportTimePeriod !== "Custom Date"}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className={`w-full outline-none border-1 rounded px-4 py-2 ${
-                    usageReportTimePeriod === "Custom Date"
-                      ? "border-gray-300 dark:border-gray-600"
-                      : "border-gray-150 dark:border-gray-700 text-gray-400 dark:text-gray-700"
-                  }`}
-                />
+              {/* Period 2 */}
+              <div className="">
+                <h3 className="text-lg font-semibold text-gray-700">
+                  Period 2
+                </h3>
+                <div className="flex items-center justify-between px-4  w-full border rounded">
+                  <DatePicker
+                    selectsRange
+                    startDate={period2[0]}
+                    endDate={period2[1]}
+                    onChange={handlePeriod2Change}
+                    highlightDates={[
+                      {
+                        "react-datepicker__day--highlighted-custom":
+                          p2PreviewRange,
+                      },
+                    ]}
+                    disabled={
+                      !isPeriod1Complete ||
+                      usageReportTimePeriod !== "Custom Date"
+                    }
+                    className="w-full px-3 py-2 rounded-md text-sm outline-none"
+                    placeholderText={
+                      !isPeriod1Complete
+                        ? "Select Period 1 first"
+                        : "Select matching date range"
+                    }
+                  />
+                  <FaRegCalendarAlt />
+                </div>
               </div>
-              {/* end Time selector */}
-
-              <div className="flex flex-col w-full items-start justify-start gap-1">
-                <label
-                  htmlFor="endDate"
-                  className={`text-[13.51px] font-500 font-inter ${
-                    usageReportTimePeriod !== "Custom Date" &&
-                    "text-gray-300 dark:text-gray-700"
-                  }`}
-                >
-                  End Time
-                </label>
-                <input
-                  type="time"
-                  value={endTime}
-                  id="endTime"
-                  name="endTime"
-                  readOnly={usageReportTimePeriod !== "Custom Date"}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className={`w-full outline-none border-1 rounded px-4 py-2 ${
-                    usageReportTimePeriod === "Custom Date"
-                      ? "border-gray-300 dark:border-gray-600"
-                      : "border-gray-150 dark:border-gray-700 text-gray-400 dark:text-gray-700"
-                  }`}
-                />
-              </div>
-              {/* </div> */}
             </div>
+            {/* // here code will be pasted */}
 
             <div className="w-full flex items-center justify-center mt-5 md:mt-10">
               <button
@@ -322,7 +671,8 @@ const EnergyComparisonPage = () => {
         </div>
       ) : showResults ? (
         <EnergyComparisonReport
-          rawData={resData}
+          rawData={tableRawData}
+          rawData2={tableRawData2}
           intervalsObj={intervalsObj}
           newIntervalObj={NewIntervalsObj}
         />
@@ -330,5 +680,4 @@ const EnergyComparisonPage = () => {
     </div>
   );
 };
-
-export default EnergyComparisonPage;
+export default UsageReport;
