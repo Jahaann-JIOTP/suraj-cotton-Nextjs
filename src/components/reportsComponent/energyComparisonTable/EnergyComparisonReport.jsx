@@ -1,5 +1,6 @@
 "use client";
 import KayValueTable from "@/components/tables/KayValueTable";
+import { SectionHeader } from "@/components/tables/SectionHeader";
 import { useTheme } from "next-themes";
 import React from "react";
 const sectionHeaders = {
@@ -20,11 +21,7 @@ const sourcesData = {
   "Unit 5": "Unit 5",
 };
 
-const EnergyComparisonReport = ({
-  rawData = {},
-  intervalsObj = {},
-  newIntervalObj = {},
-}) => {
+const EnergyComparisonReport = ({ rawData = {}, intervalObj = {} }) => {
   const { theme } = useTheme();
   return (
     <div>
@@ -70,9 +67,30 @@ const EnergyComparisonReport = ({
         </button>
       </div>
       {/* parameter table */}
-      <KayValueTable title={sectionHeaders.rParams} data={newIntervalObj} />
+      <SectionHeader title={sectionHeaders.rParams} />
+      <div className="w-full mt-5 overflow-x-auto">
+        <table className="w-full border border-gray-400 text-sm">
+          <tbody>
+            {Object.entries(intervalObj).map(([label, value], idx) => (
+              <tr key={idx}>
+                <td className="font-semibold border border-gray-400 px-3 py-2">
+                  {label}
+                </td>
+
+                <td className="border border-gray-400 px-3 py-2">
+                  {value?.p1 ?? "-"}
+                </td>
+
+                <td className="border border-gray-400 px-3 py-2">
+                  {value?.p2 ?? "-"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {/* sources */}
-      <KayValueTable title="" data={sourcesData} isSingleCol={true} />
+      {/* <KayValueTable title="" data={sourcesData} isSingleCol={true} /> */}
     </div>
   );
 };

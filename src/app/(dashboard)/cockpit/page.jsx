@@ -6,9 +6,21 @@ import config from "@/constant/apiRouteList";
 import { Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { toast } from "react-toastify";
 
 const cockpitDashboard = () => {
   const [meterData, setMeterData] = useState([]);
+  const [apiCallTime, setApiCallTime] = useState("");
+
+  const getCurrentTime = () => {
+    const now = new Date();
+    return now.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
   const getMeterData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -25,6 +37,7 @@ const cockpitDashboard = () => {
       const resData = await response.json();
       if (response.ok) {
         setMeterData(resData);
+        setApiCallTime(getCurrentTime());
       }
     } catch (error) {
       console.error(error.message);
@@ -42,22 +55,43 @@ const cockpitDashboard = () => {
   };
   //===============calculating toatl of unit 4 main
   // total of main sources
+  // console.log(
+  //   "meter data",
+  //   meterData.U27_PLC_ActivePower_Total +
+  //     meterData.U22_PLC_ActivePower_Total +
+  //     meterData.U26_PLC_ActivePower_Total +
+  //     meterData.U24_GW01_ActivePower_Total +
+  //     meterData.U28_PLC_ActivePower_Total +
+  //     meterData.U6_GW02_ActivePower_Total +
+  //     meterData.U17_GW03_ActivePower_Total +
+  //     meterData.U19_PLC_ActivePower_Total +
+  //     meterData.U11_GW01_ActivePower_Total +
+  //     meterData.U23_GW01_ActivePower_Total
+  // );
+  const safe = (v) => Number(v) || 0;
+  const wapda2 = safe(meterData.U27_PLC_ActivePower_Total) / 1000;
+  let hfo1 = safe(meterData.U22_PLC_ActivePower_Total) / 1000;
+  let jsm = safe(meterData.U26_PLC_ActivePower_Total) / 1000;
+  let wapda1 = safe(meterData.U23_GW01_ActivePower_Total) / 1000;
+  let dielsjgs1 = safe(meterData.U19_PLC_ActivePower_Total) / 1000;
+  let dieseljgs2 = safe(meterData.U11_GW01_ActivePower_Total) / 1000;
+  let solar352 = safe(meterData.U24_GW01_ActivePower_Total) / 1000;
+  let solar52 = safe(meterData.U28_PLC_ActivePower_Total) / 1000;
+  let solar1182 = safe(meterData.U6_GW02_ActivePower_Total) / 1000;
+  let solar1070 = safe(meterData.U17_GW03_ActivePower_Total) / 1000;
+
   let totalMainSourcesActivePower =
-    (Number(meterData.U27_PLC_ActivePower_Total) ||
-      0 + Number(meterData.U22_PLC_ActivePower_Total) ||
-      0 + Number(meterData.U26_PLC_ActivePower_Total) ||
-      0 + Number(meterData.U24_GW01_ActivePower_Total) ||
-      0 + Number(meterData.U28_PLC_ActivePower_Total) ||
-      0 + Number(meterData.U6_GW02_ActivePower_Total) ||
-      0 + Number(meterData.U17_GW03_ActivePower_Total) ||
-      0 + Number(meterData.U19_PLC_ActivePower_Total) ||
-      0 + Number(meterData.U11_GW01_ActivePower_Total) ||
-      0 + Number(meterData.U23_GW01_ActivePower_Total) ||
-      0) / 1000;
-  console.log(
-    "totalMainSourcesActivePower",
-    totalMainSourcesActivePower.toFixed(2)
-  );
+    wapda2 +
+    hfo1 +
+    jsm +
+    wapda1 +
+    dielsjgs1 +
+    dieseljgs2 +
+    solar352 +
+    solar52 +
+    solar1182 +
+    solar1070;
+
   // diesel jgs
   let dieselJGSTotalActivePower =
     Number(meterData.U19_PLC_ActivePower_Total) +
@@ -161,10 +195,19 @@ const cockpitDashboard = () => {
           </div> */}
 
         {/* </div> */}
-        <div className="w-full bg-white dark:bg-gray-800 border-t-3 shadow border-[#1D4F86] space-y-2 rounded-md p-3">
+        <div className="relative w-full bg-white dark:bg-gray-800 border-t-3 shadow border-[#1D4F86] space-y-2 rounded-md p-3">
           <div className="w-full text-center font-inter py-2 text-[18px] font-semibold">
             MAIN OVERVIEW
           </div>
+          <div className="absolute top-5 right-3 flex items-center justify-center gap-1">
+            <span className="font-inter py-2 text-[15px] font-semibold">
+              Last Refresh:{" "}
+            </span>
+            <span className="font-inter py-2 text-[15px]">
+              {apiCallTime || "00:00"}
+            </span>
+          </div>
+
           {/* main Sources */}
 
           {/* first row of overview */}
@@ -220,7 +263,7 @@ const cockpitDashboard = () => {
                 outerlineWidth={9}
                 outerSplitNumberRange={6}
                 title="Main Sources"
-                outerMaxRange={6}
+                outerMaxRange={12}
               />
             </div>
             <div className="flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">

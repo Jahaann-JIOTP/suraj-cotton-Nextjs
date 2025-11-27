@@ -57,9 +57,17 @@ const UsageReport = () => {
     p2startTime: "06:00",
     p2endTime: "06:00",
   });
+  console.log("selected unit:", unit);
   const [resData, setResData] = useState([]);
+  const [resData2, setResData2] = useState([]);
+  console.log("Response 1:", resData);
+  console.log("Response 2:", resData2);
+  const period1Ref = useRef(null);
+  const period2Ref = useRef(null);
   const dropdownRef = useRef(null);
   const intervalDropdownRef = useRef(null);
+  const [period1, setPeriod1] = useState([null, null]); // [start, end]
+  const [period2, setPeriod2] = useState([null, null]); // [start, end]
   const intervalsObj = {
     startDate,
     endDate,
@@ -67,7 +75,6 @@ const UsageReport = () => {
     endTime,
     usageReportTimePeriod,
   };
-
   const NewIntervalsObj = {
     "Selected Period": usageReportTimePeriod,
     "Start Date":
@@ -75,9 +82,19 @@ const UsageReport = () => {
     "End Date": endDate + (endTime ? " " + to12HourFormat(endTime) : ""),
     "Selected Timezone": "(UTC+05:00) Asia Karachi",
   };
+  //========================handle date range selection========================
+  const openPeriod1Calendar = () => {
+    if (period1Ref.current) {
+      period1Ref.current.setOpen(true);
+    }
+  };
+
+  const openPeriod2Calendar = () => {
+    if (period2Ref.current) {
+      period2Ref.current.setOpen(true);
+    }
+  };
   // /=============================================================================
-  const [period1, setPeriod1] = useState([null, null]); // [start, end]
-  const [period2, setPeriod2] = useState([null, null]); // [start, end]
   const fixKarachiOffset = (date) => {
     if (!date) return null;
     const d = new Date(date);
@@ -101,8 +118,17 @@ const UsageReport = () => {
       end: normalizeLocalDate(period2[1]),
     },
   };
-  console.log("dateRanges:", dateRanges);
-  console.log("time intervals:", timeIntervals);
+
+  const toLocalISODate = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // console.log("time intervals:", p1EndDate);
   const [p2PreviewRange, setP2PreviewRange] = useState([]); // highlight days
   const isPeriod1Complete = period1[0] && period1[1];
   const calculateDays = (start, end) => {
@@ -322,12 +348,6 @@ const UsageReport = () => {
   }, [period1, period2]);
   // /=============================================================================
 
-  const toMinutes = (time) => {
-    if (!time) return null;
-    const [h, m] = time.split(":").map(Number);
-    return h * 60 + m;
-  };
-
   //==================handle unit change===================
   const handleUnitChange = (unitClicked) => {
     if (unitClicked === "ALL") {
@@ -365,26 +385,6 @@ const UsageReport = () => {
       }
     }
   }, [usageReportTimePeriod]);
-  // useEffect(() => {
-  //   if (startDate === endDate && endTime) {
-  //     let startMins = toMinutes(startTime);
-  //     let endMins = toMinutes(endTime);
-  //     const diff = endMins - startMins;
-
-  //     if (endMins <= startMins || diff < 30) {
-  //       Swal.fire({
-  //         title: "Confirm Time",
-  //         html: `
-  //         End Time must be at least 30 minutes greater than Start Time for the same date.
-  //       `,
-  //         icon: "question",
-  //         confirmButtonText: "OK",
-  //         confirmButtonColor: "#1A68B2",
-  //       });
-  //       setEndTime("");
-  //     }
-  //   }
-  // }, [startTime, endTime, startDate, endDate]);
   const toggleDropdown = () => setIsOpen(!isOpen);
   const toggleIntervalDropdown = () => setIntervalDropdown(!intervalDropdown);
   useEffect(() => {
@@ -403,27 +403,33 @@ const UsageReport = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  //  handle minimum end time
+  // ///////===============================Handle all data processing start=================================
+  const intervalObj = {
+    Range: { p1: "Range 1", p2: "Range 2" },
+    "Start Date": {
+      p1: toLocalISODate(dateRanges.period1.start),
+      p2: toLocalISODate(dateRanges.period2.start),
+    },
+    "End Date": {
+      p1: toLocalISODate(dateRanges.period1.end),
+      p2: toLocalISODate(dateRanges.period2.end),
+    },
+  };
 
+  // ///////===============================Handle all data processing end=================================
+
+  //  handle minimum end time
+  // ===============handle submit of first range=====================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    if (!startDate || !endDate) {
-      toast.warning("Please Complete Date Intervals.");
-      return;
-    }
-    if (!startTime || !endTime) {
-      toast.warning("Please Complete Time Intervals.");
-      return;
-    }
-
     setLoadingSubmit(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.REPORTS.ENERGY_CONSUMPTION}`,
+        `${config.BASE_URL}${config.REPORTS.ENERGY_COMPARISON}`,
         {
           method: "POST",
           headers: {
@@ -431,12 +437,12 @@ const UsageReport = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            start_date: startDate,
-            end_date: endDate,
-            start_time: startTime,
-            end_time: endTime,
+            start_date: toLocalISODate(dateRanges.period1.start),
+            end_date: toLocalISODate(dateRanges.period1.end),
+            start_time: timeIntervals.p1startTime,
+            end_time: timeIntervals.p1endTime,
             suffixes: ["Del_ActiveEnergy"],
-            area: "ALL",
+            area: unit,
           }),
         }
       );
@@ -454,6 +460,57 @@ const UsageReport = () => {
     } finally {
       setLoadingSubmit(false);
     }
+  };
+  // =========================handle submit of second range=====================
+  const handleSubmit2 = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    setLoadingSubmit(true);
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.REPORTS.ENERGY_COMPARISON}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            start_date: toLocalISODate(dateRanges.period2.start),
+            end_date: toLocalISODate(dateRanges.period2.end),
+            start_time: timeIntervals.p2startTime,
+            end_time: timeIntervals.p2endTime,
+            suffixes: ["Del_ActiveEnergy"],
+            area: unit,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const resResult = await response.json();
+        setResData2(resResult);
+        setShowResults(true);
+      } else {
+        toast.error("Failed to generate report");
+      }
+    } catch (error) {
+      console.error(error.message);
+      toast.error("Error generating report");
+    } finally {
+      setLoadingSubmit(false);
+    }
+  };
+  const handleFinalSubmit = (e) => {
+    e.preventDefault();
+    if (!unit) {
+      toast.warning("Please Select Plant Unit.");
+      return;
+    }
+    handleSubmit(e);
+    handleSubmit2(e);
   };
 
   return (
@@ -492,7 +549,7 @@ const UsageReport = () => {
       <hr className="" />
       {!showResults ? (
         <div>
-          <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
+          <form onSubmit={handleFinalSubmit} className="space-y-4 p-3 md:p-6 ">
             <div className="grid grid-cols-2 gap-8">
               {/* unit selector dropdonw */}
               <div className="flex flex-col w-full items-start justify-center gap-1">
@@ -600,30 +657,42 @@ const UsageReport = () => {
 
               {/* Period 1 */}
               <div className="">
-                <h3 className="text-lg font-semibold text-gray-700">
-                  Period 1
-                </h3>
-                <div className="flex items-center justify-between px-4  w-full border rounded">
+                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
+                  First Range
+                </span>
+
+                <div
+                  className="flex items-center justify-between px-4 w-full border rounded cursor-pointer"
+                  onClick={openPeriod1Calendar}
+                >
                   <DatePicker
+                    ref={period1Ref}
                     selectsRange
                     startDate={period1[0]}
                     endDate={period1[1]}
                     onChange={handlePeriod1Change}
                     disabled={usageReportTimePeriod !== "Custom Date"}
-                    className="w-full border flex px-3 py-2 rounded-md text-sm outline-none"
+                    className="w-full flex  py-2 rounded-md text-sm outline-none cursor-pointer"
                     placeholderText="Select date range"
+                    onClick={(e) => e.stopPropagation()} // prevent recursion
                   />
-                  <FaRegCalendarAlt />
+
+                  <FaRegCalendarAlt className="pointer-events-none" />
                 </div>
               </div>
 
               {/* Period 2 */}
               <div className="">
-                <h3 className="text-lg font-semibold text-gray-700">
-                  Period 2
-                </h3>
-                <div className="flex items-center justify-between px-4  w-full border rounded">
+                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
+                  Second Range
+                </span>
+
+                <div
+                  className="flex items-center justify-between px-4 w-full border rounded cursor-pointer"
+                  onClick={openPeriod2Calendar}
+                >
                   <DatePicker
+                    ref={period2Ref}
                     selectsRange
                     startDate={period2[0]}
                     endDate={period2[1]}
@@ -638,14 +707,16 @@ const UsageReport = () => {
                       !isPeriod1Complete ||
                       usageReportTimePeriod !== "Custom Date"
                     }
-                    className="w-full px-3 py-2 rounded-md text-sm outline-none"
+                    className="w-full py-2 rounded-md text-sm outline-none cursor-pointer"
                     placeholderText={
                       !isPeriod1Complete
                         ? "Select Period 1 first"
                         : "Select matching date range"
                     }
+                    onClick={(e) => e.stopPropagation()}
                   />
-                  <FaRegCalendarAlt />
+
+                  <FaRegCalendarAlt className="pointer-events-none" />
                 </div>
               </div>
             </div>
@@ -673,8 +744,7 @@ const UsageReport = () => {
         <EnergyComparisonReport
           rawData={tableRawData}
           rawData2={tableRawData2}
-          intervalsObj={intervalsObj}
-          newIntervalObj={NewIntervalsObj}
+          intervalObj={intervalObj}
         />
       ) : null}
     </div>

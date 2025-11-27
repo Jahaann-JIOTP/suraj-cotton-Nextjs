@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [unitCLoading, setUnitCLoading] = useState(false);
   const [unitConsumption, setUnitConsumption] = useState({});
+
   const [dateRange, setDateRange] = useState({
     startDate: "",
     endDate: "",
@@ -39,8 +40,8 @@ const Dashboard = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
-        // `${config.BASE_URL}/dashbaord/consumption?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
+        // `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
+        `${config.BASE_URL}/dashboard/consumption?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
         {
           method: "GET",
           headers: {
