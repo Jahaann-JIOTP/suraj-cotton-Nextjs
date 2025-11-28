@@ -67,13 +67,6 @@ const UsageReport = () => {
   const [period1, setPeriod1] = useState([null, null]); // [start, end]
   const [period2, setPeriod2] = useState([null, null]); // [start, end]
 
-  const NewIntervalsObj = {
-    "Selected Period": usageReportTimePeriod,
-    "Start Date":
-      startDate + (startTime ? " " + to12HourFormat(startTime) : ""),
-    "End Date": endDate + (endTime ? " " + to12HourFormat(endTime) : ""),
-    "Selected Timezone": "(UTC+05:00) Asia Karachi",
-  };
   //========================handle date range selection========================
   const openPeriod1Calendar = () => {
     if (period1Ref.current) {
@@ -596,8 +589,81 @@ const UsageReport = () => {
     productionSummary1,
     productionSummary2
   );
+  // consumption per dept data mapping
+  const consumptionPerDept1 = Array.isArray(resData?.summarybydept)
+    ? resData.summarybydept
+    : [];
+  const consumptionPerDept2 = Array.isArray(resData2?.summarybydept)
+    ? resData2.summarybydept
+    : [];
+  function mergeConsumption(
+    consumptionPerDept1 = [],
+    consumptionPerDept2 = []
+  ) {
+    const map = new Map();
 
-  console.log("productionSummary1", mergedProduction);
+    // ---- Helper to insert period data ----
+    const insert = (item, period) => {
+      if (!map.has(item.name)) {
+        map.set(item.name, {
+          name: item.name,
+
+          // Unit 4 static fields
+          u4Mcs: item.u4Mcs ?? 0,
+          u4ConectedLoadPerDept: item.u4ConectedLoadPerDept ?? 0,
+          u4ConectedLoadPerMcs: item.u4ConectedLoadPerMcs ?? 0,
+          u4RunnigLoad: item.u4RunnigLoad ?? 0,
+
+          // Unit 4 period-based
+          u4AvgConsumption: { p1: null, p2: null },
+          u4Consumption: { p1: null, p2: null },
+          u4UtilizationPercent: { p1: null, p2: null },
+
+          // Unit 5 static fields
+          u5Mcs: item.u5Mcs ?? 0,
+          u5ConectedLoadPerDept: item.u5ConectedLoadPerDept ?? 0,
+          u5ConectedLoadPerMcs: item.u5ConectedLoadPerMcs ?? 0,
+          u5RunningLoad: item.u5RunningLoad ?? 0,
+          u5Name: item.u5Name ?? "",
+
+          // Unit 5 period-based
+          u5AvgConsumption: { p1: null, p2: null },
+          u5Consumption: { p1: null, p2: null },
+          u5UtilizationPercent: { p1: null, p2: null },
+
+          totalConsumption: { p1: null, p2: null },
+        });
+      }
+
+      const entry = map.get(item.name);
+
+      // Fill period values
+      entry.u4AvgConsumption[period] = item.u4AvgConsumption ?? null;
+      entry.u4Consumption[period] = item.u4Consumption ?? null;
+      entry.u4UtilizationPercent[period] = item.u4UtilizationPercent ?? null;
+
+      entry.u5AvgConsumption[period] = item.u5AvgConsumption ?? null;
+      entry.u5Consumption[period] = item.u5Consumption ?? null;
+      entry.u5UtilizationPercent[period] = item.u5UtilizationPercent ?? null;
+
+      entry.totalConsumption[period] = item.totalConsumption ?? null;
+    };
+
+    // Insert p1 (Period 1)
+    consumptionPerDept1.forEach((item) => insert(item, "p1"));
+
+    // Insert p2 (Period 2)
+    consumptionPerDept2.forEach((item) => insert(item, "p2"));
+
+    // Return final merged array
+    return Array.from(map.values());
+  }
+
+  const mergedConsPerDept = mergeConsumption(
+    consumptionPerDept1,
+    consumptionPerDept2
+  );
+  console.log("Cons Per Dept", mergedConsPerDept);
 
   // ///////===============================Handle all data processing end=================================
 
@@ -933,6 +999,7 @@ const UsageReport = () => {
           lowVoltageTotla={totalRowLowvoltageSummary}
           utilizationData={mergedUtilization}
           mergedProduction={mergedProduction}
+          consumptionPerDept={mergedConsPerDept}
           unit={unit}
           mergedSummary={mergedSummary}
           deltaOnly={deltaOnly}

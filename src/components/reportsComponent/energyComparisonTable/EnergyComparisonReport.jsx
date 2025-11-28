@@ -3,6 +3,7 @@ import KayValueTable from "@/components/tables/KayValueTable";
 import { SectionHeader } from "@/components/tables/SectionHeader";
 import { useTheme } from "next-themes";
 import React from "react";
+import { MdOutlineInfo } from "react-icons/md";
 const sectionHeaders = {
   rParams: "Report Parameters",
   HTside: "Generation Summary",
@@ -25,6 +26,7 @@ const EnergyComparisonReport = ({
   lowVoltageSide = [],
   lowVoltageTotla = {},
   utilizationData = [],
+  consumptionPerDept = [],
   mergedProduction = [],
 }) => {
   const { theme } = useTheme();
@@ -79,22 +81,29 @@ const EnergyComparisonReport = ({
             {Object.entries(intervalObj).map(([label, value], idx) => {
               const isfirstRow = idx === 0;
               return (
-                <tr key={idx}>
-                  <td className="font-semibold bg-[#E5F3FD]  w-[16.6%] border py-1 border-gray-400 px-3">
+                <tr
+                  key={idx}
+                  className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <td className="font-semibold bg-[#E5F3FD] dark:bg-gray-600 w-[16.6%] border py-1 border-gray-400 px-3">
                     {label}
                   </td>
 
                   <td
                     className={`border py-1 w-[16.6%] ${
-                      isfirstRow ? "bg-[#E5F3FD] font-semibold" : ""
+                      isfirstRow
+                        ? "bg-[#E5F3FD] dark:bg-gray-600 font-semibold"
+                        : ""
                     } border-gray-400 px-3`}
                   >
                     {value?.p1 ?? "-"}
                   </td>
 
                   <td
-                    className={`border py-1 w-[16.6%] ${
-                      isfirstRow ? "bg-[#E5F3FD] font-semibold" : ""
+                    className={`border  py-1 w-[16.6%] ${
+                      isfirstRow
+                        ? "bg-[#E5F3FD] dark:bg-gray-600 font-semibold"
+                        : ""
                     } border-gray-400 px-3`}
                   >
                     {value?.p2 ?? "-"}
@@ -110,19 +119,19 @@ const EnergyComparisonReport = ({
         <table className="w-full border border-gray-400 text-sm">
           <tbody>
             <tr>
-              <td className="font-semibold bg-[#E5F3FD] w-full border py-1 border-gray-400 px-3">
+              <td className="font-semibold bg-[#E5F3FD] dark:bg-gray-600 w-full border py-1 border-gray-400 px-3">
                 Sources
               </td>
             </tr>
             {(unit === "ALL" || unit === "Unit_4") && (
-              <tr>
+              <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
                 <td className={`border py-1 w-full border-gray-400 px-3`}>
                   Unit 4
                 </td>
               </tr>
             )}
             {(unit === "ALL" || unit === "Unit_5") && (
-              <tr>
+              <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
                 <td className={`border py-1 w-full border-gray-400 px-3`}>
                   Unit 5
                 </td>
@@ -141,14 +150,19 @@ const EnergyComparisonReport = ({
                 const isfirstRow = idx === 0;
                 const isBold = label === "Total";
                 return (
-                  <tr key={idx}>
-                    <td className="font-semibold bg-[#E5F3FD]  w-[16.6%] border py-1 border-gray-400 px-3">
+                  <tr
+                    key={idx}
+                    className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    <td className="font-semibold bg-[#E5F3FD] dark:bg-gray-600  w-[16.6%] border py-1 border-gray-400 px-3">
                       {label}
                     </td>
 
                     <td
                       className={`border py-1 w-[16.6%] ${
-                        isfirstRow ? "bg-[#E5F3FD] font-semibold" : ""
+                        isfirstRow
+                          ? "bg-[#E5F3FD] dark:bg-gray-600 font-semibold"
+                          : ""
                       } ${isBold ? "font-semibold" : ""} border-gray-400 px-3`}
                     >
                       {value?.p1?.toLocaleString("en-US", {
@@ -159,7 +173,9 @@ const EnergyComparisonReport = ({
 
                     <td
                       className={`border py-1 w-[16.6%] ${
-                        isfirstRow ? "bg-[#E5F3FD] font-semibold" : ""
+                        isfirstRow
+                          ? "bg-[#E5F3FD] dark:bg-gray-600 font-semibold"
+                          : ""
                       } ${isBold ? "font-semibold" : ""} border-gray-400 px-3`}
                     >
                       {value?.p2?.toLocaleString("en-US", {
@@ -177,21 +193,26 @@ const EnergyComparisonReport = ({
       {/* losses / consumption summary */}
       <div className="mt-5">
         <SectionHeader title={sectionHeaders.lossesSummary} />
-        <div className="w-[50%] mt-5 overflow-x-auto">
+        <div className="w-[60%] mt-5 overflow-x-auto">
           <table className="w-full border border-gray-400 text-sm">
             <tbody>
               {Object.entries(mergedSummary).map(([label, value], idx) => {
                 const isfirstRow = idx === 0;
                 const isBold = label === "Total_Consumption";
                 return (
-                  <tr key={idx}>
-                    <td className="font-semibold bg-[#E5F3FD]  w-[16.6%] border py-1 border-gray-400 px-3">
+                  <tr
+                    key={idx}
+                    className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    <td className="font-semibold bg-[#E5F3FD] dark:bg-gray-600  w-[16.6%] border py-1 border-gray-400 px-3">
                       {label.replaceAll("_", " ")}
                     </td>
 
                     <td
                       className={`border py-1 w-[16.6%] ${
-                        isfirstRow ? "bg-[#E5F3FD] font-semibold" : ""
+                        isfirstRow
+                          ? "bg-[#E5F3FD] dark:bg-gray-600 font-semibold"
+                          : ""
                       } ${isBold ? "font-semibold" : ""} border-gray-400 px-3`}
                     >
                       {typeof value === "number"
@@ -204,7 +225,9 @@ const EnergyComparisonReport = ({
 
                     <td
                       className={`border py-1 w-[16.6%] ${
-                        isfirstRow ? "bg-[#E5F3FD] font-semibold" : ""
+                        isfirstRow
+                          ? "bg-[#E5F3FD] dark:bg-gray-600 font-semibold"
+                          : ""
                       } ${isBold ? "font-semibold" : ""} border-gray-400 px-3`}
                     >
                       {typeof value === "number"
@@ -226,13 +249,15 @@ const EnergyComparisonReport = ({
                 const isBold = label === "Total";
                 return (
                   <tr key={idx}>
-                    <td className="font-semibold bg-[#E5F3FD]  w-[16.6%] border py-1 border-gray-400 px-3">
+                    <td className="font-semibold bg-[#E5F3FD] dark:bg-gray-600  w-[16.6%] border py-1 border-gray-400 px-3">
                       {label.replaceAll("_", " ")}
                     </td>
 
                     <td
                       className={`border py-1 w-[16.6%] ${
-                        isfirstRow ? "bg-[#E5F3FD] font-semibold" : ""
+                        isfirstRow
+                          ? "bg-[#E5F3FD] dark:bg-gray-600 font-semibold"
+                          : ""
                       } ${isBold ? "font-semibold" : ""} border-gray-400 px-3`}
                     >
                       {typeof value === "number"
@@ -245,7 +270,9 @@ const EnergyComparisonReport = ({
 
                     <td
                       className={`border py-1 w-[16.6%] ${
-                        isfirstRow ? "bg-[#E5F3FD] font-semibold" : ""
+                        isfirstRow
+                          ? "bg-[#E5F3FD] dark:bg-gray-600 font-semibold"
+                          : ""
                       } ${isBold ? "font-semibold" : ""} border-gray-400 px-3`}
                     >
                       {typeof value === "number"
@@ -493,13 +520,15 @@ const EnergyComparisonReport = ({
                         {item.p1?.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
-                        })}
+                        })}{" "}
+                        {item === row.UtilizationPercent ? "%" : ""}
                       </div>
                       <div className="w-1/2 py-2 px-3 text-center">
                         {item.p2?.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
-                        })}
+                        })}{" "}
+                        {item === row.UtilizationPercent ? "%" : ""}
                       </div>
                     </div>
                   </td>
@@ -590,6 +619,323 @@ const EnergyComparisonReport = ({
             ))}
           </tbody>
         </table>
+      </div>
+      {/* Consumption per dept */}
+      <div className="mt-5">
+        <SectionHeader title={sectionHeaders.consumptionPerDept} />
+        <div className="w-full mt-5 overflow-x-auto">
+          <table className="min-w-full w-full  text-sm md:text-base">
+            <thead className="bg-[#E5F3FD] dark:bg-gray-600">
+              {/* <tr className="text-[13px] md:text-[14px] font-inter">
+                <th
+                  rowSpan={2}
+                  className="text-center border px-3 py-2 w-[60px]"
+                >
+                  Sr #
+                </th>
+                <th
+                  rowSpan={2}
+                  className="text-center border px-3 py-2 w-[160px]"
+                >
+                  Department
+                </th>
+                <th
+                  rowSpan={2}
+                  className="text-center border px-3 py-2 w-[60px]"
+                >
+                  Unit
+                </th>
+                <th
+                  rowSpan={2}
+                  className="text-center border px-3 py-2 w-[60px]"
+                >
+                  MCs
+                </th>
+
+                <th rowSpan={2} className="text-center border px-3 py-2">
+                  Connected Load Per Department (kWh/h)
+                </th>
+
+                <th colSpan={2} className="text-center border px-3 py-2">
+                  Avg Running Load Per Department (kWh/h)
+                </th>
+
+                <th colSpan={2} className="text-center border px-3 py-2">
+                  Utilization
+                </th>
+
+                <th rowSpan={2} className="text-center border px-3 py-2">
+                  Connected Load Per Machine (kWh/h/Mc)
+                </th>
+
+                <th rowSpan={2} className="text-center border px-3 py-2">
+                  Avg Running Load Per Machine (kWh/h/Mc)
+                </th>
+
+                <th colSpan={2} className="text-center border px-3 py-2">
+                  Total Units Consumed (kWh)
+                </th>
+              </tr> */}
+              <tr className="text-[13px] md:text-[14px] font-inter">
+                <th className="text-center border px-3 py-2 w-[60px]">Sr #</th>
+                <th className="text-center border px-3 py-2 w-[160px]">
+                  Department
+                </th>
+                <th className="text-center border px-3 py-2 w-[60px]">Unit</th>
+                <th className="text-center border px-3 py-2 w-[60px]">MCs</th>
+
+                <th className="text-center border px-3 py-2">
+                  Connected Load Per Department (kWh/h)
+                </th>
+
+                <th colSpan={2} className="text-center border px-3 py-2">
+                  Avg Running Load Per Department (kWh/h)
+                </th>
+
+                <th colSpan={2} className="text-center border px-3 py-2">
+                  Utilization
+                </th>
+
+                <th className="text-center border px-3 py-2">
+                  Connected Load Per Machine (kWh/h/Mc)
+                </th>
+
+                <th className="text-center border px-3 py-2">
+                  Avg Running Load Per Machine (kWh/h/Mc)
+                </th>
+
+                <th colSpan={2} className="text-center border px-3 py-2">
+                  Total Units Consumed (kWh)
+                </th>
+              </tr>
+
+              <tr className="text-[13px] md:text-[14px] font-inter">
+                <th className="text-center px-3 py-2"></th>
+                <th className="text-center border-y px-3 py-2"></th>
+                <th className="text-center border-y px-3 py-2"></th>
+                <th className="text-center border-y px-3 py-2"></th>
+                <th className="text-center border-y px-3 py-2"></th>
+                <th className="text-center border px-3 py-2">P1</th>
+                <th className="text-center border px-3 py-2">P2</th>
+                <th className="text-center border px-3 py-2">P1</th>
+                <th className="text-center border px-3 py-2">P2</th>
+                <th className="text-center border-y px-3 py-2"></th>
+                <th className="text-center border-y px-3 py-2"></th>
+                <th className="text-center border px-3 py-2">P1</th>
+                <th className="text-center border px-3 py-2">P2</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {consumptionPerDept.map((dept, index) => (
+                <React.Fragment key={index}>
+                  {/* ─────────────── UNIT 4 ─────────────── */}
+                  <tr className="text-[13px] md:text-[14px] border-t-2 border-x-2 border-gray-500 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    {/* Sr # */}
+                    <td
+                      rowSpan={3}
+                      className="border w-[3%] border-gray-300 font-medium text-center px-2 py-1 align-middle bg-gray-50 dark:bg-gray-800"
+                    >
+                      {index + 1}
+                    </td>
+
+                    {/* Department */}
+                    <td className="border w-[13%] border-gray-300 font-medium px-2 py-1 align-middle">
+                      {dept.name || "-"}
+                    </td>
+
+                    {/* Unit */}
+                    <td className="border w-[3%] border-gray-300 px-2 py-1 text-center">
+                      4
+                    </td>
+
+                    {/* MCs */}
+                    <td className="border w-[3%] border-gray-300 px-2 py-1 text-center">
+                      {dept.u4Mcs ?? "-"}
+                    </td>
+
+                    {/* Connected Load Per Department */}
+                    <td className="border w-[13%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u4ConectedLoadPerDept ?? "-"}
+                    </td>
+
+                    {/* Avg Running Load Per Dept → P1 */}
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u4AvgConsumption?.p1 ?? "-"}
+                    </td>
+
+                    {/* Avg Running Load Per Dept → P2 */}
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u4AvgConsumption?.p2 ?? "-"}
+                    </td>
+
+                    {/* Utilization → P1 */}
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right bg-[#E5F3FD] dark:bg-[#e5f3fd5d]">
+                      {dept.u4UtilizationPercent?.p1
+                        ? dept.u4UtilizationPercent.p1 + " %"
+                        : "-"}
+                    </td>
+
+                    {/* Utilization → P2 */}
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right bg-[#E5F3FD] dark:bg-[#e5f3fd5d]">
+                      {dept.u4UtilizationPercent?.p2
+                        ? dept.u4UtilizationPercent.p2 + " %"
+                        : "-"}
+                    </td>
+
+                    {/* Connected Load Per Machine */}
+                    <td className="border w-[13%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u4ConectedLoadPerMcs ?? "-"}
+                    </td>
+
+                    {/* Avg Running Load per Machine */}
+                    <td className="border w-[13%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u4RunnigLoad ?? "-"}
+                    </td>
+
+                    {/* Total Consumption → P1 */}
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u4Consumption?.p1?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) ?? "-"}
+                    </td>
+
+                    {/* Total Consumption → P2 */}
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u4Consumption?.p2?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) ?? "-"}
+                    </td>
+                  </tr>
+
+                  {/* ─────────────── UNIT 5 ─────────────── */}
+                  <tr className="text-[13px] md:text-[14px] border-x-2 border-gray-500 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td className="border w-[13%] border-gray-300 font-medium px-2 py-1 align-middle">
+                      {dept.u5Name || "-"}
+                    </td>
+
+                    <td className="border w-[3%] border-gray-300 px-2 py-1 text-center">
+                      5
+                    </td>
+
+                    <td className="border w-[3%] border-gray-300 px-2 py-1 text-center">
+                      {dept.u5Mcs ?? "-"}
+                    </td>
+
+                    <td className="border w-[13%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u5ConectedLoadPerDept ?? "-"}
+                    </td>
+
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u5AvgConsumption?.p1 ?? "-"}
+                    </td>
+
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u5AvgConsumption?.p2 ?? "-"}
+                    </td>
+
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right bg-[#E5F3FD] dark:bg-[#e5f3fd5d]">
+                      {dept.u5UtilizationPercent?.p1
+                        ? dept.u5UtilizationPercent.p1 + " %"
+                        : "-"}
+                    </td>
+
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right bg-[#E5F3FD] dark:bg-[#e5f3fd5d]">
+                      {dept.u5UtilizationPercent?.p2
+                        ? dept.u5UtilizationPercent.p2 + " %"
+                        : "-"}
+                    </td>
+
+                    <td className="border w-[13%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u5ConectedLoadPerMcs ?? "-"}
+                    </td>
+
+                    <td className="border w-[13%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u5RunningLoad ?? "-"}
+                    </td>
+
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u5Consumption?.p1?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) ?? "-"}
+                    </td>
+
+                    <td className="border w-[6.5%] border-gray-300 px-2 py-1 text-right">
+                      {dept.u5Consumption?.p2?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) ?? "-"}
+                    </td>
+                  </tr>
+
+                  {/* ─────────────── TOTAL ROW ─────────────── */}
+                  <tr className="text-[13px] md:text-[14px] border-b-2 border-x-2 border-gray-500 dark:border-gray-300 font-semibold bg-gray-100 dark:bg-gray-700">
+                    <td
+                      colSpan={10}
+                      className="text-right border border-gray-400 px-2 py-1"
+                    >
+                      Total
+                    </td>
+
+                    <td className="text-right w-[6.5%] border border-gray-400 px-2 py-1">
+                      {dept.totalConsumption?.p1?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) ?? "-"}
+                    </td>
+
+                    <td className="text-right w-[6.5%] border border-gray-400 px-2 py-1">
+                      {dept.totalConsumption?.p2?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) ?? "-"}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td colSpan={13} className="h-2"></td>
+                  </tr>
+                </React.Fragment>
+              ))}
+
+              {/* ─────────────── GRAND TOTAL ROW ─────────────── */}
+              {/* <tr className="font-semibold text-[13px] md:text-[14px] dark:bg-gray-600">
+                <td colSpan={9} className="dark:bg-gray-800">
+                  <span className="flex items-center gap-5 text-gray-600 dark:text-gray-300">
+                    <MdOutlineInfo
+                      className="text-[#1E538C] dark:text-[#E5F3FD] bg-[#1E538C]/20 dark:bg-[#E5F3FD]/40 rounded-full p-[3px]"
+                      size={30}
+                    />
+                    HFO + JMS Auxiliary not included in grand total consumption.
+                  </span>
+                </td>
+
+                <td className="text-center border-2 border-gray-700 dark:border-gray-300 px-2 py-2">
+                  Total P1
+                </td>
+                <td className="text-right border-2 border-gray-700 dark:border-gray-300 px-2 py-2">
+                  {totalafterAux?.p1?.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </td>
+
+                <td className="text-center border-2 border-gray-700 dark:border-gray-300 px-2 py-2">
+                  Total P2
+                </td>
+                <td className="text-right border-2 border-gray-700 dark:border-gray-300 px-2 py-2">
+                  {totalafterAux?.p2?.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </td>
+              </tr> */}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
