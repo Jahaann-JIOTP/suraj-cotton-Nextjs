@@ -389,16 +389,16 @@ export const sidebarLinksMap = {
       icon: PlantOverview,
       href: "/energy-usage-report",
     },
-    {
-      title: "Energy Comparison Report",
-      icon: PlantOverview,
-      href: "/energy-comparison-report",
-    },
-    {
-      title: "Department-Wise Report",
-      icon: PlantOverview,
-      href: "/department-wise-report",
-    },
+    // {
+    //   title: "Energy Comparison Report",
+    //   icon: PlantOverview,
+    //   href: "/energy-comparison-report",
+    // },
+    // {
+    //   title: "Department-Wise Report",
+    //   icon: PlantOverview,
+    //   href: "/department-wise-report",
+    // },
   ],
 
   Settings: [

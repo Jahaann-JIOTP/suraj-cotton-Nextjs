@@ -10,6 +10,7 @@ import { getDateRangeFromString } from "@/utils/dateRangeForReports";
 import { to12HourFormat } from "@/utils/To12HourFormate";
 import EnergyUsageReport from "@/components/reportsComponent/energyComparisonTable/EnergyUsageReport";
 import { IoChevronDownOutline } from "react-icons/io5";
+import DeptWiseReportTable from "@/components/reportsComponent/energyComparisonTable/DeptWiseReportTable";
 const intervalOptions = [
   {
     id: 0,
@@ -37,36 +38,63 @@ const intervalOptions = [
     value: "Custom Date",
   },
 ];
+const deptOptions = [
+  "Blow Room",
+  "Card +Breaker",
+  "Card",
+  "Comber + Lap former",
+  "Drawing Finsher+Breaker",
+  "Drawing Finsher",
+  "Simplex",
+  "Simplex + Drawing Breaker",
+  "R.Transport System",
+  "Ring Dept",
+  "Winding",
+  "B/Card + Comber Filter",
+  "Back Process A/C",
+  "Ring A/C",
+  "Winding A/C",
+  "Air Compressor",
+  "Deep Well Turbine",
+  "Bailing Press ",
+  "Mills Lighting ",
+  "Residential Colony",
+  "Conditioning Machine ",
+  "Lab + Offices",
+  "HFO Plant Aux(2nd Source)",
+  "Gas Plant Aux(2nd Source)",
+  "HFO + JMS Auxiliary",
+  "Spare/PF panels",
+];
 const DeptWiseReport = () => {
   const [usageReportTimePeriod, setUsageReportTimePeriod] =
     useState("Yesterday");
   const [intervalDropdown, setIntervalDropdown] = useState(false);
+  const [deptDropdown, setDeptDropdown] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [unit, setUnit] = useState("");
+  const [selectedDept, setSelectedDept] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [endTime, setEndTime] = useState("");
   const [isHovered, setIsHovered] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [resData, setResData] = useState([]);
+  const [resData, setResData] = useState({});
+  console.log(resData);
   const intervalDropdownRef = useRef(null);
   const dropdownRef = useRef(null);
+  const deptDropdownRef = useRef(null);
+
   const intervalsObj = {
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-    usageReportTimePeriod,
-  };
-  const NewIntervalsObj = {
     "Selected Period": usageReportTimePeriod,
     "Start Date":
       startDate + (startTime ? " " + to12HourFormat(startTime) : ""),
     "End Date": endDate + (endTime ? " " + to12HourFormat(endTime) : ""),
     "Selected Timezone": "(UTC+05:00) Asia Karachi",
   };
+  const deptReport = Array.isArray(resData?.meters) ? resData.meters : [];
 
   const toMinutes = (time) => {
     if (!time) return null;
@@ -95,6 +123,7 @@ const DeptWiseReport = () => {
   }, [usageReportTimePeriod]);
   const toggleDropdown = () => setIsOpen(!isOpen);
   const toggleIntervalDropdown = () => setIntervalDropdown(!intervalDropdown);
+  const toggleDeptDropdown = () => setDeptDropdown(!deptDropdown);
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -105,6 +134,12 @@ const DeptWiseReport = () => {
         !intervalDropdownRef.current.contains(event.target)
       ) {
         setIntervalDropdown(false);
+      }
+      if (
+        deptDropdownRef.current &&
+        !deptDropdownRef.current.contains(event.target)
+      ) {
+        setDeptDropdown(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -166,27 +201,32 @@ const DeptWiseReport = () => {
       toast.warning("Please Complete Time Intervals.");
       return;
     }
+    if (!unit) {
+      toast.warning("Please Select Unit");
+      return;
+    }
+    if (!selectedDept) {
+      toast.warning("Please Select Department");
+      return;
+    }
 
     setLoadingSubmit(true);
     try {
-      const response = await fetch(
-        `${config.BASE_URL}${config.REPORTS.ENERGY_CONSUMPTION}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            start_date: startDate,
-            end_date: endDate,
-            start_time: startTime,
-            end_time: endTime,
-            suffixes: ["Del_ActiveEnergy"],
-            area: "ALL",
-          }),
-        }
-      );
+      const response = await fetch(`${config.BASE_URL}/departmentreport`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          department: selectedDept,
+          area: unit,
+          startDate: startDate,
+          endDate: endDate,
+          startTime: startTime,
+          endTime: endTime,
+        }),
+      });
 
       if (response.ok) {
         const resResult = await response.json();
@@ -240,7 +280,7 @@ const DeptWiseReport = () => {
       {!showResults ? (
         <div>
           <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* unit selector dropdonw */}
               <div className="flex flex-col w-full items-start justify-center gap-1">
                 <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
@@ -252,8 +292,8 @@ const DeptWiseReport = () => {
                     onClick={toggleDropdown}
                     className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
                   >
-                    {unit === "ALL"
-                      ? "ALL Units"
+                    {unit === "All"
+                      ? "All"
                       : unit === "Unit_4"
                       ? "Unit 4"
                       : unit === "Unit_5"
@@ -271,27 +311,76 @@ const DeptWiseReport = () => {
                       <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
                         <input
                           type="checkbox"
-                          checked={unit === "Unit_4" || unit === "ALL"}
-                          onChange={() => handleUnitChange("Unit_4")}
+                          checked={unit === "All"}
+                          onChange={() => handleUnitChange("All")}
+                        />
+                        All
+                      </label>
+                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                        <input
+                          type="checkbox"
+                          checked={unit === "Unit4" || unit === "All"}
+                          onChange={() => handleUnitChange("Unit4")}
                         />
                         Unit 4
                       </label>
                       <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
                         <input
                           type="checkbox"
-                          checked={unit === "Unit_5" || unit === "ALL"}
-                          onChange={() => handleUnitChange("Unit_5")}
+                          checked={unit === "Unit5" || unit === "All"}
+                          onChange={() => handleUnitChange("Unit5")}
                         />
                         Unit 5
                       </label>
-                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
-                        <input
-                          type="checkbox"
-                          checked={unit === "ALL"}
-                          onChange={() => handleUnitChange("ALL")}
-                        />
-                        All
-                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* Dept selector dropdown */}
+              <div className="flex flex-col w-full items-start justify-center gap-1">
+                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
+                  Select Department
+                </span>
+                <div
+                  className="relative inline-block w-full"
+                  ref={deptDropdownRef}
+                >
+                  <button
+                    type="button"
+                    onClick={toggleDeptDropdown}
+                    className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
+                  >
+                    {/* Find and display the label instead of the value */}
+                    {deptOptions.find((option) => option === selectedDept) ||
+                    selectedDept.length > 0
+                      ? selectedDept
+                      : "Select Department"}
+                    <IoChevronDownOutline
+                      className={`transition-all duration-300 ${
+                        deptDropdown ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {deptDropdown && (
+                    <div className="absolute z-20 mt-1 w-full h-[15rem] overflow-y-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
+                      {deptOptions.map((option) => (
+                        <label
+                          key={option}
+                          className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white"
+                        >
+                          <input
+                            type="radio"
+                            checked={selectedDept === option}
+                            value={option}
+                            onChange={(e) => {
+                              setDeptDropdown(false);
+                              setSelectedDept(e.target.value);
+                            }}
+                          />
+                          {option}
+                        </label>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -344,9 +433,7 @@ const DeptWiseReport = () => {
                   )}
                 </div>
               </div>
-
               {/* start date selector */}
-
               <div className="flex flex-col w-full items-start justify-start gap-1">
                 <label
                   htmlFor="startDate"
@@ -372,7 +459,6 @@ const DeptWiseReport = () => {
                 />
               </div>
               {/* end date selector */}
-
               <div className="flex flex-col w-full items-start justify-start gap-1">
                 <label
                   htmlFor="endDate"
@@ -398,9 +484,7 @@ const DeptWiseReport = () => {
                   }`}
                 />
               </div>
-
               {/* start Time Selector */}
-
               <div className="flex flex-col w-full items-start justify-start gap-1">
                 <label
                   htmlFor="startDate"
@@ -426,7 +510,6 @@ const DeptWiseReport = () => {
                 />
               </div>
               {/* end Time selector */}
-
               <div className="flex flex-col w-full items-start justify-start gap-1">
                 <label
                   htmlFor="endDate"
@@ -473,10 +556,10 @@ const DeptWiseReport = () => {
           </form>
         </div>
       ) : showResults ? (
-        <EnergyUsageReport
-          rawData={resData}
+        <DeptWiseReportTable
+          deptReportData={deptReport}
+          source={resData.departmentName || ""}
           intervalsObj={intervalsObj}
-          newIntervalObj={NewIntervalsObj}
         />
       ) : null}
     </div>

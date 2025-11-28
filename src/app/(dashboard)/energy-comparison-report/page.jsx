@@ -830,6 +830,14 @@ const UsageReport = () => {
                       <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
                         <input
                           type="checkbox"
+                          checked={unit === "ALL"}
+                          onChange={() => handleUnitChange("ALL")}
+                        />
+                        All
+                      </label>
+                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                        <input
+                          type="checkbox"
                           checked={unit === "Unit_4" || unit === "ALL"}
                           onChange={() => handleUnitChange("Unit_4")}
                         />
@@ -842,14 +850,6 @@ const UsageReport = () => {
                           onChange={() => handleUnitChange("Unit_5")}
                         />
                         Unit 5
-                      </label>
-                      <label className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
-                        <input
-                          type="checkbox"
-                          checked={unit === "ALL"}
-                          onChange={() => handleUnitChange("ALL")}
-                        />
-                        All
                       </label>
                     </div>
                   )}
