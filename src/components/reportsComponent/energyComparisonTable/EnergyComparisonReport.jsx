@@ -24,6 +24,8 @@ const EnergyComparisonReport = ({
   deltaOnly = {},
   lowVoltageSide = [],
   lowVoltageTotla = {},
+  utilizationData = [],
+  mergedProduction = [],
 }) => {
   const { theme } = useTheme();
   return (
@@ -281,12 +283,12 @@ const EnergyComparisonReport = ({
                 "Total Unaccountable Energy (kWh)",
               ].map((h, idx) => (
                 <th key={idx} className="border border-gray-400 w-[18%]">
-                  <div className="text-center flex items-center justify-center h-[50px] py-1">
+                  <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     {h}
                   </div>
 
                   {/* sub-headers */}
-                  <div className="flex h-[30px] border-t border-gray-400">
+                  <div className="flex min-h-[30px] border-t border-gray-400">
                     <div className="flex items-center justify-center w-1/2 py-1 border-r border-gray-400 text-center font-semibold">
                       P1
                     </div>
@@ -424,6 +426,168 @@ const EnergyComparisonReport = ({
                 </div>
               </td>
             </tr>
+          </tbody>
+        </table>
+      </div>
+      {/* Utilization */}
+      <div className="mt-5">
+        <SectionHeader title={sectionHeaders.utilization} />
+        <table className="min-w-full border-collapse border border-gray-400 mt-5 text-sm">
+          {/* ---------- HEADER ---------- */}
+          <thead className="bg-[#E5F3FD] dark:bg-gray-600">
+            {/* Main header row */}
+            <tr className="text-[13px] md:text-[14px] font-inter">
+              <th className="py-2 px-3 border border-gray-400 text-center w-[10%]">
+                Unit No.
+              </th>
+
+              {/* Each header with 2 sub-columns */}
+              {[
+                "Total Actual Connected Load (kWh/h)",
+                "Total Connected Load (kWh/h)",
+                "Utilization",
+              ].map((h, idx) => (
+                <th key={idx} className="border border-gray-400 w-[18%]">
+                  <div className="text-center flex items-center justify-center min-h-[50px] py-1">
+                    {h}
+                  </div>
+
+                  {/* sub-headers */}
+                  <div className="flex min-h-[30px] border-t border-gray-400">
+                    <div className="flex items-center justify-center w-1/2 py-1 border-r border-gray-400 text-center font-semibold">
+                      P1
+                    </div>
+                    <div className="flex items-center justify-center w-1/2 py-1 text-center font-semibold">
+                      P2
+                    </div>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          {/* ---------- BODY ---------- */}
+          <tbody>
+            {utilizationData.map((row, idx) => (
+              <tr
+                key={idx}
+                className="text-[13px] md:text-[14px] font-inter hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                {/* Unit column */}
+                <td className="py-2 px-3 border border-gray-400 w-[10%] text-center">
+                  {row.unit}
+                </td>
+
+                {/* All columns with two subcells */}
+                {[
+                  row.TotalConnectedLoadPerDept,
+                  row.TotalAvgConsumption,
+                  row.UtilizationPercent,
+                ].map((item, colIdx) => (
+                  <td
+                    key={colIdx}
+                    className="border border-gray-400 w-[18%] p-0"
+                  >
+                    <div className="flex">
+                      <div className="w-1/2 py-2 px-3 border-r border-gray-400 text-center">
+                        {item.p1?.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </div>
+                      <div className="w-1/2 py-2 px-3 text-center">
+                        {item.p2?.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </div>
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {/* Production summary */}
+      <div className="mt-5">
+        <SectionHeader title={sectionHeaders.production} />
+        <table className="min-w-full border-collapse border border-gray-400 mt-5 text-sm">
+          {/* ---------- HEADER ---------- */}
+          <thead className="bg-[#E5F3FD] dark:bg-gray-600">
+            {/* Main header row */}
+            <tr className="text-[13px] md:text-[14px] font-inter">
+              <th className="py-2 px-3 border border-gray-400 text-center w-[10%]">
+                Unit No.
+              </th>
+
+              {/* Each header with 2 sub-columns */}
+              {[
+                "Total No. of Bags",
+                "Avg. Count",
+                "Total Consumption (kWh)",
+                "Consumption Per Bag (kWh/Bag)",
+              ].map((h, idx) => (
+                <th key={idx} className="border border-gray-400 w-[18%]">
+                  <div className="text-center flex items-center justify-center min-h-[50px] py-1">
+                    {h}
+                  </div>
+
+                  {/* sub-headers */}
+                  <div className="flex min-h-[30px] border-t border-gray-400">
+                    <div className="flex items-center justify-center w-1/2 py-1 border-r border-gray-400 text-center font-semibold">
+                      P1
+                    </div>
+                    <div className="flex items-center justify-center w-1/2 py-1 text-center font-semibold">
+                      P2
+                    </div>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          {/* ---------- BODY ---------- */}
+          <tbody>
+            {mergedProduction.map((row, idx) => (
+              <tr
+                key={idx}
+                className="text-[13px] md:text-[14px] font-inter hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                {/* Unit column */}
+                <td className="py-2 px-3 border border-gray-400 w-[10%] text-center">
+                  {row.unit}
+                </td>
+
+                {/* All columns with two subcells */}
+                {[
+                  row.TotalProduction,
+                  row.TotalAvgCount,
+                  row.TotalConsumption,
+                  row.consumptionperbag,
+                ].map((item, colIdx) => (
+                  <td
+                    key={colIdx}
+                    className="border border-gray-400 w-[18%] p-0"
+                  >
+                    <div className="flex">
+                      <div className="w-1/2 py-2 px-3 border-r border-gray-400 text-center">
+                        {item.p1?.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </div>
+                      <div className="w-1/2 py-2 px-3 text-center">
+                        {item.p2?.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </div>
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

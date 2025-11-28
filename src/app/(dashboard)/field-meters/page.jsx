@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 const NewFieldMeter = () => {
   const [realtime, setRealtime] = useState([]);
   const [currentArea, setCurrentArea] = useState({});
+
   const [consumptionPerArea, setConumptionPerArea] = useState({});
   const currentDate = new Date();
   const nextDate = new Date(currentDate);
@@ -396,11 +397,17 @@ const NewFieldMeter = () => {
           <img
             src={`./fieldMeterStatus/${
               // currentArea.U4_GW02 === 4 ? "g" : "r"
-              currentArea.U1_GW02 === 5 ? "g" : "r"
+              currentArea.U4_GW02 === 5 ? "g" : "r"
             }1.png`}
             className="w-[38px] absolute top-[184px] left-[302px]"
             alt=""
           />
+          {(currentArea.U1_GW02 === 4 && currentArea.U4_GW02 === 4) ||
+          (currentArea.U1_GW02 === 5 && currentArea.U4_GW02 === 5) ? (
+            ""
+          ) : (
+            <div className="absolute top-[295px] left-[82px] w-[239px] h-[2px] bg-red-500"></div>
+          )}
           <img
             src={`./fieldMeterStatus/${
               currentArea.U2_GW02 === 4 ? "g" : "r"
@@ -411,11 +418,17 @@ const NewFieldMeter = () => {
           <img
             src={`./fieldMeterStatus/${
               // currentArea.U3_GW02 === 4 ? "g" : "r"
-              currentArea.U2_GW02 === 5 ? "g" : "r"
+              currentArea.U3_GW02 === 5 ? "g" : "r"
             }1.png`}
             className="w-[38px] absolute top-[184px] left-[812px]"
             alt=""
           />
+          {(currentArea.U2_GW02 === 4 && currentArea.U3_GW02 === 4) ||
+          (currentArea.U2_GW02 === 5 && currentArea.U3_GW02 === 5) ? (
+            ""
+          ) : (
+            <div className="absolute top-[295.5px] left-[592.5px] w-[239px] h-[2px] bg-red-500"></div>
+          )}
           <img
             src={`./fieldMeterStatus/${
               currentArea.U23_GW03 === 4 ? "g" : "r"

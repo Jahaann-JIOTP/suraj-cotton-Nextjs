@@ -20,17 +20,6 @@ const predefinedColors = [
   "#FFB000",
   "#6b21a8",
 ];
-// const predefinedColors = [
-//   "#b45309",
-//   "#1f77b4",
-//   "#5B9486",
-//   "#ff7f0e",
-//   "#2ca02c",
-//   "#B0C01A",
-//   "#991b1b",
-//   "#FFB000",
-//   "#6b21a8",
-// ];
 
 const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
   const { theme } = useTheme();
@@ -86,6 +75,10 @@ const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
       Date: new Date(d.Date).getTime(),
     }));
 
+    // calculate minimum and maximum data
+    let globalMin = Infinity;
+    let globalMax = -Infinity;
+
     // ✅ X Axis
     const xAxis = chart.xAxes.push(
       am5xy.DateAxis.new(root, {
@@ -115,6 +108,15 @@ const CustomTrendChart = ({ data = [], yAxisLabel = "" }) => {
     const keys = Object.keys(data[0]).filter(
       (k) => k !== "Date" && k !== "Time"
     );
+    data.forEach((item) => {
+      keys.forEach((key) => {
+        const value = item[key];
+        if (typeof value === "number") {
+          globalMin = Math.min(globalMin, value);
+          globalMax = Math.max(globalMax, value);
+        }
+      });
+    });
 
     keys.forEach((key, index) => {
       // const color = am5.color(myColors[index % myColors.length]);

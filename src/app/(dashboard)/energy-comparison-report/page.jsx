@@ -539,7 +539,66 @@ const UsageReport = () => {
     totalConsumptionValue,
     UnaccountedEnergyTotal,
   };
-  console.log("merged data", totalIcg);
+  // Utilization data mapping
+  const utilization1 = Array.isArray(resData?.utilization)
+    ? resData.utilization
+    : [];
+  const utilization2 = Array.isArray(resData2?.utilization)
+    ? resData2.utilization
+    : [];
+  function mergeUtilization(arr1, arr2) {
+    const map = new Map();
+
+    // Insert P1 values
+    arr1.forEach((item) => {
+      map.set(item.Unit, { unit: item.Unit });
+
+      Object.keys(item).forEach((key) => {
+        if (key !== "Unit") {
+          if (!map.get(item.Unit)[key]) {
+            map.get(item.Unit)[key] = {};
+          }
+          map.get(item.Unit)[key].p1 = item[key];
+        }
+      });
+    });
+
+    // Insert P2 values
+    arr2.forEach((item) => {
+      if (!map.has(item.Unit)) {
+        map.set(item.Unit, { unit: item.Unit });
+      }
+
+      Object.keys(item).forEach((key) => {
+        if (key !== "Unit") {
+          if (!map.get(item.Unit)[key]) {
+            map.get(item.Unit)[key] = {};
+          }
+          map.get(item.Unit)[key].p2 = item[key];
+        }
+      });
+    });
+
+    // Convert map to array
+    return Array.from(map.values());
+  }
+
+  const mergedUtilization = mergeUtilization(utilization1, utilization2);
+  // merge production summary
+  const productionSummary1 = Array.isArray(resData?.productionSummary)
+    ? resData.productionSummary
+    : [];
+  const productionSummary2 = Array.isArray(resData2?.productionSummary)
+    ? resData2.productionSummary
+    : [];
+
+  const mergedProduction = mergeUtilization(
+    productionSummary1,
+    productionSummary2
+  );
+
+  console.log("productionSummary1", mergedProduction);
+
   // ///////===============================Handle all data processing end=================================
 
   //  handle minimum end time
@@ -872,6 +931,8 @@ const UsageReport = () => {
           htSideData={mergedHTSideFinalData}
           lowVoltageSide={merged}
           lowVoltageTotla={totalRowLowvoltageSummary}
+          utilizationData={mergedUtilization}
+          mergedProduction={mergedProduction}
           unit={unit}
           mergedSummary={mergedSummary}
           deltaOnly={deltaOnly}
