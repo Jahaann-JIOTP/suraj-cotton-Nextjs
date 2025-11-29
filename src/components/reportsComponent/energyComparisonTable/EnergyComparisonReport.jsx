@@ -95,8 +95,11 @@ const EnergyComparisonReport = ({
                 margin: [40, 20, 0, 0],
               },
               {
-                text: "",
+                text: "Energy Comparison Report",
                 width: "*",
+                alignment: "center",
+                fontSize: 11,
+                margin: [0, 25, 0, 0],
               },
               {
                 image: jahaannBase64Logo,
@@ -126,7 +129,7 @@ const EnergyComparisonReport = ({
                 text: "Suraj Cotton Mills Limited, Raiwind",
                 alignment: "left",
                 margin: [40, 5, 0, 0],
-                fontSize: 14,
+                fontSize: 12,
                 bold: true,
                 color: "#000000",
               },
@@ -204,6 +207,7 @@ const EnergyComparisonReport = ({
           ThreecolsPdfTable({
             title: sectionHeaders.HTside,
             data: htSideData,
+            boldKyes: ["Total"],
             pageBreakAfter: true,
           }),
           //==========================================================================
@@ -211,6 +215,7 @@ const EnergyComparisonReport = ({
           ThreecolsPdfTable({
             title: sectionHeaders.lossesSummary,
             data: mergedSummary,
+            boldKyes: ["Total_Consumption"],
           }),
           ThreecolsPdfTable({
             data: deltaOnly,
@@ -807,7 +812,11 @@ const EnergyComparisonReport = ({
         pageMargins: [40, 115, 40, 60],
       };
 
-      pdfMake.createPdf(docDefinition).download("Energy_Comparison_Report.pdf");
+      pdfMake
+        .createPdf(docDefinition)
+        .download(
+          `energy_comparison_report_${reportedDate}_${reportedTime}.pdf`
+        );
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("Error generating PDF. Please try again.");

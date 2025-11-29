@@ -221,8 +221,11 @@ const EnergyUsageReport = ({ rawData, intervalsObj, newIntervalObj }) => {
                 margin: [40, 20, 0, 0],
               },
               {
-                text: "",
+                text: "Energy Usage Report",
                 width: "*",
+                alignment: "center",
+                fontSize: 11,
+                margin: [0, 25, 0, 0],
               },
               {
                 image: jahaannBase64Logo,
@@ -252,7 +255,7 @@ const EnergyUsageReport = ({ rawData, intervalsObj, newIntervalObj }) => {
                 text: "Suraj Cotton Mills Limited, Raiwind",
                 alignment: "left",
                 margin: [40, 5, 0, 0],
-                fontSize: 14,
+                fontSize: 12,
                 bold: true,
                 color: "#000000",
               },
@@ -748,7 +751,9 @@ const EnergyUsageReport = ({ rawData, intervalsObj, newIntervalObj }) => {
         pageMargins: [40, 115, 40, 60],
       };
 
-      pdfMake.createPdf(docDefinition).download("Energy_Comparison_Report.pdf");
+      pdfMake
+        .createPdf(docDefinition)
+        .download(`energy_usage_report_${reportedDate}_${reportedTime}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("Error generating PDF. Please try again.");

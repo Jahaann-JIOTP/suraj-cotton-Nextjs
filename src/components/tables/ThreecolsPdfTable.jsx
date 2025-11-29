@@ -3,10 +3,12 @@ export const ThreecolsPdfTable = ({
   data = {},
   pageBreakAfter = false,
   unit = "",
+  boldKyes = [],
 }) => {
   // Build table rows
   const body = Object.entries(data).map(([key, value], idx) => {
     const isFirstRow = idx === 0;
+    const isBoldCell = boldKyes.includes(key);
 
     // Format values
     const p1 =
@@ -30,7 +32,7 @@ export const ThreecolsPdfTable = ({
         text: key.replace(/_/g, " "),
         style: "tableHeader",
         fillColor: "#E5F3FD",
-        bold: isFirstRow,
+        bold: isFirstRow || isBoldCell,
         // alignment: isFirstRow ? "center" : "left",
         alignment: "left",
       },
@@ -38,7 +40,7 @@ export const ThreecolsPdfTable = ({
         text: unit && p1 !== "-" ? `${p1} ${unit}` : p1,
         style: "tableCell",
         fillColor: isFirstRow ? "#E5F3FD" : null,
-        bold: isFirstRow,
+        bold: isFirstRow || isBoldCell,
         // alignment: isFirstRow ? "center" : "left",
         alignment: "left",
       },
@@ -46,7 +48,7 @@ export const ThreecolsPdfTable = ({
         text: unit && p2 !== "-" ? `${p2} ${unit}` : p2,
         style: "tableCell",
         fillColor: isFirstRow ? "#E5F3FD" : null,
-        bold: isFirstRow,
+        bold: isFirstRow || isBoldCell,
         // alignment: isFirstRow ? "center" : "left",
         alignment: "left",
       },

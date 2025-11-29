@@ -6,10 +6,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { loadImageAsBase64 } from "@/utils/imageToBase64";
 import { buildKeyValuePdfTable } from "@/components/tables/pdfKayValue";
-import {
-  buildStandardPdfTable,
-  pdfStyles,
-} from "@/components/tables/pdfStandardTable";
+import { pdfStyles } from "@/components/tables/pdfStandardTable";
 const sectionHeading = {
   parameters: "Report Parameters",
   deptWiseReport: "Department Wise Consumption",
@@ -90,8 +87,11 @@ const DeptWiseReportTable = ({
                 margin: [40, 20, 0, 0],
               },
               {
-                text: "",
+                text: "Department-Wise Energy Consumption Report",
                 width: "*",
+                alignment: "center",
+                fontSize: 11,
+                margin: [0, 25, 0, 0],
               },
               {
                 image: jahaannBase64Logo,
@@ -121,7 +121,7 @@ const DeptWiseReportTable = ({
                 text: "Suraj Cotton Mills Limited, Raiwind",
                 alignment: "left",
                 margin: [40, 5, 0, 0],
-                fontSize: 14,
+                fontSize: 12,
                 bold: true,
                 color: "#000000",
               },
@@ -339,7 +339,9 @@ const DeptWiseReportTable = ({
         pageMargins: [40, 115, 40, 60],
       };
 
-      pdfMake.createPdf(docDefinition).download("Energy_Comparison_Report.pdf");
+      pdfMake
+        .createPdf(docDefinition)
+        .download(`dept_wise_report_${reportedDate}_${reportedTime}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("Error generating PDF. Please try again.");
