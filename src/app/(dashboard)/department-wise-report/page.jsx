@@ -39,33 +39,24 @@ const intervalOptions = [
   },
 ];
 const deptOptions = [
-  "Blow Room",
-  "Card +Breaker",
-  "Card",
-  "Comber + Lap former",
-  "Drawing Finsher+Breaker",
-  "Drawing Finsher",
-  "Simplex",
-  "Simplex + Drawing Breaker",
-  "R.Transport System",
-  "Ring Dept",
-  "Winding",
-  "B/Card + Comber Filter",
-  "Back Process A/C",
-  "Ring A/C",
-  "Winding A/C",
-  "Air Compressor",
-  "Deep Well Turbine",
-  "Bailing Press ",
-  "Mills Lighting ",
-  "Residential Colony",
-  "Conditioning Machine ",
-  "Lab + Offices",
+  "R. Transport System",
+  "Mills Lighting",
   "HFO Plant Aux(2nd Source)",
-  "Gas Plant Aux(2nd Source)",
-  "HFO + JMS Auxiliary",
-  "Spare/PF panels",
+  "Deep Valve Turbine",
+  "Drawing Finisher + Breaker",
+  "Winding",
+  "Ring Dept",
+  "Comber + Lap Former",
+  "Air Compressor",
+  "Simplex",
+  "Ring A/C",
+  "Residential Colony",
+  "Lap + Offices",
+  "Bailing Press",
+  "Spare/PF Panels",
+  "Blow Room",
 ];
+
 const DeptWiseReport = () => {
   const [usageReportTimePeriod, setUsageReportTimePeriod] =
     useState("Yesterday");
@@ -82,7 +73,6 @@ const DeptWiseReport = () => {
   const [showResults, setShowResults] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [resData, setResData] = useState({});
-  console.log(resData);
   const intervalDropdownRef = useRef(null);
   const dropdownRef = useRef(null);
   const deptDropdownRef = useRef(null);
@@ -247,7 +237,7 @@ const DeptWiseReport = () => {
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
       <div className="flex pb-3 items-center justify-between">
         <h1 className="text-[18.22px] text-raleway font-600">
-          Energy Usage Report
+          Department-Wise Report
         </h1>
         {showResults && (
           <button

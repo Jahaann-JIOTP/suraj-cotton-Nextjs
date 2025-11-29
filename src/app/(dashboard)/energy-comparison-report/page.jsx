@@ -14,6 +14,7 @@ import { IoChevronDownOutline } from "react-icons/io5";
 import "react-datepicker/dist/react-datepicker.css";
 import EnergyComparisonReport from "@/components/reportsComponent/energyComparisonTable/EnergyComparisonReport";
 import { FaRegCalendarAlt } from "react-icons/fa";
+import { useTheme } from "next-themes";
 
 const intervalOptions = [
   {
@@ -43,11 +44,11 @@ const UsageReport = () => {
   const [usageReportTimePeriod, setUsageReportTimePeriod] = useState("Today");
   const [isOpen, setIsOpen] = useState(false);
   const [intervalDropdown, setIntervalDropdown] = useState(false);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [unit, setUnit] = useState("");
+  // const [startDate, setStartDate] = useState("");
+  // const [endDate, setEndDate] = useState("");
+  // const [startTime, setStartTime] = useState("");
+  // const [endTime, setEndTime] = useState("");
+  const [unit, setUnit] = useState("ALL");
   const [isHovered, setIsHovered] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -66,6 +67,7 @@ const UsageReport = () => {
   const intervalDropdownRef = useRef(null);
   const [period1, setPeriod1] = useState([null, null]); // [start, end]
   const [period2, setPeriod2] = useState([null, null]); // [start, end]
+  const { theme } = useTheme();
 
   //========================handle date range selection========================
   const openPeriod1Calendar = () => {
@@ -349,26 +351,26 @@ const UsageReport = () => {
       setUnit(unitClicked);
     }
   };
-  useEffect(() => {
-    const today = new Date();
-    const hour = today.getHours().toString().padStart(2, "0");
-    const minutes = today.getMinutes().toString().padStart(2, "0");
-    const currentTime = `${hour}:${minutes}`;
-    if (usageReportTimePeriod !== "Custom Date") {
-      const { startDate, endDate } = getDateRangeFromString(
-        usageReportTimePeriod
-      );
-      setStartDate(startDate);
-      setEndDate(endDate);
-      setStartTime("06:00");
+  // useEffect(() => {
+  //   const today = new Date();
+  //   const hour = today.getHours().toString().padStart(2, "0");
+  //   const minutes = today.getMinutes().toString().padStart(2, "0");
+  //   const currentTime = `${hour}:${minutes}`;
+  //   if (usageReportTimePeriod !== "Custom Date") {
+  //     const { startDate, endDate } = getDateRangeFromString(
+  //       usageReportTimePeriod
+  //     );
+  //     setStartDate(startDate);
+  //     setEndDate(endDate);
+  //     setStartTime("06:00");
 
-      if (startDate === endDate) {
-        setEndTime(currentTime);
-      } else {
-        setEndTime("06:00");
-      }
-    }
-  }, [usageReportTimePeriod]);
+  //     if (startDate === endDate) {
+  //       setEndTime(currentTime);
+  //     } else {
+  //       setEndTime("06:00");
+  //     }
+  //   }
+  // }, [usageReportTimePeriod]);
   const toggleDropdown = () => setIsOpen(!isOpen);
   const toggleIntervalDropdown = () => setIntervalDropdown(!intervalDropdown);
   useEffect(() => {
@@ -390,7 +392,7 @@ const UsageReport = () => {
   // ///////===============================Handle all data processing start=================================
 
   const intervalObj = {
-    Range: { p1: "Range 1", p2: "Range 2" },
+    Period: { p1: "Period 1", p2: "Period 2" },
     "Start Date": {
       p1: toLocalISODate(dateRanges.period1.start),
       p2: toLocalISODate(dateRanges.period2.start),
@@ -406,8 +408,8 @@ const UsageReport = () => {
   function mergeHTSideData(ht1, ht2) {
     const finalObj = {
       Period: {
-        p1: "Range 1",
-        p2: "Range 2",
+        p1: "Period 1",
+        p2: "Period 2",
       },
     };
     Object.keys(ht1).forEach((key) => {
@@ -426,7 +428,7 @@ const UsageReport = () => {
     const deltaKey = "Δ Generation / Consumption";
 
     const mergedSummary = {
-      Period: { p1: "Range 1", p2: "Range 2" },
+      Period: { p1: "Period 1", p2: "Period 2" },
     };
 
     Object.keys(loss1).forEach((key) => {
@@ -531,6 +533,11 @@ const UsageReport = () => {
     totalIcg,
     totalConsumptionValue,
     UnaccountedEnergyTotal,
+  };
+  const totalRowLowvoltageSummaryRowPdf = {
+    Total_I_C_G: totalIcg,
+    Total_Consumption: totalConsumptionValue,
+    Unaccounted_Energy: UnaccountedEnergyTotal,
   };
   // Utilization data mapping
   const utilization1 = Array.isArray(resData?.utilization)
@@ -663,8 +670,32 @@ const UsageReport = () => {
     consumptionPerDept1,
     consumptionPerDept2
   );
-  console.log("Cons Per Dept", mergedConsPerDept);
+  // total of consumption per dept
+  const totalConsumptionFirstrange = consumptionPerDept1.reduce((acc, cur) => {
+    return acc + cur.totalConsumption;
+  }, 0);
+  const totalConsumptionSecondrange = consumptionPerDept2.reduce((acc, cur) => {
+    return acc + cur.totalConsumption;
+  }, 0);
+  // extracting hfo auxiliary
+  const hfoAuxObj1 = consumptionPerDept1.find(
+    (item) =>
+      item.name === "HFO + JMS Auxiliary" ||
+      item.u5Name === "HFO + JMS Auxiliary"
+  );
+  const hfoAuxObj2 = consumptionPerDept2.find(
+    (item) =>
+      item.name === "HFO + JMS Auxiliary" ||
+      item.u5Name === "HFO + JMS Auxiliary"
+  );
 
+  const hfoAux1 = hfoAuxObj1 ? hfoAuxObj1.totalConsumption : 0;
+  const hfoAux2 = hfoAuxObj2 ? hfoAuxObj2.totalConsumption : 0;
+  const totalConsumptionFirstrangeafterHfo =
+    totalConsumptionFirstrange - hfoAux1;
+
+  const totalConsumptionSecondrangeafterHfo =
+    totalConsumptionSecondrange - hfoAux2;
   // ///////===============================Handle all data processing end=================================
 
   //  handle minimum end time
@@ -801,7 +832,7 @@ const UsageReport = () => {
           <form onSubmit={handleFinalSubmit} className="space-y-4 p-3 md:p-6 ">
             <div className="grid grid-cols-2 gap-8">
               {/* unit selector dropdonw */}
-              <div className="flex flex-col w-full items-start justify-center gap-1">
+              {/* <div className="flex flex-col w-full items-start justify-center gap-1">
                 <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
                   Select Plants Units
                 </span>
@@ -854,7 +885,7 @@ const UsageReport = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
               {/* Interval selector dropdown */}
               <div className="flex flex-col w-full items-start justify-center gap-1">
                 <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
@@ -906,12 +937,22 @@ const UsageReport = () => {
 
               {/* Period 1 */}
               <div className="">
-                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
+                <span
+                  className={`${
+                    usageReportTimePeriod !== "Custom Date"
+                      ? "text-gray-400 dark:text-gray-500 "
+                      : ""
+                  } text-[13.51px] font-500 font-inter`}
+                >
                   First Range
                 </span>
 
                 <div
-                  className="flex items-center justify-between px-4 w-full border rounded cursor-pointer"
+                  className={`flex items-center justify-between px-4 w-full border rounded  ${
+                    usageReportTimePeriod !== "Custom Date"
+                      ? "cursor-not-allowed"
+                      : "cursor-pointer"
+                  }`}
                   onClick={openPeriod1Calendar}
                 >
                   <DatePicker
@@ -921,23 +962,45 @@ const UsageReport = () => {
                     endDate={period1[1]}
                     onChange={handlePeriod1Change}
                     disabled={usageReportTimePeriod !== "Custom Date"}
-                    className="w-full flex  py-2 rounded-md text-sm outline-none cursor-pointer"
+                    className={`w-full flex  py-2 rounded-md text-sm outline-none  ${
+                      usageReportTimePeriod !== "Custom Date"
+                        ? "text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
                     placeholderText="Select date range"
                     onClick={(e) => e.stopPropagation()} // prevent recursion
                   />
 
-                  <FaRegCalendarAlt className="pointer-events-none" />
+                  <FaRegCalendarAlt
+                    className={`pointer-events-none ${
+                      usageReportTimePeriod !== "Custom Date"
+                        ? "text-gray-400 dark:text-gray-500 "
+                        : ""
+                    }`}
+                  />
                 </div>
               </div>
 
               {/* Period 2 */}
               <div className="">
-                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
+                <span
+                  className={`${
+                    !isPeriod1Complete ||
+                    usageReportTimePeriod !== "Custom Date"
+                      ? "text-gray-400 dark:text-gray-500"
+                      : ""
+                  } text-[13.51px] font-500 font-inter`}
+                >
                   Second Range
                 </span>
 
                 <div
-                  className="flex items-center justify-between px-4 w-full border rounded cursor-pointer"
+                  className={` flex items-center justify-between px-4 w-full border rounded ${
+                    !isPeriod1Complete ||
+                    usageReportTimePeriod !== "Custom Date"
+                      ? "cursor-not-allowed"
+                      : "cursor-pointer"
+                  }`}
                   onClick={openPeriod2Calendar}
                 >
                   <DatePicker
@@ -956,7 +1019,12 @@ const UsageReport = () => {
                       !isPeriod1Complete ||
                       usageReportTimePeriod !== "Custom Date"
                     }
-                    className="w-full py-2 rounded-md text-sm outline-none cursor-pointer"
+                    className={` w-full py-2 ${
+                      !isPeriod1Complete ||
+                      usageReportTimePeriod !== "Custom Date"
+                        ? "text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                        : "cursor-pointer"
+                    } rounded-md text-sm outline-none`}
                     placeholderText={
                       !isPeriod1Complete
                         ? "Select Period 1 first"
@@ -965,7 +1033,14 @@ const UsageReport = () => {
                     onClick={(e) => e.stopPropagation()}
                   />
 
-                  <FaRegCalendarAlt className="pointer-events-none" />
+                  <FaRegCalendarAlt
+                    className={`pointer-events-none ${
+                      !isPeriod1Complete ||
+                      usageReportTimePeriod !== "Custom Date"
+                        ? "text-gray-400 dark:text-gray-500"
+                        : ""
+                    }`}
+                  />
                 </div>
               </div>
             </div>
@@ -996,13 +1071,16 @@ const UsageReport = () => {
           intervalObj={intervalObj}
           htSideData={mergedHTSideFinalData}
           lowVoltageSide={merged}
-          lowVoltageTotla={totalRowLowvoltageSummary}
+          lowVoltageTotal={totalRowLowvoltageSummary}
+          lowVoltageTotalPdf={totalRowLowvoltageSummaryRowPdf}
           utilizationData={mergedUtilization}
           mergedProduction={mergedProduction}
           consumptionPerDept={mergedConsPerDept}
           unit={unit}
           mergedSummary={mergedSummary}
           deltaOnly={deltaOnly}
+          totalConsumptionFirstrange={totalConsumptionFirstrangeafterHfo}
+          totalConsumptionSecondrange={totalConsumptionSecondrangeafterHfo}
         />
       ) : null}
     </div>
