@@ -42,14 +42,59 @@ const meters = [
     u5buttonText: "LT2-Winding 10-18",
   },
 ];
-
+const meterGroups = [
+  ["U1_GW02", "U4_GW02"], // Group 1
+  ["U2_GW02", "U3_GW02"], // Group 2
+];
 const Settings = () => {
   const [selectedUnits, setSelectedUnits] = useState({});
-
   const [userData, setUserData] = useState({});
   const [meterToggleStatus, setMeterToggleStatus] = useState([]);
   const token = localStorage.getItem("token");
 
+  const getMeterName = (id) => {
+    const meter = meters.find((m) => m.id === id);
+    return meter ? meter.name : id; // fallback to id if not found
+  };
+  const checkCrossAreaConflict = (meterId, targetUnit, selectedUnits) => {
+    const group = meterGroups.find((g) => g.includes(meterId));
+    if (!group) return null;
+
+    const [m1, m2] = group;
+    const otherMeter = m1 === meterId ? m2 : m1;
+
+    const otherUnit = selectedUnits[otherMeter];
+
+    // Rule 1: if other meter is in Unit 5 → you cannot move this to Unit 4
+    if (otherUnit === 5 && targetUnit === 4) {
+      return {
+        blocked: true,
+        reason: `
+        You cannot switch 
+        <b>${getMeterName(meterId)}</b> 
+        to Unit 4 because 
+        <b>${getMeterName(otherMeter)}</b> 
+        is already assigned to Unit 5.
+      `,
+      };
+    }
+
+    // Rule 2: if other meter is in Unit 4 → you cannot move this to Unit 5
+    if (otherUnit === 4 && targetUnit === 5) {
+      return {
+        blocked: true,
+        reason: `
+        You cannot switch 
+        <b>${getMeterName(meterId)}</b> 
+        to Unit 5 because 
+        <b>${getMeterName(otherMeter)}</b> 
+        is already assigned to Unit 4.
+      `,
+      };
+    }
+
+    return { blocked: false };
+  };
   /////////////////////////////////// fetch consumption calculation api
   const callhiddenConsumptionApi = async () => {
     try {
@@ -65,7 +110,6 @@ const Settings = () => {
       console.error(error);
     }
   };
-
   // toggle meter for storing real time values
   const postMeterWithrealTimeValues = async (meterId, unit) => {
     const token = localStorage.getItem("token");
@@ -76,6 +120,11 @@ const Settings = () => {
     if (currentUnit === unit) {
       return;
     }
+    const conflict = checkCrossAreaConflict(meterId, unit, selectedUnits);
+    if (conflict?.blocked) {
+      return;
+    }
+
     try {
       const response = await fetch(`${config.BASE_URL}/meter/fetch-real-time`, {
         method: "GET",
@@ -112,7 +161,6 @@ const Settings = () => {
       console.error("Error fetching profile:", err);
     }
   };
-
   // fetch current status of meters
   const fetchMeterToggleStatus = async () => {
     const token = localStorage.getItem("token");
@@ -159,6 +207,81 @@ const Settings = () => {
       });
       return;
     }
+    // first group
+    const conflict = checkCrossAreaConflict(meterId, unit, selectedUnits);
+    if (conflict?.blocked) {
+      Swal.fire({
+        icon: "error",
+        title: "Cross Area Not Allowed",
+        html: conflict.reason,
+      });
+      return;
+    }
+    // if (
+    //   selectedUnits["U1_GW02"] === 5 && // another meter already in Unit 5
+    //   meterId === "U4_GW02" && // current meter trying to switch
+    //   unit === 4 // and switching to Unit 4
+    // ) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Cross Area Not Allowed",
+    //     html: `You cannot switch <b>${getMeterName(
+    //       meterId
+    //     )}</b> to Unit 4 because <b>${getMeterName(
+    //       "U1_GW02"
+    //     )}</b> is already assigned to Unit 5.`,
+    //   });
+    //   return;
+    // }
+    // if (
+    //   selectedUnits["U4_GW02"] === 4 && // another meter already in Unit 5
+    //   meterId === "U1_GW02" && // current meter trying to switch
+    //   unit === 5 // and switching to Unit 4
+    // ) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Cross Area Not Allowed",
+    //     html: `You cannot switch <b>${getMeterName(
+    //       meterId
+    //     )}</b> to Unit 4 because <b>${getMeterName(
+    //       "U1_GW02"
+    //     )}</b> is already assigned to Unit 5.`,
+    //   });
+    //   return;
+    // }
+    // // second group
+    // if (
+    //   selectedUnits["U2_GW02"] === 5 && // another meter already in Unit 5
+    //   meterId === "U3_GW02" && // current meter trying to switch
+    //   unit === 4 // and switching to Unit 4
+    // ) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Cross Area Not Allowed",
+    //     html: `You cannot switch <b>${getMeterName(
+    //       meterId
+    //     )}</b> to Unit 4 because <b>${getMeterName(
+    //       "U2_GW02"
+    //     )}</b> is already assigned to Unit 5.`,
+    //   });
+    //   return;
+    // }
+    // if (
+    //   selectedUnits["U3_GW02"] === 4 && // another meter already in Unit 5
+    //   meterId === "U2_GW02" && // current meter trying to switch
+    //   unit === 5 // and switching to Unit 4
+    // ) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Cross Area Not Allowed",
+    //     html: `You cannot switch <b>${getMeterName(
+    //       meterId
+    //     )}</b> to Unit 4 because <b>${getMeterName(
+    //       "U3_GW02"
+    //     )}</b> is already assigned to Unit 5.`,
+    //   });
+    //   return;
+    // }
 
     const result = await Swal.fire({
       title: "Confirm Switch",

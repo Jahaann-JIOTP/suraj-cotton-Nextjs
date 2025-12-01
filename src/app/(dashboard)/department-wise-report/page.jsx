@@ -8,7 +8,6 @@ import { ImArrowLeft2 } from "react-icons/im";
 import Swal from "sweetalert2";
 import { getDateRangeFromString } from "@/utils/dateRangeForReports";
 import { to12HourFormat } from "@/utils/To12HourFormate";
-import EnergyUsageReport from "@/components/reportsComponent/energyComparisonTable/EnergyUsageReport";
 import { IoChevronDownOutline } from "react-icons/io5";
 import DeptWiseReportTable from "@/components/reportsComponent/energyComparisonTable/DeptWiseReportTable";
 const intervalOptions = [
@@ -39,28 +38,29 @@ const intervalOptions = [
   },
 ];
 const deptOptions = [
-  "Blow Room",
-  "Card",
-  "Comber + Lap Former",
-  "Drawing Finisher",
-  "Simplex",
-  "R.Transport System",
-  "Ring Dept",
-  "Winding",
-  "B/Card + Comber Filter",
-  "Back Process A/C",
-  "Ring A/C",
-  "Winding A/C",
-  "Air Compressor",
-  "Deep Valve Turbine",
-  "Bailing Press",
-  "Mills Lighting",
-  "Residential Colony",
-  "Conditioning Machine",
-  "Lap + Offices",
-  "HFO Plant Aux(2nd Source)",
-  "Gas Plant Aux(2nd Source)",
-  "Spare/PF Panels",
+  { area: "All", dept: "Blow Room" },
+  { area: "All", dept: "Card" },
+  { area: "All", dept: "Comber + Lap Former" },
+  { area: "All", dept: "Drawing Finisher" },
+  { area: "All", dept: "Simplex" },
+  { area: "All", dept: "R.Transport System" },
+  { area: "All", dept: "Ring Dept" },
+  { area: "All", dept: "Winding" },
+  { area: "All", dept: "B/Card + Comber Filter" },
+  { area: "All", dept: "Back Process A/C" },
+  { area: "All", dept: "Ring A/C" },
+  { area: "All", dept: "Winding A/C" },
+  { area: "All", dept: "Air Compressor" },
+  { area: "All", dept: "Deep Valve Turbine" },
+  { area: "All", dept: "Bailing Press" },
+  { area: "All", dept: "Mills Lighting" },
+  { area: "All", dept: "Residential Colony" },
+  { area: "All", dept: "Conditioning Machine" },
+  { area: "Unit4", dept: "Lap + Offices" },
+  { area: "Unit4", dept: "HFO Plant Aux(2nd Source)" },
+  { area: "Unit4", dept: "Gas Plant Aux(2nd Source)" },
+  { area: "All", dept: "HFO + JMS Auxiliary" },
+  { area: "Unit5", dept: "Spare/PF Panels" },
 ];
 
 const DeptWiseReport = () => {
@@ -82,7 +82,6 @@ const DeptWiseReport = () => {
   const intervalDropdownRef = useRef(null);
   const dropdownRef = useRef(null);
   const deptDropdownRef = useRef(null);
-
   const intervalsObj = {
     "Selected Period": usageReportTimePeriod,
     "Start Date":
@@ -91,6 +90,14 @@ const DeptWiseReport = () => {
     "Selected Timezone": "(UTC+05:00) Asia Karachi",
   };
   const deptReport = Array.isArray(resData?.meters) ? resData.meters : [];
+  const filteredDept =
+    unit === "All"
+      ? deptOptions
+      : deptOptions.filter((dept) => {
+          if (unit.length > 0) {
+            return dept.area === unit || dept.area === "All";
+          }
+        });
 
   const toMinutes = (time) => {
     if (!time) return null;
@@ -280,7 +287,7 @@ const DeptWiseReport = () => {
               {/* unit selector dropdonw */}
               <div className="flex flex-col w-full items-start justify-center gap-1">
                 <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
-                  Select Plants Units
+                  Select Plant Units
                 </span>
                 <div className="relative inline-block w-full" ref={dropdownRef}>
                   <button
@@ -290,9 +297,9 @@ const DeptWiseReport = () => {
                   >
                     {unit === "All"
                       ? "All"
-                      : unit === "Unit_4"
+                      : unit === "Unit4"
                       ? "Unit 4"
-                      : unit === "Unit_5"
+                      : unit === "Unit5"
                       ? "Unit 5"
                       : "Select Area"}
                     <IoChevronDownOutline
@@ -347,8 +354,9 @@ const DeptWiseReport = () => {
                     className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
                   >
                     {/* Find and display the label instead of the value */}
-                    {deptOptions.find((option) => option === selectedDept) ||
-                    selectedDept.length > 0
+                    {filteredDept.find(
+                      (option) => option.dept === selectedDept
+                    ) || selectedDept.length > 0
                       ? selectedDept
                       : "Select Department"}
                     <IoChevronDownOutline
@@ -359,24 +367,30 @@ const DeptWiseReport = () => {
                   </button>
 
                   {deptDropdown && (
-                    <div className="absolute z-20 mt-1 w-full h-[15rem] overflow-y-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
-                      {deptOptions.map((option) => (
-                        <label
-                          key={option}
-                          className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white"
-                        >
-                          <input
-                            type="radio"
-                            checked={selectedDept === option}
-                            value={option}
-                            onChange={(e) => {
-                              setDeptDropdown(false);
-                              setSelectedDept(e.target.value);
-                            }}
-                          />
-                          {option}
-                        </label>
-                      ))}
+                    <div className="absolute z-20 mt-1 w-full max-h-[15rem] overflow-y-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
+                      {unit.length > 0 ? (
+                        filteredDept.map((option, idx) => (
+                          <label
+                            key={idx}
+                            className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white"
+                          >
+                            <input
+                              type="radio"
+                              checked={selectedDept === option.dept}
+                              value={option.dept}
+                              onChange={(e) => {
+                                setDeptDropdown(false);
+                                setSelectedDept(e.target.value);
+                              }}
+                            />
+                            {option.dept}
+                          </label>
+                        ))
+                      ) : (
+                        <span className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white">
+                          Please Select Plant Unit First
+                        </span>
+                      )}
                     </div>
                   )}
                 </div>

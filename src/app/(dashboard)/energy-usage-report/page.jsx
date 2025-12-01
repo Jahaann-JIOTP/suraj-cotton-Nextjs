@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import config from "@/constant/apiRouteList";
 import { CircularProgress } from "@mui/material";
@@ -9,6 +9,34 @@ import Swal from "sweetalert2";
 import { getDateRangeFromString } from "@/utils/dateRangeForReports";
 import { to12HourFormat } from "@/utils/To12HourFormate";
 import EnergyUsageReport from "@/components/reportsComponent/energyComparisonTable/EnergyUsageReport";
+import { IoChevronDownOutline } from "react-icons/io5";
+const intervalOptions = [
+  {
+    id: 0,
+    label: "Today",
+    value: "Today",
+  },
+  {
+    id: 1,
+    label: "Yesterday",
+    value: "Yesterday",
+  },
+  {
+    id: 2,
+    label: "This Week",
+    value: "This Week",
+  },
+  {
+    id: 3,
+    label: "This Month",
+    value: "This Month",
+  },
+  {
+    id: 4,
+    label: "Custom Date",
+    value: "Custom Date",
+  },
+];
 
 const EnergyComparisonPage = () => {
   const [usageReportTimePeriod, setUsageReportTimePeriod] =
@@ -17,9 +45,11 @@ const EnergyComparisonPage = () => {
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [intervalDropdown, setIntervalDropdown] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const intervalDropdownRef = useRef(null);
   const [resData, setResData] = useState([]);
   const intervalsObj = {
     startDate,
@@ -41,6 +71,22 @@ const EnergyComparisonPage = () => {
     const [h, m] = time.split(":").map(Number);
     return h * 60 + m;
   };
+
+  const toggleIntervalDropdown = () => setIntervalDropdown((prev) => !prev);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        intervalDropdownRef.current &&
+        !intervalDropdownRef.current.contains(event.target)
+      ) {
+        setIntervalDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   useEffect(() => {
     const today = new Date();
     const hour = today.getHours().toString().padStart(2, "0");
@@ -177,21 +223,53 @@ const EnergyComparisonPage = () => {
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* area selector dropdown */}
 
-              <div className="flex flex-col w-full items-start justify-start gap-1">
-                <label className="text-[13.51px] font-500 font-inter">
+              {/* Interval selector dropdown */}
+              <div className="flex flex-col w-full items-start justify-center gap-1">
+                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
                   Interval
-                </label>
-                <select
-                  value={usageReportTimePeriod}
-                  onChange={(e) => setUsageReportTimePeriod(e.target.value)}
-                  className="w-full outline-none border border-gray-300 dark:border-gray-600 dark:bg-gray-800 rounded px-4 py-2"
+                </span>
+                <div
+                  className="relative inline-block w-full"
+                  ref={intervalDropdownRef}
                 >
-                  <option value="Today">Today</option>
-                  <option value="Yesterday">Yesterday</option>
-                  <option value="This Week">This Week</option>
-                  <option value="This Month">This Month</option>
-                  <option value="Custom Date">Custom Date</option>
-                </select>
+                  <button
+                    type="button"
+                    onClick={toggleIntervalDropdown}
+                    className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
+                  >
+                    {/* Find and display the label instead of the value */}
+                    {intervalOptions.find(
+                      (option) => option.value === usageReportTimePeriod
+                    )?.label || usageReportTimePeriod}
+                    <IoChevronDownOutline
+                      className={`transition-all duration-300 ${
+                        intervalDropdown ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {intervalDropdown && (
+                    <div className="absolute z-20 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
+                      {intervalOptions.map((option) => (
+                        <label
+                          key={option.id}
+                          className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white"
+                        >
+                          <input
+                            type="radio"
+                            checked={usageReportTimePeriod === option.value}
+                            value={option.value}
+                            onChange={(e) => {
+                              setIntervalDropdown(false);
+                              setUsageReportTimePeriod(e.target.value);
+                            }}
+                          />
+                          {option.label}
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* start date selector */}

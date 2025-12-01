@@ -667,7 +667,7 @@ function CustomTrend() {
                 setSelectedMeter([]);
                 setChartData([]);
               }}
-              className="w-full p-2 border rounded"
+              className="w-full p-[9px] border rounded"
             >
               {areaOptions.map((area) => (
                 <option
@@ -680,7 +680,7 @@ function CustomTrend() {
               ))}
             </select>
           </div>
-
+          {/* //  select meters */}
           <div ref={meterDropdownRef} className="relative w-full lg:w-[21%]">
             <label
               className="block text-sm font-medium text-gray-600 dark:text-gray-300"
@@ -698,11 +698,17 @@ function CustomTrend() {
               <span className="truncate">{displayText}</span>
 
               <span className="absolute right-2 top-2">
-                {showMeters ? (
+                {/* {showMeters ? (
                   <IoChevronUp size={20} className="font-bold" />
                 ) : (
                   <HiMiniChevronDown size={25} className="font-bold" />
-                )}
+                  )} */}
+                <HiMiniChevronDown
+                  size={25}
+                  className={`font-bold transition-all duration-300 ${
+                    showMeters && "rotate-180"
+                  }`}
+                />
               </span>
 
               {/* Hidden measuring element */}
@@ -739,6 +745,7 @@ function CustomTrend() {
             )}
           </div>
 
+          {/* select parameters */}
           <div
             ref={parameterDropdownRef}
             className="relative w-full lg:w-[23%]"
@@ -755,11 +762,12 @@ function CustomTrend() {
             >
               {selectedParameter || "Select Parameter"}
               <span className="float-right">
-                {showParameters ? (
-                  <IoChevronUp size={20} className="font-bold" />
-                ) : (
-                  <HiMiniChevronDown size={25} className="font-bold" />
-                )}
+                <HiMiniChevronDown
+                  size={25}
+                  className={`font-bold transition-all duration-300 ${
+                    showParameters && "rotate-180"
+                  }`}
+                />
               </span>
             </button>
             {showParameters && (
