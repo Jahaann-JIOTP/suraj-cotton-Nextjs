@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }) {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const token = useSelector((state) => state.auth.token);
-useEffect(() => {
+  useEffect(() => {
     dispatch(initializeAuth());
   }, [pathname, dispatch]);
   // fetch use details
@@ -39,7 +39,6 @@ useEffect(() => {
       if (res.ok) {
         const data = await res.json();
         const privileges = data?.role?.privelleges?.map((p) => p.name) || [];
-        
       } else {
         console.error("Failed to fetch user profile");
       }

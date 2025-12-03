@@ -10,6 +10,7 @@ import { privilegeConfig } from "@/constant/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
+  // const [returnedUrl, setReturnedUrl] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -21,10 +22,6 @@ const Login = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
-  const handleShowPassword = () => {
-    setShowPassword((prev) => !prev);
-  };
 
   // handle login
   const handleLogin = async (e) => {
@@ -96,7 +93,7 @@ const Login = () => {
 
   const redirectBasedOnPrivileges = (privileges) => {
     const navItems = Object.values(privilegeConfig);
-
+    const returnUrl = localStorage.getItem("returnUrl");
     const accessibleNavItem = navItems.find((navItem) => {
       return privileges.some(
         (privilege) =>
@@ -105,10 +102,15 @@ const Login = () => {
       );
     });
 
-    if (accessibleNavItem) {
-      router.push(accessibleNavItem.href);
+    // if (returnedUrl.length > 0) {
+    if (returnUrl && returnUrl !== "/login") {
+      router.push(returnUrl);
     } else {
-      router.push("/dashboard");
+      if (accessibleNavItem) {
+        router.push(accessibleNavItem.href);
+      } else {
+        router.push("/dashboard");
+      }
     }
   };
 

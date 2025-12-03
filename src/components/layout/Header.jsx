@@ -13,7 +13,6 @@ import { privilegeConfig, privilegeOrder } from "@/constant/navigation";
 import MobileSidebar from "./MobileSidebar";
 import ThemeSwitcher from "@/themeSwitcher/ThemeSwitcher";
 import { getActiveTabFromPathname } from "@/utils/navigation-utils";
-import { useTheme } from "next-themes";
 
 const SEEN_KEY = "seenAlarmIds_v1";
 const SNOOZE_OPTIONS = ["15 mins", "30 mins", "1 hour", "2 hours"];
@@ -110,7 +109,6 @@ function useAlarmAudioManager(src = "/alarm.mp3") {
 const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const { theme } = useTheme();
   const notificationDropdownRef = useRef(null);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -139,15 +137,16 @@ const Header = ({ handleTabClick, activeTab }) => {
     const full = lastFullFetchRef.current || [];
     const hasAudibleAlarm = full.some(
       (a) => !(a.snoozeStatus && !a.isSnoozeExpired) // any unsnoozed (new or old)
-      // If you want only NEW alarms to ring, use:
-      // a.status === "new" && !(a.snoozeStatus && !a.isSnoozeExpired)
     );
     if (hasAudibleAlarm) play();
     else stop();
   }, [play, stop]);
   // store current url
   const returnUrl = window.location.pathname + window.location.search;
-  localStorage.setItem("returnUrl", returnUrl);
+  if (pathname !== "/") {
+    localStorage.setItem("returnUrl", returnUrl);
+  }
+
   // Format date in Asia/Karachi
   const formatAlarmDate = (triggeredAt) => {
     const zonedDate = toZonedTime(new Date(triggeredAt), "Asia/Karachi");

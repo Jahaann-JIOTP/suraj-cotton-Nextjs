@@ -183,7 +183,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_2",
   },
   {
-    meterName: "MIlls Residential Colony & Workshop",
+    meterName: "Mills Residential Colony & Workshop",
     meterId: "U4_GW01",
     area: "Unit 4 LT_2",
   },
@@ -330,7 +330,7 @@ export const mainMeterMapping = [
     area: "Unit 5 LT_1",
   },
   {
-    meterName: "Comber 1-14+Lap former 1-3",
+    meterName: "Comber 1-14+Lap Former 1-3",
     meterId: "U14_GW02",
     area: "Unit 5 LT_1",
   },
