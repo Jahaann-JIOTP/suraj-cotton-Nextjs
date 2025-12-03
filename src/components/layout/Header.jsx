@@ -13,6 +13,7 @@ import { privilegeConfig, privilegeOrder } from "@/constant/navigation";
 import MobileSidebar from "./MobileSidebar";
 import ThemeSwitcher from "@/themeSwitcher/ThemeSwitcher";
 import { getActiveTabFromPathname } from "@/utils/navigation-utils";
+import CustomLoader from "../customLoader/CustomLoader";
 
 const SEEN_KEY = "seenAlarmIds_v1";
 const SNOOZE_OPTIONS = ["15 mins", "30 mins", "1 hour", "2 hours"];
@@ -110,7 +111,7 @@ const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
   const router = useRouter();
   const notificationDropdownRef = useRef(null);
-
+  const [linkStatLoading, setLinkStateLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userPrivileges, setUserPrivileges] = useState([]);
   const [alarms, setAlarms] = useState([]); // top 5 shown in panel
@@ -203,6 +204,7 @@ const Header = ({ handleTabClick, activeTab }) => {
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (!token) return;
+    setLinkStateLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DIAGRAM.NODE_RED_REAL_TIME_STATUS}`,
@@ -210,8 +212,11 @@ const Header = ({ handleTabClick, activeTab }) => {
       );
       const resData = await response.json();
       if (response.ok) setRealTimeData(resData);
+      setLinkStateLoading(false);
     } catch (e) {
       console.error(e?.message);
+    } finally {
+      setLinkStateLoading(false);
     }
   };
 
@@ -436,18 +441,61 @@ const Header = ({ handleTabClick, activeTab }) => {
       {/* Right: link status + bell + theme */}
       <div className="flex items-center justify-center">
         {/* Link status */}
+        {/* {linkStatLoading === true ? (
+          <div className="mr-4 w-[60px]">
+            <CustomLoader size="20px" />
+          </div>
+        ) : (
+          <div className="mr-4 w-[60px]">
+            {realTimeData?.message === "Link is up" ? (
+              <div className="flex flex-col items-center justify-center">
+                <img src={"../../../green_bl.gif"} className="w-[20px]" />
+                <span className="text-[10px]">Link Up</span>
+              </div>
+            ) : realTimeData?.message?.includes("Cache Data Receiving") ? (
+              <div className="flex flex-col items-center justify-center">
+                <img src={"../../../yell_bl.gif"} className="w-[20px]" />
+                <span className="text-[10px] animate-pulse duration-300">
+                  Caching
+                </span>
+              </div>
+            ) : (
+              // <div className="flex flex-col items-center justify-center">
+              //   <img src={"../../../red_bl.gif"} className="w-[20px]" />
+              //   <span className="text-[10px] animate-pulse duration-300">
+              //     Link Down
+              //   </span>
+              // </div>
+              <div className="mr-4 w-[60px]">
+            <CustomLoader size="20px" />
+          </div>
+            )}
+          </div>
+        )} */}
+
         <div className="mr-4 w-[60px]">
           {realTimeData?.message === "Link is up" ? (
             <div className="flex flex-col items-center justify-center">
               <img src={"../../../green_bl.gif"} className="w-[20px]" />
               <span className="text-[10px]">Link Up</span>
             </div>
-          ) : (
+          ) : realTimeData?.message?.includes("Cache Data Receiving") ? (
+            <div className="flex flex-col items-center justify-center">
+              <img src={"../../../yell_bl.gif"} className="w-[20px]" />
+              <span className="text-[10px] animate-pulse duration-300">
+                Caching
+              </span>
+            </div>
+          ) : realTimeData?.message === "Link is down" ? (
             <div className="flex flex-col items-center justify-center">
               <img src={"../../../red_bl.gif"} className="w-[20px]" />
               <span className="text-[10px] animate-pulse duration-300">
                 Link Down
               </span>
+            </div>
+          ) : (
+            <div className="mr-4 w-[60px]">
+              <CustomLoader size="25px" />
             </div>
           )}
         </div>

@@ -1,7 +1,6 @@
 "use client";
 import config from "@/constant/apiRouteList";
 import { useTheme } from "next-themes";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { TiInfoOutline } from "react-icons/ti";
 
@@ -9,7 +8,8 @@ const TopHeader = () => {
   const [mounted, setMounted] = useState(false);
   const [realTimeData, setRealTimeData] = useState({});
   const { theme } = useTheme();
-  const isCaching = realTimeData?.message?.includes("cache retreving");
+  const isCaching = realTimeData?.message?.includes("Cache Data Receiving");
+
   const getMeterData = async () => {
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
