@@ -59,7 +59,7 @@ const deptOptions = [
   { area: "Unit4", dept: "Lap + Offices" },
   { area: "Unit4", dept: "HFO Plant Aux(2nd Source)" },
   { area: "Unit4", dept: "Gas Plant Aux(2nd Source)" },
-  { area: "All", dept: "HFO + JMS Auxiliary" },
+  { area: "Unit4", dept: "HFO + JMS Auxiliary" },
   { area: "Unit5", dept: "Spare/PF Panels" },
 ];
 
