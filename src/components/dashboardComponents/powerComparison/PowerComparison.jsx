@@ -29,7 +29,7 @@ const PowerComparison = ({ dateRange }) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}/power_comparison?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&label=${timeRange}`,
+        `${config.BASE_URL}${config.DASHBOARD.ENERGY_BALANCE_CHART}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&label=${timeRange}`,
         {
           method: "GET",
           headers: {
@@ -445,7 +445,7 @@ const PowerComparison = ({ dateRange }) => {
         isPowerComparisonFullView
           ? "fixed inset-0 z-50  p-5 overflow-auto w-[100%] m-auto h-[100vh]"
           : "relative  px-1 py-2 md:p-3 h-[19rem] md:h-[15rem] lg:h-[16.5rem] xl:h-[14.3rem]"
-      } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
+      } border-t-3 border-[#1F5897] bg-white dark:bg-gray-800 rounded-md shadow-md `}
     >
       {/* Header */}
       <div className="flex items-center flex-col gap-3 md:gap-auto justify-between">

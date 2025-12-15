@@ -111,7 +111,6 @@ const Header = ({ handleTabClick, activeTab }) => {
   const pathname = usePathname();
   const router = useRouter();
   const notificationDropdownRef = useRef(null);
-  const [linkStatLoading, setLinkStateLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userPrivileges, setUserPrivileges] = useState([]);
   const [alarms, setAlarms] = useState([]); // top 5 shown in panel
@@ -142,11 +141,6 @@ const Header = ({ handleTabClick, activeTab }) => {
     if (hasAudibleAlarm) play();
     else stop();
   }, [play, stop]);
-  // store current url
-  const returnUrl = window.location.pathname + window.location.search;
-  if (pathname !== "/") {
-    localStorage.setItem("returnUrl", returnUrl);
-  }
 
   // Format date in Asia/Karachi
   const formatAlarmDate = (triggeredAt) => {
@@ -204,7 +198,6 @@ const Header = ({ handleTabClick, activeTab }) => {
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (!token) return;
-    setLinkStateLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DIAGRAM.NODE_RED_REAL_TIME_STATUS}`,
@@ -212,11 +205,9 @@ const Header = ({ handleTabClick, activeTab }) => {
       );
       const resData = await response.json();
       if (response.ok) setRealTimeData(resData);
-      setLinkStateLoading(false);
     } catch (e) {
       console.error(e?.message);
     } finally {
-      setLinkStateLoading(false);
     }
   };
 

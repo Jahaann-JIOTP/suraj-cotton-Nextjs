@@ -157,10 +157,7 @@ export default function MobileSidebar({
 
       <div className="w-full px-4 py-4">
         <button
-          onClick={() => {
-            handleLogout();
-            localStorage.removeItem("returnUrl");
-          }}
+          onClick={() => handleLogout()}
           className="w-full py-3 bg-[#1A68B2] text-[16.004px] flex items-center justify-center gap-2 cursor-pointer rounded-md"
           style={{ fontWeight: 600 }}
         >

@@ -6,13 +6,13 @@ import Swal from "sweetalert2";
 // Meters with display name and ID
 const meters = [
   {
-    name: "PDB1 CD1",
+    name: "PDBCD1",
     id: "U1_GW02",
     u4buttonText: "LT2-Card 1-4+9-12",
     u5buttonText: "LT1-Comber 1-14+Lap Former 1-3",
   },
   {
-    name: "PDB2 CD2",
+    name: "PDBCD2",
     id: "U2_GW02",
     u4buttonText: "LT2-Card 5-8+13-14+Breaker 5-6",
     u5buttonText: "LT1-Card 8-14",
@@ -20,13 +20,13 @@ const meters = [
   {
     u4buttonText: "LT2-Card 5-8+13-14+Breaker 5-6",
     u5buttonText: "LT1-Card 8-14",
-    name: "Card PDB 01",
+    name: "PDB 01",
     id: "U3_GW02",
   },
   {
     u4buttonText: "LT2-Card 1-4+9-12",
     u5buttonText: "LT1-Comber 1-14+Lap Former 1-3",
-    name: "PDB 08",
+    name: "PDB08",
     id: "U4_GW02",
   },
   {
@@ -57,41 +57,108 @@ const Settings = () => {
     return meter ? meter.name : id; // fallback to id if not found
   };
   const checkCrossAreaConflict = (meterId, targetUnit, selectedUnits) => {
+    console.log("meter Id", meterId);
+    console.log("target unit", targetUnit);
+    console.log("selected uints", selectedUnits);
+    const currentUnit = selectedUnits[meterId];
     const group = meterGroups.find((g) => g.includes(meterId));
     if (!group) return null;
 
-    const [m1, m2] = group;
-    const otherMeter = m1 === meterId ? m2 : m1;
-
-    const otherUnit = selectedUnits[otherMeter];
+    // const [m1, m2] = group;
+    // const otherMeter = m1 === meterId ? m2 : m1;
+    // const otherUnit = selectedUnits[otherMeter];
 
     // Rule 1: if other meter is in Unit 5 → you cannot move this to Unit 4
-    if (otherUnit === 5 && targetUnit === 4) {
-      return {
-        blocked: true,
-        reason: `
-        You cannot switch 
-        <b>${getMeterName(meterId)}</b> 
-        to Unit 4 because 
-        <b>${getMeterName(otherMeter)}</b> 
-        is already assigned to Unit 5.
-      `,
-      };
-    }
-
-    // Rule 2: if other meter is in Unit 4 → you cannot move this to Unit 5
-    if (otherUnit === 4 && targetUnit === 5) {
+    if (
+      meterId === "U1_GW02" &&
+      targetUnit === 5 &&
+      selectedUnits["U4_GW02"] === 4
+    ) {
       return {
         blocked: true,
         reason: `
         You cannot switch 
         <b>${getMeterName(meterId)}</b> 
         to Unit 5 because 
-        <b>${getMeterName(otherMeter)}</b> 
+        <b>${getMeterName("U4_GW02")}</b> 
         is already assigned to Unit 4.
       `,
       };
     }
+    if (
+      meterId === "U4_GW02" &&
+      targetUnit === 4 &&
+      selectedUnits["U1_GW02"] === 5
+    ) {
+      return {
+        blocked: true,
+        reason: `
+        You cannot switch 
+        <b>${getMeterName(meterId)}</b> 
+        to Unit 4 because 
+        <b>${getMeterName("U1_GW02")}</b> 
+        is already assigned to Unit 5.
+      `,
+      };
+    }
+    if (
+      meterId === "U2_GW02" &&
+      targetUnit === 5 &&
+      selectedUnits["U3_GW02"] === 4
+    ) {
+      return {
+        blocked: true,
+        reason: `
+        You cannot switch 
+        <b>${getMeterName(meterId)}</b> 
+        to Unit 5 because 
+        <b>${getMeterName("U3_GW02")}</b> 
+        is already assigned to Unit 4.
+      `,
+      };
+    }
+    if (
+      meterId === "U3_GW02" &&
+      targetUnit === 4 &&
+      selectedUnits["U2_GW02"] === 5
+    ) {
+      return {
+        blocked: true,
+        reason: `
+        You cannot switch 
+        <b>${getMeterName(meterId)}</b> 
+        to Unit 4 because 
+        <b>${getMeterName("U1_GW02")}</b> 
+        is already assigned to Unit 5.
+      `,
+      };
+    }
+    // if (otherUnit === 5 && targetUnit === 4) {
+    //   return {
+    //     blocked: true,
+    //     reason: `
+    //     You cannot switch
+    //     <b>${getMeterName(meterId)}</b>
+    //     to Unit 4 because
+    //     <b>${getMeterName(otherMeter)}</b>
+    //     is already assigned to Unit 5.
+    //   `,
+    //   };
+    // }
+
+    // Rule 2: if other meter is in Unit 4 → you cannot move this to Unit 5
+    // if (otherUnit === 4 && targetUnit === 5) {
+    //   return {
+    //     blocked: true,
+    //     reason: `
+    //     You cannot switch
+    //     <b>${getMeterName(meterId)}</b>
+    //     to Unit 5 because
+    //     <b>${getMeterName(otherMeter)}</b>
+    //     is already assigned to Unit 4.
+    //   `,
+    //   };
+    // }
 
     return { blocked: false };
   };

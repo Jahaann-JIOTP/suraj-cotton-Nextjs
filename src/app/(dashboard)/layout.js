@@ -62,7 +62,9 @@ export default function DashboardLayout({ children }) {
 
   useEffect(() => {
     if (authChecked && !isAuthenticated) {
-      router.replace("/");
+      const currentUrl = window.location.pathname + window.location.search;
+      // router.replace("/");
+      router.replace(`/?redirect=${encodeURIComponent(currentUrl)}`);
     }
   }, [authChecked, isAuthenticated, router]);
 

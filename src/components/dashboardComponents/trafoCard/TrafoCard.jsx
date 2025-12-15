@@ -25,7 +25,7 @@ const TrafoCard = ({
   }, []);
   if (!mounted) return null;
   return (
-    <div className="w-full bg-white dark:bg-gray-700 h-full shadow-md lg:h-[12.6rem] rounded-md border-t-3 border-[#1A68B2] px-1 p-7 pb-10 flex flex-col items-center justify-between ">
+    <div className="w-full bg-white dark:bg-gray-800 h-full shadow-md lg:h-[30vh] rounded-md border-t-3 border-[#1A68B2] px-1 p-7 pb-10 flex flex-col items-center justify-evenly ">
       <span className="text-[17px] text-[#1A68B2] mb-7 md:mb-auto font-700 font-inter">
         {mainTitle}
       </span>
@@ -40,10 +40,10 @@ const TrafoCard = ({
               <CustomLoader size="32px" />
             ) : (
               <div className="flex items-center gap-1">
-                <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+                <span className="text-[18px] text-black dark:text-white font-inter font-500">
                   {icomingValue}
                 </span>
-                <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+                <span className="text-[18px] text-black dark:text-white font-inter font-500">
                   {iconmingUnit}
                 </span>
               </div>
@@ -64,10 +64,10 @@ const TrafoCard = ({
             <CustomLoader size="32px" />
           ) : (
             <div className="flex items-center gap-1">
-              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+              <span className="text-[18px] text-black dark:text-white font-inter font-500">
                 {outgoingValue}
               </span>
-              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+              <span className="text-[18px] text-black dark:text-white font-inter font-500">
                 {outgoingUnit}
               </span>
             </div>
@@ -87,10 +87,10 @@ const TrafoCard = ({
             <CustomLoader size="32px" />
           ) : (
             <div className="flex items-center gap-1">
-              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+              <span className="text-[18px] text-black dark:text-white font-inter font-500">
                 {lossesValue}
               </span>
-              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+              <span className="text-[18px] text-black dark:text-white font-inter font-500">
                 {lossesUnit}
               </span>
             </div>
@@ -110,10 +110,10 @@ const TrafoCard = ({
             <CustomLoader size="32px" />
           ) : (
             <div className="flex items-center gap-1">
-              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+              <span className="text-[18px] text-black dark:text-white font-inter font-500">
                 {lossesPercent}
               </span>
-              <span className="text-[20.24px] text-black dark:text-white font-inter font-500">
+              <span className="text-[18px] text-black dark:text-white font-inter font-500">
                 {lossesPercentUnit}
               </span>
             </div>

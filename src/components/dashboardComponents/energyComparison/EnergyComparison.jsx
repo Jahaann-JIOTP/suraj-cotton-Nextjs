@@ -431,7 +431,7 @@ const EnergyComparison = ({ dateRange }) => {
         isEnergyComparisonFullView
           ? "fixed inset-0 z-50  p-5 overflow-auto w-[100%] m-auto h-[100vh]"
           : "relative  px-1 py-2 md:p-3 h-[19rem] md:h-[15rem] lg:h-[16.5rem] xl:h-[14.3rem]"
-      } border-t-3 border-[#1F5897] bg-white dark:bg-gray-700 rounded-md shadow-md `}
+      } border-t-3 border-[#1F5897] bg-white dark:bg-gray-800 rounded-md shadow-md `}
     >
       {/* Header */}
       <div className="relative flex items-start md:items-center flex-col md:flex-row gap-3 md:gap-auto justify-between">
@@ -439,29 +439,6 @@ const EnergyComparison = ({ dateRange }) => {
           Energy Comparison
         </span>
         <div className=" flex items-center justify-center gap-2">
-          {/* <div className="flex items-start justify-start gap-1">
-            <span className="text-[12px] font-raleway font-semibold text-black dark:text-white">
-              Select Interval
-            </span>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="text-[12px] font-raleway px-1 py-0.5 border rounded"
-            />
-          </div> */}
-          {/* <div className="flex items-start justify-start gap-1">
-            <span className="text-[12px] font-raleway font-semibold text-black dark:text-white">
-              to
-            </span>
-            <input
-              type="date"
-              value={endDate}
-              min={startDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="text-[12px] font-raleway px-1 py-0.5 border rounded"
-            />
-          </div> */}
           <button
             className="absolute top-0 right-[0px] md:relative cursor-pointer"
             onClick={handleEnergyComparisonFullView}

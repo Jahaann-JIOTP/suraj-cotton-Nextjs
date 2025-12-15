@@ -1,6 +1,5 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import TimePeriodSelector from "@/components/dashboardComponents/timePeriodSelector/TimePeriodSelector";
 import SingleValueDiv from "@/components/dashboardComponents/singleValueDiv/SingleValueDiv";
 import ConsumptionEnergy from "@/components/dashboardComponents/consumptionEnergy/ConsumptionEnergy";
 import EnergyComparison from "@/components/dashboardComponents/energyComparison/EnergyComparison";
@@ -13,7 +12,6 @@ import { DateRangePicker } from "@/components/dashboardComponents/timePeriodSele
 const Dashboard = () => {
   const [singleDivData, setSingleDivData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [unitCLoading, setUnitCLoading] = useState(false);
   const [unitConsumption, setUnitConsumption] = useState({});
 
   const [dateRange, setDateRange] = useState({
@@ -40,8 +38,7 @@ const Dashboard = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        // `${config.BASE_URL}${config.DASHBOARD.SINGLE_VALUE_DIV}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
-        `${config.BASE_URL}/dashboard/consumption?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
+        `${config.BASE_URL}${config.DASHBOARD.DASHABOARD_SINGLE_VALUE}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
         {
           method: "GET",
           headers: {
@@ -67,11 +64,9 @@ const Dashboard = () => {
     // BLOCK API IF DATE MISSING
     if (!timeRange.startDate || !timeRange.endDate) return null;
 
-    setUnitCLoading(true);
-
     try {
       const response = await fetch(
-        `${config.BASE_URL}/energy-consumption-report/unit-only`,
+        `${config.BASE_URL}${config.DASHBOARD.DASHABOARD_UNIT_CONSUMPTION}`,
         {
           method: "POST",
           headers: {
@@ -92,12 +87,10 @@ const Dashboard = () => {
       const resResult = await response.json();
       if (response.ok) {
         setUnitConsumption(resResult);
-        setUnitCLoading(false);
       }
     } catch (error) {
       console.error(error);
     } finally {
-      setUnitCLoading(false);
     }
   };
 
@@ -166,21 +159,25 @@ const Dashboard = () => {
   }, [dateRange]);
 
   useEffect(() => {
+    if (!timeRange.startDate || !timeRange.endDate) return;
+
     fetchUnitConsumption();
     fetchSingleValueData();
+
     const interval = setInterval(() => {
       fetchUnitConsumption();
       fetchSingleValueData();
     }, 900000);
-    return () => clearInterval(interval);
-  }, [dateRange]);
-  useEffect(() => {
-    fetchUnitConsumption();
-    const interval = setInterval(() => {
-      fetchUnitConsumption();
-    }, 900000);
+
     return () => clearInterval(interval);
   }, [timeRange]);
+  // useEffect(() => {
+  //   fetchUnitConsumption();
+  //   const interval = setInterval(() => {
+  //     fetchUnitConsumption();
+  //   }, 900000);
+  //   return () => clearInterval(interval);
+  // }, [timeRange]);
 
   return (
     <div className="h-[81vh] overflow-y-auto relative">
@@ -197,10 +194,13 @@ const Dashboard = () => {
         />
       </div>
       {/* second section first of small divs */}
-      <div className="mt-3 md:mt-[0.7vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
-        <div className="w-full md:w-[23%] lg:w-[24.3%] ">
+      {/* <div className="mt-3 md:mt-[0.7vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between"> */}
+      <div className="mt-3 md:mt-[0.7vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-center gap-2  justify-between">
+        {/* <div className="w-full md:w-[23%] lg:w-[24.3%] "> */}
+        <div className="w-full">
           <SingleValueDiv
             title="HT Generation"
+            height="6rem"
             value={Number(singleDivData?.HT_Generation || 0).toLocaleString(
               "en-US"
             )}
@@ -208,9 +208,11 @@ const Dashboard = () => {
             unit="kWh"
           />
         </div>
-        <div className="w-full md:w-[23%] lg:w-[24.3%] ">
+        {/* <div className="w-full md:w-[23%] lg:w-[24.3%] "> */}
+        <div className="w-full">
           <SingleValueDiv
             title="LT Generation"
+            height="6rem"
             value={Number(singleDivData?.LTGeneration || 0).toLocaleString(
               "en-US"
             )}
@@ -218,9 +220,11 @@ const Dashboard = () => {
             unit="kWh"
           />
         </div>
-        <div className="w-full md:w-[23%] lg:w-[24.3%] ">
+        {/* <div className="w-full md:w-[23%] lg:w-[24.3%] "> */}
+        <div className="w-full">
           <SingleValueDiv
             title="Solar Generation"
+            height="6rem"
             value={Number(singleDivData?.SolarGeneration || 0).toLocaleString(
               "en-US"
             )}
@@ -228,28 +232,29 @@ const Dashboard = () => {
             unit="kWh"
           />
         </div>
-        <div className="w-full md:w-[23%] lg:w-[24.3%] ">
+        {/* <div className="w-full md:w-[23%] lg:w-[24.3%] "> */}
+        <div className="w-full">
           <SingleValueDiv
             title="WAPDA Import"
+            height="6rem"
             value={Number(singleDivData?.WapdaImport || 0).toLocaleString(
               "en-US"
             )}
             loading={loading}
             unit="kWh"
-            height="3"
           />
         </div>
       </div>
       {/* charts second section */}
-      <div className=" mt-3 lg:mt-[0.7vw] flex flex-wrap w-full items-center gap-3 lg:gap-[0.7vw] justify-between">
+      <div className=" mt-2 lg:mt-[0.7vw] grid grid-cols-1 lg:grid-cols-2 w-full items-center gap-2 justify-between">
         {/* left side */}
-        <div className="w-full lg:w-[49.5%] flex flex-col gap-3 lg:gap-[0.7vw]">
+        <div className="w-full flex flex-col gap-2">
           {/* small card two */}
-          <div className="flex flex-wrap gap-3 md:gap-[0.7vw] items-center  justify-between">
-            <div className="w-full md:w-[48.7%]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-center  justify-between">
+            <div className="w-full">
               <SingleValueDiv
-                // title="Total Generation"
                 title="In-house Generation"
+                height="6rem"
                 value={Number(
                   singleDivData?.Total_Generation || 0
                 ).toLocaleString("en-US")}
@@ -257,9 +262,10 @@ const Dashboard = () => {
                 unit="kWh"
               />
             </div>
-            <div className="w-full md:w-[48.7%]">
+            <div className="w-full">
               <SingleValueDiv
                 title="Total Energy Input"
+                height="6rem"
                 value={Number(
                   singleDivData?.total_energy_input || 0
                 ).toLocaleString("en-US")}
@@ -274,16 +280,17 @@ const Dashboard = () => {
           </div>
         </div>
         {/* right side */}
-        <div className="w-full lg:w-[49.5%] flex flex-col gap-3 md:gap-[0.7vw]">
+        <div className="w-full flex flex-col gap-2">
           {/* graph card one */}
           <div className="">
             <ConsumptionEnergy />
           </div>
           {/* small card two */}
-          <div className="flex flex-wrap gap-3 md:gap-[0.7vw] items-center  justify-between">
-            <div className="w-full md:w-[48.7%]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-center  justify-between">
+            <div className="w-full">
               <SingleValueDiv
                 title="Energy/Bags(U4)"
+                height="6rem"
                 value={
                   unitConsumption?.Unit_4_ConsumptionPerBag?.toLocaleString(
                     "en-US",
@@ -297,9 +304,10 @@ const Dashboard = () => {
                 unit="kWh"
               />
             </div>
-            <div className="w-full md:w-[48.7%]">
+            <div className="w-full">
               <SingleValueDiv
                 title="Energy/Bags(U5)"
+                height="6rem"
                 value={
                   unitConsumption?.Unit_5_ConsumptionPerBag?.toLocaleString(
                     "en-US",
@@ -317,10 +325,11 @@ const Dashboard = () => {
         </div>
       </div>
       {/*  third section */}
-      <div className="mt-3 md:mt-[0.7vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
-        <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
+      <div className="mt-3 md:mt-[0.7vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-center gap-2 justify-between">
+        <div className="w-full">
           <SingleValueDiv
             title="U4 Consumption"
+            height="6rem"
             value={
               unitConsumption?.Unit_4_Consumption?.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
@@ -331,9 +340,10 @@ const Dashboard = () => {
             unit="kWh"
           />
         </div>
-        <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
+        <div className="w-full">
           <SingleValueDiv
             title="U5 Consumption"
+            height="6rem"
             value={
               unitConsumption?.Unit_5_Consumption?.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
@@ -344,9 +354,10 @@ const Dashboard = () => {
             unit="kWh"
           />
         </div>
-        <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
+        <div className="w-full">
           <SingleValueDiv
             title="HFO + JMS Auxiliary"
+            height="6rem"
             loading={loading}
             value={Number(singleDivData?.Aux_consumption || 0).toLocaleString(
               "en-US"
@@ -354,9 +365,10 @@ const Dashboard = () => {
             unit="kWh"
           />
         </div>
-        <div className="w-full md:w-[23.5%] lg:w-[24.3%] ">
+        <div className="w-full">
           <SingleValueDiv
             title="Total Energy Output"
+            height="6rem"
             value={(totalEnerOutput || 0).toLocaleString("en-US", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -367,11 +379,11 @@ const Dashboard = () => {
         </div>
       </div>
       {/* comparison graphs */}
-      <div className="flex flex-col lg:flex-row mt-3 md:mt-[0.7vw] gap-3 md:gap-[0.7vw] justify-between">
-        <div className="w-full lg:w-[49.5%]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 mt-3 md:mt-[0.7vw] gap-2 justify-between">
+        <div className="w-full">
           <EnergyComparison dateRange={dateRange} />
         </div>
-        <div className="w-full lg:w-[49.5%]">
+        <div className="w-full">
           <PowerComparison dateRange={dateRange} />
         </div>
       </div>

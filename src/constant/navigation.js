@@ -94,6 +94,7 @@ export const privilegeConfig = {
       "/energy-summary-report",
       "/energy-comparison-report",
       "/department-wise-report",
+      "/analytics-report",
     ],
     tab: "Reports",
   },
@@ -379,26 +380,44 @@ export const sidebarLinksMap = {
   ],
 
   Reports: [
+    {
+      id: 1,
+      title: "Consumption Report",
+      icon: PlantOverview,
+      submenu: [
+        {
+          id: 0,
+          title: "Energy Usage Report",
+          icon: PlantOverview,
+          href: "/energy-usage-report",
+        },
+        {
+          id: 1,
+          title: "Energy Comparison Report",
+          icon: PlantOverview,
+          href: "/energy-comparison-report",
+        },
+        {
+          id: 2,
+          title: "Department-Wise Report",
+          icon: PlantOverview,
+          href: "/department-wise-report",
+        },
+      ],
+    },
     // {
-    //   title: "Energy Summary Report",
+    //   id: 2,
+    //   title: "Harmonics Report",
     //   icon: PlantOverview,
-    //   href: "/energy-summary-report",
+    //   submenu: [
+    //     {
+    //       id: 0,
+    //       title: "Analytics Report",
+    //       icon: PlantOverview,
+    //       href: "/analytics-report",
+    //     },
+    //   ],
     // },
-    {
-      title: "Energy Usage Report",
-      icon: PlantOverview,
-      href: "/energy-usage-report",
-    },
-    {
-      title: "Energy Comparison Report",
-      icon: PlantOverview,
-      href: "/energy-comparison-report",
-    },
-    {
-      title: "Department-Wise Report",
-      icon: PlantOverview,
-      href: "/department-wise-report",
-    },
   ],
 
   Settings: [

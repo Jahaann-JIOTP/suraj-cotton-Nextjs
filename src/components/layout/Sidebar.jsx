@@ -74,10 +74,7 @@ const Sidebar = ({ activeTab, handleTabClick }) => {
       {/* Bottom Section (fixed) */}
       <div className="w-full">
         <button
-          onClick={() => {
-            handleLogout();
-            localStorage.removeItem("returnUrl");
-          }}
+          onClick={() => handleLogout()}
           className="w-full pt-2 text-[16.004px] flex items-center justify-center gap-2 cursor-pointer  rounded-md"
           style={{ fontWeight: 600 }}
         >

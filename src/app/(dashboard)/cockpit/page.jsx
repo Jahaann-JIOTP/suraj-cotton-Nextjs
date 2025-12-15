@@ -211,7 +211,7 @@ const cockpitDashboard = () => {
           {/* main Sources */}
 
           {/* first row of overview */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center items-center  gap-2">
             {/* Total plant */}
             <div className="relative flex flex-col rounded items-center bg-[#fef9c3] dark:bg-[#d9f99d]/30 justify-center">
               <CardHeader
@@ -266,6 +266,7 @@ const cockpitDashboard = () => {
                 outerMaxRange={12}
               />
             </div>
+            {/* wapda 2 */}
             <div className="flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
               <CardHeader
                 title="Wapda 2"
@@ -332,9 +333,8 @@ const cockpitDashboard = () => {
                 outerMaxRange={4000}
               />
             </div>
-          </div>
-          {/* second row of overview */}
-          <div className="grid items-center justify-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+
+            {/* second row of overview */}
             {/* hfo aux chart */}
             <div className="flex flex-col rounded items-center bg-[#E8F5FF] dark:bg-[#E8F5FF]/10 justify-center">
               <CardHeader

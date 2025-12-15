@@ -10,7 +10,6 @@ import { privilegeConfig } from "@/constant/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
-  // const [returnedUrl, setReturnedUrl] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -18,6 +17,10 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [userPrivileges, setUserPrivileges] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
+  const searchParams = new URLSearchParams(
+    typeof window !== "undefined" ? window.location.search : ""
+  );
+  const redirect = searchParams.get("redirect");
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -80,7 +83,12 @@ const Login = () => {
         const privileges = data?.role?.privelleges?.map((p) => p.name) || [];
         setUserPrivileges(privileges);
 
-        if (!token) {
+        // if (!token) {
+        //   redirectBasedOnPrivileges(privileges);
+        // }
+        if (redirect && redirect !== "/") {
+          router.push(redirect);
+        } else {
           redirectBasedOnPrivileges(privileges);
         }
       } else {
@@ -93,7 +101,6 @@ const Login = () => {
 
   const redirectBasedOnPrivileges = (privileges) => {
     const navItems = Object.values(privilegeConfig);
-    const returnUrl = localStorage.getItem("returnUrl");
     const accessibleNavItem = navItems.find((navItem) => {
       return privileges.some(
         (privilege) =>
@@ -102,15 +109,10 @@ const Login = () => {
       );
     });
 
-    // if (returnedUrl.length > 0) {
-    if (returnUrl && returnUrl !== "/login") {
-      router.push(returnUrl);
+    if (accessibleNavItem) {
+      router.push(accessibleNavItem.href);
     } else {
-      if (accessibleNavItem) {
-        router.push(accessibleNavItem.href);
-      } else {
-        router.push("/dashboard");
-      }
+      router.push("/dashboard");
     }
   };
 

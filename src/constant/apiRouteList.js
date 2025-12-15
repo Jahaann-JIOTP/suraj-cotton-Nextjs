@@ -25,10 +25,13 @@ const config = {
     UPDATE_USER: "/users/update/:id", //replace id
   },
   DASHBOARD: {
-    SINGLE_VALUE_DIV: "/energy/consumption", // add start and endDate in query
+    SINGLE_VALUE_DIV: "/energy/consumption",
+    DASHABOARD_SINGLE_VALUE: "/dashboard/consumption", // add start and endDate in query
+    DASHABOARD_UNIT_CONSUMPTION: "/energy-consumption-report/unit-only",
     GET_GENERATION_ENERGY: "/generation-energy?value=", // pass query parameter
     GET_CONSUMPTION_ENERGY: "/consumption-energy?value=",
     GET_ENERGY_COMPARISON: "/pie-chart/chart-data",
+    ENERGY_BALANCE_CHART: "/power_comparison",
     GET_HEAT_MAP_DATA: "/heat-map",
     GET_SPINDLES: "/energy-spindle",
     ADD_MAINTENANCE_HOURS: "/heat-map/transformers",

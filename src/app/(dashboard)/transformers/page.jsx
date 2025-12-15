@@ -148,8 +148,7 @@ const TranformersPage = () => {
     1900, 2000,
   ];
   const trafo3and4 = [
-    800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000,
-    2100, 2200, 2300, 2400, 2500,
+    800, 950, 1100, 1250, 1400, 1550, 1700, 1850, 2000, 2150, 2300, 2450,
   ];
   const loadMaintenanceHrs = (transformerName) => {
     const apiMap = {
@@ -193,308 +192,262 @@ const TranformersPage = () => {
   }, [dateRange]);
 
   return (
-    <>
-      <div className="h-full lg:h-[81vh] overflow-y-auto">
-        <div className="flex flex-col md:flex-row gap-2 items-start md:items-center justify-between mb-2">
-          <h1 className="font-raleway font-600 text-[17px] md:text-[20px]">
-            Transformer Energy Usage Heat Map
-          </h1>
-          <DateRangePicker
-            showTime={false}
-            showLabels={true}
-            dateRangeLabel="Select Date Range:"
-            intervalLabel="From"
-            defaultSelected="last7days"
-            toLabel="To"
-            timeLabel="Time"
-            onChange={handleDateRangeChange}
-          />
+    <div className="h-full lg:h-[81vh] overflow-y-auto">
+      <div className="flex flex-col md:flex-row gap-2 items-start md:items-center justify-between mb-2">
+        <h1 className="font-raleway font-600 text-[17px] md:text-[20px]">
+          Transformer Energy Usage Heat Map
+        </h1>
+        <DateRangePicker
+          showTime={false}
+          showLabels={true}
+          dateRangeLabel="Select Date Range:"
+          intervalLabel="From"
+          defaultSelected="last7days"
+          toLabel="To"
+          timeLabel="Time"
+          onChange={handleDateRangeChange}
+        />
+      </div>
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 mb-2">
+        {/* transformer 1 */}
+        <div className="flex flex-col w-full bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
+          <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
+            <img src="../../../heatmapIcon.png" alt="" />
+            <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
+              Unit 4 Transformer 1 (kWh) Total:
+              {Number(
+                transformerTotalValTag.Trafo1outgoing || 0
+              ).toLocaleString("en-US")}
+            </h2>
+          </div>
+          <div>
+            <div className="flex">
+              <div className="w-[100%] flex items-center justify-center">
+                {loading === true ? (
+                  <div className="w-full h-[18rem] flex items-center">
+                    <CustomLoader size="50px" />
+                  </div>
+                ) : (
+                  <HeatmapTrafo
+                    data={trafo1}
+                    meter="Trafo1"
+                    startRange={600}
+                    endRange={2200}
+                  />
+                )}
+              </div>
+            </div>
+            {!loading && (
+              <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
+                <div className="flex w-[86.5%] items-center justify-between flex-wrap">
+                  {trafo1and2.map((item, index, array) => {
+                    const isFirst = index === 0;
+                    const isLast = index === array.length - 1;
+                    const isHiddenOnSmall =
+                      index % 2 === 1 && !isFirst && !isLast;
+                    return (
+                      <span
+                        key={item}
+                        className={`text-[11px] ${
+                          isHiddenOnSmall ? "hidden xl:inline" : "inline"
+                        }`}
+                      >
+                        {item}
+                      </span>
+                    );
+                  })}
+                </div>
+                <div
+                  className="w-[86.5%] h-[20px]"
+                  style={{
+                    background:
+                      "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
+                  }}
+                ></div>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="flex w-full flex-wrap gap-2 mb-2">
-          {/* transformer 1 */}
-          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
-            <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
-              <img src="../../../heatmapIcon.png" alt="" />
-              <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
-                Unit 4 Transformer 1 (kWh) Total:
-                {Number(
-                  transformerTotalValTag.Trafo1outgoing || 0
-                ).toLocaleString("en-US")}
-              </h2>
-            </div>
-            <div>
-              <div className="flex">
-                <div className="w-[100%] flex items-center justify-center">
-                  {loading === true ? (
-                    <div className="w-full h-[18rem] flex items-center">
-                      <CustomLoader size="50px" />
-                    </div>
-                  ) : (
-                    <HeatmapTrafo
-                      data={trafo1}
-                      meter="Trafo1"
-                      startRange={600}
-                      endRange={2200}
-                    />
-                  )}
-                </div>
-                {/* <div className="w-[30%]">
-                  <TransformerSide
-                    onMaintenanceUpdated={loadMaintenanceHrs}
-                    transformerReading={"2.0 MVA"}
-                    nxtMaintenance={maintenanceHrsT1.value}
-                    remainingHrs={remainingHrsT1}
-                    traffoTemp={"Not Connected"}
-                    losses={trafo1Losses.toFixed(2)}
-                    trafoName="T1"
-                  />
-                </div> */}
-              </div>
-              {!loading && (
-                <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
-                  <div className="flex w-[86.5%] items-center justify-between flex-wrap">
-                    {trafo1and2.map((item, index, array) => {
-                      const isFirst = index === 0;
-                      const isLast = index === array.length - 1;
-                      const isHiddenOnSmall =
-                        index % 2 === 1 && !isFirst && !isLast;
-                      return (
-                        <span
-                          key={item}
-                          className={`text-[11px] ${
-                            isHiddenOnSmall ? "hidden xl:inline" : "inline"
-                          }`}
-                        >
-                          {item}
-                        </span>
-                      );
-                    })}
-                  </div>
-                  <div
-                    className="w-[86.5%] h-[20px]"
-                    style={{
-                      background:
-                        "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
-                    }}
-                  ></div>
-                </div>
-              )}
-            </div>
+        {/* transformer 2 */}
+        <div className="flex flex-col w-full bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
+          <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
+            <img src="../../../heatmapIcon.png" alt="" />
+            <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
+              Unit 4 Transformer 2 (kWh) Total:
+              {Number(
+                transformerTotalValTag.Trafo2outgoing || 0
+              ).toLocaleString("en-US")}
+            </h2>
           </div>
-          {/* transformer 2 */}
-          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
-            <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
-              <img src="../../../heatmapIcon.png" alt="" />
-              <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
-                Unit 4 Transformer 2 (kWh) Total:
-                {Number(
-                  transformerTotalValTag.Trafo2outgoing || 0
-                ).toLocaleString("en-US")}
-              </h2>
-            </div>
-            <div>
-              <div className="flex items-center  justify-center">
-                <div className="w-[100%] flex items-center  justify-center">
-                  {loading === true ? (
-                    <div className="w-full h-[18rem] flex items-center">
-                      <CustomLoader size="50px" />
-                    </div>
-                  ) : (
-                    <HeatmapTrafo
-                      data={trafo2}
-                      meter="Trafo2"
-                      startRange={600}
-                      endRange={2200}
-                    />
-                  )}
-                </div>
-                {/* <div className="w-[30%]">
-                  <TransformerSide
-                    onMaintenanceUpdated={loadMaintenanceHrs}
-                    transformerReading={"2.0 MVA"}
-                    nxtMaintenance={maintenanceHrsT2.value}
-                    remainingHrs={remainingHrsT2}
-                    traffoTemp={"Not Connected"}
-                    losses={trafo2Losses.toFixed(2)}
-                    trafoName="T2"
-                  />
-                </div> */}
-              </div>
-              {!loading && (
-                <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
-                  <div className="flex w-[86.5%] items-center justify-between flex-wrap">
-                    {trafo1and2.map((item, index, array) => {
-                      const isFirst = index === 0;
-                      const isLast = index === array.length - 1;
-                      const isHiddenOnSmall =
-                        index % 2 === 1 && !isFirst && !isLast;
-                      return (
-                        <span
-                          key={item}
-                          className={`text-[11px] ${
-                            isHiddenOnSmall ? "hidden xl:inline" : "inline"
-                          }`}
-                        >
-                          {item}
-                        </span>
-                      );
-                    })}
+          <div>
+            <div className="flex items-center  justify-center">
+              <div className="w-[100%] flex items-center  justify-center">
+                {loading === true ? (
+                  <div className="w-full h-[18rem] flex items-center">
+                    <CustomLoader size="50px" />
                   </div>
-                  <div
-                    className="w-[86.5%] h-[20px]"
-                    style={{
-                      background:
-                        "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
-                    }}
-                  ></div>
-                </div>
-              )}
-            </div>
-          </div>
-          {/* transformer 3 */}
-          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
-            <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
-              <img src="../../../heatmapIcon.png" alt="" />
-              <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
-                Unit 5 Transformer 1 (kWh) Total:
-                {Number(
-                  transformerTotalValTag.Trafo3outgoing || 0
-                ).toLocaleString("en-US")}
-              </h2>
-            </div>
-            <div>
-              <div className="flex">
-                <div className="w-[100%] flex items-center justify-center">
-                  {loading === true ? (
-                    <div className="w-full h-[18rem] flex items-center">
-                      <CustomLoader size="50px" />
-                    </div>
-                  ) : (
-                    <HeatmapTrafo
-                      data={trafo3}
-                      meter="Trafo3"
-                      startRange={800}
-                      endRange={2500}
-                    />
-                  )}
-                </div>
-                {/* <div className="w-[30%]">
-                  <TransformerSide
-                    onMaintenanceUpdated={loadMaintenanceHrs}
-                    transformerReading={"2.5 MVA"}
-                    nxtMaintenance={maintenanceHrsT3.value}
-                    remainingHrs={remainingHrsT3}
-                    traffoTemp={"Not Connected"}
-                    losses={trafo3Losses.toFixed(2)}
-                    trafoName="T3"
+                ) : (
+                  <HeatmapTrafo
+                    data={trafo2}
+                    meter="Trafo2"
+                    startRange={600}
+                    endRange={2200}
                   />
-                </div> */}
+                )}
               </div>
-              {!loading && (
-                <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
-                  <div className="flex w-[86.5%] items-center justify-between flex-wrap">
-                    {trafo3and4.map((item, index, array) => {
-                      const isFirst = index === 0;
-                      const isLast = index === array.length - 1;
-                      const isHiddenOnSmall =
-                        index % 2 === 1 && !isFirst && !isLast;
-                      return (
-                        <span
-                          key={item}
-                          className={`text-[11px] ${
-                            isHiddenOnSmall ? "hidden xl:inline" : "inline"
-                          }`}
-                        >
-                          {item}
-                        </span>
-                      );
-                    })}
+            </div>
+            {!loading && (
+              <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
+                <div className="flex w-[86.5%] items-center justify-between flex-wrap">
+                  {trafo1and2.map((item, index, array) => {
+                    const isFirst = index === 0;
+                    const isLast = index === array.length - 1;
+                    const isHiddenOnSmall =
+                      index % 2 === 1 && !isFirst && !isLast;
+                    return (
+                      <span
+                        key={item}
+                        className={`text-[11px] ${
+                          isHiddenOnSmall ? "hidden xl:inline" : "inline"
+                        }`}
+                      >
+                        {item}
+                      </span>
+                    );
+                  })}
+                </div>
+                <div
+                  className="w-[86.5%] h-[20px]"
+                  style={{
+                    background:
+                      "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
+                  }}
+                ></div>
+              </div>
+            )}
+          </div>
+        </div>
+        {/* transformer 3 */}
+        <div className="flex flex-col w-full bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
+          <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
+            <img src="../../../heatmapIcon.png" alt="" />
+            <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
+              Unit 5 Transformer 1 (kWh) Total:
+              {Number(
+                transformerTotalValTag.Trafo3outgoing || 0
+              ).toLocaleString("en-US")}
+            </h2>
+          </div>
+          <div>
+            <div className="flex">
+              <div className="w-[100%] flex items-center justify-center">
+                {loading === true ? (
+                  <div className="w-full h-[18rem] flex items-center">
+                    <CustomLoader size="50px" />
                   </div>
-                  <div
-                    className="w-[86.5%] h-[20px]"
-                    style={{
-                      background:
-                        "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
-                    }}
-                  ></div>
-                </div>
-              )}
-            </div>
-          </div>
-          {/* transformer 4 */}
-          <div className="flex flex-col w-full lg:w-[49.5%] bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
-            <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
-              <img src="../../../heatmapIcon.png" alt="" />
-              <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
-                Unit 5 Transformer 2 (kWh) Total:
-                {Number(
-                  transformerTotalValTag.Trafo4outgoing || 0
-                ).toLocaleString("en-US")}
-              </h2>
-            </div>
-            <div>
-              <div className="flex">
-                <div className="w-[100%] flex items-center justify-center">
-                  {loading === true ? (
-                    <div className="w-full h-[18rem] flex items-center">
-                      <CustomLoader size="50px" />
-                    </div>
-                  ) : (
-                    <HeatmapTrafo
-                      data={trafo4}
-                      meter="Trafo4"
-                      startRange={800}
-                      endRange={2500}
-                    />
-                  )}
-                </div>
-                {/* <div className="w-[30%]">
-                  <TransformerSide
-                    onMaintenanceUpdated={loadMaintenanceHrs}
-                    transformerReading={"2.5 MVA"}
-                    nxtMaintenance={maintenanceHrsT4.value}
-                    remainingHrs={remainingHrsT4}
-                    traffoTemp={"Not Connected"}
-                    losses={trafo4Losses.toFixed(2)}
-                    trafoName="T4"
+                ) : (
+                  <HeatmapTrafo
+                    data={trafo3}
+                    meter="Trafo3"
+                    startRange={800}
+                    endRange={2500}
                   />
-                </div> */}
+                )}
               </div>
-              {!loading && (
-                <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
-                  <div className="flex w-[86.5%] items-center justify-between flex-wrap">
-                    {trafo3and4.map((item, index, array) => {
-                      const isFirst = index === 0;
-                      const isLast = index === array.length - 1;
-                      const isHiddenOnSmall =
-                        index % 2 === 1 && !isFirst && !isLast;
+            </div>
+            {!loading && (
+              <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
+                <div className="flex w-[86.5%] items-center justify-between flex-wrap">
+                  {trafo3and4.map((item, index, array) => {
+                    const isFirst = index === 0;
+                    const isLast = index === array.length - 1;
+                    const isHiddenOnSmall =
+                      index % 2 === 1 && !isFirst && !isLast;
+                    return (
+                      <span
+                        key={item}
+                        className={`text-[11px] ${
+                          isHiddenOnSmall ? "hidden xl:inline" : "inline"
+                        }`}
+                      >
+                        {item}
+                      </span>
+                    );
+                  })}
+                </div>
+                <div
+                  className="w-[86.5%] h-[20px]"
+                  style={{
+                    background:
+                      "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
+                  }}
+                ></div>
+              </div>
+            )}
+          </div>
+        </div>
+        {/* transformer 4 */}
+        <div className="flex flex-col w-full bg-white h-[23rem] md:h-[20.8rem] dark:bg-gray-800 rounded-md shadow-lg border-t-3 border-t-[#1A68B2]">
+          <div className="flex items-center justify-start gap-2 md:gap-5 px-5 pt-2">
+            <img src="../../../heatmapIcon.png" alt="" />
+            <h2 className="font-inter font-500 text-[16px] text-[#3978A8]">
+              Unit 5 Transformer 2 (kWh) Total:
+              {Number(
+                transformerTotalValTag.Trafo4outgoing || 0
+              ).toLocaleString("en-US")}
+            </h2>
+          </div>
+          <div>
+            <div className="flex">
+              <div className="w-[100%] flex items-center justify-center">
+                {loading === true ? (
+                  <div className="w-full h-[18rem] flex items-center">
+                    <CustomLoader size="50px" />
+                  </div>
+                ) : (
+                  <HeatmapTrafo
+                    data={trafo4}
+                    meter="Trafo4"
+                    startRange={800}
+                    endRange={2500}
+                  />
+                )}
+              </div>
+            </div>
+            {!loading && (
+              <div className="w-full flex flex-col items-end pr-[4rem] px-5 mt-[-10px] md:mt-[-17px]">
+                <div className="flex w-[86.5%] items-center justify-between flex-wrap">
+                  {trafo3and4.map((item, index, array) => {
+                    const isFirst = index === 0;
+                    const isLast = index === array.length - 1;
+                    const isHiddenOnSmall =
+                      index % 2 === 1 && !isFirst && !isLast;
 
-                      return (
-                        <span
-                          key={item}
-                          className={`text-[11px] ${
-                            isHiddenOnSmall ? "hidden xl:inline" : "inline"
-                          }`}
-                        >
-                          {item}
-                        </span>
-                      );
-                    })}
-                  </div>
-                  <div
-                    className="w-[86.5%] h-[20px]"
-                    style={{
-                      background:
-                        "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
-                    }}
-                  ></div>
+                    return (
+                      <span
+                        key={item}
+                        className={`text-[11px] ${
+                          isHiddenOnSmall ? "hidden xl:inline" : "inline"
+                        }`}
+                      >
+                        {item}
+                      </span>
+                    );
+                  })}
                 </div>
-              )}
-            </div>
+                <div
+                  className="w-[86.5%] h-[20px]"
+                  style={{
+                    background:
+                      "linear-gradient(to right, #012AFF, #05EFFD, #0BFF01, #FDFF00, #FE0803)",
+                  }}
+                ></div>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

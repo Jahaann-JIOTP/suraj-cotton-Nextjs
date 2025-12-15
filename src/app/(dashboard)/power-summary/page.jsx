@@ -78,7 +78,7 @@ const PowerSummaryPage = () => {
             value={Number(powerSummaryData.Wapda1 || 0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            // height="6rem"
           />
         </div>
 
@@ -88,7 +88,7 @@ const PowerSummaryPage = () => {
             value={Number(powerSummaryData.Wapda2 || 0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            // height="6rem"
           />
         </div>
 
@@ -100,7 +100,7 @@ const PowerSummaryPage = () => {
             )}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            // height="6rem"
           />
         </div>
 
@@ -110,14 +110,14 @@ const PowerSummaryPage = () => {
             value={Number(powerSummaryData.JMS || 0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6rem"
+            // height="6rem"
           />
         </div>
       </div>
 
       {/* Third section */}
-      <div className="mt-3 md:mt-[0.9vw] flex flex-wrap items-center gap-3 lg:gap-[0.7vw] justify-between">
-        <div className="w-full lg:w-[49.5%]">
+      <div className="mt-3 md:mt-[0.9vw] grid grid-cols-1 xl:grid-cols-2 items-center gap-3 lg:gap-[0.7vw] justify-between">
+        <div className="w-full">
           <TrafoCard
             mainTitle="Unit 4 Transformer 1+2"
             icomingValue={Number(
@@ -139,7 +139,7 @@ const PowerSummaryPage = () => {
             lossesPercentUnit="%"
           />
         </div>
-        <div className="w-full lg:w-[49.6%]">
+        <div className="w-full">
           <TrafoCard
             mainTitle="Unit 5 Transformer 1+2"
             icomingValue={Number(
@@ -170,7 +170,7 @@ const PowerSummaryPage = () => {
             loading={loading}
             value={Number(powerSummaryData.Solar1 || 0).toLocaleString("en-US")}
             unit="kWh"
-            height="6.5rem"
+            // height="6.5rem"
           />
         </div>
 
@@ -180,7 +180,7 @@ const PowerSummaryPage = () => {
             value={Number(powerSummaryData.Solar2 || 0).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6.5rem"
+            // height="6.5rem"
           />
         </div>
 
@@ -192,7 +192,7 @@ const PowerSummaryPage = () => {
             )}
             loading={loading}
             unit="kWh"
-            height="6.5rem"
+            // height="6.5rem"
           />
         </div>
 
@@ -204,7 +204,7 @@ const PowerSummaryPage = () => {
             )}
             loading={loading}
             unit="kWh"
-            height="6.5rem"
+            // height="6.5rem"
           />
         </div>
 
@@ -216,7 +216,7 @@ const PowerSummaryPage = () => {
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6.5rem"
+            // height="6.5rem"
           />
         </div>
         {/* </div> */}
@@ -229,8 +229,8 @@ const PowerSummaryPage = () => {
               "en-US"
             )}
             unit="kWh"
-            height="6.5rem"
             valueColor="#019726"
+            // height="6.5rem"
           />
         </div>
         <div className="w-full">
@@ -241,8 +241,8 @@ const PowerSummaryPage = () => {
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6.5rem"
             valueColor="#E40101"
+            // height="6.5rem"
           />
         </div>
         <div className="w-full">
@@ -253,8 +253,8 @@ const PowerSummaryPage = () => {
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6.5rem"
             valueColor="#E40101"
+            // height="6.5rem"
           />
         </div>
         <div className="w-full">
@@ -265,8 +265,8 @@ const PowerSummaryPage = () => {
             ).toLocaleString("en-US")}
             loading={loading}
             unit="%"
-            height="6.5rem"
             valueColor="#E40101"
+            // height="6.5rem"
           />
         </div>
 
@@ -278,8 +278,8 @@ const PowerSummaryPage = () => {
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
-            height="6.5rem"
             valueColor="#E40101"
+            // height="6.5rem"
           />
         </div>
       </div>
