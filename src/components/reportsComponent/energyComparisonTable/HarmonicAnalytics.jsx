@@ -10,9 +10,9 @@ import AnalyticsChart from "./AnalyticsChart";
 import { ThreecolsPdfTable } from "@/components/tables/ThreecolsPdfTable";
 const sectionHeaders = {
   rParams: "Report Parameters",
-  mappingSec: "Dates mapping",
-  voltageChart: "Harmonics Votage Analytics Chart",
-  currentChart: "Harmonics Current Analytics Chart",
+  mappingSec: "Dates Mapping",
+  voltageChart: "Harmonics Voltage Analytics Report",
+  currentChart: "Harmonics Current Analytics Report",
 };
 
 const HarmonicAnalytics = ({
