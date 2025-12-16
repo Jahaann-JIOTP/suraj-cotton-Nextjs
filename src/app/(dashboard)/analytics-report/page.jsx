@@ -709,6 +709,32 @@ const HarmonicsReport = () => {
 
   return (
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
+      {/* {usageReportTimePeriod === "15mins" ? (
+        <div className="absolute right-0 top-0 rounded-tr-md bg-orange-500 p-2 text-white">
+          <span>i </span>
+          <span>
+            For hour 15 Minutes Resolution 
+          </span>
+        </div>
+      ) : usageReportTimePeriod === "hour" ? (
+        <div className="absolute right-0 top-0 rounded-tr-md bg-orange-500 p-2 text-white">
+          <span>i </span>
+          <span>
+            For daily resolution please select atleast 2 days(due to 6:00-6:00
+            time interval) and maximum 30 days
+          </span>
+        </div>
+      ) : usageReportTimePeriod === "day" ? (
+        <div className="absolute right-0 top-0 rounded-tr-md bg-orange-500 p-2 text-white">
+          <span>i </span>
+          <span>
+            For daily resolution please select atleast 2 days(due to 6:00-6:00
+            time interval) and maximum 30 days
+          </span>
+        </div>
+      ) : (
+        ""
+      )} */}
       <div className="flex pb-3 items-center justify-between">
         <h1 className="text-[18.22px] text-raleway font-600">
           Harmonics Analytics Report

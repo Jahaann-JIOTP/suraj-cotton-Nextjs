@@ -406,25 +406,25 @@ export const sidebarLinksMap = {
         },
       ],
     },
-    // {
-    //   id: 2,
-    //   title: "Harmonics Report",
-    //   icon: PlantOverview,
-    //   submenu: [
-    //     {
-    //       id: 0,
-    //       title: "Harmonics Analytics Report",
-    //       icon: PlantOverview,
-    //       href: "/analytics-report",
-    //     },
-    //     {
-    //       id: 1,
-    //       title: "Harmonic Detail Report",
-    //       icon: PlantOverview,
-    //       href: "/harmonics-detail-report",
-    //     },
-    //   ],
-    // },
+    {
+      id: 2,
+      title: "Harmonics Report",
+      icon: PlantOverview,
+      submenu: [
+        {
+          id: 0,
+          title: "Harmonics Analytics Report",
+          icon: PlantOverview,
+          href: "/analytics-report",
+        },
+        // {
+        //   id: 1,
+        //   title: "Harmonic Detail Report",
+        //   icon: PlantOverview,
+        //   href: "/harmonics-detail-report",
+        // },
+      ],
+    },
   ],
 
   Settings: [

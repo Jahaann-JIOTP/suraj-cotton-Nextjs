@@ -7,13 +7,10 @@ import { CircularProgress } from "@mui/material";
 import { ImArrowLeft2 } from "react-icons/im";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
-import { IoChevronDownOutline } from "react-icons/io5";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegCalendarAlt } from "react-icons/fa";
-// import { useTheme } from "next-themes";
-import HarmonicAnalytics from "@/components/reportsComponent/energyComparisonTable/HarmonicAnalytics";
 import SelectDropdown from "@/components/reUseUi/SelectDropdown";
-// import { HiOutlineClock } from "react-icons/hi2";
+import HarmonicDetailSummaryReport from "@/components/reportsComponent/energyComparisonTable/HarmonicDetailSummaryReport";
 
 const sourceOptions = [
   {
@@ -51,24 +48,27 @@ const sourceOptions = [
     label: "HFO Aux",
     value: "U25_PLC",
   },
+  {
+    id: 7,
+    label: "HFO Aux",
+    value: "U35_PLC",
+  },
+  {
+    id: 7,
+    label: "HFO Aux",
+    value: "U31_PLC",
+  },
+  {
+    id: 7,
+    label: "HFO Aux",
+    value: "U32_PLC",
+  },
+  {
+    id: 7,
+    label: "HFO Aux",
+    value: "U33_PLC",
+  },
 ];
-// const intervalOptions = [
-//   {
-//     id: 0,
-//     label: "15 Minutes",
-//     value: "15mins",
-//   },
-//   {
-//     id: 2,
-//     label: "Hourly",
-//     value: "hour",
-//   },
-//   {
-//     id: 3,
-//     label: "Day",
-//     value: "day",
-//   },
-// ];
 
 const HarmonicsDetailReport = () => {
   const createSixAM = () => {
@@ -80,7 +80,8 @@ const HarmonicsDetailReport = () => {
   const [resData, setResData] = useState({});
   //   const [usageReportTimePeriod, setUsageReportTimePeriod] = useState("day");
   const usageReportTimePeriod = "day";
-  const [selectedSource, setSelectedSource] = useState("");
+  const [selectedSource, setSelectedSource] = useState([]);
+  console.log(selectedSource);
   const [sourceDropdwon, setSourceDropdown] = useState(false);
   const [intervalDropdown, setIntervalDropdown] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -176,14 +177,10 @@ const HarmonicsDetailReport = () => {
   const Period2startDate = toLocalISODate(period2Date[0]);
   const Period2endDate = toLocalISODate(period2Date[1]);
   // -------------------time----------------------
-  const Period1startTime =
-    usageReportTimePeriod === "15mins" ? formatToPKTime(period1[0]) : "06:00";
-  const Period1endTime =
-    usageReportTimePeriod === "15mins" ? formatToPKTime(period1[1]) : "06:00";
-  const Period2startTime =
-    usageReportTimePeriod === "15mins" ? formatToPKTime(period2[0]) : "06:00";
-  const Period2endTime =
-    usageReportTimePeriod === "15mins" ? formatToPKTime(period2[1]) : "06:00";
+  const Period1startTime = "06:00";
+  const Period1endTime = "06:00";
+  const Period2startTime = "06:00";
+  const Period2endTime = "06:00";
 
   // -------------------Get Payload----------------------
   const payload = {
@@ -196,7 +193,7 @@ const HarmonicsDetailReport = () => {
     Period2startTime: Period2startTime,
     Period2endTime: Period2endTime,
     resolution: usageReportTimePeriod,
-    DeviceId: [selectedSource],
+    DeviceId: selectedSource,
   };
 
   const isPeriod1Complete = period1Date[0] && period1Date[1];
@@ -387,7 +384,6 @@ const HarmonicsDetailReport = () => {
   //============================handle time change=========================
 
   //   Dropdown click outside handlers
-  const toggleSourceDropdown = () => setSourceDropdown(!sourceDropdwon);
   const toggleIntervalDropdown = () => setIntervalDropdown(!intervalDropdown);
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -436,9 +432,9 @@ const HarmonicsDetailReport = () => {
     },
   };
 
-  const sourceLabel = sourceOptions.find(
-    (source) => source.value === selectedSource
-  );
+  const selectedLabels = selectedSource
+    .map((val) => sourceOptions.find((opt) => opt.value === val)?.label)
+    .filter(Boolean);
   //--------------------------------Chart Data----------------------------------------
   const period1Data = Array.isArray(resData?.period1) ? resData.period1 : [];
   const period2Data = Array.isArray(resData?.period2) ? resData.period2 : [];
@@ -681,111 +677,18 @@ const HarmonicsDetailReport = () => {
         <div>
           <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
             <div className="grid grid-cols-1  lg:grid-cols-2 gap-8">
-              {/* Interval selector dropdown */}
-              {/* <div className="flex flex-col w-full items-start justify-center gap-1">
-                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
-                  Select Resolution
-                </span>
-                <div
-                  className="relative inline-block w-full"
-                  ref={intervalDropdownRef}
-                >
-                  <button
-                    type="button"
-                    onClick={toggleIntervalDropdown}
-                    className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
-                  >
-                   
-                    {intervalOptions.find(
-                      (option) => option.value === usageReportTimePeriod
-                    )?.label || "Select Resolution"}
-                    <IoChevronDownOutline
-                      className={`transition-all duration-300 ${
-                        intervalDropdown ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {intervalDropdown && (
-                    <div className="absolute z-20 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
-                      {intervalOptions.map((option) => (
-                        <label
-                          key={option.id}
-                          className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white"
-                        >
-                          <input
-                            type="radio"
-                            checked={usageReportTimePeriod === option.value}
-                            value={option.value}
-                            onChange={(e) => {
-                              setIntervalDropdown(false);
-                              setUsageReportTimePeriod(e.target.value);
-                            }}
-                          />
-                          {option.label}
-                        </label>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div> */}
               {/* Device selector dropdown */}
-              <div className="flex flex-col w-full items-start justify-center gap-1">
-                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
-                  Select Source
-                </span>
-                <div
-                  className="relative inline-block w-full"
-                  ref={sourceDropdownRef}
-                >
-                  <button
-                    type="button"
-                    onClick={toggleSourceDropdown}
-                    className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
-                  >
-                    {sourceOptions.find(
-                      (option) => option.value === selectedSource
-                    )?.label || "Select Source Meter"}
-                    <IoChevronDownOutline
-                      className={`transition-all duration-300 ${
-                        sourceDropdwon ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
 
-                  {sourceDropdwon && (
-                    <div className="absolute z-20 mt-1 w-full max-h-[16rem] overflow-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
-                      {sourceOptions.map((option) => (
-                        <label
-                          key={option.id}
-                          className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white"
-                        >
-                          <input
-                            type="radio"
-                            checked={selectedSource === option.value}
-                            value={option.value}
-                            onChange={(e) => {
-                              setSourceDropdown(false);
-                              setSelectedSource(e.target.value);
-                            }}
-                          />
-                          {option.label}
-                        </label>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
               <div className="w-full">
                 <SelectDropdown
-                  label="Select Devices"
+                  label="Select Source"
                   options={sourceOptions}
                   value={selectedSource}
                   onChange={setSelectedSource}
-                  isMulti={false}
+                  isMulti={true}
+                  placeholder="Select Sources"
                 />
               </div>
-
               {/* Period 1 */}
               <div className="">
                 <span className={` text-[13.51px] font-500 font-inter`}>
@@ -819,54 +722,6 @@ const HarmonicsDetailReport = () => {
                   <FaRegCalendarAlt />
                 </div>
               </div>
-              {/* period 1 time interval */}
-              {/* {usageReportTimePeriod === "15mins" && isPeriod1Complete && (
-                <>
-                  <div className="">
-                    <span>Period 1 Time Interval</span>
-                    <div className="grid grid-cols-2 items-center justify-center gap-2">
-                      <div
-                        onClick={openPeriod1StartTime}
-                        className="w-full flex items-center justify-around border p-1 pl-3 rounded flex items-center gap-2"
-                      >
-                        <label htmlFor="">From</label>
-
-                        <DatePicker
-                          ref={periodStartTime1Ref}
-                          selected={period1[0]}
-                          onChange={(date) => handleTimeChange(1, 0, date)}
-                          showTimeSelect
-                          showTimeSelectOnly
-                          timeIntervals={15}
-                          timeCaption="Start Time"
-                          dateFormat="hh:mm aa"
-                          className="rounded p-1 outline-none w-full"
-                        />
-                        <HiOutlineClock size={22} />
-                      </div>
-                      <div
-                        onClick={openPeriod1endTime}
-                        className="w-full border flex items-center justify-around p-1 pl-3 rounded flex items-center gap-2"
-                      >
-                        <label htmlFor="">To</label>
-
-                        <DatePicker
-                          ref={periodEndTime1Ref}
-                          selected={period1[1]}
-                          onChange={(date) => handleTimeChange(1, 1, date)}
-                          showTimeSelect
-                          showTimeSelectOnly
-                          timeIntervals={15}
-                          timeCaption="End Time"
-                          dateFormat="hh:mm aa"
-                          className="rounded p-1 outline-none w-full"
-                        />
-                        <HiOutlineClock size={22} />
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )} */}
               {/* Period 2 */}
               <div className="">
                 <span
@@ -912,54 +767,6 @@ const HarmonicsDetailReport = () => {
                   />
                 </div>
               </div>
-              {/* ///// period 2 time selectors//// */}
-              {/* {usageReportTimePeriod === "15mins" && isPeriod2Complete && (
-                <>
-                  <div>
-                    <span>Period 2 Time Interval</span>
-                    <div className="grid grid-cols-2 items-center justify-center gap-2">
-                      <div
-                        onClick={openPeriod2StartTime}
-                        className="w-full flex items-center justify-around border p-1 pl-3 rounded  flex items-center gap-2"
-                      >
-                        <label htmlFor="">From</label>
-                       
-                        <DatePicker
-                          ref={periodStartTime2Ref}
-                          selected={period2[0]}
-                          onChange={(date) => handleTimeChange(2, 0, date)}
-                          showTimeSelect
-                          showTimeSelectOnly
-                          timeIntervals={15}
-                          timeCaption="Start Time"
-                          dateFormat="hh:mm aa"
-                          className="p-1 outline-none w-full"
-                        />
-                        <HiOutlineClock size={22} />
-                      </div>
-                      <div
-                        onClick={openPeriod2endTime}
-                        className="w-full border flex items-center justify-around p-1 pl-3 rounded  flex items-center gap-2"
-                      >
-                        <label htmlFor="">To</label>
-                        
-                        <DatePicker
-                          ref={periodEndTime2Ref}
-                          selected={period2[1]}
-                          onChange={(date) => handleTimeChange(2, 1, date)}
-                          showTimeSelect
-                          showTimeSelectOnly
-                          timeIntervals={15}
-                          timeCaption="End Time"
-                          dateFormat="hh:mm aa"
-                          className="p-1 outline-none w-full"
-                        />
-                        <HiOutlineClock size={22} />
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )} */}
               {/* ////////////////////time selectors////////////////////////////////////// */}
             </div>
             {/* // here code will be pasted */}
@@ -983,15 +790,14 @@ const HarmonicsDetailReport = () => {
           </form>
         </div>
       ) : showResults ? (
-        <HarmonicAnalytics
+        <HarmonicDetailSummaryReport
           voltageChartData={filteredVoltageChartData}
           currentChartData={filteredCurrentChartData}
           intervalObj={intervalObj}
           usageReportTimePeriod={usageReportTimePeriod}
-          selectedSource={sourceLabel?.label}
+          selectedSource={selectedLabels}
           voltageAvgData={voltageAvgData}
           currentAvgData={currentAvgData}
-          sourceLabel={sourceLabel}
         />
       ) : null}
     </div>
