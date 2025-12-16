@@ -12,7 +12,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaRegCalendarAlt } from "react-icons/fa";
 // import { useTheme } from "next-themes";
 import HarmonicAnalytics from "@/components/reportsComponent/energyComparisonTable/HarmonicAnalytics";
-import { HiOutlineClock } from "react-icons/hi2";
+import SelectDropdown from "@/components/reUseUi/SelectDropdown";
+// import { HiOutlineClock } from "react-icons/hi2";
 
 const sourceOptions = [
   {
@@ -51,25 +52,25 @@ const sourceOptions = [
     value: "U25_PLC",
   },
 ];
-const intervalOptions = [
-  {
-    id: 0,
-    label: "15 Minutes",
-    value: "15mins",
-  },
-  {
-    id: 2,
-    label: "Hourly",
-    value: "hour",
-  },
-  {
-    id: 3,
-    label: "Day",
-    value: "day",
-  },
-];
+// const intervalOptions = [
+//   {
+//     id: 0,
+//     label: "15 Minutes",
+//     value: "15mins",
+//   },
+//   {
+//     id: 2,
+//     label: "Hourly",
+//     value: "hour",
+//   },
+//   {
+//     id: 3,
+//     label: "Day",
+//     value: "day",
+//   },
+// ];
 
-const HarmonicsReport = () => {
+const HarmonicsDetailReport = () => {
   const createSixAM = () => {
     const d = new Date();
     d.setHours(6, 0, 0, 0);
@@ -77,7 +78,8 @@ const HarmonicsReport = () => {
   };
 
   const [resData, setResData] = useState({});
-  const [usageReportTimePeriod, setUsageReportTimePeriod] = useState("");
+  //   const [usageReportTimePeriod, setUsageReportTimePeriod] = useState("day");
+  const usageReportTimePeriod = "day";
   const [selectedSource, setSelectedSource] = useState("");
   const [sourceDropdwon, setSourceDropdown] = useState(false);
   const [intervalDropdown, setIntervalDropdown] = useState(false);
@@ -86,17 +88,17 @@ const HarmonicsReport = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const period1Ref = useRef(null);
   const period2Ref = useRef(null);
-  const periodStartTime1Ref = useRef(null);
-  const periodEndTime1Ref = useRef(null);
-  const periodStartTime2Ref = useRef(null);
-  const periodEndTime2Ref = useRef(null);
+  //   const periodStartTime1Ref = useRef(null);
+  //   const periodEndTime1Ref = useRef(null);
+  //   const periodStartTime2Ref = useRef(null);
+  //   const periodEndTime2Ref = useRef(null);
   const sourceDropdownRef = useRef(null);
   const intervalDropdownRef = useRef(null);
   const [period1, setPeriod1] = useState([createSixAM(), createSixAM()]);
   const [period2, setPeriod2] = useState([createSixAM(), createSixAM()]);
   const [period1Date, setPeriod1Date] = useState([null, null]); // NEW: for dates only
   const [period2Date, setPeriod2Date] = useState([null, null]);
-  // const { theme } = useTheme();
+  //   const { theme } = useTheme();
   function formatToPKTime(date) {
     if (!date) return "";
 
@@ -134,26 +136,26 @@ const HarmonicsReport = () => {
       period2Ref.current.setOpen(true);
     }
   };
-  const openPeriod1StartTime = () => {
-    if (periodStartTime1Ref.current) {
-      periodStartTime1Ref.current.setOpen(true);
-    }
-  };
-  const openPeriod1endTime = () => {
-    if (periodEndTime1Ref.current) {
-      periodEndTime1Ref.current.setOpen(true);
-    }
-  };
-  const openPeriod2StartTime = () => {
-    if (periodStartTime2Ref.current) {
-      periodStartTime2Ref.current.setOpen(true);
-    }
-  };
-  const openPeriod2endTime = () => {
-    if (periodEndTime2Ref.current) {
-      periodEndTime2Ref.current.setOpen(true);
-    }
-  };
+  //   const openPeriod1StartTime = () => {
+  //     if (periodStartTime1Ref.current) {
+  //       periodStartTime1Ref.current.setOpen(true);
+  //     }
+  //   };
+  //   const openPeriod1endTime = () => {
+  //     if (periodEndTime1Ref.current) {
+  //       periodEndTime1Ref.current.setOpen(true);
+  //     }
+  //   };
+  //   const openPeriod2StartTime = () => {
+  //     if (periodStartTime2Ref.current) {
+  //       periodStartTime2Ref.current.setOpen(true);
+  //     }
+  //   };
+  //   const openPeriod2endTime = () => {
+  //     if (periodEndTime2Ref.current) {
+  //       periodEndTime2Ref.current.setOpen(true);
+  //     }
+  //   };
   // /=============================================================================
   const fixKarachiOffset = (date) => {
     if (!date) return null;
@@ -216,46 +218,12 @@ const HarmonicsReport = () => {
 
     const days = calculateDays(start, end);
 
-    if (usageReportTimePeriod === "15mins") {
-      if (days > 1) {
-        Swal.fire({
-          title: "Invalid Range",
-          text: "For for 15 minutes data, you must select exactly 1 day.",
-          icon: "error",
-        });
-        setPeriod1Date([null, null]);
-        return;
-      }
-      return; // skip daily checks
-    } else if (usageReportTimePeriod === "hour") {
-      if (days !== 2) {
-        Swal.fire({
-          title: "Invalid Range",
-          text: "For hourly data, you must select exactly 2 days.",
-          icon: "error",
-        });
-        setPeriod1Date([null, null]);
-        return;
-      }
-      return; // skip daily checks
-    }
-
     // DAILY validation
-    else if (usageReportTimePeriod === "day") {
+    if (usageReportTimePeriod === "day") {
       if (days < 2) {
         Swal.fire({
           title: "Invalid Range",
           text: "You must select at least 2 days.",
-          icon: "error",
-        });
-        setPeriod1Date([null, null]);
-        return;
-      }
-
-      if (days > 30) {
-        Swal.fire({
-          title: "Invalid Range",
-          text: "You can select a maximum of 30 days.",
           icon: "error",
         });
         setPeriod1Date([null, null]);
@@ -282,31 +250,6 @@ const HarmonicsReport = () => {
 
     const p1Days = calculateDays(period1Date[0], period1Date[1]);
     const p2Days = calculateDays(start, end);
-
-    if (usageReportTimePeriod === "5mins") {
-      if (p1Days !== 1 || p2Days !== 1) {
-        Swal.fire({
-          title: "Invalid Range",
-          text: "For 5 Miutes data, both periods must be exactly 1 day.",
-          icon: "error",
-        });
-        setPeriod2Date([null, null]);
-        return;
-      }
-      return; // skip daily checks
-    }
-    if (usageReportTimePeriod === "hour") {
-      if (p1Days !== 2 || p2Days !== 2) {
-        Swal.fire({
-          title: "Invalid Range",
-          text: "For hourly data, both periods must be exactly 2 days.",
-          icon: "error",
-        });
-        setPeriod2Date([null, null]);
-        return;
-      }
-      return; // skip daily checks
-    }
 
     // DAILY validation
     if (p2Days !== p1Days) {
@@ -576,21 +519,18 @@ const HarmonicsReport = () => {
     dateKey: `${selectedSource}_Harmonics_V_THD_max_timestamp`,
     type: "max",
   });
-
   const p2MaxVoltage = getExtremeValueWithDate({
     data: period2Data,
     valueKey: `${selectedSource}_Harmonics_V_THD_max`,
     dateKey: `${selectedSource}_Harmonics_V_THD_max_timestamp`,
     type: "max",
   });
-
   const p1MinVoltage = getExtremeValueWithDate({
     data: period1Data,
     valueKey: `${selectedSource}_Harmonics_V_THD_min`,
     dateKey: `${selectedSource}_Harmonics_V_THD_min_timestamp`,
     type: "min",
   });
-
   const p2MinVoltage = getExtremeValueWithDate({
     data: period2Data,
     valueKey: `${selectedSource}_Harmonics_V_THD_min`,
@@ -603,21 +543,18 @@ const HarmonicsReport = () => {
     dateKey: `${selectedSource}_Harmonics_I_THD_max_timestamp`,
     type: "max",
   });
-
   const p2MaxCurrent = getExtremeValueWithDate({
     data: period2Data,
     valueKey: `${selectedSource}_Harmonics_I_THD_max`,
     dateKey: `${selectedSource}_Harmonics_I_THD_max_timestamp`,
     type: "max",
   });
-
   const p1MinCurrent = getExtremeValueWithDate({
     data: period1Data,
     valueKey: `${selectedSource}_Harmonics_I_THD_min`,
     dateKey: `${selectedSource}_Harmonics_I_THD_min_timestamp`,
     type: "min",
   });
-
   const p2MinCurrent = getExtremeValueWithDate({
     data: period2Data,
     valueKey: `${selectedSource}_Harmonics_I_THD_min`,
@@ -625,7 +562,6 @@ const HarmonicsReport = () => {
     type: "min",
   });
   //--------------------------------Min Max Data----------------------------------------
-
   const voltageAvgData = [
     {
       period: "Period 1",
@@ -711,7 +647,7 @@ const HarmonicsReport = () => {
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
       <div className="flex pb-3 items-center justify-between">
         <h1 className="text-[18.22px] text-raleway font-600">
-          Harmonics Analytics Report
+          Harmonics Detail Summary Report
         </h1>
         {showResults && (
           <button
@@ -746,7 +682,7 @@ const HarmonicsReport = () => {
           <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
             <div className="grid grid-cols-1  lg:grid-cols-2 gap-8">
               {/* Interval selector dropdown */}
-              <div className="flex flex-col w-full items-start justify-center gap-1">
+              {/* <div className="flex flex-col w-full items-start justify-center gap-1">
                 <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
                   Select Resolution
                 </span>
@@ -759,7 +695,7 @@ const HarmonicsReport = () => {
                     onClick={toggleIntervalDropdown}
                     className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
                   >
-                    {/* Find and display the label instead of the value */}
+                   
                     {intervalOptions.find(
                       (option) => option.value === usageReportTimePeriod
                     )?.label || "Select Resolution"}
@@ -792,7 +728,7 @@ const HarmonicsReport = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
               {/* Device selector dropdown */}
               <div className="flex flex-col w-full items-start justify-center gap-1">
                 <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
@@ -807,7 +743,6 @@ const HarmonicsReport = () => {
                     onClick={toggleSourceDropdown}
                     className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
                   >
-                    {/* Find and display the label instead of the value */}
                     {sourceOptions.find(
                       (option) => option.value === selectedSource
                     )?.label || "Select Source Meter"}
@@ -840,6 +775,15 @@ const HarmonicsReport = () => {
                     </div>
                   )}
                 </div>
+              </div>
+              <div className="w-full">
+                <SelectDropdown
+                  label="Select Devices"
+                  options={sourceOptions}
+                  value={selectedSource}
+                  onChange={setSelectedSource}
+                  isMulti={false}
+                />
               </div>
 
               {/* Period 1 */}
@@ -876,7 +820,7 @@ const HarmonicsReport = () => {
                 </div>
               </div>
               {/* period 1 time interval */}
-              {usageReportTimePeriod === "15mins" && isPeriod1Complete && (
+              {/* {usageReportTimePeriod === "15mins" && isPeriod1Complete && (
                 <>
                   <div className="">
                     <span>Period 1 Time Interval</span>
@@ -886,7 +830,7 @@ const HarmonicsReport = () => {
                         className="w-full flex items-center justify-around border p-1 pl-3 rounded flex items-center gap-2"
                       >
                         <label htmlFor="">From</label>
-                        {/* <div className="bg-gray-400 dark:bg-gray-600 w-[2px] h-[25px]"></div> */}
+
                         <DatePicker
                           ref={periodStartTime1Ref}
                           selected={period1[0]}
@@ -905,7 +849,7 @@ const HarmonicsReport = () => {
                         className="w-full border flex items-center justify-around p-1 pl-3 rounded flex items-center gap-2"
                       >
                         <label htmlFor="">To</label>
-                        {/* <div className="bg-gray-400 dark:bg-gray-600 w-[1.8px] h-[25px]"></div> */}
+
                         <DatePicker
                           ref={periodEndTime1Ref}
                           selected={period1[1]}
@@ -922,8 +866,7 @@ const HarmonicsReport = () => {
                     </div>
                   </div>
                 </>
-              )}
-
+              )} */}
               {/* Period 2 */}
               <div className="">
                 <span
@@ -970,7 +913,7 @@ const HarmonicsReport = () => {
                 </div>
               </div>
               {/* ///// period 2 time selectors//// */}
-              {usageReportTimePeriod === "15mins" && isPeriod2Complete && (
+              {/* {usageReportTimePeriod === "15mins" && isPeriod2Complete && (
                 <>
                   <div>
                     <span>Period 2 Time Interval</span>
@@ -980,7 +923,7 @@ const HarmonicsReport = () => {
                         className="w-full flex items-center justify-around border p-1 pl-3 rounded  flex items-center gap-2"
                       >
                         <label htmlFor="">From</label>
-                        {/* <div className="bg-gray-400 dark:bg-gray-600 w-[2px] h-[25px]"></div> */}
+                       
                         <DatePicker
                           ref={periodStartTime2Ref}
                           selected={period2[0]}
@@ -999,7 +942,7 @@ const HarmonicsReport = () => {
                         className="w-full border flex items-center justify-around p-1 pl-3 rounded  flex items-center gap-2"
                       >
                         <label htmlFor="">To</label>
-                        {/* <div className="bg-gray-400 dark:bg-gray-600 w-[1.8px] h-[25px]"></div> */}
+                        
                         <DatePicker
                           ref={periodEndTime2Ref}
                           selected={period2[1]}
@@ -1016,7 +959,7 @@ const HarmonicsReport = () => {
                     </div>
                   </div>
                 </>
-              )}
+              )} */}
               {/* ////////////////////time selectors////////////////////////////////////// */}
             </div>
             {/* // here code will be pasted */}
@@ -1054,4 +997,4 @@ const HarmonicsReport = () => {
     </div>
   );
 };
-export default HarmonicsReport;
+export default HarmonicsDetailReport;

@@ -95,6 +95,7 @@ export const privilegeConfig = {
       "/energy-comparison-report",
       "/department-wise-report",
       "/analytics-report",
+      "/harmonics-detail-report",
     ],
     tab: "Reports",
   },
@@ -412,9 +413,15 @@ export const sidebarLinksMap = {
     //   submenu: [
     //     {
     //       id: 0,
-    //       title: "Analytics Report",
+    //       title: "Harmonics Analytics Report",
     //       icon: PlantOverview,
     //       href: "/analytics-report",
+    //     },
+    //     {
+    //       id: 1,
+    //       title: "Harmonic Detail Report",
+    //       icon: PlantOverview,
+    //       href: "/harmonics-detail-report",
     //     },
     //   ],
     // },

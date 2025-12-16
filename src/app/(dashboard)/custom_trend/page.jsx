@@ -633,6 +633,7 @@ function CustomTrend() {
             </label>
             <input
               type="date"
+              max={endDate}
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               className="w-full p-2 border rounded"

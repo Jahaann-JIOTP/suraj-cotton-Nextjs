@@ -15,29 +15,14 @@ const sectionHeaders = {
   currentChart: "Harmonics Current Analytics Chart",
 };
 
-const avgTabData = [
-  {
-    period: "Period 1",
-    minValue: 20,
-    minDate: "2025-12-13T20:30:00",
-    maxValue: 40,
-    maxDate: "2025-12-13T18:30:00",
-  },
-  {
-    period: "Period 2",
-    minValue: 15,
-    minDate: "2025-12-13T20:30:00",
-    maxValue: 30,
-    maxDate: "2025-12-13T18:30:00",
-  },
-];
-
 const HarmonicAnalytics = ({
   intervalObj = {},
   voltageChartData = [],
   currentChartData = [],
   selectedSource = "",
   usageReportTimePeriod = "",
+  voltageAvgData = [],
+  currentAvgData = [],
 }) => {
   const [voltageChartImg, setVoltageChartImg] = useState(null);
   const [currentChartImg, setCurrentChartImg] = useState(null);
@@ -46,19 +31,34 @@ const HarmonicAnalytics = ({
   function formatLocalDateTime(dateStr) {
     if (!dateStr) return "";
 
-    // Extract date & time directly from string (NO Date object)
-    // Example input: 2025-11-01T14:30:04.358+05:00
-    const [datePart, timePart] = dateStr.split("T");
+    // Ensure string
+    let str = typeof dateStr === "string" ? dateStr : "";
+
+    // Normalize separator: replace space with 'T' if missing
+    if (!str.includes("T")) {
+      const parts = str.split(" ");
+      if (parts.length >= 2) {
+        str = parts[0] + "T" + parts[1];
+      } else {
+        return ""; // invalid format
+      }
+    }
+
+    // Example: 2025-12-01T14:30:00+05:30
+    const [datePart, timePart] = str.split("T");
+    if (!timePart) return datePart; // just date
+
     const [hh24, mm] = timePart.split(":");
+    if (hh24 === undefined || mm === undefined) return datePart;
 
     let hour = parseInt(hh24, 10);
     const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
 
-    hour = hour % 12 || 12; // convert to 12-hour
-
-    return `${datePart} ${String(hour).padStart(2, "0")}:${mm} ${ampm}`;
+    return usageReportTimePeriod === "day"
+      ? datePart
+      : `${datePart} ${String(hour).padStart(2, "0")}:${mm} ${ampm}`;
   }
-
   // get dates for date mapping array
   function mapDatesByDay(data) {
     const result = {
@@ -86,9 +86,7 @@ const HarmonicAnalytics = ({
     const hours = String(d.getHours()).padStart(2, "0");
     const minutes = String(d.getMinutes()).padStart(2, "0");
 
-    return usageReportTimePeriod === "day"
-      ? `${day}/${month}`
-      : `${day}/${month} - ${hours}:${minutes}`;
+    return `${day}/${month} - ${hours}:${minutes}`;
   };
 
   //=======================================PDF export start ================================
@@ -319,6 +317,41 @@ const HarmonicAnalytics = ({
             title: sectionHeaders.rParams,
             data: intervalObj,
           }),
+          // Sources
+          {
+            width: "100%",
+            stack: [
+              {
+                table: {
+                  headerRows: 1,
+                  widths: ["20%"],
+                  body: [
+                    [
+                      {
+                        text: "Sources",
+                        style: "tableHeader",
+                        alignment: "left",
+                      },
+                    ],
+                    [
+                      {
+                        text: selectedSource,
+                        style: "tableCell",
+                        alignment: "left",
+                      },
+                    ],
+                  ],
+                },
+                layout: {
+                  hLineWidth: () => 0.5,
+                  vLineWidth: () => 0.5,
+                  hLineColor: () => "#000000",
+                  vLineColor: () => "#000000",
+                },
+                margin: [0, 5, 0, 10],
+              },
+            ],
+          },
 
           // ================= Dates Mapping table =================
           ThreecolsPdfTable({
@@ -346,7 +379,7 @@ const HarmonicAnalytics = ({
             : null,
           ...generatePdfTable({
             title: "Actual Min Max Value of the Interval",
-            data: avgTabData,
+            data: voltageAvgData,
           }),
 
           // ✅ Voltage Chart Image
@@ -380,7 +413,7 @@ const HarmonicAnalytics = ({
             : null,
           ...generatePdfTable({
             title: "Actual Min Max Value of the Interval",
-            data: avgTabData,
+            data: currentAvgData,
           }),
 
           // ✅ Current Chart Image
@@ -593,7 +626,7 @@ const HarmonicAnalytics = ({
 
             {/* ---------- BODY ---------- */}
             <tbody>
-              {avgTabData.map((row, index) => (
+              {voltageAvgData.map((row, index) => (
                 <tr
                   key={index}
                   className="text-[13px] md:text-[14px] font-inter hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -670,7 +703,7 @@ const HarmonicAnalytics = ({
 
             {/* ---------- BODY ---------- */}
             <tbody>
-              {avgTabData.map((row, index) => (
+              {currentAvgData.map((row, index) => (
                 <tr
                   key={index}
                   className="text-[13px] md:text-[14px] font-inter hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
