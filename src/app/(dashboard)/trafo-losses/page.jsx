@@ -1,17 +1,20 @@
 "use client";
-import { ChartCard } from "@/components/trendsComponents/ChartCard";
-import CurrentChart from "@/components/trendsComponents/CurrentChart";
-import EnergyChart from "@/components/trendsComponents/EnergyChart";
-import HarmonicsChart from "@/components/trendsComponents/HarmonicsChart";
-import PowerChart from "@/components/trendsComponents/PowerChart";
-import PowerFactorChart from "@/components/trendsComponents/PowerFactor";
 import Unit4Trafos from "@/components/trendsComponents/Unit4Trafos";
-import VoltageChart from "@/components/trendsComponents/VoltageChart";
 import { useEffect, useState } from "react";
-import { trafoLosses } from "@/data/rawData";
 import config from "@/constant/apiRouteList";
 
 const TrafoLossesPage = () => {
+  ////////////////////////////////////////////////////////
+
+  const [dateRanges, setDateRanges] = useState({
+    Unit4TrafoLosses1and2: { startDate: "", endDate: "" },
+    Unit5TrafoLosses1: { startDate: "", endDate: "" },
+    Unit5TrafoLosses2: { startDate: "", endDate: "" },
+    Unit5TrafoLosses1and2: { startDate: "", endDate: "" },
+  });
+
+  ////////////////////////////////////////////////////////
+
   const [u4combineResData, setU4CombineResData] = useState([]);
   const [u5Trafo1ResData, setU5Trafo1ResData] = useState([]);
   const [u5Trafo2ResData, setU5Trafo2ResData] = useState([]);
@@ -36,7 +39,7 @@ const TrafoLossesPage = () => {
       return newObj;
     });
   };
-  console.log(",,,,,,,,,,,,,,,", u5Trafo2ResData);
+
   const selectedKeys = {
     timestamp: "time",
     Unit4CombineNetLosses: "netLosses",
@@ -52,12 +55,21 @@ const TrafoLossesPage = () => {
     Unit5Trafo4NetLosses: "netLosses",
     Unit5Trafo4NetLossesPercentage: "netLossesPercent",
   };
+  const u5Trafo1And2Keys = {
+    timestamp: "time",
+    Unit5CombineNetLosses: "netLosses",
+    Unit5CombineNetLossesPercentage: "netLossesPercent",
+  };
   const u4CombineData = pickAndTransformKeys(u4combineResData, selectedKeys);
   const u5Trafo1Data = pickAndTransformKeys(u5Trafo1ResData, u5Trafo1Keys);
   const u5Trafo2Data = pickAndTransformKeys(u5Trafo2ResData, u5Trafo2Keys);
-  const data = pickAndTransformKeys(trafoLosses, selectedKeys);
+  const u5Trafo1And2Data = pickAndTransformKeys(
+    u5Trafo1and2ResData,
+    u5Trafo1And2Keys
+  );
+
   // ================================================================================
-  const fetchU4Trafo1and2 = async () => {
+  const fetchU4Trafo1and2 = async ({ startDate, endDate }) => {
     try {
       setU4Trafo1and2Loading(true);
       const res = await fetch(`${config.BASE_URL}/tltrends/unit4-combine`, {
@@ -66,8 +78,8 @@ const TrafoLossesPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          start_date: "2025-11-23",
-          end_date: "2025-11-24",
+          start_date: startDate,
+          end_date: endDate,
         }),
       });
       const resResult = await res.json();
@@ -81,7 +93,7 @@ const TrafoLossesPage = () => {
     }
   };
   // ================================================================================
-  const fetchU5Trafo1 = async () => {
+  const fetchU5Trafo1 = async ({ startDate, endDate }) => {
     try {
       setU5Trafo1Loading(true);
       const res = await fetch(`${config.BASE_URL}/tltrends/unit5-trafo3`, {
@@ -90,8 +102,8 @@ const TrafoLossesPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          start_date: "2025-11-23",
-          end_date: "2025-11-24",
+          start_date: startDate,
+          end_date: endDate,
         }),
       });
       const resResult = await res.json();
@@ -105,7 +117,7 @@ const TrafoLossesPage = () => {
     }
   };
   // ================================================================================
-  const fetchU5Trafo2 = async () => {
+  const fetchU5Trafo2 = async ({ startDate, endDate }) => {
     try {
       setU5Trafo2Loading(true);
       const res = await fetch(`${config.BASE_URL}/tltrends/unit5-trafo4`, {
@@ -114,8 +126,8 @@ const TrafoLossesPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          start_date: "2025-11-23",
-          end_date: "2025-11-24",
+          start_date: startDate,
+          end_date: endDate,
         }),
       });
       const resResult = await res.json();
@@ -129,7 +141,7 @@ const TrafoLossesPage = () => {
     }
   };
   // ================================================================================
-  const fetchU5Trafo1and2 = async () => {
+  const fetchU5Trafo1and2 = async ({ startDate, endDate }) => {
     try {
       setU5Trafo1and2Loading(true);
       const res = await fetch(`${config.BASE_URL}/tltrends/unit5-combine`, {
@@ -138,8 +150,8 @@ const TrafoLossesPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          start_date: "2025-11-23",
-          end_date: "2025-11-24",
+          start_date: startDate,
+          end_date: endDate,
         }),
       });
       const resResult = await res.json();
@@ -152,7 +164,29 @@ const TrafoLossesPage = () => {
       setU5Trafo1and2Loading(false);
     }
   };
+  //===============================================================================
 
+  const handleDateChange = (id, range) => {
+    setDateRanges((prev) => ({
+      ...prev,
+      [id]: range,
+    }));
+
+    switch (id) {
+      case "Unit4TrafoLosses1and2":
+        fetchU4Trafo1and2(range);
+        break;
+      case "Unit5TrafoLosses1":
+        fetchU5Trafo1(range);
+        break;
+      case "Unit5TrafoLosses2":
+        fetchU5Trafo2(range);
+        break;
+      case "Unit5TrafoLosses1and2":
+        fetchU5Trafo1and2(range);
+        break;
+    }
+  };
   useEffect(() => {
     fetchU4Trafo1and2();
   }, []);
@@ -165,67 +199,52 @@ const TrafoLossesPage = () => {
   useEffect(() => {
     fetchU5Trafo1and2();
   }, []);
-  const charts = [
-    {
-      id: "harmonics",
-      title: "Unit 4 Transformer 1+2 Losses",
-      Chart: HarmonicsChart,
-    },
-    {
-      id: "power",
-      title: "UNIT 5 TRANSFORMER 1 LOSSES",
-      Chart: PowerChart,
-    },
-    {
-      id: "voltage",
-      title: "UNIT 5 TRANSFORMER 2 LOSSES",
-      Chart: VoltageChart,
-    },
-    {
-      id: "current",
-      title: "UNIT 5 TRANSFORMER 1+2 LOSSES",
-      Chart: CurrentChart,
-    },
-  ];
+
   return (
     <div className="h-[81vh] py-[1px] overflow-y-auto space-y-3">
-      {/* {charts.map(({ id, title, Chart }) => (
-        <ChartCard
-          area="unit4-lt1"
-          key={id}
-          id={id}
-          chartId={id}
-          title={title}
-          ChartComponent={Chart}
-          state={chartStates[id]}
-          onChange={updateChartState}
-        />
-      ))} */}
       <Unit4Trafos
         id="Unit4TrafoLosses1and2"
         title={"UNIT 4 TRANSFORMER 1+2 LOSSES"}
         data={u4CombineData}
+        colors={{
+          series1: "#dc2626",
+          series2: "#65a30d",
+        }}
         loading={u4Trafo1and2Loading}
+        onDateChange={handleDateChange}
       />
       <Unit4Trafos
         id="Unit5TrafoLosses1"
         title={"UNIT 5 TRANSFORMER 1 LOSSES"}
         data={u5Trafo1Data}
+        colors={{
+          series1: "#c2410c",
+          series2: "#047857",
+        }}
         loading={u5Trafo1Loading}
+        onDateChange={handleDateChange}
       />
       <Unit4Trafos
         id="Unit5TrafoLosses2"
         title={"UNIT 5 TRANSFORMER 2 LOSSES"}
-        data={data}
-        trafoLosses={trafoLosses}
+        data={u5Trafo2Data}
+        colors={{
+          series1: "#a16207",
+          series2: "#0369a1",
+        }}
         loading={u5Trafo2Loading}
+        onDateChange={handleDateChange}
       />
       <Unit4Trafos
         id="Unit5TrafoLosses1and2"
         title={"UNIT 5 TRANSFORMER 1+2 LOSSES"}
-        data={data}
-        trafoLosses={trafoLosses}
+        data={u5Trafo1And2Data}
+        colors={{
+          series1: "#f43f5e",
+          series2: "#5b21b6",
+        }}
         loading={u5Trafo1and2Loading}
+        onDateChange={handleDateChange}
       />
     </div>
   );

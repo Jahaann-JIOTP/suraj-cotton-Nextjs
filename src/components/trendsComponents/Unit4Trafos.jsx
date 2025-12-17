@@ -1,20 +1,26 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import ReusableTrendChart from "./ReusableTrendChart";
 import CustomLoader from "../customLoader/CustomLoader";
 
 const Unit4Trafos = ({
+  id = "",
   title,
-  selectedKeys = {},
   data = [],
+  onDateChange,
   loading = false,
+  colors = {},
 }) => {
   const today = new Date().toISOString().split("T")[0];
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const [fullscreen, setFullscreen] = useState(false);
-  //   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (onDateChange && id) {
+      onDateChange(id, { startDate, endDate });
+    }
+  }, [startDate, endDate]);
 
   return (
     <div
@@ -68,15 +74,9 @@ const Unit4Trafos = ({
           </div>
         )}
         <ReusableTrendChart
-          id={`Unit4TrafoLosses1and2`}
+          id={id}
           title="UNIT 4 TRANSFORMER 1+2 LOSSES"
           data={data}
-          //   data={data.map((item) => ({
-          //     time: new Date(item.timestamp).getTime(),
-          //     Unit4CombineNetLosses: item.Unit4CombineNetLosses,
-          //     Unit4CombineNetLossesPercentage:
-          //       item.Unit4CombineNetLossesPercentage,
-          //   }))}
           xKey="time"
           xType="date"
           series={[
@@ -84,13 +84,13 @@ const Unit4Trafos = ({
               type: "line",
               yKey: "netLosses",
               name: "Net Losses",
-              color: "#4682B4",
+              color: colors.series1,
             },
             {
               type: "line",
               yKey: "netLossesPercent",
               name: "Losses (%)",
-              color: "#008D23",
+              color: colors.series2,
               yAxis: "right",
             },
           ]}

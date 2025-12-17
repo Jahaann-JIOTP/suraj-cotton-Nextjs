@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 import { getDateRangeFromString } from "@/utils/dateRangeForReports";
 import DatePicker from "react-datepicker";
 import { to12HourFormat } from "@/utils/To12HourFormate";
-import { tableRawData, tableRawData2 } from "@/data/rawData";
 import { IoChevronDownOutline } from "react-icons/io5";
 import "react-datepicker/dist/react-datepicker.css";
 import EnergyComparisonReport from "@/components/reportsComponent/energyComparisonTable/EnergyComparisonReport";
@@ -1066,8 +1065,6 @@ const UsageReport = () => {
         </div>
       ) : showResults ? (
         <EnergyComparisonReport
-          rawData={tableRawData}
-          rawData2={tableRawData2}
           intervalObj={intervalObj}
           htSideData={mergedHTSideFinalData}
           lowVoltageSide={merged}
