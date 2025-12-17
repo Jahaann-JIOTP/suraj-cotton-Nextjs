@@ -421,24 +421,16 @@ const HarmonicsDetailReport = () => {
   // ===============handle submit=====================
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!usageReportTimePeriod) {
-      toast.warning("Please Select Resolution first");
+    if (!selectedSource.length > 0) {
+      toast.warning("Please Select Devices");
       return;
     }
-    if (!selectedSource) {
-      toast.warning("Please Select Meter");
+    if (!Period1startDate && !Period1endDate) {
+      toast.warning("Please Select First Range");
       return;
     }
-    if (
-      !Period1startDate &&
-      !Period1endDate &&
-      !Period1startTime &&
-      !Period1endTime &&
-      !Period2startDate &&
-      !Period2endDate &&
-      !Period2startTime &&
-      !Period2endTime
-    ) {
+    if (!Period2startDate && !Period2endDate) {
+      toast.warning("Please Select Second Range");
       return;
     }
     try {

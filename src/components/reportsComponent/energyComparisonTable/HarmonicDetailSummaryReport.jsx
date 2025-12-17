@@ -10,9 +10,17 @@ import AnalyticsChart from "./AnalyticsChart";
 import { ThreecolsPdfTable } from "@/components/tables/ThreecolsPdfTable";
 const sectionHeaders = {
   rParams: "Report Parameters",
-  mappingSec: "Dates mapping",
-  voltageChart: "Harmonics Voltage Detail Summary",
-  currentChart: "Harmonics Current Detail Summary",
+  mappingSec: "Dates Mapping",
+  voltageChart: (
+    <>
+      THD<sub>V</sub> Summary
+    </>
+  ),
+  currentChart: (
+    <>
+      THD<sub>I</sub> Summary
+    </>
+  ),
 };
 
 const HarmonicDetailSummaryReport = ({
@@ -21,8 +29,6 @@ const HarmonicDetailSummaryReport = ({
   currentChartData = [],
   selectedSource = [],
   usageReportTimePeriod = "",
-  voltageAvgData = [],
-  currentAvgData = [],
 }) => {
   const { theme } = useTheme();
   // formate number
@@ -81,10 +87,11 @@ const HarmonicDetailSummaryReport = ({
     const d = new Date(iso);
     const day = String(d.getDate()).padStart(2, "0");
     const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = String(d.getFullYear()).padStart(2, "0");
     const hours = String(d.getHours()).padStart(2, "0");
     const minutes = String(d.getMinutes()).padStart(2, "0");
 
-    return `${day}/${month} - ${hours}:${minutes}`;
+    return `${year}/${month}/${day} - ${hours}:${minutes}`;
   };
 
   //=======================================PDF export start ================================
@@ -441,7 +448,7 @@ const HarmonicDetailSummaryReport = ({
                   body: [
                     [
                       {
-                        text: sectionHeaders.voltageChart,
+                        text: ["THD", { text: "V", sub: true }, " Summary"],
                         style: "sectionHeader",
                       },
                     ],
@@ -457,12 +464,13 @@ const HarmonicDetailSummaryReport = ({
           // ================= Current Min / Max table =================
           sectionHeaders.currentChart
             ? {
+                pageBreak: "before",
                 table: {
                   widths: ["*"],
                   body: [
                     [
                       {
-                        text: sectionHeaders.currentChart,
+                        text: ["THD", { text: "I", sub: true }, " Summary"],
                         style: "sectionHeader",
                       },
                     ],
@@ -484,7 +492,7 @@ const HarmonicDetailSummaryReport = ({
       pdfMake
         .createPdf(docDefinition)
         .download(
-          `harmonics_analytics_report_${reportedDate}_${reportedTime}.pdf`
+          `harmonics_detail_report_${reportedDate}_${reportedTime}.pdf`
         );
     } catch (error) {
       console.error("Error generating PDF:", error);

@@ -23,6 +23,21 @@ const TrafoLossesPage = () => {
   const [u5Trafo1Loading, setU5Trafo1Loading] = useState(false);
   const [u5Trafo2Loading, setU5Trafo2Loading] = useState(false);
   const [u5Trafo1and2Loading, setU5Trafo1and2Loading] = useState(false);
+  const formatData = (arr) => {
+    return arr.map((item) => {
+      const newItem = {};
+      Object.keys(item).forEach((key) => {
+        if (key === "timestamp") {
+          newItem[key] = item[key]; // keep timestamp as-is
+        } else if (typeof item[key] === "number") {
+          newItem[key] = Number(item[key].toFixed(2)); // round to 2 decimals
+        } else {
+          newItem[key] = item[key]; // non-number values stay the same
+        }
+      });
+      return newItem;
+    });
+  };
   const pickAndTransformKeys = (arr, keyMap) => {
     return arr.map((obj) => {
       const newObj = {};
@@ -60,11 +75,20 @@ const TrafoLossesPage = () => {
     Unit5CombineNetLosses: "netLosses",
     Unit5CombineNetLossesPercentage: "netLossesPercent",
   };
-  const u4CombineData = pickAndTransformKeys(u4combineResData, selectedKeys);
-  const u5Trafo1Data = pickAndTransformKeys(u5Trafo1ResData, u5Trafo1Keys);
-  const u5Trafo2Data = pickAndTransformKeys(u5Trafo2ResData, u5Trafo2Keys);
+  const u4CombineData = pickAndTransformKeys(
+    formatData(u4combineResData),
+    selectedKeys
+  );
+  const u5Trafo1Data = pickAndTransformKeys(
+    formatData(u5Trafo1ResData),
+    u5Trafo1Keys
+  );
+  const u5Trafo2Data = pickAndTransformKeys(
+    formatData(u5Trafo2ResData),
+    u5Trafo2Keys
+  );
   const u5Trafo1And2Data = pickAndTransformKeys(
-    u5Trafo1and2ResData,
+    formatData(u5Trafo1and2ResData),
     u5Trafo1And2Keys
   );
 

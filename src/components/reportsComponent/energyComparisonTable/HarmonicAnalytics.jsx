@@ -11,8 +11,16 @@ import { ThreecolsPdfTable } from "@/components/tables/ThreecolsPdfTable";
 const sectionHeaders = {
   rParams: "Report Parameters",
   mappingSec: "Dates Mapping",
-  voltageChart: "Harmonics Voltage Analytics Report",
-  currentChart: "Harmonics Current Analytics Report",
+  voltageChart: (
+    <>
+      THD<sub>V</sub> Analytics
+    </>
+  ),
+  currentChart: (
+    <>
+      THD<sub>I</sub> Analytics
+    </>
+  ),
 };
 
 const HarmonicAnalytics = ({
@@ -83,10 +91,11 @@ const HarmonicAnalytics = ({
     const d = new Date(iso);
     const day = String(d.getDate()).padStart(2, "0");
     const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = String(d.getFullYear()).padStart(2, "0");
     const hours = String(d.getHours()).padStart(2, "0");
     const minutes = String(d.getMinutes()).padStart(2, "0");
 
-    return `${day}/${month} - ${hours}:${minutes}`;
+    return `/${year}${month}/${day} - ${hours}:${minutes}`;
   };
 
   //=======================================PDF export start ================================
@@ -368,7 +377,7 @@ const HarmonicAnalytics = ({
                   body: [
                     [
                       {
-                        text: sectionHeaders.voltageChart,
+                        text: ["THD", { text: "V", sub: true }, " Analytics"],
                         style: "sectionHeader",
                       },
                     ],
@@ -402,7 +411,7 @@ const HarmonicAnalytics = ({
                   body: [
                     [
                       {
-                        text: sectionHeaders.currentChart,
+                        text: ["THD", { text: "I", sub: true }, " Analytics"],
                         style: "sectionHeader",
                       },
                     ],
