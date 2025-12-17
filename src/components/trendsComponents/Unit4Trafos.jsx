@@ -4,12 +4,17 @@ import { MdOutlineFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import ReusableTrendChart from "./ReusableTrendChart";
 import CustomLoader from "../customLoader/CustomLoader";
 
-const Unit4Trafos = ({ title, selectedKeys = {}, data = [] }) => {
+const Unit4Trafos = ({
+  title,
+  selectedKeys = {},
+  data = [],
+  loading = false,
+}) => {
   const today = new Date().toISOString().split("T")[0];
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const [fullscreen, setFullscreen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  //   const [loading, setLoading] = useState(false);
 
   return (
     <div

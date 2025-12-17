@@ -36,11 +36,25 @@ const TrafoLossesPage = () => {
       return newObj;
     });
   };
+  console.log(",,,,,,,,,,,,,,,", u5Trafo2ResData);
   const selectedKeys = {
     timestamp: "time",
     Unit4CombineNetLosses: "netLosses",
     Unit4CombineNetLossesPercentage: "netLossesPercent",
   };
+  const u5Trafo1Keys = {
+    timestamp: "time",
+    Unit5Trafo3NetLosses: "netLosses",
+    Unit5Trafo3NetLossesPercentage: "netLossesPercent",
+  };
+  const u5Trafo2Keys = {
+    timestamp: "time",
+    Unit5Trafo4NetLosses: "netLosses",
+    Unit5Trafo4NetLossesPercentage: "netLossesPercent",
+  };
+  const u4CombineData = pickAndTransformKeys(u4combineResData, selectedKeys);
+  const u5Trafo1Data = pickAndTransformKeys(u5Trafo1ResData, u5Trafo1Keys);
+  const u5Trafo2Data = pickAndTransformKeys(u5Trafo2ResData, u5Trafo2Keys);
   const data = pickAndTransformKeys(trafoLosses, selectedKeys);
   // ================================================================================
   const fetchU4Trafo1and2 = async () => {
@@ -190,15 +204,13 @@ const TrafoLossesPage = () => {
       <Unit4Trafos
         id="Unit4TrafoLosses1and2"
         title={"UNIT 4 TRANSFORMER 1+2 LOSSES"}
-        data={data}
-        trafoLosses={trafoLosses}
+        data={u4CombineData}
         loading={u4Trafo1and2Loading}
       />
       <Unit4Trafos
         id="Unit5TrafoLosses1"
         title={"UNIT 5 TRANSFORMER 1 LOSSES"}
-        data={data}
-        trafoLosses={trafoLosses}
+        data={u5Trafo1Data}
         loading={u5Trafo1Loading}
       />
       <Unit4Trafos

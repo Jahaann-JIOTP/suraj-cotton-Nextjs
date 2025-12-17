@@ -31,7 +31,6 @@ const ReusableTrendChart = ({
     }));
   };
   // const convertedData = convertTimestampToISO(originalTimestampData);
-  // console.log(convertedData);
   // Initialize chart
   useEffect(() => {
     if (!chartRef.current) return;
@@ -176,7 +175,6 @@ const ReusableTrendChart = ({
             labelText: "{name}: {valueY}",
           }),
         });
-        console.log("axis", xAxis);
         if (seriesConfig.color) {
           const lineColor = am5.color(seriesConfig.color);
           chartSeries.strokes.template.setAll({
