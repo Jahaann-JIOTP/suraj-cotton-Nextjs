@@ -14,50 +14,6 @@ const sectionHeaders = {
   voltageChart: "Harmonics Voltage Detail Summary",
   currentChart: "Harmonics Current Detail Summary",
 };
-const arrData = [
-  {
-    year: "C1",
-    meter: "Wapda 1",
-    p1Harmonics: 0,
-    p2Harmonics: 0,
-    p1Max: 0,
-    p1Min: 0,
-    p2Max: 0,
-    p2Min: 0,
-    p1Mindate: "2025-12-01T06:00:00+05:30",
-    p2Mindate: "2025-12-01T06:00:00+05:30",
-    p1Maxdate: "2025-12-01T06:00:00+05:30",
-    p2Maxdate: "2025-12-01T06:00:00+05:30",
-  },
-  {
-    year: "C2",
-    meter: "Wapda 2",
-    p1Harmonics: 0,
-    p2Harmonics: 0,
-    p1Max: 0,
-    p1Min: 0,
-    p2Max: 0,
-    p2Min: 0,
-    p1Mindate: "2025-12-02T06:00:00+05:30",
-    p2Mindate: "2025-12-02T06:00:00+05:30",
-    p1Maxdate: "2025-12-02T06:00:00+05:30",
-    p2Maxdate: "2025-12-02T06:00:00+05:30",
-  },
-  {
-    year: "C3",
-    meter: "HFO 1",
-    p1Harmonics: 0,
-    p2Harmonics: 0,
-    p1Max: 0,
-    p1Min: 0,
-    p2Max: 0,
-    p2Min: 0,
-    p1Mindate: "2025-12-02T06:00:00+05:30",
-    p2Mindate: "2025-12-02T06:00:00+05:30",
-    p1Maxdate: "2025-12-02T06:00:00+05:30",
-    p2Maxdate: "2025-12-02T06:00:00+05:30",
-  },
-];
 
 const HarmonicDetailSummaryReport = ({
   intervalObj = {},
@@ -68,7 +24,6 @@ const HarmonicDetailSummaryReport = ({
   voltageAvgData = [],
   currentAvgData = [],
 }) => {
-  console.log(voltageChartData);
   const { theme } = useTheme();
   // formate number
   function formatLocalDateTime(dateStr) {
@@ -133,122 +88,199 @@ const HarmonicDetailSummaryReport = ({
   };
 
   //=======================================PDF export start ================================
-  const generatePdfTable = ({ title, data }) => {
-    if (!data || data.length === 0) return [];
+  const HarmonicsComparisonPdfTable = ({ data = [] }) => {
+    const getValue = (row, key) => {
+      return row[key] !== null && row[key] !== undefined
+        ? row[key].toFixed?.(2) ?? row[key]
+        : "-";
+    };
 
-    // Dynamic header columns from the first row keys
-    const headers = [
-      { text: "Period", style: "tableHeader", alignment: "center" },
-      {
-        text: "Min Value",
-        style: "tableHeader",
-        alignment: "center",
-      },
-      {
-        text: "Max Value",
-        style: "tableHeader",
-        alignment: "center",
-      },
-    ];
+    return {
+      margin: [0, 10, 0, 20],
+      table: {
+        headerRows: 2,
 
-    // Table body
+        // ✅ 10 equal columns + 1 small separator
+        widths: [
+          "11%",
+          "11%",
+          "11%",
+          "11%",
+          "11%",
+          "0.7%",
+          "11%",
+          "11%",
+          "11%",
+          "11%",
+        ],
 
-    const body = [
-      // Title row
-
-      [
-        {
-          text: title,
-          colSpan: 3,
-
-          alignment: "center",
-          bold: true,
-          fontSize: 9,
-          fillColor: "#E5F3FD",
-          // margin: [0, 5, 0, 5],
-        },
-        {},
-        {},
-      ],
-
-      // Header row
-      headers,
-      // Data rows
-      ...data.map((row) => [
-        { text: row.period, alignment: "center", bold: true, fontSize: 9 },
-        {
-          alignment: "center",
-          stack: [
+        body: [
+          // ===================== HEADER ROW 1 =====================
+          [
+            { text: "", border: [false, false, false, false] },
             {
-              text: String(row.minValue),
-              fontSize: 9,
+              text: "Period 1",
+              colSpan: 4,
+              alignment: "center",
+              style: "tablecell",
               bold: true,
+              fontSize: 9,
+            },
+            {},
+            {},
+            {},
+            { text: "", border: [true, false, false, false] },
+            {
+              text: "Period 2",
+              colSpan: 4,
+              alignment: "center",
+              style: "tablecell",
+              bold: true,
+              fontSize: 9,
+            },
+            {},
+            {},
+            {},
+          ],
+
+          // ===================== HEADER ROW 2 =====================
+          [
+            {
+              text: "Meter",
+              style: "tableHeader",
+              alignment: "center",
+              valign: "middle",
             },
             {
-              text: formatDateTime(row.minDate),
-              fontSize: 7,
-              color: "#555",
-              margin: [0, 2, 0, 0],
+              text: "Avg THD",
+              style: "tableHeader",
+              alignment: "center",
+              valign: "middle",
+            },
+            {
+              text: "Min Value",
+              style: "tableHeader",
+              alignment: "center",
+              valign: "middle",
+            },
+            {
+              text: "Max Value",
+              style: "tableHeader",
+              alignment: "center",
+              valign: "middle",
+            },
+            {
+              text: "Total Energy Consumed",
+              style: "tableHeader",
+              alignment: "center",
+            },
+            {
+              text: "",
+              border: [false, false, false, false],
+              fillColor: "#ffffff",
+            },
+            {
+              text: "Avg THD",
+              style: "tableHeader",
+              alignment: "center",
+              valign: "middle",
+            },
+            {
+              text: "Min Value",
+              style: "tableHeader",
+              alignment: "center",
+              valign: "middle",
+            },
+            {
+              text: "Max Value",
+              style: "tableHeader",
+              alignment: "center",
+              valign: "middle",
+            },
+            {
+              text: "Total Energy Consumed",
+              style: "tableHeader",
+              alignment: "center",
             },
           ],
-        },
-        {
-          alignment: "center",
-          stack: [
-            {
-              text: String(row.maxValue),
-              fontSize: 9,
-              bold: true,
-            },
-            {
-              text: formatDateTime(row.maxDate),
-              fontSize: 7,
-              color: "#555",
-              margin: [0, 2, 0, 0],
-            },
-          ],
-        },
-      ]),
-    ];
 
-    return [
-      {
-        table: {
-          widths: ["20%", "20%", "20%"],
-          body: body,
-          headerRows: 2, // Keep first two rows as title + header
-        },
-        layout: {
-          fillColor: function (rowIndex, node, columnIndex) {
-            // Alternate row colors
-            if (rowIndex === 0) return "#E5F3FD"; // title row
-            if (rowIndex === 1) return "#E5F3FD"; // header row
-            return rowIndex % 2 === 0 ? "#F9FAFB" : null;
-          },
-          hLineWidth: function () {
-            return 1;
-          },
-          vLineWidth: function () {
-            return 1;
-          },
-          hLineColor: "#CCCCCC",
-          vLineColor: "#CCCCCC",
-          paddingLeft: function () {
-            return 5;
-          },
-          paddingRight: function () {
-            return 5;
-          },
-          paddingTop: function () {
-            return 5;
-          },
-          paddingBottom: function () {
-            return 5;
-          },
-        },
-        margin: [0, 10, 0, 20],
+          // ===================== DATA ROWS =====================
+          ...data.map((row) => [
+            { text: row.meter, style: "tableCell" },
+
+            {
+              text: getValue(row, "p1Harmonics"),
+              alignment: "center",
+              style: "tableCell",
+            },
+            {
+              stack: [
+                { text: getValue(row, "p1Min"), bold: true },
+                { text: formatDateTime(row.p1Mindate), fontSize: 8 },
+              ],
+              alignment: "center",
+              style: "tableCell",
+            },
+            {
+              stack: [
+                { text: getValue(row, "p1Max"), bold: true },
+                { text: formatDateTime(row.p1Maxdate), fontSize: 8 },
+              ],
+              alignment: "center",
+              style: "tableCell",
+            },
+            {
+              text: row.p1Consumption ?? "-",
+              style: "tableCell",
+              alignment: "center",
+            },
+
+            {
+              text: "",
+              fillColor: "#ffffff",
+              border: [false, false, false, false],
+            },
+
+            {
+              text: getValue(row, "p2Harmonics"),
+              style: "tableCell",
+              alignment: "center",
+            },
+            {
+              stack: [
+                { text: getValue(row, "p2Min"), bold: true },
+                {
+                  text: formatDateTime(row.p2Mindate),
+                  fontSize: 8,
+                },
+              ],
+              alignment: "center",
+              style: "tableCell",
+            },
+            {
+              stack: [
+                { text: getValue(row, "p2Max"), bold: true },
+                { text: formatDateTime(row.p2Maxdate), fontSize: 8 },
+              ],
+              alignment: "center",
+              style: "tableCell",
+            },
+            {
+              text: row.p2Consumption ?? "-",
+              style: "tableCell",
+              alignment: "center",
+            },
+          ]),
+        ],
       },
-    ];
+
+      layout: {
+        hLineWidth: () => 0.5,
+        vLineWidth: () => 0.5,
+        hLineColor: () => "#000000",
+        vLineColor: () => "#000000",
+      },
+    };
   };
 
   if (pdfFonts?.pdfMake?.vfs) {
@@ -298,7 +330,7 @@ const HarmonicDetailSummaryReport = ({
                 margin: [40, 20, 0, 0],
               },
               {
-                text: "Harmonics Analytics Report",
+                text: "Harmonics Detail Summary Report",
                 width: "*",
                 alignment: "center",
                 fontSize: 11,
@@ -376,13 +408,18 @@ const HarmonicDetailSummaryReport = ({
                         alignment: "left",
                       },
                     ],
-                    [
-                      {
-                        text: selectedSource,
-                        style: "tableCell",
-                        alignment: "left",
-                      },
-                    ],
+                    ...selectedSource.flatMap((source) => {
+                      const rows = [];
+                      rows.push([
+                        {
+                          text: source,
+                          style: "tableCell",
+                          alignment: "left",
+                          fillColor: "#F9F9F9",
+                        },
+                      ]);
+                      return rows;
+                    }),
                   ],
                 },
                 layout: {
@@ -399,7 +436,6 @@ const HarmonicDetailSummaryReport = ({
           // ================= Voltage Min / Max table =================
           sectionHeaders.voltageChart
             ? {
-                pageBreak: "before",
                 table: {
                   widths: ["*"],
                   body: [
@@ -414,15 +450,13 @@ const HarmonicDetailSummaryReport = ({
                 layout: "noBorders",
               }
             : null,
-          ...generatePdfTable({
-            title: "Actual Min Max Value of the Interval",
-            data: voltageAvgData,
-          }),
 
+          HarmonicsComparisonPdfTable({
+            data: voltageChartData,
+          }),
           // ================= Current Min / Max table =================
           sectionHeaders.currentChart
             ? {
-                pageBreak: "before",
                 table: {
                   widths: ["*"],
                   body: [
@@ -437,9 +471,8 @@ const HarmonicDetailSummaryReport = ({
                 layout: "noBorders",
               }
             : null,
-          ...generatePdfTable({
-            title: "Actual Min Max Value of the Interval",
-            data: currentAvgData,
+          HarmonicsComparisonPdfTable({
+            data: currentChartData,
           }),
         ],
 
@@ -578,50 +611,53 @@ const HarmonicDetailSummaryReport = ({
               <tr className="text-[13px] md:text-[14px] font-inter">
                 <th className="w-[12.8%]"></th>
                 <th
-                  colSpan={3}
+                  colSpan={4}
                   className=" dark:bg-gray-600 py-1 border border-gray-600 w-[12.8%]"
                 >
                   Period 1
                 </th>
                 <th className="w-[0.8%]"></th>
                 <th
-                  colSpan={3}
+                  colSpan={4}
                   className=" dark:bg-gray-600 py-1 border border-gray-600 w-[12.8%]"
                 >
                   Period 2
                 </th>
               </tr>
               <tr className="bg-[#E5F3FD] dark:bg-gray-600 text-[13px] md:text-[14px] font-inter">
-                <th className="py-2 px-3 border border-gray-400 text-center w-[12.8%]">
+                <th className="py-2 px-3 border border-gray-400 text-center w-[11.11%]">
                   Meter
                 </th>
 
-                <th className="border border-gray-600 w-[12.8%]">Avg THD V</th>
-                <th className="border border-gray-600 w-[12.8%]">
+                <th className="border border-gray-600 w-[11.11%]">Avg THD</th>
+                <th className="border border-gray-600 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Min Value
                   </div>
                 </th>
 
-                <th className="border border-gray-600 w-[12.8%]">
+                <th className="border border-gray-600 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Max Value
                   </div>
+                </th>
+                <th className="border border-gray-600 w-[11.11%]">
+                  Total Energy Consumed
                 </th>
                 <th className="bg-white dark:bg-gray-800 border-x border-gray-600 w-[0.7%]"></th>
-                <th className="border border-gray-600 w-[12.8%]">Avg THD V</th>
-                <th className="border border-gray-600 w-[12.8%]">
+                <th className="border border-gray-600 w-[11.11%]">Avg THD</th>
+                <th className="border border-gray-600 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Min Value
                   </div>
                 </th>
 
-                <th className="border border-gray-600 w-[12.8%]">
+                <th className="border border-gray-600 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Max Value
                   </div>
                 </th>
-                <th className="border border-gray-600 w-[12.8%]">
+                <th className="border border-gray-600 w-[11.11%]">
                   Total Energy Consumed
                 </th>
               </tr>
@@ -629,7 +665,7 @@ const HarmonicDetailSummaryReport = ({
 
             {/* ---------- BODY ---------- */}
             <tbody>
-              {arrData.map((meter) => (
+              {voltageChartData.map((meter) => (
                 <tr className="text-[13px] md:text-[14px] font-inter hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                   {/* Period */}
                   <td className="py-2 px-3 border border-gray-400  font-semibold">
@@ -645,7 +681,7 @@ const HarmonicDetailSummaryReport = ({
                       <span className="font-semibold">
                         {meter.p1Min.toFixed(2)}
                       </span>
-                      <span className="text-[11px] text-gray-600 dark:text-gray-300">
+                      <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p1Mindate)}
                       </span>
                     </div>
@@ -657,10 +693,13 @@ const HarmonicDetailSummaryReport = ({
                       <span className="font-semibold">
                         {meter.p1Max.toFixed(2)}
                       </span>
-                      <span className="text-[11px] text-gray-600 dark:text-gray-300">
+                      <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p2Mindate)}
                       </span>
                     </div>
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
+                    {meter.p1Consumption}
                   </td>
                   <td className="py-2 border-x bg-white dark:bg-gray-800 border-gray-400 text-center font-semibold"></td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
@@ -673,7 +712,7 @@ const HarmonicDetailSummaryReport = ({
                       <span className="font-semibold">
                         {meter.p2Min.toFixed(2)}
                       </span>
-                      <span className="text-[11px] text-gray-600 dark:text-gray-300">
+                      <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p1Maxdate)}
                       </span>
                     </div>
@@ -685,13 +724,13 @@ const HarmonicDetailSummaryReport = ({
                       <span className="font-semibold">
                         {meter.p2Max.toFixed(2)}
                       </span>
-                      <span className="text-[11px] text-gray-600 dark:text-gray-300">
+                      <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p2Maxdate)}
                       </span>
                     </div>
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
-                    00
+                    {meter.p2Consumption}
                   </td>
                 </tr>
               ))}
@@ -708,50 +747,53 @@ const HarmonicDetailSummaryReport = ({
               <tr className="text-[13px] md:text-[14px] font-inter">
                 <th className="w-[12.8%]"></th>
                 <th
-                  colSpan={3}
+                  colSpan={4}
                   className=" dark:bg-gray-600 py-1 border border-gray-600 w-[12.8%]"
                 >
                   Period 1
                 </th>
                 <th className="w-[0.8%]"></th>
                 <th
-                  colSpan={3}
+                  colSpan={4}
                   className=" dark:bg-gray-600 py-1 border border-gray-600 w-[12.8%]"
                 >
                   Period 2
                 </th>
               </tr>
               <tr className="bg-[#E5F3FD] dark:bg-gray-600 text-[13px] md:text-[14px] font-inter">
-                <th className="py-2 px-3 border border-gray-400 text-center w-[12.8%]">
+                <th className="py-2 px-3 border border-gray-400 text-center w-[11.11%]">
                   Meter
                 </th>
 
-                <th className="border border-gray-600 w-[12.8%]">Avg THD I</th>
-                <th className="border border-gray-600 w-[12.8%]">
+                <th className="border border-gray-600 w-[11.11%]">Avg THD</th>
+                <th className="border border-gray-600 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Min Value
                   </div>
                 </th>
 
-                <th className="border border-gray-600 w-[12.8%]">
+                <th className="border border-gray-600 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Max Value
                   </div>
+                </th>
+                <th className="border border-gray-600 w-[11.11%]">
+                  Total Energy Consumed
                 </th>
                 <th className="bg-white dark:bg-gray-800 border-x border-gray-600 w-[0.7%]"></th>
-                <th className="border border-gray-600 w-[12.8%]">Avg THD I</th>
-                <th className="border border-gray-600 w-[12.8%]">
+                <th className="border border-gray-600 w-[11.11%]">Avg THD</th>
+                <th className="border border-gray-600 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Min Value
                   </div>
                 </th>
 
-                <th className="border border-gray-600 w-[12.8%]">
+                <th className="border border-gray-600 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Max Value
                   </div>
                 </th>
-                <th className="border border-gray-600 w-[12.8%]">
+                <th className="border border-gray-600 w-[11.11%]">
                   Total Energy Consumed
                 </th>
               </tr>
@@ -759,7 +801,7 @@ const HarmonicDetailSummaryReport = ({
 
             {/* ---------- BODY ---------- */}
             <tbody>
-              {arrData.map((meter) => (
+              {currentChartData.map((meter) => (
                 <tr className="text-[13px] md:text-[14px] font-inter hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                   {/* Period */}
                   <td className="py-2 px-3 border border-gray-400  font-semibold">
@@ -775,7 +817,7 @@ const HarmonicDetailSummaryReport = ({
                       <span className="font-semibold">
                         {meter.p1Min.toFixed(2)}
                       </span>
-                      <span className="text-[11px] text-gray-600 dark:text-gray-300">
+                      <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p1Mindate)}
                       </span>
                     </div>
@@ -787,10 +829,13 @@ const HarmonicDetailSummaryReport = ({
                       <span className="font-semibold">
                         {meter.p1Max.toFixed(2)}
                       </span>
-                      <span className="text-[11px] text-gray-600 dark:text-gray-300">
+                      <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p2Mindate)}
                       </span>
                     </div>
+                  </td>
+                  <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
+                    {meter.p1Consumption}
                   </td>
                   <td className="py-2 border-x bg-white dark:bg-gray-800 border-gray-400 text-center font-semibold"></td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
@@ -803,7 +848,7 @@ const HarmonicDetailSummaryReport = ({
                       <span className="font-semibold">
                         {meter.p2Min.toFixed(2)}
                       </span>
-                      <span className="text-[11px] text-gray-600 dark:text-gray-300">
+                      <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p1Maxdate)}
                       </span>
                     </div>
@@ -815,13 +860,13 @@ const HarmonicDetailSummaryReport = ({
                       <span className="font-semibold">
                         {meter.p2Max.toFixed(2)}
                       </span>
-                      <span className="text-[11px] text-gray-600 dark:text-gray-300">
+                      <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p2Maxdate)}
                       </span>
                     </div>
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
-                    00
+                    {meter.p2Consumption}
                   </td>
                 </tr>
               ))}

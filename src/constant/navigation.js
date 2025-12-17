@@ -64,6 +64,7 @@ export const privilegeConfig = {
       "/trend-u4-lt2",
       "/trend-u5-lt1",
       "/trend-u5-lt2",
+      "/trafo-losses",
     ],
     tab: "Trends",
   },
@@ -254,7 +255,6 @@ export const sidebarLinksMap = {
       ],
     },
   ],
-
   Diagram: [
     {
       id: 0,
@@ -324,6 +324,12 @@ export const sidebarLinksMap = {
           href: "/trend-u5-lt2",
           icon: AlarmSubMenuIcon,
         },
+        // {
+        //   id: 6,
+        //   title: "Tansformer Losses",
+        //   href: "/trafo-losses",
+        //   icon: TransformerIcon,
+        // },
       ],
     },
   ],
@@ -379,7 +385,6 @@ export const sidebarLinksMap = {
       ],
     },
   ],
-
   Reports: [
     {
       id: 1,
@@ -417,16 +422,15 @@ export const sidebarLinksMap = {
           icon: PlantOverview,
           href: "/analytics-report",
         },
-        // {
-        //   id: 1,
-        //   title: "Harmonic Detail Report",
-        //   icon: PlantOverview,
-        //   href: "/harmonics-detail-report",
-        // },
+        {
+          id: 1,
+          title: "Harmonic Detail Report",
+          icon: PlantOverview,
+          href: "/harmonics-detail-report",
+        },
       ],
     },
   ],
-
   Settings: [
     {
       title: "User Configuration",

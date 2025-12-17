@@ -118,9 +118,9 @@ export default function SelectDropdown({
         {/* Dropdown */}
         {open && (
           <div className="absolute z-20 mt-1 w-full max-h-[16rem] overflow-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
-            {options.map((option) => (
+            {options.map((option, idx) => (
               <label
-                key={option.id}
+                key={idx}
                 className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-[13.51px] font-inter text-black dark:text-white"
               >
                 <input

@@ -14,41 +14,282 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import HarmonicAnalytics from "@/components/reportsComponent/energyComparisonTable/HarmonicAnalytics";
 import { HiOutlineClock } from "react-icons/hi2";
 
-const sourceOptions = [
+export const sourceOptions = [
   {
-    id: 0,
-    label: "Wapda 2",
     value: "U27_PLC",
+    label: "Wapda 2",
   },
   {
-    id: 2,
-    label: "Wapda 1",
-    value: "U23_GW01",
-  },
-  {
-    id: 3,
-    label: "HFO 1",
     value: "U22_PLC",
+    label: "HFO 1",
   },
   {
-    id: 4,
-    label: "JMS 620",
     value: "U26_PLC",
+    label: "JMS 620",
   },
   {
-    id: 5,
-    label: "O/G 2 (Unit 5)",
     value: "U23_PLC",
+    label: "O/G 2 (Unit 5)",
   },
   {
-    id: 6,
-    label: "O/G 1 (Unit 4)",
     value: "U24_PLC",
+    label: "O/G 1 (Unit 4)",
   },
   {
-    id: 7,
-    label: "HFO Aux",
     value: "U25_PLC",
+    label: "HFO AUX",
+  },
+  {
+    value: "U22_GW01",
+    label: "P/H IC HFO",
+  },
+  {
+    value: "U23_GW01",
+    label: "Wapda 1",
+  },
+  {
+    value: "U21_GW03",
+    label: "Main Incoming (Unit 5)",
+  },
+  {
+    value: "U20_GW03",
+    label: "T/F 1",
+  },
+  {
+    value: "U19_GW03",
+    label: "T/F 2",
+  },
+  {
+    value: "U1_PLC",
+    label: "Roving Transport System",
+  },
+  {
+    value: "U6_PLC",
+    label: "Deep Valve Turbine",
+  },
+  {
+    value: "U7_PLC",
+    label: "Main Meter",
+  },
+  {
+    value: "U9_PLC",
+    label: "Winding 7-9",
+  },
+  {
+    value: "U10_PLC",
+    label: "Ring 1-4",
+  },
+  {
+    value: "U11_PLC",
+    label: "Ring 17-20",
+  },
+  {
+    value: "U12_PLC",
+    label: "Ring 21-24",
+  },
+  {
+    value: "U13_PLC",
+    label: "Comber 1-10 + Lap Former 1-2",
+  },
+  {
+    value: "U14_PLC",
+    label: "Compressor (119 kW)",
+  },
+  {
+    value: "U15_PLC",
+    label: "Simplex 1-6",
+  },
+  {
+    value: "U17_PLC",
+    label: "Ring A/C(Supply & Return Fans)",
+  },
+  {
+    value: "U20_PLC",
+    label: "Compressor (119kW) Bypass",
+  },
+  {
+    value: "U21_PLC",
+    label: "Wapda+HFO+JMS Incoming",
+  },
+  {
+    value: "U1_GW01",
+    label: "Back Process A/C",
+  },
+  {
+    value: "U2_GW01",
+    label: "Conditioning Machine",
+  },
+  {
+    value: "U3_GW01",
+    label: "Winding A/C",
+  },
+  {
+    value: "U5_GW01",
+    label: "Card 1-4+9-12",
+  },
+  {
+    value: "U20_GW01",
+    label: "Bailing press",
+  },
+  {
+    value: "U8_GW01",
+    label: "Blow Room",
+  },
+  {
+    value: "U9_GW01",
+    label: "Card 5-8+ 13-14 + Breaker 5-6",
+  },
+  {
+    value: "U10_GW01",
+    label: "Winding 1-6",
+  },
+  {
+    value: "U14_GW01",
+    label: "B/Card + Comber Filter",
+  },
+  {
+    value: "U13_GW01",
+    label: "Wapda+HFO+JMS Incoming",
+  },
+  {
+    value: "U12_GW01",
+    label: "B/Card + Comber Filter Bypass",
+  },
+  {
+    value: "U15_GW01",
+    label: "Ring 5-8",
+  },
+  {
+    value: "U16_GW01",
+    label: "Ring 13-16",
+  },
+  {
+    value: "U17_GW01",
+    label: "Ring 9-12",
+  },
+  {
+    value: "U24_GW01",
+    label: "Solar 352.50 kW",
+  },
+  {
+    value: "U28_PLC",
+    label: "Solar 52.17 kW",
+  },
+  {
+    value: "U6_GW02",
+    label: "Solar 1185 KW",
+  },
+  {
+    value: "U7_GW02",
+    label: "Ring 1-3",
+  },
+  {
+    value: "U8_GW02",
+    label: "Ring A/C (Supply Fans)",
+  },
+  {
+    value: "U9_GW02",
+    label: "Blow Room",
+  },
+  {
+    value: "U10_GW02",
+    label: "Ring 4-6",
+  },
+  {
+    value: "U11_GW02",
+    label: "A/C Back Process",
+  },
+  {
+    value: "U12_GW02",
+    label: "Lighting Internal",
+  },
+  {
+    value: "U13_GW02",
+    label: "T/F 1",
+  },
+  {
+    value: "U15_GW02",
+    label: "Ring A/C (Return Fans)",
+  },
+  {
+    value: "U17_GW02",
+    label: "Card 8-14",
+  },
+  {
+    value: "U18_GW02",
+    label: "Winding 1-9",
+  },
+  {
+    value: "U19_GW02",
+    label: "Card 1-7",
+  },
+  {
+    value: "U20_GW02",
+    label: "Winding A/C",
+  },
+  {
+    value: "U21_GW02",
+    label: "Simplex + Drawing Breaker",
+  },
+  {
+    value: "U22_GW02",
+    label: "Ring Unit 4 (17-20)",
+  },
+  {
+    value: "U23_GW02",
+    label: "Drawing Finisher 1-8",
+  },
+  {
+    value: "U1_GW03",
+    label: "Ring 7-9",
+  },
+  {
+    value: "U2_GW03",
+    label: "Conditioning Machine",
+  },
+  {
+    value: "U4_GW03",
+    label: "Roving Transport System",
+  },
+  {
+    value: "U5_GW03",
+    label: "Ring 10-12",
+  },
+  {
+    value: "U9_GW03",
+    label: "Ring 13-15",
+  },
+  {
+    value: "U10_GW03",
+    label: "Winding 10-18",
+  },
+  {
+    value: "U11_GW03",
+    label: "Bailing Press",
+  },
+  {
+    value: "U12_GW03",
+    label: "Ring 16-18",
+  },
+  // {
+  //     "value": "U13_GW03",
+  //     "label": "B/Card+Comber filter"
+  // },
+  {
+    value: "U14_GW03",
+    label: "Lighting Internal",
+  },
+  {
+    value: "U15_GW03",
+    label: "Deep Valve Turbine",
+  },
+  {
+    value: "U16_GW03",
+    label: "T/F 2",
+  },
+  {
+    value: "U18_GW03",
+    label: "PF Panel",
   },
 ];
 const intervalOptions = [
@@ -96,6 +337,7 @@ const HarmonicsReport = () => {
   const [period2, setPeriod2] = useState([createSixAM(), createSixAM()]);
   const [period1Date, setPeriod1Date] = useState([null, null]); // NEW: for dates only
   const [period2Date, setPeriod2Date] = useState([null, null]);
+
   // const { theme } = useTheme();
   function formatToPKTime(date) {
     if (!date) return "";
@@ -846,9 +1088,9 @@ const HarmonicsReport = () => {
 
                   {sourceDropdwon && (
                     <div className="absolute z-20 mt-1 w-full max-h-[16rem] overflow-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
-                      {sourceOptions.map((option) => (
+                      {sourceOptions.map((option, idx) => (
                         <label
-                          key={option.id}
+                          key={idx}
                           className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white"
                         >
                           <input

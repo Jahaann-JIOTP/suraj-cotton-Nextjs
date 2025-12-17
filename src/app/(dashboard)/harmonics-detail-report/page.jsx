@@ -10,65 +10,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import SelectDropdown from "@/components/reUseUi/SelectDropdown";
+import { sourceOptions } from "../analytics-report/page";
 import HarmonicDetailSummaryReport from "@/components/reportsComponent/energyComparisonTable/HarmonicDetailSummaryReport";
-
-const sourceOptions = [
-  {
-    id: 0,
-    label: "Wapda 2",
-    value: "U27_PLC",
-  },
-  {
-    id: 2,
-    label: "Wapda 1",
-    value: "U23_GW01",
-  },
-  {
-    id: 3,
-    label: "HFO 1",
-    value: "U22_PLC",
-  },
-  {
-    id: 4,
-    label: "JMS 620",
-    value: "U26_PLC",
-  },
-  {
-    id: 5,
-    label: "O/G 2 (Unit 5)",
-    value: "U23_PLC",
-  },
-  {
-    id: 6,
-    label: "O/G 1 (Unit 4)",
-    value: "U24_PLC",
-  },
-  {
-    id: 7,
-    label: "HFO Aux",
-    value: "U25_PLC",
-  },
-  {
-    id: 7,
-    label: "HFO Aux",
-    value: "U35_PLC",
-  },
-  {
-    id: 7,
-    label: "HFO Aux",
-    value: "U31_PLC",
-  },
-  {
-    id: 7,
-    label: "HFO Aux",
-    value: "U32_PLC",
-  },
-  {
-    id: 7,
-    label: "HFO Aux",
-    value: "U33_PLC",
-  },
-];
 
 const HarmonicsDetailReport = () => {
   const createSixAM = () => {
@@ -78,10 +21,9 @@ const HarmonicsDetailReport = () => {
   };
 
   const [resData, setResData] = useState({});
-  //   const [usageReportTimePeriod, setUsageReportTimePeriod] = useState("day");
+
   const usageReportTimePeriod = "day";
   const [selectedSource, setSelectedSource] = useState([]);
-  console.log(selectedSource);
   const [sourceDropdwon, setSourceDropdown] = useState(false);
   const [intervalDropdown, setIntervalDropdown] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -89,10 +31,7 @@ const HarmonicsDetailReport = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const period1Ref = useRef(null);
   const period2Ref = useRef(null);
-  //   const periodStartTime1Ref = useRef(null);
-  //   const periodEndTime1Ref = useRef(null);
-  //   const periodStartTime2Ref = useRef(null);
-  //   const periodEndTime2Ref = useRef(null);
+
   const sourceDropdownRef = useRef(null);
   const intervalDropdownRef = useRef(null);
   const [period1, setPeriod1] = useState([createSixAM(), createSixAM()]);
@@ -137,26 +76,6 @@ const HarmonicsDetailReport = () => {
       period2Ref.current.setOpen(true);
     }
   };
-  //   const openPeriod1StartTime = () => {
-  //     if (periodStartTime1Ref.current) {
-  //       periodStartTime1Ref.current.setOpen(true);
-  //     }
-  //   };
-  //   const openPeriod1endTime = () => {
-  //     if (periodEndTime1Ref.current) {
-  //       periodEndTime1Ref.current.setOpen(true);
-  //     }
-  //   };
-  //   const openPeriod2StartTime = () => {
-  //     if (periodStartTime2Ref.current) {
-  //       periodStartTime2Ref.current.setOpen(true);
-  //     }
-  //   };
-  //   const openPeriod2endTime = () => {
-  //     if (periodEndTime2Ref.current) {
-  //       periodEndTime2Ref.current.setOpen(true);
-  //     }
-  //   };
   // /=============================================================================
   const fixKarachiOffset = (date) => {
     if (!date) return null;
@@ -417,7 +336,7 @@ const HarmonicsDetailReport = () => {
     setPeriod2Date([null, null]);
   }, [usageReportTimePeriod]);
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  //===================================Handle all data processing end=================================
+  //===================================Handle all data processing start=================================
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   //--------------------------------params data----------------------------------------
   const intervalObj = {
@@ -436,160 +355,64 @@ const HarmonicsDetailReport = () => {
     .map((val) => sourceOptions.find((opt) => opt.value === val)?.label)
     .filter(Boolean);
   //--------------------------------Chart Data----------------------------------------
+
   const period1Data = Array.isArray(resData?.period1) ? resData.period1 : [];
   const period2Data = Array.isArray(resData?.period2) ? resData.period2 : [];
 
-  const mergePeriodData = ({
-    period1Data = [],
-    period2Data = [],
-    type = "",
+  const getMeterLabel = (meterId, sourceOptions) => {
+    return sourceOptions.find((opt) => opt.value === meterId)?.label || meterId;
+  };
+  const buildHarmonicsComparison = ({
+    period1,
+    period2,
+    selectedSource,
+    sourceOptions,
+    basePostfix,
   }) => {
-    const minLength = Math.min(period1Data.length, period2Data.length);
-    return Array.from({ length: minLength }, (_, index) => {
-      const p1 = period1Data[index];
-      const p2 = period2Data[index];
+    const p1 = period1?.[0] || {};
+    const p2 = period2?.[0] || {};
+
+    return selectedSource.map((meterId) => {
+      const baseKey = `${meterId}_${basePostfix}`;
+
       return {
-        year: `C${index + 1}`, // 👈 interval key
+        meterId,
+        meter: getMeterLabel(meterId, sourceOptions),
 
-        // Harmonics (Voltage THD)
-        p1Harmonics: p1?.[`${selectedSource}_Harmonics_${type}_THD`] ?? 0,
-        p2Harmonics: p2?.[`${selectedSource}_Harmonics_${type}_THD`] ?? 0,
+        // averages
+        p1Harmonics: p1[baseKey] ?? null,
+        p2Harmonics: p2[baseKey] ?? null,
 
-        // Min / Max
-        p1Max: p1?.[`${selectedSource}_Harmonics_${type}_THD_max`] ?? 0,
-        p1Min: p1?.[`${selectedSource}_Harmonics_${type}_THD_min`] ?? 0,
-
-        p2Max: p2?.[`${selectedSource}_Harmonics_${type}_THD_max`] ?? 0,
-        p2Min: p2?.[`${selectedSource}_Harmonics_${type}_THD_min`] ?? 0,
-
-        // Dates
-        p1date: p1?.timestamp ?? null,
-        p2date: p2?.timestamp ?? null,
+        // min / max
+        p1Min: p1[`${baseKey}_min`] ?? null,
+        p1Max: p1[`${baseKey}_max`] ?? null,
+        p2Min: p2[`${baseKey}_min`] ?? null,
+        p2Max: p2[`${baseKey}_max`] ?? null,
+        // total unit consumed
+        p1Consumption: p1[`${meterId}_Total_Energy_Consumed`] ?? null,
+        p2Consumption: p2[`${meterId}_Total_Energy_Consumed`] ?? null,
+        // min / max timestamps
+        p1Mindate: p1[`${baseKey}_minTime`] ?? null,
+        p1Maxdate: p1[`${baseKey}_maxTime`] ?? null,
+        p2Mindate: p2[`${baseKey}_minTime`] ?? null,
+        p2Maxdate: p2[`${baseKey}_maxTime`] ?? null,
       };
     });
   };
-
-  const filteredVoltageChartData = mergePeriodData({
-    period1Data,
-    period2Data,
-    type: "V",
+  const VoltageFilterData = buildHarmonicsComparison({
+    period1: period1Data,
+    period2: period2Data,
+    selectedSource,
+    sourceOptions,
+    basePostfix: "Harmonics_V_THD",
   });
-  const filteredCurrentChartData = mergePeriodData({
-    period1Data,
-    period2Data,
-    type: "I",
+  const CurrentFilterData = buildHarmonicsComparison({
+    period1: period1Data,
+    period2: period2Data,
+    selectedSource,
+    sourceOptions,
+    basePostfix: "Harmonics_I_THD",
   });
-  //--------------------------------Min Max Data----------------------------------------
-  function getExtremeValueWithDate({
-    data,
-    valueKey,
-    dateKey,
-    type = "max", // "min" or "max"
-  }) {
-    if (!Array.isArray(data) || data.length === 0) {
-      return { value: 0, date: "" }; // ✅ safe default
-    }
-
-    let result = null;
-
-    for (const item of data) {
-      const value = item?.[valueKey];
-      if (value == null) continue;
-
-      if (
-        !result ||
-        (type === "max" ? value > result.value : value < result.value)
-      ) {
-        result = {
-          value,
-          date: item?.[dateKey] || item?.timestamp || "",
-        };
-      }
-    }
-
-    return result ?? { value: 0, date: "" };
-  }
-  const p1MaxVoltage = getExtremeValueWithDate({
-    data: period1Data,
-    valueKey: `${selectedSource}_Harmonics_V_THD_max`,
-    dateKey: `${selectedSource}_Harmonics_V_THD_max_timestamp`,
-    type: "max",
-  });
-  const p2MaxVoltage = getExtremeValueWithDate({
-    data: period2Data,
-    valueKey: `${selectedSource}_Harmonics_V_THD_max`,
-    dateKey: `${selectedSource}_Harmonics_V_THD_max_timestamp`,
-    type: "max",
-  });
-  const p1MinVoltage = getExtremeValueWithDate({
-    data: period1Data,
-    valueKey: `${selectedSource}_Harmonics_V_THD_min`,
-    dateKey: `${selectedSource}_Harmonics_V_THD_min_timestamp`,
-    type: "min",
-  });
-  const p2MinVoltage = getExtremeValueWithDate({
-    data: period2Data,
-    valueKey: `${selectedSource}_Harmonics_V_THD_min`,
-    dateKey: `${selectedSource}_Harmonics_V_THD_min_timestamp`,
-    type: "min",
-  });
-  const p1MaxCurrent = getExtremeValueWithDate({
-    data: period1Data,
-    valueKey: `${selectedSource}_Harmonics_I_THD_max`,
-    dateKey: `${selectedSource}_Harmonics_I_THD_max_timestamp`,
-    type: "max",
-  });
-  const p2MaxCurrent = getExtremeValueWithDate({
-    data: period2Data,
-    valueKey: `${selectedSource}_Harmonics_I_THD_max`,
-    dateKey: `${selectedSource}_Harmonics_I_THD_max_timestamp`,
-    type: "max",
-  });
-  const p1MinCurrent = getExtremeValueWithDate({
-    data: period1Data,
-    valueKey: `${selectedSource}_Harmonics_I_THD_min`,
-    dateKey: `${selectedSource}_Harmonics_I_THD_min_timestamp`,
-    type: "min",
-  });
-  const p2MinCurrent = getExtremeValueWithDate({
-    data: period2Data,
-    valueKey: `${selectedSource}_Harmonics_I_THD_min`,
-    dateKey: `${selectedSource}_Harmonics_I_THD_min_timestamp`,
-    type: "min",
-  });
-  //--------------------------------Min Max Data----------------------------------------
-  const voltageAvgData = [
-    {
-      period: "Period 1",
-      minValue: p1MinVoltage.value,
-      minDate: p1MinVoltage.date,
-      maxValue: p1MaxVoltage.value,
-      maxDate: p1MaxVoltage.date,
-    },
-    {
-      period: "Period 2",
-      minValue: p2MinVoltage.value,
-      minDate: p2MinVoltage.date,
-      maxValue: p2MaxVoltage.value,
-      maxDate: p2MaxVoltage.date,
-    },
-  ];
-  const currentAvgData = [
-    {
-      period: "Period 1",
-      minValue: p1MinCurrent.value,
-      minDate: p1MinCurrent.date,
-      maxValue: p1MaxCurrent.value,
-      maxDate: p1MaxCurrent.date,
-    },
-    {
-      period: "Period 2",
-      minValue: p2MinCurrent.value,
-      minDate: p2MinCurrent.date,
-      maxValue: p2MaxCurrent.value,
-      maxDate: p2MaxCurrent.date,
-    },
-  ];
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   //===================================Handle all data processing end=================================
@@ -620,7 +443,7 @@ const HarmonicsDetailReport = () => {
     }
     try {
       setLoadingSubmit(true);
-      const res = await fetch(`${config.BASE_URL}/harmonics/report`, {
+      const res = await fetch(`${config.BASE_URL}/harmonics-detail/report`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -791,13 +614,11 @@ const HarmonicsDetailReport = () => {
         </div>
       ) : showResults ? (
         <HarmonicDetailSummaryReport
-          voltageChartData={filteredVoltageChartData}
-          currentChartData={filteredCurrentChartData}
+          voltageChartData={VoltageFilterData}
+          currentChartData={CurrentFilterData}
           intervalObj={intervalObj}
           usageReportTimePeriod={usageReportTimePeriod}
           selectedSource={selectedLabels}
-          voltageAvgData={voltageAvgData}
-          currentAvgData={currentAvgData}
         />
       ) : null}
     </div>
