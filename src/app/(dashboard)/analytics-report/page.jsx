@@ -7,12 +7,75 @@ import { CircularProgress } from "@mui/material";
 import { ImArrowLeft2 } from "react-icons/im";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
-import { IoChevronDownOutline } from "react-icons/io5";
+import {
+  IoChevronDownOutline,
+  IoInformationCircleOutline,
+} from "react-icons/io5";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegCalendarAlt } from "react-icons/fa";
 // import { useTheme } from "next-themes";
 import HarmonicAnalytics from "@/components/reportsComponent/energyComparisonTable/HarmonicAnalytics";
 import { HiOutlineClock } from "react-icons/hi2";
+import { harmonicsMeterId } from "@/data/harmonicsMeterId";
+import { mainMeterMapping } from "@/data/mainMeterMapping";
+import SelectDropdown from "@/components/reUseUi/SelectDropdown";
+export const areaOptions = [
+  {
+    meterName: "All",
+    meterId: "all",
+  },
+  {
+    meterName: "HFO",
+    meterId: "HFO",
+  },
+  {
+    meterName: "Unit 4 HT Room",
+    meterId: "HT_Room1",
+  },
+  {
+    meterName: "Unit 5 HT Room",
+    meterId: "HT_Room2",
+  },
+  {
+    meterName: "UNIT 4 LT 1",
+    meterId: "Unit 4 LT_1",
+  },
+  {
+    meterName: "UNIT 4 LT 2",
+    meterId: "Unit 4 LT_2",
+  },
+  {
+    meterName: "UNIT 5 LT 1",
+    meterId: "Unit 5 LT_1",
+  },
+  {
+    meterName: "UNIT 5 LT 2",
+    meterId: "Unit 5 LT_2",
+  },
+];
+
+export const InfoCard = ({ content }) => {
+  return (
+    <div className="relative lg:absolute top-0 right-0 w-full  xl:w-auto">
+      <div
+        className="relative flex items-center gap-3  py-1 px-3 
+                    rounded-md bg-gradient-to-r from-orange-700 via-orange-600 to-orange-700 
+                    shadow-lg text-white overflow-hidden"
+      >
+        <div className="relative flex items-center">
+          <span className="absolute inset-0 rounded-full bg-orange-500 animate-ping opacity-40"></span>
+          <span
+            className="relative flex items-center justify-center h-8 w-8 
+              rounded-full bg-orange-600 shadow-md"
+          >
+            <IoInformationCircleOutline size={22} className="text-white" />
+          </span>
+        </div>
+        <div className="">{content}</div>
+      </div>
+    </div>
+  );
+};
 
 export const sourceOptions = [
   {
@@ -310,6 +373,12 @@ const intervalOptions = [
   },
 ];
 
+const harmonicsMeterSet = new Set(harmonicsMeterId ?? []);
+
+export const filteredArray = (mainMeterMapping ?? []).filter((v) =>
+  harmonicsMeterSet.has(v?.meterId)
+);
+
 const HarmonicsReport = () => {
   const createSixAM = () => {
     const d = new Date();
@@ -319,7 +388,8 @@ const HarmonicsReport = () => {
 
   const [resData, setResData] = useState({});
   const [usageReportTimePeriod, setUsageReportTimePeriod] = useState("");
-  const [selectedSource, setSelectedSource] = useState("");
+  const [selectedArea, setSelectedArea] = useState(["all"]);
+  const [selectedSource, setSelectedSource] = useState([]);
   const [sourceDropdwon, setSourceDropdown] = useState(false);
   const [intervalDropdown, setIntervalDropdown] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -338,6 +408,10 @@ const HarmonicsReport = () => {
   const [period1Date, setPeriod1Date] = useState([null, null]); // NEW: for dates only
   const [period2Date, setPeriod2Date] = useState([null, null]);
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const filteredDevices = selectedArea.includes("all")
+    ? filteredArray
+    : filteredArray.filter((meter) => selectedArea.includes(meter.area));
   // const { theme } = useTheme();
   function formatToPKTime(date) {
     if (!date) return "";
@@ -436,7 +510,7 @@ const HarmonicsReport = () => {
     Period2startTime: Period2startTime,
     Period2endTime: Period2endTime,
     resolution: usageReportTimePeriod,
-    DeviceId: [selectedSource],
+    DeviceId: selectedSource,
   };
 
   const isPeriod1Complete = period1Date[0] && period1Date[1];
@@ -735,9 +809,10 @@ const HarmonicsReport = () => {
     },
   };
 
-  const sourceLabel = sourceOptions.find(
-    (source) => source.value === selectedSource
+  const sourceLabel = filteredDevices.find(
+    (source) => source.meterId === selectedSource[0]
   );
+
   //--------------------------------Chart Data----------------------------------------
   const period1Data = Array.isArray(resData?.period1) ? resData.period1 : [];
   const period2Data = Array.isArray(resData?.period2) ? resData.period2 : [];
@@ -755,15 +830,15 @@ const HarmonicsReport = () => {
         year: `C${index + 1}`, // 👈 interval key
 
         // Harmonics (Voltage THD)
-        p1Harmonics: p1?.[`${selectedSource}_Harmonics_${type}_THD`] ?? 0,
-        p2Harmonics: p2?.[`${selectedSource}_Harmonics_${type}_THD`] ?? 0,
+        p1Harmonics: p1?.[`${selectedSource[0]}_Harmonics_${type}_THD`] ?? 0,
+        p2Harmonics: p2?.[`${selectedSource[0]}_Harmonics_${type}_THD`] ?? 0,
 
         // Min / Max
-        p1Max: p1?.[`${selectedSource}_Harmonics_${type}_THD_max`] ?? 0,
-        p1Min: p1?.[`${selectedSource}_Harmonics_${type}_THD_min`] ?? 0,
+        p1Max: p1?.[`${selectedSource[0]}_Harmonics_${type}_THD_max`] ?? 0,
+        p1Min: p1?.[`${selectedSource[0]}_Harmonics_${type}_THD_min`] ?? 0,
 
-        p2Max: p2?.[`${selectedSource}_Harmonics_${type}_THD_max`] ?? 0,
-        p2Min: p2?.[`${selectedSource}_Harmonics_${type}_THD_min`] ?? 0,
+        p2Max: p2?.[`${selectedSource[0]}_Harmonics_${type}_THD_max`] ?? 0,
+        p2Min: p2?.[`${selectedSource[0]}_Harmonics_${type}_THD_min`] ?? 0,
 
         // Dates
         p1date: p1?.timestamp ?? null,
@@ -814,56 +889,56 @@ const HarmonicsReport = () => {
   }
   const p1MaxVoltage = getExtremeValueWithDate({
     data: period1Data,
-    valueKey: `${selectedSource}_Harmonics_V_THD_max`,
-    dateKey: `${selectedSource}_Harmonics_V_THD_max_timestamp`,
+    valueKey: `${selectedSource[0]}_Harmonics_V_THD_max`,
+    dateKey: `${selectedSource[0]}_Harmonics_V_THD_max_timestamp`,
     type: "max",
   });
 
   const p2MaxVoltage = getExtremeValueWithDate({
     data: period2Data,
-    valueKey: `${selectedSource}_Harmonics_V_THD_max`,
-    dateKey: `${selectedSource}_Harmonics_V_THD_max_timestamp`,
+    valueKey: `${selectedSource[0]}_Harmonics_V_THD_max`,
+    dateKey: `${selectedSource[0]}_Harmonics_V_THD_max_timestamp`,
     type: "max",
   });
 
   const p1MinVoltage = getExtremeValueWithDate({
     data: period1Data,
-    valueKey: `${selectedSource}_Harmonics_V_THD_min`,
-    dateKey: `${selectedSource}_Harmonics_V_THD_min_timestamp`,
+    valueKey: `${selectedSource[0]}_Harmonics_V_THD_min`,
+    dateKey: `${selectedSource[0]}_Harmonics_V_THD_min_timestamp`,
     type: "min",
   });
 
   const p2MinVoltage = getExtremeValueWithDate({
     data: period2Data,
-    valueKey: `${selectedSource}_Harmonics_V_THD_min`,
-    dateKey: `${selectedSource}_Harmonics_V_THD_min_timestamp`,
+    valueKey: `${selectedSource[0]}_Harmonics_V_THD_min`,
+    dateKey: `${selectedSource[0]}_Harmonics_V_THD_min_timestamp`,
     type: "min",
   });
   const p1MaxCurrent = getExtremeValueWithDate({
     data: period1Data,
-    valueKey: `${selectedSource}_Harmonics_I_THD_max`,
-    dateKey: `${selectedSource}_Harmonics_I_THD_max_timestamp`,
+    valueKey: `${selectedSource[0]}_Harmonics_I_THD_max`,
+    dateKey: `${selectedSource[0]}_Harmonics_I_THD_max_timestamp`,
     type: "max",
   });
 
   const p2MaxCurrent = getExtremeValueWithDate({
     data: period2Data,
-    valueKey: `${selectedSource}_Harmonics_I_THD_max`,
-    dateKey: `${selectedSource}_Harmonics_I_THD_max_timestamp`,
+    valueKey: `${selectedSource[0]}_Harmonics_I_THD_max`,
+    dateKey: `${selectedSource[0]}_Harmonics_I_THD_max_timestamp`,
     type: "max",
   });
 
   const p1MinCurrent = getExtremeValueWithDate({
     data: period1Data,
-    valueKey: `${selectedSource}_Harmonics_I_THD_min`,
-    dateKey: `${selectedSource}_Harmonics_I_THD_min_timestamp`,
+    valueKey: `${selectedSource[0]}_Harmonics_I_THD_min`,
+    dateKey: `${selectedSource[0]}_Harmonics_I_THD_min_timestamp`,
     type: "min",
   });
 
   const p2MinCurrent = getExtremeValueWithDate({
     data: period2Data,
-    valueKey: `${selectedSource}_Harmonics_I_THD_min`,
-    dateKey: `${selectedSource}_Harmonics_I_THD_min_timestamp`,
+    valueKey: `${selectedSource[0]}_Harmonics_I_THD_min`,
+    dateKey: `${selectedSource[0]}_Harmonics_I_THD_min_timestamp`,
     type: "min",
   });
   //--------------------------------Min Max Data----------------------------------------
@@ -912,7 +987,7 @@ const HarmonicsReport = () => {
       toast.warning("Please Select Resolution first");
       return;
     }
-    if (!selectedSource) {
+    if (!selectedSource[0]) {
       toast.warning("Please Select Meter");
       return;
     }
@@ -948,35 +1023,26 @@ const HarmonicsReport = () => {
       setLoadingSubmit(false);
     }
   };
-
+  useEffect(() => {
+    setSelectedSource([]);
+  }, [selectedArea]);
   return (
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
-      {/* {usageReportTimePeriod === "15mins" ? (
-        <div className="absolute right-0 top-0 rounded-tr-md bg-orange-500 p-2 text-white">
-          <span>i </span>
-          <span>
-            For hour 15 Minutes Resolution 
-          </span>
-        </div>
-      ) : usageReportTimePeriod === "hour" ? (
-        <div className="absolute right-0 top-0 rounded-tr-md bg-orange-500 p-2 text-white">
-          <span>i </span>
-          <span>
-            For daily resolution please select atleast 2 days(due to 6:00-6:00
-            time interval) and maximum 30 days
-          </span>
-        </div>
-      ) : usageReportTimePeriod === "day" ? (
-        <div className="absolute right-0 top-0 rounded-tr-md bg-orange-500 p-2 text-white">
-          <span>i </span>
-          <span>
-            For daily resolution please select atleast 2 days(due to 6:00-6:00
-            time interval) and maximum 30 days
-          </span>
-        </div>
+      {showResults === false && usageReportTimePeriod === "15mins" ? (
+        <InfoCard
+          content="For hour 15 Minutes Resolution please select single date and select
+            Maximum 6 hours on each time interval"
+        />
+      ) : showResults === false && usageReportTimePeriod === "hour" ? (
+        <InfoCard content="For hourly resolution please select only 2 days" />
+      ) : showResults === false && usageReportTimePeriod === "day" ? (
+        <InfoCard
+          content="For daily resolution please select atleast 2 days(due to 6:00-6:00
+            time interval) and maximum 30 days"
+        />
       ) : (
         ""
-      )} */}
+      )}
       <div className="flex pb-3 items-center justify-between">
         <h1 className="text-[18.22px] text-raleway font-600">
           Harmonics Analytics Report
@@ -1061,53 +1127,31 @@ const HarmonicsReport = () => {
                   )}
                 </div>
               </div>
+              {/* Area selector dropdown */}
+              <div className="w-full">
+                <SelectDropdown
+                  label="Select Area"
+                  options2={areaOptions}
+                  value={selectedArea}
+                  onChange={setSelectedArea}
+                  isMulti={false}
+                  showSubLabel={false}
+                  enableSearch={false}
+                  placeholder="Select Area"
+                />
+              </div>
               {/* Device selector dropdown */}
-              <div className="flex flex-col w-full items-start justify-center gap-1">
-                <span className="text-[13.51px] font-500 font-inter text-black dark:text-white">
-                  Select Source
-                </span>
-                <div
-                  className="relative inline-block w-full"
-                  ref={sourceDropdownRef}
-                >
-                  <button
-                    type="button"
-                    onClick={toggleSourceDropdown}
-                    className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border cursor-pointer border-gray-300 dark:border-gray-600 text-black dark:text-white px-4 py-2 rounded text-sm text-left"
-                  >
-                    {/* Find and display the label instead of the value */}
-                    {sourceOptions.find(
-                      (option) => option.value === selectedSource
-                    )?.label || "Select Source Meter"}
-                    <IoChevronDownOutline
-                      className={`transition-all duration-300 ${
-                        sourceDropdwon ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {sourceDropdwon && (
-                    <div className="absolute z-20 mt-1 w-full max-h-[16rem] overflow-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
-                      {sourceOptions.map((option, idx) => (
-                        <label
-                          key={idx}
-                          className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer gap-2 text-[13.51px] font-500 font-inter text-black dark:text-white"
-                        >
-                          <input
-                            type="radio"
-                            checked={selectedSource === option.value}
-                            value={option.value}
-                            onChange={(e) => {
-                              setSourceDropdown(false);
-                              setSelectedSource(e.target.value);
-                            }}
-                          />
-                          {option.label}
-                        </label>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              <div className="w-full">
+                <SelectDropdown
+                  label="Select Source"
+                  options2={filteredDevices}
+                  value={selectedSource}
+                  onChange={setSelectedSource}
+                  isMulti={false}
+                  showSubLabel={true}
+                  enableSearch={true}
+                  placeholder="Select Sources"
+                />
               </div>
 
               {/* Period 1 */}
@@ -1166,7 +1210,7 @@ const HarmonicsReport = () => {
                           dateFormat="hh:mm aa"
                           className="rounded p-1 outline-none w-full"
                         />
-                        <HiOutlineClock size={22} />
+                        <HiOutlineClock className="text-[22px]" />
                       </div>
                       <div
                         onClick={openPeriod1endTime}
@@ -1185,7 +1229,7 @@ const HarmonicsReport = () => {
                           dateFormat="hh:mm aa"
                           className="rounded p-1 outline-none w-full"
                         />
-                        <HiOutlineClock size={22} />
+                        <HiOutlineClock className="text-[22px]" />
                       </div>
                     </div>
                   </div>
@@ -1260,7 +1304,7 @@ const HarmonicsReport = () => {
                           dateFormat="hh:mm aa"
                           className="p-1 outline-none w-full"
                         />
-                        <HiOutlineClock size={22} />
+                        <HiOutlineClock className="text-[22px]" />
                       </div>
                       <div
                         onClick={openPeriod2endTime}
@@ -1279,7 +1323,7 @@ const HarmonicsReport = () => {
                           dateFormat="hh:mm aa"
                           className="p-1 outline-none w-full"
                         />
-                        <HiOutlineClock size={22} />
+                        <HiOutlineClock className="text-[22px]" />
                       </div>
                     </div>
                   </div>
@@ -1313,10 +1357,9 @@ const HarmonicsReport = () => {
           currentChartData={filteredCurrentChartData}
           intervalObj={intervalObj}
           usageReportTimePeriod={usageReportTimePeriod}
-          selectedSource={sourceLabel?.label}
+          selectedSource={sourceLabel?.meterName}
           voltageAvgData={voltageAvgData}
           currentAvgData={currentAvgData}
-          sourceLabel={sourceLabel}
         />
       ) : null}
     </div>

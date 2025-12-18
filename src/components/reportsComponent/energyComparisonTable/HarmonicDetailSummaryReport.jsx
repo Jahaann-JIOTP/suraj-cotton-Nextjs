@@ -63,24 +63,7 @@ const HarmonicDetailSummaryReport = ({
       ? datePart
       : `${datePart} ${String(hour).padStart(2, "0")}:${mm} ${ampm}`;
   }
-  // get dates for date mapping array
-  function mapDatesByDay(data) {
-    const result = {
-      Cluster: {
-        p1: "Period 1",
-        p2: "Period 2",
-      },
-    };
-    data.forEach((item) => {
-      result[item.year] = {
-        p1: formatLocalDateTime(item.p1date),
-        p2: formatLocalDateTime(item.p2date),
-      };
-    });
-    return result;
-  }
 
-  const datesMap = mapDatesByDay(voltageChartData);
   const formatDateTime = (iso) => {
     if (!iso) return "";
 
@@ -88,20 +71,41 @@ const HarmonicDetailSummaryReport = ({
     const day = String(d.getDate()).padStart(2, "0");
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const year = String(d.getFullYear()).padStart(2, "0");
-    const hours = String(d.getHours()).padStart(2, "0");
-    const minutes = String(d.getMinutes()).padStart(2, "0");
 
-    return `${year}/${month}/${day} - ${hours}:${minutes}`;
+    let hours = d.getHours();
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    hours = hours % 12 || 12; // convert 0 → 12
+    hours = String(hours).padStart(2, "0");
+
+    return `${year}/${month}/${day} - ${hours}:${minutes} ${ampm}`;
+  };
+  const formateNumber = (num) => {
+    return Number(num || 0).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   //=======================================PDF export start ================================
   const HarmonicsComparisonPdfTable = ({ data = [] }) => {
     const getValue = (row, key) => {
-      return row[key] !== null && row[key] !== undefined
-        ? row[key].toFixed?.(2) ?? row[key]
-        : "-";
-    };
+      const value = row?.[key];
 
+      if (value === null || value === undefined) return "-";
+
+      // If it's a number (or numeric string)
+      if (typeof value === "number" || !isNaN(value)) {
+        return Number(value).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      // Fallback for non-numeric values
+      return value;
+    };
     return {
       margin: [0, 10, 0, 20],
       table: {
@@ -223,7 +227,7 @@ const HarmonicDetailSummaryReport = ({
             {
               stack: [
                 { text: getValue(row, "p1Min"), bold: true },
-                { text: formatDateTime(row.p1Mindate), fontSize: 8 },
+                { text: formatDateTime(row.p1Mindate), fontSize: 7 },
               ],
               alignment: "center",
               style: "tableCell",
@@ -231,13 +235,13 @@ const HarmonicDetailSummaryReport = ({
             {
               stack: [
                 { text: getValue(row, "p1Max"), bold: true },
-                { text: formatDateTime(row.p1Maxdate), fontSize: 8 },
+                { text: formatDateTime(row.p1Maxdate), fontSize: 7 },
               ],
               alignment: "center",
               style: "tableCell",
             },
             {
-              text: row.p1Consumption ?? "-",
+              text: formateNumber(row.p1Consumption) ?? "-",
               style: "tableCell",
               alignment: "center",
             },
@@ -258,7 +262,7 @@ const HarmonicDetailSummaryReport = ({
                 { text: getValue(row, "p2Min"), bold: true },
                 {
                   text: formatDateTime(row.p2Mindate),
-                  fontSize: 8,
+                  fontSize: 7,
                 },
               ],
               alignment: "center",
@@ -267,13 +271,13 @@ const HarmonicDetailSummaryReport = ({
             {
               stack: [
                 { text: getValue(row, "p2Max"), bold: true },
-                { text: formatDateTime(row.p2Maxdate), fontSize: 8 },
+                { text: formatDateTime(row.p2Maxdate), fontSize: 7 },
               ],
               alignment: "center",
               style: "tableCell",
             },
             {
-              text: row.p2Consumption ?? "-",
+              text: formateNumber(row.p2Consumption) ?? "-",
               style: "tableCell",
               alignment: "center",
             },
@@ -620,14 +624,14 @@ const HarmonicDetailSummaryReport = ({
                 <th className="w-[12.8%]"></th>
                 <th
                   colSpan={4}
-                  className=" dark:bg-gray-600 py-1 border border-gray-600 w-[12.8%]"
+                  className=" dark:bg-gray-600 py-1 border border-gray-400 w-[12.8%]"
                 >
                   Period 1
                 </th>
                 <th className="w-[0.8%]"></th>
                 <th
                   colSpan={4}
-                  className=" dark:bg-gray-600 py-1 border border-gray-600 w-[12.8%]"
+                  className=" dark:bg-gray-600 py-1 border border-gray-400 w-[12.8%]"
                 >
                   Period 2
                 </th>
@@ -637,35 +641,35 @@ const HarmonicDetailSummaryReport = ({
                   Meter
                 </th>
 
-                <th className="border border-gray-600 w-[11.11%]">Avg THD</th>
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="border border-gray-400 w-[11.11%]">Avg THD</th>
+                <th className="border border-gray-400 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Min Value
                   </div>
                 </th>
 
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="border border-gray-400 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Max Value
                   </div>
                 </th>
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="border border-gray-400 w-[11.11%]">
                   Total Energy Consumed
                 </th>
-                <th className="bg-white dark:bg-gray-800 border-x border-gray-600 w-[0.7%]"></th>
-                <th className="border border-gray-600 w-[11.11%]">Avg THD</th>
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="bg-white dark:bg-gray-800 border-x border-gray-400 w-[0.7%]"></th>
+                <th className="border border-gray-400 w-[11.11%]">Avg THD</th>
+                <th className="border border-gray-400 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Min Value
                   </div>
                 </th>
 
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="border border-gray-400 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Max Value
                   </div>
                 </th>
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="border border-gray-400 w-[11.11%]">
                   Total Energy Consumed
                 </th>
               </tr>
@@ -680,14 +684,14 @@ const HarmonicDetailSummaryReport = ({
                     {meter.meter}
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
-                    {meter.p1Harmonics.toFixed(2)}
+                    {formateNumber(meter.p1Harmonics)}
                   </td>
 
                   {/* Min Value */}
                   <td className="border border-gray-400 p-0">
                     <div className="flex flex-col items-center justify-center py-2 px-3">
                       <span className="font-semibold">
-                        {meter.p1Min.toFixed(2)}
+                        {formateNumber(meter.p1Min)}
                       </span>
                       <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p1Mindate)}
@@ -699,7 +703,7 @@ const HarmonicDetailSummaryReport = ({
                   <td className="border border-gray-400 p-0">
                     <div className="flex flex-col items-center justify-center py-2 px-3">
                       <span className="font-semibold">
-                        {meter.p1Max.toFixed(2)}
+                        {formateNumber(meter.p1Max)}
                       </span>
                       <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p2Mindate)}
@@ -707,18 +711,18 @@ const HarmonicDetailSummaryReport = ({
                     </div>
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
-                    {meter.p1Consumption}
+                    {formateNumber(meter.p1Consumption)}
                   </td>
                   <td className="py-2 border-x bg-white dark:bg-gray-800 border-gray-400 text-center font-semibold"></td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
-                    {meter.p2Harmonics.toFixed(2)}
+                    {formateNumber(meter.p2Harmonics)}
                   </td>
 
                   {/* Min Value */}
                   <td className="border border-gray-400 p-0">
                     <div className="flex flex-col items-center justify-center py-2 px-3">
                       <span className="font-semibold">
-                        {meter.p2Min.toFixed(2)}
+                        {formateNumber(meter.p2Min)}
                       </span>
                       <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p1Maxdate)}
@@ -730,7 +734,7 @@ const HarmonicDetailSummaryReport = ({
                   <td className="border border-gray-400 p-0">
                     <div className="flex flex-col items-center justify-center py-2 px-3">
                       <span className="font-semibold">
-                        {meter.p2Max.toFixed(2)}
+                        {formateNumber(meter.p2Max)}
                       </span>
                       <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p2Maxdate)}
@@ -738,7 +742,7 @@ const HarmonicDetailSummaryReport = ({
                     </div>
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
-                    {meter.p2Consumption}
+                    {formateNumber(meter.p2Consumption)}
                   </td>
                 </tr>
               ))}
@@ -756,14 +760,14 @@ const HarmonicDetailSummaryReport = ({
                 <th className="w-[12.8%]"></th>
                 <th
                   colSpan={4}
-                  className=" dark:bg-gray-600 py-1 border border-gray-600 w-[12.8%]"
+                  className=" dark:bg-gray-600 py-1 border border-gray-400 w-[12.8%]"
                 >
                   Period 1
                 </th>
                 <th className="w-[0.8%]"></th>
                 <th
                   colSpan={4}
-                  className=" dark:bg-gray-600 py-1 border border-gray-600 w-[12.8%]"
+                  className=" dark:bg-gray-600 py-1 border border-gray-400 w-[12.8%]"
                 >
                   Period 2
                 </th>
@@ -773,35 +777,35 @@ const HarmonicDetailSummaryReport = ({
                   Meter
                 </th>
 
-                <th className="border border-gray-600 w-[11.11%]">Avg THD</th>
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="border border-gray-400 w-[11.11%]">Avg THD</th>
+                <th className="border border-gray-400 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Min Value
                   </div>
                 </th>
 
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="border border-gray-400 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Max Value
                   </div>
                 </th>
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="border border-gray-400 w-[11.11%]">
                   Total Energy Consumed
                 </th>
-                <th className="bg-white dark:bg-gray-800 border-x border-gray-600 w-[0.7%]"></th>
-                <th className="border border-gray-600 w-[11.11%]">Avg THD</th>
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="bg-white dark:bg-gray-800 border-x border-gray-400 w-[0.7%]"></th>
+                <th className="border border-gray-400 w-[11.11%]">Avg THD</th>
+                <th className="border border-gray-400 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Min Value
                   </div>
                 </th>
 
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="border border-gray-400 w-[11.11%]">
                   <div className="text-center flex items-center justify-center min-h-[50px] py-1">
                     Max Value
                   </div>
                 </th>
-                <th className="border border-gray-600 w-[11.11%]">
+                <th className="border border-gray-400 w-[11.11%]">
                   Total Energy Consumed
                 </th>
               </tr>
@@ -816,14 +820,14 @@ const HarmonicDetailSummaryReport = ({
                     {meter.meter}
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
-                    {meter.p1Harmonics.toFixed(2)}
+                    {formateNumber(meter.p1Harmonics)}
                   </td>
 
                   {/* Min Value */}
                   <td className="border border-gray-400 p-0">
                     <div className="flex flex-col items-center justify-center py-2 px-3">
                       <span className="font-semibold">
-                        {meter.p1Min.toFixed(2)}
+                        {formateNumber(meter.p1Min)}
                       </span>
                       <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p1Mindate)}
@@ -835,7 +839,7 @@ const HarmonicDetailSummaryReport = ({
                   <td className="border border-gray-400 p-0">
                     <div className="flex flex-col items-center justify-center py-2 px-3">
                       <span className="font-semibold">
-                        {meter.p1Max.toFixed(2)}
+                        {formateNumber(meter.p1Max)}
                       </span>
                       <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p2Mindate)}
@@ -843,18 +847,18 @@ const HarmonicDetailSummaryReport = ({
                     </div>
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
-                    {meter.p1Consumption}
+                    {formateNumber(meter.p1Consumption)}
                   </td>
                   <td className="py-2 border-x bg-white dark:bg-gray-800 border-gray-400 text-center font-semibold"></td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
-                    {meter.p2Harmonics.toFixed(2)}
+                    {formateNumber(meter.p2Harmonics)}
                   </td>
 
                   {/* Min Value */}
                   <td className="border border-gray-400 p-0">
                     <div className="flex flex-col items-center justify-center py-2 px-3">
                       <span className="font-semibold">
-                        {meter.p2Min.toFixed(2)}
+                        {formateNumber(meter.p2Min)}
                       </span>
                       <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p1Maxdate)}
@@ -866,7 +870,7 @@ const HarmonicDetailSummaryReport = ({
                   <td className="border border-gray-400 p-0">
                     <div className="flex flex-col items-center justify-center py-2 px-3">
                       <span className="font-semibold">
-                        {meter.p2Max.toFixed(2)}
+                        {formateNumber(meter.p2Max)}
                       </span>
                       <span className="text-[11px] text-center text-gray-600 dark:text-gray-300">
                         {formatDateTime(meter.p2Maxdate)}
@@ -874,7 +878,7 @@ const HarmonicDetailSummaryReport = ({
                     </div>
                   </td>
                   <td className="py-2 px-3 border border-gray-400 text-center font-semibold">
-                    {meter.p2Consumption}
+                    {formateNumber(meter.p2Consumption)}
                   </td>
                 </tr>
               ))}

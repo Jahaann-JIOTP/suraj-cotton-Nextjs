@@ -10,9 +10,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import SelectDropdown from "@/components/reUseUi/SelectDropdown";
-import { sourceOptions } from "../analytics-report/page";
+import { sourceOptions, filteredArray } from "../analytics-report/page";
 import HarmonicDetailSummaryReport from "@/components/reportsComponent/energyComparisonTable/HarmonicDetailSummaryReport";
-
+import { areaOptions } from "../analytics-report/page";
 const HarmonicsDetailReport = () => {
   const createSixAM = () => {
     const d = new Date();
@@ -23,6 +23,7 @@ const HarmonicsDetailReport = () => {
   const [resData, setResData] = useState({});
 
   const usageReportTimePeriod = "day";
+  const [selectedArea, setSelectedArea] = useState(["all"]);
   const [selectedSource, setSelectedSource] = useState([]);
   const [sourceDropdwon, setSourceDropdown] = useState(false);
   const [intervalDropdown, setIntervalDropdown] = useState(false);
@@ -39,22 +40,11 @@ const HarmonicsDetailReport = () => {
   const [period1Date, setPeriod1Date] = useState([null, null]); // NEW: for dates only
   const [period2Date, setPeriod2Date] = useState([null, null]);
   //   const { theme } = useTheme();
-  function formatToPKTime(date) {
-    if (!date) return "";
 
-    // Create a copy in PKT (UTC+5)
-    const utcHours = date.getUTCHours();
-    const utcMinutes = date.getUTCMinutes();
-
-    // PKT offset = +5 hours
-    const pktHours = (utcHours + 5) % 24;
-
-    // Format hours and minutes to 2 digits
-    const hh = String(pktHours).padStart(2, "0");
-    const mm = String(utcMinutes).padStart(2, "0");
-
-    return `${hh}:${mm}`;
-  }
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const filteredDevices = selectedArea.includes("all")
+    ? filteredArray
+    : filteredArray.filter((meter) => selectedArea.includes(meter.area));
 
   const toLocalISODate = (date) => {
     if (!date) return "";
@@ -453,6 +443,9 @@ const HarmonicsDetailReport = () => {
       setLoadingSubmit(false);
     }
   };
+  useEffect(() => {
+    setSelectedSource([]);
+  }, [selectedArea]);
 
   return (
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
@@ -492,15 +485,29 @@ const HarmonicsDetailReport = () => {
         <div>
           <form onSubmit={handleSubmit} className="space-y-4 p-3 md:p-6 ">
             <div className="grid grid-cols-1  lg:grid-cols-2 gap-8">
+              {/* Area selector dropdown */}
+              <div className="w-full">
+                <SelectDropdown
+                  label="Select Area"
+                  options2={areaOptions}
+                  value={selectedArea}
+                  onChange={setSelectedArea}
+                  isMulti={false}
+                  showSubLabel={false}
+                  enableSearch={false}
+                  placeholder="Select Area"
+                />
+              </div>
               {/* Device selector dropdown */}
-
               <div className="w-full">
                 <SelectDropdown
                   label="Select Source"
-                  options={sourceOptions}
+                  options2={filteredDevices}
                   value={selectedSource}
                   onChange={setSelectedSource}
                   isMulti={true}
+                  showSubLabel={true}
+                  enableSearch={true}
                   placeholder="Select Sources"
                 />
               </div>

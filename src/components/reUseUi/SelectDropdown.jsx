@@ -1,21 +1,29 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
 
 export default function SelectDropdown({
   label = "",
-  options = [],
-  value = [], // array of strings
-  onChange, // callback: (arrayOfStrings) => void
+  options2 = [],
+  value = [],
+  onChange,
   isMulti = false,
   placeholder = "Select option",
+  showSubLabel = false, // ✅ NEW
+  searchPlaceholder = "Search...", // ✅ NEW
+  enableSearch = false,
 }) {
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
+  const searchRef = useRef(null); // ✅ NEW
+
   const [open, setOpen] = useState(false);
   const [displayLabels, setDisplayLabels] = useState("");
+  const [search, setSearch] = useState(""); // ✅ NEW
 
   const toggleDropdown = () => setOpen((p) => !p);
+
+  // Close on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -25,30 +33,49 @@ export default function SelectDropdown({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Reset search & focus when opened
+  useEffect(() => {
+    if (open) {
+      setSearch("");
+      setTimeout(() => searchRef.current?.focus(), 0);
+    }
+  }, [open]);
+
   const handleSelect = (val) => {
     if (isMulti) {
-      let updated;
-      if (value.includes(val)) {
-        updated = value.filter((v) => v !== val);
-      } else {
-        updated = [...value, val];
-      }
-      onChange(updated);
+      onChange(
+        value.includes(val) ? value.filter((v) => v !== val) : [...value, val]
+      );
     } else {
       onChange([val]);
       setOpen(false);
     }
   };
 
-  // Function to calculate which labels fit and remaining +N
+  // 🔍 Filtered options (SEARCH)
+  const filteredOptions = useMemo(() => {
+    if (!enableSearch || !search) return options2;
+
+    const q = search.toLowerCase();
+    return options2.filter(
+      (o) =>
+        o.meterName?.toLowerCase().includes(q) ||
+        o.area?.toLowerCase().includes(q)
+    );
+  }, [search, options2, enableSearch]);
+
+  // Display label calculation (unchanged logic)
   const updateDisplayLabels = () => {
     if (!buttonRef.current) return;
 
-    const buttonWidth = buttonRef.current.offsetWidth - 30; // leave space for arrow
-    const selectedOptions = options.filter((opt) => value.includes(opt.value));
-    const labels = selectedOptions.map((opt) => opt.label);
+    const buttonWidth = buttonRef.current.offsetWidth - 30;
+    const selectedOptions = options2.filter((opt) =>
+      value.includes(opt.meterId)
+    );
+    const labels = selectedOptions.map((opt) => opt.meterName);
 
-    if (labels.length === 0) {
+    if (!labels.length) {
       setDisplayLabels(placeholder);
       return;
     }
@@ -74,22 +101,38 @@ export default function SelectDropdown({
       }
     }
 
-    if (remaining > 0) {
-      setDisplayLabels(`${visibleLabels.join(", ")} ...+${remaining}`);
-    } else {
-      setDisplayLabels(labels.join(", "));
-    }
+    setDisplayLabels(
+      remaining > 0
+        ? `${visibleLabels.join(", ")} ...+${remaining}`
+        : labels.join(", ")
+    );
   };
 
-  useEffect(() => {
-    updateDisplayLabels();
-  }, [value, options]);
+  const highlightText = (text, query) => {
+    if (!enableSearch || !query) return text;
 
-  // Update on window resize
+    const regex = new RegExp(`(${query})`, "ig");
+    const parts = text.split(regex);
+
+    return parts.map((part, i) =>
+      regex.test(part) ? (
+        <span
+          key={i}
+          className="bg-yellow-200 dark:bg-yellow-600/40 font-semibold"
+        >
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
+
+  useEffect(updateDisplayLabels, [value, options2]);
   useEffect(() => {
     window.addEventListener("resize", updateDisplayLabels);
     return () => window.removeEventListener("resize", updateDisplayLabels);
-  }, [value, options]);
+  }, [value, options2]);
 
   return (
     <div className="flex flex-col w-full gap-1">
@@ -117,20 +160,55 @@ export default function SelectDropdown({
 
         {/* Dropdown */}
         {open && (
-          <div className="absolute z-20 mt-1 w-full max-h-[16rem] overflow-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
-            {options.map((option, idx) => (
-              <label
-                key={idx}
-                className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-[13.51px] font-inter text-black dark:text-white"
-              >
+          <div className="absolute z-20 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow-md">
+            {/* 🔍 Search Input */}
+            {enableSearch && (
+              <div className="p-2 sticky top-0 bg-white dark:bg-gray-800 z-10">
                 <input
-                  type={isMulti ? "checkbox" : "radio"}
-                  checked={value.includes(option.value)}
-                  onChange={() => handleSelect(option.value)}
+                  ref={searchRef}
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder={searchPlaceholder}
+                  className="w-full px-3 py-2 outline-none text-sm border rounded bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 />
-                {option.label}
-              </label>
-            ))}
+              </div>
+            )}
+
+            <div className="max-h-[14rem] overflow-auto">
+              {filteredOptions.length === 0 && (
+                <div className="px-4 py-2 text-sm text-gray-500">
+                  No results found
+                </div>
+              )}
+
+              {filteredOptions.map((option) => (
+                <label
+                  key={option.meterId}
+                  className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white"
+                >
+                  <input
+                    type={isMulti ? "checkbox" : "radio"}
+                    checked={value.includes(option.meterId)}
+                    onChange={() => handleSelect(option.meterId)}
+                  />
+
+                  <div className="flex flex-col">
+                    <span className="text-[14px] font-semibold">
+                      {/* {option.meterName} */}
+                      {highlightText(option.meterName, search)}
+                    </span>
+
+                    {/* Optional sub label */}
+                    {showSubLabel && option.area && (
+                      <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                        {highlightText(option.area, search)}
+                      </span>
+                    )}
+                  </div>
+                </label>
+              ))}
+            </div>
           </div>
         )}
       </div>

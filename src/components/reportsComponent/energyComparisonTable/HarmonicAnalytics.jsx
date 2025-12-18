@@ -92,10 +92,21 @@ const HarmonicAnalytics = ({
     const day = String(d.getDate()).padStart(2, "0");
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const year = String(d.getFullYear()).padStart(2, "0");
-    const hours = String(d.getHours()).padStart(2, "0");
-    const minutes = String(d.getMinutes()).padStart(2, "0");
 
-    return `${year}/${month}/${day} - ${hours}:${minutes}`;
+    let hours = d.getHours();
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    hours = hours % 12 || 12; // convert 0 → 12
+    hours = String(hours).padStart(2, "0");
+
+    return `${year}/${month}/${day} - ${hours}:${minutes} ${ampm}`;
+  };
+  const formateNumber = (num) => {
+    return Number(num || 0).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   //=======================================PDF export start ================================

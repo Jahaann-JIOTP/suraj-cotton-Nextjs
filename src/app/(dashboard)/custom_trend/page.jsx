@@ -17,7 +17,48 @@ import { Tooltip } from "@mui/material";
 
 import CustomTrendChart from "@/components/trendsComponents/CustomTrendsChart";
 
-import ReusableTrendChart from "@/components/trendsComponents/NewTestingChart";
+export const areaOptions = [
+  {
+    id: 0,
+    label: "Select Area",
+    value: "",
+  },
+  {
+    id: 1,
+    label: "HFO",
+    value: "HFO",
+  },
+  {
+    id: 2,
+    label: "Unit 4 HT Room",
+    value: "HT_Room1",
+  },
+  {
+    id: 3,
+    label: "Unit 5 HT Room",
+    value: "HT_Room2",
+  },
+  {
+    id: 4,
+    label: "UNIT 4 LT 1",
+    value: "Unit 4 LT_1",
+  },
+  {
+    id: 5,
+    label: "UNIT 4 LT 2",
+    value: "Unit 4 LT_2",
+  },
+  {
+    id: 6,
+    label: "UNIT 5 LT 1",
+    value: "Unit 5 LT_1",
+  },
+  {
+    id: 7,
+    label: "UNIT 5 LT 2",
+    value: "Unit 5 LT_2",
+  },
+];
 
 function CustomTrend() {
   const [startDate, setStartDate] = useState("");
@@ -36,48 +77,6 @@ function CustomTrend() {
   const [displayText, setDisplayText] = useState("Select Meters");
   const meterDropdownRef = useRef();
   const parameterDropdownRef = useRef();
-  const areaOptions = [
-    {
-      id: 0,
-      label: "Select Area",
-      value: "",
-    },
-    {
-      id: 1,
-      label: "HFO",
-      value: "HFO",
-    },
-    {
-      id: 2,
-      label: "Unit 4 HT Room",
-      value: "HT_Room1",
-    },
-    {
-      id: 3,
-      label: "Unit 5 HT Room",
-      value: "HT_Room2",
-    },
-    {
-      id: 4,
-      label: "UNIT 4 LT 1",
-      value: "Unit 4 LT_1",
-    },
-    {
-      id: 5,
-      label: "UNIT 4 LT 2",
-      value: "Unit 4 LT_2",
-    },
-    {
-      id: 6,
-      label: "UNIT 5 LT 1",
-      value: "Unit 5 LT_1",
-    },
-    {
-      id: 7,
-      label: "UNIT 5 LT 2",
-      value: "Unit 5 LT_2",
-    },
-  ];
 
   //============== unique color generation ==========================
 
