@@ -73,34 +73,47 @@ const Unit4Trafos = ({
             <CustomLoader />
           </div>
         )}
-        <ReusableTrendChart
-          id={id}
-          title="UNIT 4 TRANSFORMER 1+2 LOSSES"
-          data={data}
-          xKey="time"
-          xType="date"
-          series={[
-            {
-              type: "line",
-              yKey: "netLosses",
-              name: "Net Losses",
-              color: colors.series1,
-            },
-            {
-              type: "line",
-              yKey: "netLossesPercent",
-              name: "Losses (%)",
-              color: colors.series2,
-              yAxis: "right",
-            },
-          ]}
-          yLeftTitle="Net Losses"
-          yRightTitle="Losses (%)"
-          legend
-          cursor
-          scrollbar
-          isFullscreen={fullscreen}
-        />
+        {!loading && data.length < 1 ? (
+          <div
+            className={`w-full flex flex-col items-center py-5 justify-center ${
+              fullscreen ? "h-[90vh]" : "h-auto"
+            }`}
+          >
+            <img src="../../../trend_icon.png" width={180} alt="" />
+            <span className="text-[13px] text-gray-300 dark:text-gray-500">
+              No Data Available
+            </span>
+          </div>
+        ) : (
+          <ReusableTrendChart
+            id={id}
+            title="UNIT 4 TRANSFORMER 1+2 LOSSES"
+            data={data}
+            xKey="time"
+            xType="date"
+            series={[
+              {
+                type: "line",
+                yKey: "netLosses",
+                name: "Net Losses",
+                color: colors.series1,
+              },
+              {
+                type: "line",
+                yKey: "netLossesPercent",
+                name: "Losses (%)",
+                color: colors.series2,
+                yAxis: "right",
+              },
+            ]}
+            yLeftTitle="Net Losses"
+            yRightTitle="Losses (%)"
+            legend
+            cursor
+            scrollbar
+            isFullscreen={fullscreen}
+          />
+        )}
       </>
     </div>
   );

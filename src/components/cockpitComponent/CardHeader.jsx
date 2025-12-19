@@ -20,7 +20,7 @@ const CardHeader = ({
             width: powerkWWidth,
           }}
         >
-          {Number(activePower).toLocaleString("en-US", {
+          {Number(activePower || 0).toLocaleString("en-US", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}{" "}
@@ -33,7 +33,7 @@ const CardHeader = ({
               width: powerFactorWidth,
             }}
           >
-            {Number(powerFactor).toFixed(2)} PF
+            {Number(powerFactor || 0).toFixed(2)} PF
           </div>
         )}
       </div>

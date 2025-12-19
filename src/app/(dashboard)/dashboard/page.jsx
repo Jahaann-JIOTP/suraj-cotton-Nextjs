@@ -12,6 +12,7 @@ import { DateRangePicker } from "@/components/dashboardComponents/timePeriodSele
 const Dashboard = () => {
   const [singleDivData, setSingleDivData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [unitLoading, setUnitLoading] = useState(false);
   const [unitConsumption, setUnitConsumption] = useState({});
 
   const [dateRange, setDateRange] = useState({
@@ -63,7 +64,7 @@ const Dashboard = () => {
 
     // BLOCK API IF DATE MISSING
     if (!timeRange.startDate || !timeRange.endDate) return null;
-
+    setUnitLoading(true);
     try {
       const response = await fetch(
         `${config.BASE_URL}${config.DASHBOARD.DASHABOARD_UNIT_CONSUMPTION}`,
@@ -91,6 +92,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error(error);
     } finally {
+      setUnitLoading(false);
     }
   };
 
@@ -102,10 +104,24 @@ const Dashboard = () => {
   // time rnage effect
   const updateTimeRange = (dateRange) => {
     const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-
     const currentTime = today.toTimeString().slice(0, 5); // HH:MM
+
+    // ⭐ CUSTOM period: same start & end date
+    if (
+      dateRange.selectedPeriod === "custom" &&
+      dateRange.startDate === dateRange.endDate
+    ) {
+      const nextDay = new Date(dateRange.startDate);
+      nextDay.setDate(nextDay.getDate() + 1);
+
+      setTimeRange({
+        startDate: dateRange.startDate,
+        endDate: nextDay.toISOString().split("T")[0],
+        startTime: "06:00",
+        endTime: "06:00",
+      });
+      return;
+    }
 
     // 1. If both dates same AND period = today
     if (
@@ -127,21 +143,21 @@ const Dashboard = () => {
       dateRange.selectedPeriod === "yesterday"
     ) {
       setTimeRange({
-        startDate: dateRange.startDate, // Keep start date as it is
-        endDate: today.toISOString().split("T")[0], // End date should be today
+        startDate: dateRange.startDate,
+        endDate: today.toISOString().split("T")[0],
         startTime: "06:00",
         endTime: "06:00",
       });
       return;
     }
 
-    // 3. If both dates same (for other cases like this week, this month)
+    // 3. If both dates same (other cases)
     if (dateRange.startDate === dateRange.endDate) {
       setTimeRange({
         startDate: dateRange.startDate,
         endDate: dateRange.endDate,
         startTime: "06:00",
-        endTime: currentTime, // Current time for today
+        endTime: currentTime,
       });
       return;
     }
@@ -154,6 +170,8 @@ const Dashboard = () => {
       endTime: "06:00",
     });
   };
+
+  /////////////////////////////////////////////
   useEffect(() => {
     updateTimeRange(dateRange);
   }, [dateRange]);
@@ -170,7 +188,7 @@ const Dashboard = () => {
     }, 900000);
 
     return () => clearInterval(interval);
-  }, [timeRange]);
+  }, [timeRange.startDate, timeRange.endDate]);
   // useEffect(() => {
   //   fetchUnitConsumption();
   //   const interval = setInterval(() => {
@@ -300,7 +318,7 @@ const Dashboard = () => {
                     }
                   ) || 0
                 }
-                loading={loading}
+                loading={unitLoading}
                 unit="kWh"
               />
             </div>
@@ -317,7 +335,7 @@ const Dashboard = () => {
                     }
                   ) || 0
                 }
-                loading={loading}
+                loading={unitLoading}
                 unit="kWh"
               />
             </div>
@@ -336,7 +354,7 @@ const Dashboard = () => {
                 maximumFractionDigits: 2,
               }) || 0
             }
-            loading={loading}
+            loading={unitLoading}
             unit="kWh"
           />
         </div>
@@ -350,7 +368,7 @@ const Dashboard = () => {
                 maximumFractionDigits: 2,
               }) || 0
             }
-            loading={loading}
+            loading={unitLoading}
             unit="kWh"
           />
         </div>
@@ -373,7 +391,7 @@ const Dashboard = () => {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
-            loading={loading}
+            loading={unitLoading}
             unit="kWh"
           />
         </div>

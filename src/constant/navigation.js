@@ -324,12 +324,12 @@ export const sidebarLinksMap = {
           href: "/trend-u5-lt2",
           icon: AlarmSubMenuIcon,
         },
-        // {
-        //   id: 6,
-        //   title: "Tansformer Losses",
-        //   href: "/trafo-losses",
-        //   icon: TransformerIcon,
-        // },
+        {
+          id: 6,
+          title: "Tansformer Losses",
+          href: "/trafo-losses",
+          icon: TransformerIcon,
+        },
       ],
     },
   ],

@@ -107,7 +107,7 @@ function useAlarmAudioManager(src = "/alarm.mp3") {
   return { play, stop };
 }
 
-const Header = ({ handleTabClick, activeTab }) => {
+const Header = ({ handleTabClick, activeTab, realTimeData = {} }) => {
   const pathname = usePathname();
   const router = useRouter();
   const notificationDropdownRef = useRef(null);
@@ -115,7 +115,7 @@ const Header = ({ handleTabClick, activeTab }) => {
   const [userPrivileges, setUserPrivileges] = useState([]);
   const [alarms, setAlarms] = useState([]); // top 5 shown in panel
   const [isNotificationVisible, setNotificationVisible] = useState(false);
-  const [realTimeData, setRealTimeData] = useState({});
+
   const [error, setError] = useState(null);
   const [openSnoozeFor, setOpenSnoozeFor] = useState(null); // occurrenceId for which snooze menu is open
 
@@ -193,24 +193,6 @@ const Header = ({ handleTabClick, activeTab }) => {
     }
   };
 
-  // Link status (Node-RED)
-  const getMeterData = async () => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (!token) return;
-    try {
-      const response = await fetch(
-        `${config.BASE_URL}${config.DIAGRAM.NODE_RED_REAL_TIME_STATUS}`,
-        { method: "GET", headers: { Authorization: `Bearer ${token}` } }
-      );
-      const resData = await response.json();
-      if (response.ok) setRealTimeData(resData);
-    } catch (e) {
-      console.error(e?.message);
-    } finally {
-    }
-  };
-
   // Update bell & UI (and cache FULL list for audio logic)
   const updateBellIcon = (fetchedAlarms) => {
     const enrichedAll = fetchedAlarms.map((a) => {
@@ -256,9 +238,6 @@ const Header = ({ handleTabClick, activeTab }) => {
     }
     fetchUserDetails();
     fetchAlarms();
-    getMeterData();
-
-    const meterIv = setInterval(getMeterData, 5000);
     const alarmIv = setInterval(fetchAlarms, 40000);
 
     const handleClickOutside = (event) => {
@@ -273,7 +252,7 @@ const Header = ({ handleTabClick, activeTab }) => {
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      clearInterval(meterIv);
+      // clearInterval(meterIv);
       clearInterval(alarmIv);
       document.removeEventListener("mousedown", handleClickOutside);
     };

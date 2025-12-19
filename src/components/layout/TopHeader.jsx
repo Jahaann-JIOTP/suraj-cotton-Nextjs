@@ -4,38 +4,15 @@ import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 import { TiInfoOutline } from "react-icons/ti";
 
-const TopHeader = () => {
+const TopHeader = ({ realTimeData = {} }) => {
   const [mounted, setMounted] = useState(false);
-  const [realTimeData, setRealTimeData] = useState({});
   const { theme } = useTheme();
   const isCaching = realTimeData?.message?.includes("Cache Data Receiving");
-
-  const getMeterData = async () => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (!token) return;
-    try {
-      const response = await fetch(
-        `${config.BASE_URL}${config.DIAGRAM.NODE_RED_REAL_TIME_STATUS}`,
-        { method: "GET", headers: { Authorization: `Bearer ${token}` } }
-      );
-      const resData = await response.json();
-      if (response.ok) {
-        setRealTimeData(resData);
-      }
-    } catch (e) {
-      console.error(e?.message);
-    }
-  };
 
   useEffect(() => {
     setMounted(true);
   }, []);
-  useEffect(() => {
-    getMeterData();
-    const meterIv = setInterval(getMeterData, 5000);
-    return () => clearInterval(meterIv);
-  }, []);
+
   if (!mounted) return null;
   return (
     <header className="h-[48px] flex items-center justify-between px-4 bg-white dark:bg-gray-800">

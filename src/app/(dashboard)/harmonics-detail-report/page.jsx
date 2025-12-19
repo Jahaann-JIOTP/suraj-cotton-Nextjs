@@ -10,8 +10,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import SelectDropdown from "@/components/reUseUi/SelectDropdown";
-import { sourceOptions, filteredArray } from "../analytics-report/page";
+import { filteredArray } from "../analytics-report/page";
 import HarmonicDetailSummaryReport from "@/components/reportsComponent/energyComparisonTable/HarmonicDetailSummaryReport";
+import { formatDateTime } from "@/components/reportsComponent/energyComparisonTable/HarmonicDetailSummaryReport";
 import { areaOptions } from "../analytics-report/page";
 const HarmonicsDetailReport = () => {
   const createSixAM = () => {
@@ -332,31 +333,36 @@ const HarmonicsDetailReport = () => {
   const intervalObj = {
     Period: { p1: "Period 1", p2: "Period 2" },
     "Start Date": {
-      p1: toLocalISODate(period1Date[0]),
-      p2: toLocalISODate(period1Date[1]),
+      p1: `${toLocalISODate(period1Date[0])}`,
+      p2: `${toLocalISODate(period1Date[1])} `,
     },
     "End Date": {
-      p1: toLocalISODate(period2Date[0]),
-      p2: toLocalISODate(period2Date[1]),
+      p1: `${toLocalISODate(period2Date[0])}`,
+      p2: `${toLocalISODate(period2Date[1])}`,
     },
   };
-
   const selectedLabels = selectedSource
-    .map((val) => sourceOptions.find((opt) => opt.value === val)?.label)
+    .map(
+      (val) =>
+        filteredDevices.find((opt) => String(opt.meterId) === String(val))
+          ?.meterName
+    )
     .filter(Boolean);
+
   //--------------------------------Chart Data----------------------------------------
 
   const period1Data = Array.isArray(resData?.period1) ? resData.period1 : [];
   const period2Data = Array.isArray(resData?.period2) ? resData.period2 : [];
 
   const getMeterLabel = (meterId, sourceOptions) => {
-    return sourceOptions.find((opt) => opt.value === meterId)?.label || meterId;
+    return (
+      sourceOptions.find((opt) => opt.meterId === meterId)?.meterName || meterId
+    );
   };
   const buildHarmonicsComparison = ({
     period1,
     period2,
     selectedSource,
-    sourceOptions,
     basePostfix,
   }) => {
     const p1 = period1?.[0] || {};
@@ -367,7 +373,7 @@ const HarmonicsDetailReport = () => {
 
       return {
         meterId,
-        meter: getMeterLabel(meterId, sourceOptions),
+        meter: getMeterLabel(meterId, filteredArray),
 
         // averages
         p1Harmonics: p1[baseKey] ?? null,
@@ -393,14 +399,14 @@ const HarmonicsDetailReport = () => {
     period1: period1Data,
     period2: period2Data,
     selectedSource,
-    sourceOptions,
+    filteredArray,
     basePostfix: "Harmonics_V_THD",
   });
   const CurrentFilterData = buildHarmonicsComparison({
     period1: period1Data,
     period2: period2Data,
     selectedSource,
-    sourceOptions,
+    filteredArray,
     basePostfix: "Harmonics_I_THD",
   });
 
@@ -446,7 +452,6 @@ const HarmonicsDetailReport = () => {
   useEffect(() => {
     setSelectedSource([]);
   }, [selectedArea]);
-
   return (
     <div className="relative bg-white dark:bg-gray-800 h-full md:h-[81vh] overflow-y-auto custom-scrollbar-report rounded-md border-t-3 border-[#1A68B2] px-3 md:px-6 pt-2">
       <div className="flex pb-3 items-center justify-between">

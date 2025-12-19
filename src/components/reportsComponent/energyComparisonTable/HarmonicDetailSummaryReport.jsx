@@ -23,6 +23,24 @@ const sectionHeaders = {
   ),
 };
 
+export const formatDateTime = (iso) => {
+  if (!iso) return "";
+
+  const d = new Date(iso);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = String(d.getFullYear()).padStart(2, "0");
+
+  let hours = d.getHours();
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours = hours % 12 || 12; // convert 0 → 12
+  hours = String(hours).padStart(2, "0");
+
+  return `${year}/${month}/${day} - ${hours}:${minutes} ${ampm}`;
+};
+
 const HarmonicDetailSummaryReport = ({
   intervalObj = {},
   voltageChartData = [],
@@ -30,57 +48,10 @@ const HarmonicDetailSummaryReport = ({
   selectedSource = [],
   usageReportTimePeriod = "",
 }) => {
+  console.log(selectedSource);
   const { theme } = useTheme();
   // formate number
-  function formatLocalDateTime(dateStr) {
-    if (!dateStr) return "";
 
-    // Ensure string
-    let str = typeof dateStr === "string" ? dateStr : "";
-
-    // Normalize separator: replace space with 'T' if missing
-    if (!str.includes("T")) {
-      const parts = str.split(" ");
-      if (parts.length >= 2) {
-        str = parts[0] + "T" + parts[1];
-      } else {
-        return ""; // invalid format
-      }
-    }
-
-    // Example: 2025-12-01T14:30:00+05:30
-    const [datePart, timePart] = str.split("T");
-    if (!timePart) return datePart; // just date
-
-    const [hh24, mm] = timePart.split(":");
-    if (hh24 === undefined || mm === undefined) return datePart;
-
-    let hour = parseInt(hh24, 10);
-    const ampm = hour >= 12 ? "PM" : "AM";
-    hour = hour % 12 || 12;
-
-    return usageReportTimePeriod === "day"
-      ? datePart
-      : `${datePart} ${String(hour).padStart(2, "0")}:${mm} ${ampm}`;
-  }
-
-  const formatDateTime = (iso) => {
-    if (!iso) return "";
-
-    const d = new Date(iso);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = String(d.getFullYear()).padStart(2, "0");
-
-    let hours = d.getHours();
-    const minutes = String(d.getMinutes()).padStart(2, "0");
-    const ampm = hours >= 12 ? "PM" : "AM";
-
-    hours = hours % 12 || 12; // convert 0 → 12
-    hours = String(hours).padStart(2, "0");
-
-    return `${year}/${month}/${day} - ${hours}:${minutes} ${ampm}`;
-  };
   const formateNumber = (num) => {
     return Number(num || 0).toLocaleString("en-US", {
       minimumFractionDigits: 2,

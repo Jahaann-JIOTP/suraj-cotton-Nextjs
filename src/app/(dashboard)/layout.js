@@ -15,12 +15,31 @@ import config from "@/constant/apiRouteList";
 export default function DashboardLayout({ children }) {
   const [activeTab, setActiveTab] = useState("Home");
   const [authChecked, setAuthChecked] = useState(false);
-
+  const [realTimeData, setRealTimeData] = useState({});
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const token = useSelector((state) => state.auth.token);
+
+  const getMeterData = async () => {
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (!token) return;
+    try {
+      const response = await fetch(
+        `${config.BASE_URL}${config.DIAGRAM.NODE_RED_REAL_TIME_STATUS}`,
+        { method: "GET", headers: { Authorization: `Bearer ${token}` } }
+      );
+      const resData = await response.json();
+      if (response.ok) {
+        setRealTimeData(resData);
+      }
+    } catch (e) {
+      console.error(e?.message);
+    }
+  };
+
   useEffect(() => {
     dispatch(initializeAuth());
   }, [pathname, dispatch]);
@@ -86,6 +105,12 @@ export default function DashboardLayout({ children }) {
     }
   }, [token, router]);
 
+  useEffect(() => {
+    getMeterData();
+    const meterIv = setInterval(getMeterData, 5000);
+    return () => clearInterval(meterIv);
+  }, []);
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -96,8 +121,8 @@ export default function DashboardLayout({ children }) {
     <div
       className={` flex flex-col font-inter bg-[#f7f7f7] dark:bg-gray-900 overflow-hidden`}
     >
-      <TopHeader />
-      <Header handleTabClick={handleTabClick} />
+      <TopHeader realTimeData={realTimeData} />
+      <Header handleTabClick={handleTabClick} realTimeData={realTimeData} />
 
       <div className="flex px-4 gap-[0.7vw]">
         <Sidebar activeTab={activeTab} handleTabClick={handleTabClick} />

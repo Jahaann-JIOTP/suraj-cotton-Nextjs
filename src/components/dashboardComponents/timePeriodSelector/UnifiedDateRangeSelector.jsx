@@ -224,6 +224,7 @@ export const DateRangePicker = ({
                 type="date"
                 name="startDate"
                 id="startDate"
+                max={customRange.endDate}
                 style={{ width: "9rem" }}
                 className="border-1 border-gray-300 dark:bg-gray-700 rounded px-1 py-[2px]"
                 onChange={(e) =>
