@@ -9,6 +9,7 @@ import { useTheme } from "next-themes";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 
 const PowerComparison = ({ dateRange }) => {
+  console.log(dateRange);
   const [stackChartData, setStackchartData] = useState([]);
 
   const [timeRange, setTimeRange] = useState("hourly");
@@ -29,7 +30,7 @@ const PowerComparison = ({ dateRange }) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.ENERGY_BALANCE_CHART}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&label=${timeRange}`,
+        `${config.BASE_URL}${config.DASHBOARD.ENERGY_BALANCE_CHART}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&start_date=${dateRange.startTime}&end_date=${dateRange.endTime}&label=${timeRange}`,
         {
           method: "GET",
           headers: {
@@ -81,7 +82,7 @@ const PowerComparison = ({ dateRange }) => {
 
   useEffect(() => {
     fetchPowerComparisonData();
-  }, [dateRange, timeRange]);
+  }, [dateRange.endDate, timeRange]);
 
   useEffect(() => {
     if (!chartRef.current || stackChartData.length === 0) return;
@@ -468,7 +469,7 @@ const PowerComparison = ({ dateRange }) => {
               className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1`}
               onClick={() => handleTimeRangeChange("hourly")}
               style={{
-                background: timeRange === "hourly" ? "#226ce4" : "#6FA1F3",
+                background: timeRange === "hourly" ? "#226ce4" : "#8eb5f3ff",
               }}
             >
               Hourly
@@ -477,7 +478,7 @@ const PowerComparison = ({ dateRange }) => {
               className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1`}
               onClick={() => handleTimeRangeChange("daily")}
               style={{
-                background: timeRange === "daily" ? "#23c15d" : "#55B87A",
+                background: timeRange === "daily" ? "#23c15d" : "#6abb88ff",
               }}
             >
               Daily
@@ -486,7 +487,7 @@ const PowerComparison = ({ dateRange }) => {
               className={`cursor-pointer text-white rounded w-[4rem] text-[12px] py-1`}
               onClick={() => handleTimeRangeChange("monthly")}
               style={{
-                background: timeRange === "monthly" ? "#ed5e3a" : "#F57F62",
+                background: timeRange === "monthly" ? "#ed5e3a" : "#f5a794ff",
               }}
             >
               Monthly

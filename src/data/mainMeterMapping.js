@@ -26,7 +26,7 @@ export const mainMeterMapping = [
     area: "HFO",
   },
   {
-    meterName: "HFO AUX",
+    meterName: "HFO+JMS Auxiliary",
     meterId: "U25_PLC",
     area: "HFO",
   },
@@ -81,7 +81,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_1",
   },
   {
-    meterName: "HFO Plant Aux(2nd Source)",
+    meterName: "HFO Plant Aux(2nd Source) Unit 4",
     meterId: "U5_PLC",
     area: "Unit 4 LT_1",
   },
@@ -91,7 +91,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_1",
   },
   {
-    meterName: "Main Meter",
+    meterName: "PF Panel LT#01",
     meterId: "U7_PLC",
     area: "Unit 4 LT_1",
   },
@@ -198,7 +198,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_2",
   },
   {
-    meterName: "Gas Plant Aux(2nd Source)",
+    meterName: "Gas Plant Aux(2nd Source) Unit 4",
     meterId: "U7_GW01",
     area: "Unit 4 LT_2",
   },
@@ -263,7 +263,7 @@ export const mainMeterMapping = [
     area: "Unit 4 LT_2",
   },
   {
-    meterName: "Spare",
+    meterName: "PF Panel LT#02",
     meterId: "U6_GW01",
     area: "Unit 4 LT_2",
   },
@@ -345,7 +345,7 @@ export const mainMeterMapping = [
     area: "Unit 5 LT_1",
   },
   {
-    meterName: "Card 8-14",
+    meterName: "Card 8-14+Bailing Press-01",
     meterId: "U17_GW02",
     area: "Unit 5 LT_1",
   },
@@ -365,7 +365,7 @@ export const mainMeterMapping = [
     area: "Unit 5 LT_1",
   },
   {
-    meterName: "Simplex + Drawing Breaker",
+    meterName: "Simplex 1-5+Drawing Breaker 1-6",
     meterId: "U21_GW02",
     area: "Unit 5 LT_1",
   },

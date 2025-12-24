@@ -13,7 +13,6 @@ const Sidebar = ({ activeTab, handleTabClick }) => {
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.setItem("theme", "light");
     setTimeout(() => dispatch(logout()), 0);
     router.push("/");
   };

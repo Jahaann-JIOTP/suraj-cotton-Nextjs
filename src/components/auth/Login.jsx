@@ -8,6 +8,7 @@ import config from "../../constant/apiRouteList";
 import { login } from "@/redux/slices/authSlice";
 import { privilegeConfig } from "@/constant/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import DashboardIntervalSelector from "../dashboardComponents/timePeriodSelector/DashboardIntervalSelector";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +18,13 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [userPrivileges, setUserPrivileges] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
+  const [dateTimeRange, setDateTimeRange] = useState({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+  });
+  console.log(dateTimeRange);
   const searchParams = new URLSearchParams(
     typeof window !== "undefined" ? window.location.search : ""
   );

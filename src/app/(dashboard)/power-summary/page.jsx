@@ -162,6 +162,52 @@ const PowerSummaryPage = () => {
           />
         </div>
       </div>
+      {/* <div className="mt-3 md:mt-[0.9vw] grid grid-cols-1 xl:grid-cols-2 items-center gap-3 lg:gap-[0.7vw] justify-between">
+        <div className="w-full">
+          <TrafoCard
+            mainTitle="Unit 4 Transformer 1"
+            icomingValue={Number(
+              powerSummaryData.T1andT2incoming || 0
+            ).toLocaleString("en-US")}
+            loading={loading}
+            iconmingUnit="kWh"
+            outgoingValue={Number(
+              powerSummaryData.T1andT2outgoing || 0
+            ).toLocaleString("en-US")}
+            outgoingUnit="kWh"
+            lossesValue={Number(
+              powerSummaryData.T1andT2losses || 0
+            ).toLocaleString("en-US")}
+            lossesUnit="kWh"
+            lossesPercent={Number(
+              powerSummaryData.T1T2unit4percentage || 0
+            ).toLocaleString("en-US")}
+            lossesPercentUnit="%"
+          />
+        </div>
+        <div className="w-full">
+          <TrafoCard
+            mainTitle="Unit 5 Transformer 2"
+            icomingValue={Number(
+              powerSummaryData.T3andT4incoming || 0
+            ).toLocaleString("en-US")}
+            loading={loading}
+            iconmingUnit="kWh"
+            outgoingValue={Number(
+              powerSummaryData.T3andT4outgoing || 0
+            ).toLocaleString("en-US")}
+            outgoingUnit="kWh"
+            lossesValue={Number(
+              powerSummaryData.T3andT4losses || 0
+            ).toLocaleString("en-US")}
+            lossesUnit="kWh"
+            lossesPercent={Number(
+              powerSummaryData.T3T4percentage || 0
+            ).toLocaleString("en-US")}
+            lossesPercentUnit="%"
+          />
+        </div>
+      </div> */}
       {/* fourth section first of small divs */}
       <div className="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 lg:gap-[0.9vw]">
         <div className="w-full">

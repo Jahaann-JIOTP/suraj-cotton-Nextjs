@@ -1,45 +1,34 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SingleValueDiv from "@/components/dashboardComponents/singleValueDiv/SingleValueDiv";
 import ConsumptionEnergy from "@/components/dashboardComponents/consumptionEnergy/ConsumptionEnergy";
 import EnergyComparison from "@/components/dashboardComponents/energyComparison/EnergyComparison";
 import GenerationEnergy from "@/components/dashboardComponents/generationEnergy/GenerationEnergy";
 import PowerComparison from "@/components/dashboardComponents/powerComparison/PowerComparison";
 import config from "@/constant/apiRouteList";
-
-import { DateRangePicker } from "@/components/dashboardComponents/timePeriodSelector/UnifiedDateRangeSelector";
+import DashboardIntervalSelector from "@/components/dashboardComponents/timePeriodSelector/DashboardIntervalSelector";
 
 const Dashboard = () => {
   const [singleDivData, setSingleDivData] = useState({});
   const [loading, setLoading] = useState(false);
   const [unitLoading, setUnitLoading] = useState(false);
   const [unitConsumption, setUnitConsumption] = useState({});
+  const [dateTimeRange, setDateTimeRange] = useState({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+  });
 
-  const [dateRange, setDateRange] = useState({
-    startDate: "",
-    endDate: "",
-    startTime: "",
-    endTime: "",
-    selectedPeriod: "today",
-  });
-  const [timeRange, setTimeRange] = useState({
-    startDate: "",
-    endDate: "",
-    startTime: "",
-    endTime: "",
-  });
-  const handleDateRangeChange = useCallback((range) => {
-    setDateRange(range);
-  }, []);
   // ===========================fetch consumption api data===================
   const fetchSingleValueData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    if (!dateRange.startDate && !dateRange.endDate) return null;
+    if (!dateTimeRange.endDate) return null;
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.DASHABOARD_SINGLE_VALUE}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
+        `${config.BASE_URL}${config.DASHBOARD.DASHABOARD_SINGLE_VALUE}?start_date=${dateTimeRange.startDate}&end_date=${dateTimeRange.endDate}&start_time=${dateTimeRange.startTime}&end_time=${dateTimeRange.endTime}`,
         {
           method: "GET",
           headers: {
@@ -63,7 +52,7 @@ const Dashboard = () => {
     if (!token) return null;
 
     // BLOCK API IF DATE MISSING
-    if (!timeRange.startDate || !timeRange.endDate) return null;
+    if (!dateTimeRange.endDate) return null;
     setUnitLoading(true);
     try {
       const response = await fetch(
@@ -75,10 +64,10 @@ const Dashboard = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            start_date: timeRange.startDate,
-            end_date: timeRange.endDate,
-            start_time: timeRange.startTime,
-            end_time: timeRange.endTime,
+            start_date: dateTimeRange.startDate,
+            end_date: dateTimeRange.endDate,
+            start_time: dateTimeRange.startTime,
+            end_time: dateTimeRange.endTime,
             suffixes: ["Del_ActiveEnergy"],
             area: "ALL",
           }),
@@ -101,83 +90,8 @@ const Dashboard = () => {
     unitConsumption?.Unit_5_Consumption +
     Number(singleDivData?.Aux_consumption || 0);
 
-  // time rnage effect
-  const updateTimeRange = (dateRange) => {
-    const today = new Date();
-    const currentTime = today.toTimeString().slice(0, 5); // HH:MM
-
-    // ⭐ CUSTOM period: same start & end date
-    if (
-      dateRange.selectedPeriod === "custom" &&
-      dateRange.startDate === dateRange.endDate
-    ) {
-      const nextDay = new Date(dateRange.startDate);
-      nextDay.setDate(nextDay.getDate() + 1);
-
-      setTimeRange({
-        startDate: dateRange.startDate,
-        endDate: nextDay.toISOString().split("T")[0],
-        startTime: "06:00",
-        endTime: "06:00",
-      });
-      return;
-    }
-
-    // 1. If both dates same AND period = today
-    if (
-      dateRange.startDate === dateRange.endDate &&
-      dateRange.selectedPeriod === "today"
-    ) {
-      setTimeRange({
-        startDate: dateRange.startDate,
-        endDate: dateRange.endDate,
-        startTime: "06:00",
-        endTime: currentTime,
-      });
-      return;
-    }
-
-    // 2. If both dates same AND period = yesterday
-    if (
-      dateRange.startDate === dateRange.endDate &&
-      dateRange.selectedPeriod === "yesterday"
-    ) {
-      setTimeRange({
-        startDate: dateRange.startDate,
-        endDate: today.toISOString().split("T")[0],
-        startTime: "06:00",
-        endTime: "06:00",
-      });
-      return;
-    }
-
-    // 3. If both dates same (other cases)
-    if (dateRange.startDate === dateRange.endDate) {
-      setTimeRange({
-        startDate: dateRange.startDate,
-        endDate: dateRange.endDate,
-        startTime: "06:00",
-        endTime: currentTime,
-      });
-      return;
-    }
-
-    // 4. If dates NOT same
-    setTimeRange({
-      startDate: dateRange.startDate,
-      endDate: dateRange.endDate,
-      startTime: "06:00",
-      endTime: "06:00",
-    });
-  };
-
-  /////////////////////////////////////////////
   useEffect(() => {
-    updateTimeRange(dateRange);
-  }, [dateRange]);
-
-  useEffect(() => {
-    if (!timeRange.startDate || !timeRange.endDate) return;
+    if (!dateTimeRange.endDate) return;
 
     fetchUnitConsumption();
     fetchSingleValueData();
@@ -188,27 +102,17 @@ const Dashboard = () => {
     }, 900000);
 
     return () => clearInterval(interval);
-  }, [timeRange.startDate, timeRange.endDate]);
-  // useEffect(() => {
-  //   fetchUnitConsumption();
-  //   const interval = setInterval(() => {
-  //     fetchUnitConsumption();
-  //   }, 900000);
-  //   return () => clearInterval(interval);
-  // }, [timeRange]);
+  }, [dateTimeRange.endDate]);
 
   return (
-    <div className="h-[81vh] overflow-y-auto relative">
+    <div className="h-[81vh] outline-none overflow-y-auto relative">
       {/* first section */}
-      <div className="w-full z-100 flex items-center justify-center md:justify-start">
-        <DateRangePicker
-          showTime={false}
-          showLabels={true}
-          dateRangeLabel="Select Date Range:"
-          intervalLabel="From"
-          toLabel="To"
-          timeLabel="Time"
-          onChange={handleDateRangeChange}
+
+      <div className="z-100">
+        <DashboardIntervalSelector
+          onChange={(range) => {
+            setDateTimeRange(range);
+          }}
         />
       </div>
       {/* second section first of small divs */}
@@ -399,10 +303,10 @@ const Dashboard = () => {
       {/* comparison graphs */}
       <div className="grid grid-cols-1 lg:grid-cols-2 mt-3 md:mt-[0.7vw] gap-2 justify-between">
         <div className="w-full">
-          <EnergyComparison dateRange={dateRange} />
+          <EnergyComparison dateRange={dateTimeRange} />
         </div>
         <div className="w-full">
-          <PowerComparison dateRange={dateRange} />
+          <PowerComparison dateRange={dateTimeRange} />
         </div>
       </div>
     </div>

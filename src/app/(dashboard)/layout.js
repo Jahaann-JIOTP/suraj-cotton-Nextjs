@@ -128,7 +128,7 @@ export default function DashboardLayout({ children }) {
         <Sidebar activeTab={activeTab} handleTabClick={handleTabClick} />
         <main
           // className="w-full h-full pb-5 md:p-auto md:h-[81vh] overflow-x-hidden overflow-y-auto bg-center bg-contain bg-no-repeat"
-          className="w-full h-full pb-5 md:p-auto md:h-[81vh] overflow-hidden bg-center bg-contain bg-no-repeat"
+          className="w-full h-full outline-none pb-5 md:p-auto md:h-[81vh] overflow-hidden bg-center bg-contain bg-no-repeat"
           style={{ backgroundImage: 'url("./bglogo.png")' }}
         >
           {children}

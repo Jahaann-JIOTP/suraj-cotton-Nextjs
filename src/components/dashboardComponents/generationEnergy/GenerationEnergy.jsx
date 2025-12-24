@@ -24,6 +24,7 @@ export default function GenerationEnergy() {
 
   const fetchGenerationEnergyData = async () => {
     const token = localStorage.getItem("token");
+
     if (!token) return;
     setLoading(true);
 

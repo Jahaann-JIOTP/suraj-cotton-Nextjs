@@ -43,7 +43,6 @@ export default function MobileSidebar({
 
   const handleLogout = () => {
     dispatch(logout());
-
     router.push("/");
   };
 

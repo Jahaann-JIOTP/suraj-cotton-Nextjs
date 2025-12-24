@@ -62,12 +62,11 @@ const EnergyComparison = ({ dateRange }) => {
   const fetchPieChartData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    if (!dateRange.startDate && !dateRange.endDate) return null;
-
+    if (!dateRange.endDate) return null;
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.GET_ENERGY_COMPARISON}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&Label=Custom`,
+        `${config.BASE_URL}${config.DASHBOARD.GET_ENERGY_COMPARISON}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&start_time=${dateRange.startTime}&end_time=${dateRange.endTime}&Label=Custom`,
         {
           method: "GET",
           headers: {
@@ -98,8 +97,7 @@ const EnergyComparison = ({ dateRange }) => {
 
   useEffect(() => {
     fetchPieChartData();
-  }, [dateRange]);
-
+  }, [dateRange.endDate]);
   useEffect(() => {
     if (!chartDivRef.current || pieChartData.length === 0) return;
 
@@ -412,18 +410,24 @@ const EnergyComparison = ({ dateRange }) => {
     return () => {
       root.dispose();
     };
-  }, [theme, window.innerWidth, isEnergyComparisonFullView, pieChartData]);
+  }, [
+    theme,
+    window.innerWidth,
+    isEnergyComparisonFullView,
+    pieChartData,
+    dateRange.endDate,
+  ]);
 
   // Update the fetch function to use the selected dates
-  const handleDateChange = () => {
-    if (dateRange) {
-      fetchPieChartData();
-    }
-  };
+  // const handleDateChange = () => {
+  //   if (dateRange) {
+  //     fetchPieChartData();
+  //   }
+  // };
 
-  useEffect(() => {
-    handleDateChange();
-  }, [dateRange]);
+  // useEffect(() => {
+  //   handleDateChange();
+  // }, [dateRange]);
 
   return (
     <div
