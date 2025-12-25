@@ -9,7 +9,6 @@ import { useTheme } from "next-themes";
 import CustomLoader from "@/components/customLoader/CustomLoader";
 
 const PowerComparison = ({ dateRange }) => {
-  console.log(dateRange);
   const [stackChartData, setStackchartData] = useState([]);
 
   const [timeRange, setTimeRange] = useState("hourly");
@@ -26,11 +25,11 @@ const PowerComparison = ({ dateRange }) => {
   const fetchPowerComparisonData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    if (!dateRange.startDate && !dateRange.endDate) return null;
+    if (!dateRange.startDate || !dateRange.endDate) return null;
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}${config.DASHBOARD.ENERGY_BALANCE_CHART}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&start_date=${dateRange.startTime}&end_date=${dateRange.endTime}&label=${timeRange}`,
+        `${config.BASE_URL}${config.DASHBOARD.ENERGY_BALANCE_CHART}?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}&start_time=${dateRange.startTime}&end_time=${dateRange.endTime}&label=${timeRange}`,
         {
           method: "GET",
           headers: {
@@ -82,7 +81,7 @@ const PowerComparison = ({ dateRange }) => {
 
   useEffect(() => {
     fetchPowerComparisonData();
-  }, [dateRange.endDate, timeRange]);
+  }, [dateRange, timeRange]);
 
   useEffect(() => {
     if (!chartRef.current || stackChartData.length === 0) return;

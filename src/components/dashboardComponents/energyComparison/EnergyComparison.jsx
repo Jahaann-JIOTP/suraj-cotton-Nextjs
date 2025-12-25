@@ -62,7 +62,7 @@ const EnergyComparison = ({ dateRange }) => {
   const fetchPieChartData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    if (!dateRange.endDate) return null;
+    if (!dateRange.startDate || !dateRange.endDate) return null;
     setLoading(true);
     try {
       const response = await fetch(
@@ -97,7 +97,7 @@ const EnergyComparison = ({ dateRange }) => {
 
   useEffect(() => {
     fetchPieChartData();
-  }, [dateRange.endDate]);
+  }, [dateRange]);
   useEffect(() => {
     if (!chartDivRef.current || pieChartData.length === 0) return;
 
@@ -415,19 +415,8 @@ const EnergyComparison = ({ dateRange }) => {
     window.innerWidth,
     isEnergyComparisonFullView,
     pieChartData,
-    dateRange.endDate,
+    dateRange,
   ]);
-
-  // Update the fetch function to use the selected dates
-  // const handleDateChange = () => {
-  //   if (dateRange) {
-  //     fetchPieChartData();
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleDateChange();
-  // }, [dateRange]);
 
   return (
     <div

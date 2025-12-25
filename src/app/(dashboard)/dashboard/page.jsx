@@ -24,7 +24,7 @@ const Dashboard = () => {
   const fetchSingleValueData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    if (!dateTimeRange.endDate) return null;
+    if (!dateTimeRange.startDate || !dateTimeRange.endDate) return null;
     setLoading(true);
     try {
       const response = await fetch(
@@ -52,7 +52,7 @@ const Dashboard = () => {
     if (!token) return null;
 
     // BLOCK API IF DATE MISSING
-    if (!dateTimeRange.endDate) return null;
+    if (!dateTimeRange.startDate || !dateTimeRange.endDate) return null;
     setUnitLoading(true);
     try {
       const response = await fetch(
@@ -91,7 +91,7 @@ const Dashboard = () => {
     Number(singleDivData?.Aux_consumption || 0);
 
   useEffect(() => {
-    if (!dateTimeRange.endDate) return;
+    if (!dateTimeRange.startDate || !dateTimeRange.endDate) return;
 
     fetchUnitConsumption();
     fetchSingleValueData();
@@ -102,7 +102,7 @@ const Dashboard = () => {
     }, 900000);
 
     return () => clearInterval(interval);
-  }, [dateTimeRange.endDate]);
+  }, [dateTimeRange]);
 
   return (
     <div className="h-[81vh] outline-none overflow-y-auto relative">
