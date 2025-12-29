@@ -48,7 +48,6 @@ const HarmonicDetailSummaryReport = ({
   selectedSource = [],
   usageReportTimePeriod = "",
 }) => {
-  console.log(selectedSource);
   const { theme } = useTheme();
   // formate number
 

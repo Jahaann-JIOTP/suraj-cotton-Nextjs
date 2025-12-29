@@ -110,6 +110,7 @@ const Dashboard = () => {
 
       <div className="z-100">
         <DashboardIntervalSelector
+          title="Select Date Range:"
           onChange={(range) => {
             setDateTimeRange(range);
           }}

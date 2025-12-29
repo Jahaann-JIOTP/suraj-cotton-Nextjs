@@ -1,31 +1,28 @@
 "use client";
 import SingleValueDiv from "@/components/dashboardComponents/singleValueDiv/SingleValueDiv";
-import { DateRangePicker } from "@/components/dashboardComponents/timePeriodSelector/UnifiedDateRangeSelector";
+import DashboardIntervalSelector from "@/components/dashboardComponents/timePeriodSelector/DashboardIntervalSelector";
 import TrafoCard from "@/components/dashboardComponents/trafoCard/TrafoCard";
 import config from "@/constant/apiRouteList";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const PowerSummaryPage = () => {
   const [powerSummaryData, setPowerSummaryData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [dateRange, setDateRange] = useState({
+  const [dateTimeRange, setDateTimeRange] = useState({
     startDate: "",
     endDate: "",
     startTime: "",
     endTime: "",
   });
-  const handleDateRangeChange = useCallback((range) => {
-    setDateRange(range);
-  }, []);
 
   const fetchPowerSummaryData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    if (!dateRange.startDate && !dateRange.endDate) return null;
+    if (!dateTimeRange.startDate && !dateTimeRange.endDate) return null;
     setLoading(true);
     try {
       const response = await fetch(
-        `${config.BASE_URL}/powersummary/consumption?start_date=${dateRange.startDate}&end_date=${dateRange.endDate}`,
+        `${config.BASE_URL}/powersummary/consumption?start_date=${dateTimeRange.startDate}&end_date=${dateTimeRange.endDate}&startTime=${dateTimeRange.startTime}&endTime=${dateTimeRange.endTime}`,
         {
           method: "GET",
           headers: {
@@ -51,21 +48,20 @@ const PowerSummaryPage = () => {
       fetchPowerSummaryData();
     }, 900000);
     return () => clearInterval(interval);
-  }, [dateRange]);
+  }, [dateTimeRange]);
 
   return (
     <div className="h-full lg:h-[81vh] overflow-y-auto">
       {/* time period selector */}
       <div className="w-full z-100 flex items-center justify-center md:justify-start">
-        <DateRangePicker
-          showTime={false}
-          showLabels={true}
-          dateRangeLabel="Select Date Range:"
-          intervalLabel="From"
-          toLabel="To"
-          timeLabel="Time"
-          onChange={handleDateRangeChange}
-        />
+        <div className="z-100">
+          <DashboardIntervalSelector
+            title="Select Date Range:"
+            onChange={(range) => {
+              setDateTimeRange(range);
+            }}
+          />
+        </div>
       </div>
       {/* first section first of small divs */}
 
@@ -162,25 +158,25 @@ const PowerSummaryPage = () => {
           />
         </div>
       </div>
-      {/* <div className="mt-3 md:mt-[0.9vw] grid grid-cols-1 xl:grid-cols-2 items-center gap-3 lg:gap-[0.7vw] justify-between">
+      <div className="mt-3 md:mt-[0.9vw] grid grid-cols-1 xl:grid-cols-2 items-center gap-3 lg:gap-[0.7vw] justify-between">
         <div className="w-full">
           <TrafoCard
-            mainTitle="Unit 4 Transformer 1"
+            mainTitle="Unit 5 Transformer 1"
             icomingValue={Number(
-              powerSummaryData.T1andT2incoming || 0
+              powerSummaryData.T3incoming || 0
             ).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
             outgoingValue={Number(
-              powerSummaryData.T1andT2outgoing || 0
+              powerSummaryData.T3outgoing || 0
             ).toLocaleString("en-US")}
             outgoingUnit="kWh"
-            lossesValue={Number(
-              powerSummaryData.T1andT2losses || 0
-            ).toLocaleString("en-US")}
+            lossesValue={Number(powerSummaryData.T3losses || 0).toLocaleString(
+              "en-US"
+            )}
             lossesUnit="kWh"
             lossesPercent={Number(
-              powerSummaryData.T1T2unit4percentage || 0
+              powerSummaryData.T3percentage || 0
             ).toLocaleString("en-US")}
             lossesPercentUnit="%"
           />
@@ -189,25 +185,25 @@ const PowerSummaryPage = () => {
           <TrafoCard
             mainTitle="Unit 5 Transformer 2"
             icomingValue={Number(
-              powerSummaryData.T3andT4incoming || 0
+              powerSummaryData.T4incoming || 0
             ).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
             outgoingValue={Number(
-              powerSummaryData.T3andT4outgoing || 0
+              powerSummaryData.T4outgoing || 0
             ).toLocaleString("en-US")}
             outgoingUnit="kWh"
-            lossesValue={Number(
-              powerSummaryData.T3andT4losses || 0
-            ).toLocaleString("en-US")}
+            lossesValue={Number(powerSummaryData.T4losses || 0).toLocaleString(
+              "en-US"
+            )}
             lossesUnit="kWh"
             lossesPercent={Number(
-              powerSummaryData.T3T4percentage || 0
+              powerSummaryData.T4percentage || 0
             ).toLocaleString("en-US")}
             lossesPercentUnit="%"
           />
         </div>
-      </div> */}
+      </div>
       {/* fourth section first of small divs */}
       <div className="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 lg:gap-[0.9vw]">
         <div className="w-full">

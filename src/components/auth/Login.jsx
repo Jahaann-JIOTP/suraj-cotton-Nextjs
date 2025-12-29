@@ -18,13 +18,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [userPrivileges, setUserPrivileges] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
-  const [dateTimeRange, setDateTimeRange] = useState({
-    startDate: "",
-    endDate: "",
-    startTime: "",
-    endTime: "",
-  });
-  console.log(dateTimeRange);
+
   const searchParams = new URLSearchParams(
     typeof window !== "undefined" ? window.location.search : ""
   );

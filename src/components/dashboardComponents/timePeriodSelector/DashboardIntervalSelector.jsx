@@ -36,7 +36,7 @@ const getMonday = (date) => {
 };
 
 /* ---------- component ---------- */
-export default function DashboardIntervalSelector({ onChange }) {
+export default function DashboardIntervalSelector({ onChange, title = "" }) {
   const [interval, setInterval] = useState("today");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [customRange, setCustomRange] = useState([null, null]);
@@ -174,8 +174,9 @@ export default function DashboardIntervalSelector({ onChange }) {
   };
 
   return (
-    <div className="flex gap-4 w-auto">
+    <div className="flex items-center gap-4 w-auto">
       {/* -------- Interval Dropdown -------- */}
+      <label htmlFor="">{title}</label>
       <div className="relative w-[11rem]" ref={dropdownRef}>
         <button
           type="button"

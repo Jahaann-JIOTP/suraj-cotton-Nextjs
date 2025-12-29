@@ -96,7 +96,6 @@ export default function HeatmapTrafo({
       originalDateString: row.date,
       value: row[meter],
     }));
-    console.log("heatmap data", records);
     const allDates = records.map((r) => r.dt.toISOString().split("T")[0]);
     const minDateStr = allDates.reduce((a, b) => (a < b ? a : b));
     const maxDateStr = allDates.reduce((a, b) => (a > b ? a : b));

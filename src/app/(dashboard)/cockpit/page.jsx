@@ -54,20 +54,7 @@ const cockpitDashboard = () => {
       "Both Wapda+HFO+JMS I/C LT1 and LT2 meters are included in Wapda+HFO+JMS I/C",
   };
   //===============calculating toatl of unit 4 main
-  // total of main sources
-  // console.log(
-  //   "meter data",
-  //   meterData.U27_PLC_ActivePower_Total +
-  //     meterData.U22_PLC_ActivePower_Total +
-  //     meterData.U26_PLC_ActivePower_Total +
-  //     meterData.U24_GW01_ActivePower_Total +
-  //     meterData.U28_PLC_ActivePower_Total +
-  //     meterData.U6_GW02_ActivePower_Total +
-  //     meterData.U17_GW03_ActivePower_Total +
-  //     meterData.U19_PLC_ActivePower_Total +
-  //     meterData.U11_GW01_ActivePower_Total +
-  //     meterData.U23_GW01_ActivePower_Total
-  // );
+
   const safe = (v) => Number(v) || 0;
   const wapda2 = safe(meterData.U27_PLC_ActivePower_Total) / 1000;
   let hfo1 = safe(meterData.U22_PLC_ActivePower_Total) / 1000;

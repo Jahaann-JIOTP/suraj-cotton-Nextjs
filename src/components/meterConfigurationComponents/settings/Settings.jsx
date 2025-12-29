@@ -57,9 +57,6 @@ const Settings = () => {
     return meter ? meter.name : id; // fallback to id if not found
   };
   const checkCrossAreaConflict = (meterId, targetUnit, selectedUnits) => {
-    console.log("meter Id", meterId);
-    console.log("target unit", targetUnit);
-    console.log("selected uints", selectedUnits);
     const currentUnit = selectedUnits[meterId];
     const group = meterGroups.find((g) => g.includes(meterId));
     if (!group) return null;
