@@ -7,7 +7,7 @@ export async function POST() {
   try {
     await connectDB();
 
-    const response = await fetch("http://13.234.241.103:1880/surajcotton");
+    const response = await fetch("http://43.204.118.114:6881/surajcotton");
     if (!response.ok) {
       return NextResponse.json(
         { error: `Failed to fetch: ${response.status}` },
