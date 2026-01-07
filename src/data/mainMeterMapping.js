@@ -310,7 +310,7 @@ export const mainMeterMapping = [
     area: "Unit 5 LT_1",
   },
   {
-    meterName: "Ring 4-6",
+    meterName: "Ring Frames 4-6",
     meterId: "U10_GW02",
     area: "Unit 5 LT_1",
   },

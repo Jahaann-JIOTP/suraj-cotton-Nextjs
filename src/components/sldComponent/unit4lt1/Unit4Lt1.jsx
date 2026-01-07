@@ -7,8 +7,8 @@ const lt1MeterData = [
   {
     link: "U1_PLC",
     title: "Roving Transport System",
-    top: 277,
-    left: 96,
+    top: 276,
+    left: 98,
   },
   {
     link: "U2_PLC",
@@ -19,7 +19,7 @@ const lt1MeterData = [
   {
     link: "U3_PLC",
     title: "Lighting Outside",
-    top: 277,
+    top: 271,
     left: 261,
   },
   {
@@ -31,7 +31,7 @@ const lt1MeterData = [
   {
     link: "U5_PLC",
     title: "HFO Plant Aux(2nd Source)",
-    top: 277,
+    top: 271,
     left: 427,
   },
   {
@@ -42,7 +42,7 @@ const lt1MeterData = [
   },
   {
     link: "U7_PLC",
-    title: "Main Meter",
+    title: "PF Panel LT#01",
     top: 277,
     left: 600,
   },
@@ -62,61 +62,61 @@ const lt1MeterData = [
     link: "U10_PLC",
     title: "Ring 1-4",
     top: 340,
-    left: 887,
+    left: 883,
   },
   {
     link: "U11_PLC",
     title: "Ring 17-20",
-    top: 603,
-    left: 95,
+    top: 600,
+    left: 98,
   },
   {
     link: "U12_PLC",
     title: "Ring 21-24",
-    top: 540,
-    left: 178,
+    top: 537,
+    left: 180,
   },
   {
     link: "U13_PLC",
     title: "Comber 1-10 + Lap Former 1-2",
-    top: 603,
-    left: 260,
+    top: 600,
+    left: 261,
   },
   {
     link: "U14_PLC",
     title: "Compressor (119 kW)",
-    top: 540,
+    top: 537,
     left: 342,
   },
   {
     link: "U15_PLC",
     title: "Simplex 1-6",
-    top: 603,
+    top: 600,
     left: 424,
   },
   {
     link: "U16_PLC",
-    title: "Compressor (303 kW)",
-    top: 540,
+    title: "Compressor (303kW)",
+    top: 537,
     left: 507,
   },
   {
     link: "U17_PLC",
     title: "Ring A/C (Supply & Return Fans)",
-    top: 603,
+    top: 600,
     left: 590,
   },
   {
     link: "U18_PLC",
     title: "Ring A/C (Supply & Return Fans) Bypass",
-    top: 540,
+    top: 537,
     left: 680,
   },
   {
     link: "U20_PLC",
-    title: "Compressor (119 kW) Bypass",
-    top: 603,
-    left: 773,
+    title: "Compressor (119kW) Bypass",
+    top: 600,
+    left: 770,
   },
 ];
 
@@ -145,7 +145,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U3_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U3_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U3_PLC_Voltage_Avg,
-      top: 284,
+      top: 278,
       left: 268,
     },
     // Lighting Inside
@@ -161,7 +161,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U5_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U5_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U5_PLC_Voltage_Avg,
-      top: 284,
+      top: 278,
       left: 433,
     },
     // Turbine
@@ -177,7 +177,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U7_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U7_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U7_PLC_Voltage_Avg,
-      top: 284,
+      top: 282,
       left: 606,
     },
     // Drawing 1
@@ -193,8 +193,8 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U9_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U9_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U9_PLC_Voltage_Avg,
-      top: 284,
-      left: 777,
+      top: 282,
+      left: 775,
     },
 
     // Ring 1
@@ -210,15 +210,15 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U11_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U11_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U11_PLC_Voltage_BC,
-      top: 610,
-      left: 103,
+      top: 608,
+      left: 105,
     },
     // Ring 6
     {
       activePowerTotalTag: roundedData?.U12_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U12_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U12_PLC_Voltage_Avg,
-      top: 546,
+      top: 544,
       left: 186,
     },
     // Comber 1
@@ -226,7 +226,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U13_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U13_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U13_PLC_Voltage_Avg,
-      top: 610,
+      top: 608,
       left: 267,
     },
     // Compressor
@@ -234,7 +234,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U14_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U14_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U14_PLC_Voltage_BC,
-      top: 546,
+      top: 544,
       left: 349,
     },
     // Simplex 1
@@ -242,7 +242,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U15_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U15_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U15_PLC_Voltage_Avg,
-      top: 610,
+      top: 608,
       left: 431.5,
     },
     // Compressor 2
@@ -250,7 +250,7 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U16_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U16_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U16_PLC_Voltage_Avg,
-      top: 546,
+      top: 544,
       left: 513.5,
     },
     // Ring AC
@@ -258,24 +258,24 @@ const Unit4Lt1 = ({ roundedData }) => {
       activePowerTotalTag: roundedData?.U17_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U17_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U17_PLC_Voltage_Avg,
-      top: 610,
-      left: 595.5,
+      top: 608,
+      left: 595,
     },
     // Ring AC (Bypass)
     {
       activePowerTotalTag: roundedData?.U18_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U18_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U18_PLC_Voltage_BC,
-      top: 546,
-      left: 687,
+      top: 544,
+      left: 686,
     },
     // Compressor (Bypass)
     {
       activePowerTotalTag: roundedData?.U20_PLC_ActivePower_Total,
       activeCurrentAvgTag: roundedData?.U20_PLC_Current_Avg,
       activeVoltageAvgTag: roundedData?.U20_PLC_Voltage_Avg,
-      top: 610,
-      left: 777.5,
+      top: 608,
+      left: 777,
     },
   ];
 
@@ -325,7 +325,7 @@ const Unit4Lt1 = ({ roundedData }) => {
         ))}
         {/* Diagram Image */}
         <img
-          src="../../../surajcotton-sld/u4lt1updated.png"
+          src="../../../sld/unit4lt1-updated.png"
           className=" h-full"
           style={{ width: "1100px" }}
           alt="unit 4 sld"
