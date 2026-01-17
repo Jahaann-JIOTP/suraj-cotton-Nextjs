@@ -28,7 +28,7 @@ const PowerSummaryPage = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       const resResult = await response.json();
       if (response.ok) {
@@ -92,7 +92,7 @@ const PowerSummaryPage = () => {
           <SingleValueDiv
             title="HFO 1"
             value={Number(powerSummaryData.Niigata || 0).toLocaleString(
-              "en-US"
+              "en-US",
             )}
             loading={loading}
             unit="kWh"
@@ -117,20 +117,20 @@ const PowerSummaryPage = () => {
           <TrafoCard
             mainTitle="Unit 4 Transformer 1+2"
             icomingValue={Number(
-              powerSummaryData.T1andT2incoming || 0
+              powerSummaryData.T1andT2incoming || 0,
             ).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
             outgoingValue={Number(
-              powerSummaryData.T1andT2outgoing || 0
+              powerSummaryData.T1andT2outgoing || 0,
             ).toLocaleString("en-US")}
             outgoingUnit="kWh"
             lossesValue={Number(
-              powerSummaryData.T1andT2losses || 0
+              powerSummaryData.T1andT2losses || 0,
             ).toLocaleString("en-US")}
             lossesUnit="kWh"
             lossesPercent={Number(
-              powerSummaryData.T1T2unit4percentage || 0
+              powerSummaryData.T1T2unit4percentage || 0,
             ).toLocaleString("en-US")}
             lossesPercentUnit="%"
           />
@@ -139,20 +139,20 @@ const PowerSummaryPage = () => {
           <TrafoCard
             mainTitle="Unit 5 Transformer 1+2"
             icomingValue={Number(
-              powerSummaryData.T3andT4incoming || 0
+              powerSummaryData.T3andT4incoming || 0,
             ).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
             outgoingValue={Number(
-              powerSummaryData.T3andT4outgoing || 0
+              powerSummaryData.T3andT4outgoing || 0,
             ).toLocaleString("en-US")}
             outgoingUnit="kWh"
             lossesValue={Number(
-              powerSummaryData.T3andT4losses || 0
+              powerSummaryData.T3andT4losses || 0,
             ).toLocaleString("en-US")}
             lossesUnit="kWh"
             lossesPercent={Number(
-              powerSummaryData.T3T4percentage || 0
+              powerSummaryData.T3T4percentage || 0,
             ).toLocaleString("en-US")}
             lossesPercentUnit="%"
           />
@@ -163,20 +163,20 @@ const PowerSummaryPage = () => {
           <TrafoCard
             mainTitle="Unit 5 Transformer 1"
             icomingValue={Number(
-              powerSummaryData.T3incoming || 0
+              powerSummaryData.T3incoming || 0,
             ).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
             outgoingValue={Number(
-              powerSummaryData.T3outgoing || 0
+              powerSummaryData.T3outgoing || 0,
             ).toLocaleString("en-US")}
             outgoingUnit="kWh"
             lossesValue={Number(powerSummaryData.T3losses || 0).toLocaleString(
-              "en-US"
+              "en-US",
             )}
             lossesUnit="kWh"
             lossesPercent={Number(
-              powerSummaryData.T3percentage || 0
+              powerSummaryData.T3percentage || 0,
             ).toLocaleString("en-US")}
             lossesPercentUnit="%"
           />
@@ -185,20 +185,20 @@ const PowerSummaryPage = () => {
           <TrafoCard
             mainTitle="Unit 5 Transformer 2"
             icomingValue={Number(
-              powerSummaryData.T4incoming || 0
+              powerSummaryData.T4incoming || 0,
             ).toLocaleString("en-US")}
             loading={loading}
             iconmingUnit="kWh"
             outgoingValue={Number(
-              powerSummaryData.T4outgoing || 0
+              powerSummaryData.T4outgoing || 0,
             ).toLocaleString("en-US")}
             outgoingUnit="kWh"
             lossesValue={Number(powerSummaryData.T4losses || 0).toLocaleString(
-              "en-US"
+              "en-US",
             )}
             lossesUnit="kWh"
             lossesPercent={Number(
-              powerSummaryData.T4percentage || 0
+              powerSummaryData.T4percentage || 0,
             ).toLocaleString("en-US")}
             lossesPercentUnit="%"
           />
@@ -230,7 +230,7 @@ const PowerSummaryPage = () => {
           <SingleValueDiv
             title="Solar 352.50 kW"
             value={Number(powerSummaryData.solarunit4 || 0).toLocaleString(
-              "en-US"
+              "en-US",
             )}
             loading={loading}
             unit="kWh"
@@ -242,7 +242,7 @@ const PowerSummaryPage = () => {
           <SingleValueDiv
             title="Solar 52.17 kW"
             value={Number(powerSummaryData.solar52 || 0).toLocaleString(
-              "en-US"
+              "en-US",
             )}
             loading={loading}
             unit="kWh"
@@ -254,7 +254,7 @@ const PowerSummaryPage = () => {
           <SingleValueDiv
             title="Diesel and Gas Genset"
             value={Number(
-              powerSummaryData.DieselandGasGenset || 0
+              powerSummaryData.DieselandGasGenset || 0,
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
@@ -268,7 +268,7 @@ const PowerSummaryPage = () => {
             title="Wapda Energy Export"
             loading={loading}
             value={Number(powerSummaryData.Wapdaexport || 0).toLocaleString(
-              "en-US"
+              "en-US",
             )}
             unit="kWh"
             valueColor="#019726"
@@ -279,7 +279,7 @@ const PowerSummaryPage = () => {
           <SingleValueDiv
             title="Unaccounted Energy"
             value={Number(
-              powerSummaryData.unaccoutable_energy || 0
+              powerSummaryData.unaccoutable_energy || 0,
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
@@ -291,7 +291,7 @@ const PowerSummaryPage = () => {
           <SingleValueDiv
             title="Trasformer Losses"
             value={Number(
-              powerSummaryData.TrasformerLosses || 0
+              powerSummaryData.TrasformerLosses || 0,
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
@@ -301,9 +301,9 @@ const PowerSummaryPage = () => {
         </div>
         <div className="w-full">
           <SingleValueDiv
-            title="Tranformer Losses (%)"
+            title="Transformer Losses (%)"
             value={Number(
-              powerSummaryData.TotalTrasformepercentage || 0
+              powerSummaryData.TotalTrasformepercentage || 0,
             ).toLocaleString("en-US")}
             loading={loading}
             unit="%"
@@ -316,7 +316,7 @@ const PowerSummaryPage = () => {
           <SingleValueDiv
             title="HT Transmission Losses"
             value={Number(
-              powerSummaryData.HT_Transmissioin_Losses || 0
+              powerSummaryData.HT_Transmissioin_Losses || 0,
             ).toLocaleString("en-US")}
             loading={loading}
             unit="kWh"
