@@ -1,6 +1,6 @@
 "use client";
 import { ArrowLeft, Edit, Eye, Trash } from "lucide-react";
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo, use } from "react";
 import ViewDetailsModal from "@/components/alarmsComponents/Alarm_View";
 import DeleteModal from "@/components/alarmsComponents/Delete_Modal";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -13,22 +13,25 @@ export default function Index() {
   const router = useRouter();
 
   const dataString = searchParams.get("data");
-  const alarm = dataString ? JSON.parse(dataString) : null;
+  const alarm = dataString ? dataString : null;
+  console.log("................", alarm);
 
   // Derive typeId robustly
   const typeId = useMemo(() => {
-    if (!alarm) return searchParams.get("typeId") || null;
+    if (!alarm) return searchParams.get("data") || null;
     return (
       alarm.typeId ||
       alarm.typeID ||
       alarm.alarmTypeId?._id ||
       alarm._id || // if /types/:id object was passed directly
-      searchParams.get("typeId") ||
+      searchParams.get("data") ||
       null
     );
   }, [alarm, searchParams]);
 
   const [alarms, setAlarms] = useState([]);
+  const [singleAlarm, setSingleAlarm] = useState({});
+
   const [currentPage, setCurrentPage] = useState(1);
   const alarmsPerPage = 4;
   const [selectedAlarm, setSelectedAlarm] = useState(null);
@@ -50,7 +53,7 @@ export default function Index() {
   };
 
   const fetchAlarms = useCallback(async () => {
-    if (!typeId) {
+    if (!alarm) {
       setFetchError("Missing typeId to fetch alarms.");
       setIsLoading(false);
       return;
@@ -157,6 +160,35 @@ export default function Index() {
   const canGoNext = alarms.length > currentPage * alarmsPerPage;
   const canGoBack = currentPage > 1;
 
+  // ------------------------------fetch single arlarm------------------------------------
+  useEffect(() => {
+    const fetchAlarmData = async () => {
+      if (!alarm) {
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${config.BASE_URL}/alarms/all-types-alarms`,
+        );
+        const data = await response.json();
+
+        // Find the alarm that matches the _id
+        const matchedAlarm = data.find((item) => item._id === alarm);
+
+        if (matchedAlarm) {
+          setSingleAlarm(matchedAlarm);
+        }
+      } catch (error) {
+        console.error("Error fetching alarm data:", error);
+      }
+    };
+
+    fetchAlarmData();
+  }, [alarm]);
+
+  // ---------------------------------------------------------------------------------
+
   const handleAddClick = () => {
     const rowData = {
       _id: null,
@@ -173,20 +205,26 @@ export default function Index() {
       triggerPersistChecked: false,
       triggerOccursChecked: true,
     };
-    router.push(
-      `/alarms?data=${encodeURIComponent(
-        JSON.stringify(alarm)
-      )}&rowData=${encodeURIComponent(JSON.stringify(rowData))}`
-    );
+    // router.push(
+    //   `/alarms?data=${encodeURIComponent(
+    //     JSON.stringify(singleAlarm),
+    //   )}&rowData=${encodeURIComponent(JSON.stringify(rowData))}`,
+    // );
+    sessionStorage.setItem("alarmMeta", JSON.stringify(singleAlarm));
+    sessionStorage.setItem("rowData", JSON.stringify(rowData));
+    router.push(`/alarms?typeId=${singleAlarm._id}`);
   };
 
   const handleEditClick = (selected) => {
+    sessionStorage.setItem("alarmMeta", JSON.stringify(singleAlarm));
+    sessionStorage.setItem("rowData", JSON.stringify(selected));
     const rowData = selected;
-    router.push(
-      `/alarms?data=${encodeURIComponent(
-        JSON.stringify(alarm)
-      )}&rowData=${encodeURIComponent(JSON.stringify(rowData))}`
-    );
+    // router.push(
+    //   `/alarms?data=${encodeURIComponent(
+    //     JSON.stringify(singleAlarm),
+    //   )}&rowData=${encodeURIComponent(JSON.stringify(rowData))}`,
+    // );
+    router.push(`/alarms?typeId=${singleAlarm._id}`);
   };
   // remove _ and id from param
   const formateParmeter = (param) => {
@@ -253,24 +291,27 @@ export default function Index() {
             <span>
               <strong>Alarm Priority:</strong>{" "}
               <span className="text-[#025697] font-semibold">
-                {priorityLabels[alarm.priority] || `Priority ${alarm.priority}`}
+                {/* {priorityLabels[alarm.priority] || `Priority ${alarm.priority}`} */}
+                {`Priority ${singleAlarm.priority}`}
               </span>
             </span>
             <span>
               <strong>Alarm Type:</strong>{" "}
-              <span className="text-[#025697] font-semibold">{alarm.type}</span>
+              <span className="text-[#025697] font-semibold">
+                {singleAlarm.type}
+              </span>
             </span>
             <span className="flex items-center">
               <strong>Alarm Color:</strong>
               <div
                 className="ml-2 w-4 h-4 rounded-sm border border-black/20"
-                style={{ backgroundColor: alarm.color }}
+                style={{ backgroundColor: singleAlarm.color }}
               />
             </span>
             <span>
               <strong>Acknowledgement Type:</strong>{" "}
               <span className="text-[#025697] cursor-pointer">
-                {alarm.acknowledgeType === "Both"
+                {singleAlarm.acknowledgeType === "Both"
                   ? "Single + Mass Acknowledgement"
                   : "Single Acknowledgement"}
               </span>

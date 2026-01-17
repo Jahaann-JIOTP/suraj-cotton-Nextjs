@@ -192,7 +192,7 @@ const MainSldOverview = ({ roundedData }) => {
             href={`/meter?area=${meter.area}&page-type=sld&LT_selections=${
               meter.lt_scheme
             }&meter_id=${meter.link}&meter_name=${encodeURIComponent(
-              meter.title
+              meter.title,
             )}`}
             key={meter.link}
             style={{

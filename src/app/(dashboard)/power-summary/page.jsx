@@ -289,7 +289,7 @@ const PowerSummaryPage = () => {
         </div>
         <div className="w-full">
           <SingleValueDiv
-            title="Trasformer Losses"
+            title="Transformer Losses"
             value={Number(
               powerSummaryData.TrasformerLosses || 0,
             ).toLocaleString("en-US")}

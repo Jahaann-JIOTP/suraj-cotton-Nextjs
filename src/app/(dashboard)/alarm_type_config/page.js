@@ -26,12 +26,10 @@ export default function Index() {
 
   const totalPages = Math.max(
     1,
-    Math.ceil(sortedAlarms.length / alarmsPerPage)
+    Math.ceil(sortedAlarms.length / alarmsPerPage),
   );
   const handleViewClick = (alarm) => {
-    router.push(
-      `/alarm_config?data=${encodeURIComponent(JSON.stringify(alarm))}`
-    );
+    router.push(`/alarm_config?data=${encodeURIComponent(alarm)}`);
   };
 
   useEffect(() => {
@@ -39,7 +37,7 @@ export default function Index() {
     const fetchAlarms = async () => {
       try {
         const response = await fetch(
-          `${config.BASE_URL}/alarms/all-types-alarms`
+          `${config.BASE_URL}/alarms/all-types-alarms`,
         );
         const data = await response.json();
 
@@ -69,7 +67,7 @@ export default function Index() {
   const refreshAlarms = async () => {
     try {
       const response = await fetch(
-        `${config.BASE_URL}/alarms/all-types-alarms`
+        `${config.BASE_URL}/alarms/all-types-alarms`,
       );
       const data = await response.json();
       setAlarms(data);
@@ -196,10 +194,10 @@ export default function Index() {
                   style={{
                     backgroundColor: `rgba(${parseInt(
                       alarm.color.slice(1, 3),
-                      16
+                      16,
                     )}, ${parseInt(alarm.color.slice(3, 5), 16)}, ${parseInt(
                       alarm.color.slice(5, 7),
-                      16
+                      16,
                     )}, 0.1)`,
                   }}
                 >
@@ -255,7 +253,7 @@ export default function Index() {
                   </div>
                   <div className="flex justify-end gap-2 mt-4">
                     <button
-                      onClick={() => handleViewClick(alarm)}
+                      onClick={() => handleViewClick(alarm?._id)}
                       className="cursor-pointer !font-[Inter] bg-[#007A1F] text-white text-[12px] px-4 py-1 rounded hover:bg-green-700"
                     >
                       View

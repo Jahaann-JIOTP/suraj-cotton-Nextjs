@@ -42,7 +42,9 @@ const buildComparableFromState = ({
     alarmTriggerConfig: {
       persistenceEnabled: !!triggerPersistChecked,
       occursEnabled: !!triggerOccursChecked,
-      persistenceTime: !!triggerPersistChecked ? Number(persistSeconds || 0) : 0,
+      persistenceTime: !!triggerPersistChecked
+        ? Number(persistSeconds || 0)
+        : 0,
       occursCount: !!triggerOccursChecked ? Number(occurTimes || 0) : 0,
       thresholds: [
         {
@@ -97,21 +99,32 @@ export default function Index() {
   const [formErrors, setFormErrors] = useState({});
 
   const searchParams = useSearchParams();
-  const dataString = searchParams.get("data");
-  const alarm = dataString ? JSON.parse(dataString) : null;
-  const rowDataString = searchParams.get("rowData");
-  const rowData = rowDataString ? JSON.parse(rowDataString) : null;
+  // const dataString = searchParams.get("data");
+  // const alarm = dataString ? JSON.parse(dataString) : null;
+  // const rowDataString = searchParams.get("rowData");
+  // const rowData = rowDataString ? JSON.parse(rowDataString) : null;
+  const typeId = searchParams.get("typeId");
 
+  const singleAlarm = useMemo(() => {
+    if (typeof window === "undefined") return {};
+    const stored = sessionStorage.getItem("alarmMeta");
+    return stored ? JSON.parse(stored) : {};
+  }, []);
+  const rowData = useMemo(() => {
+    if (typeof window === "undefined") return null;
+    const stored = sessionStorage.getItem("rowData");
+    return stored ? JSON.parse(stored) : null;
+  }, []);
   const [location, setLocation] = useState("");
   const [subLocation, setSubLocation] = useState("");
   const [device, setDevice] = useState("");
   const [parameter, setParameter] = useState("");
   const [actions, setActions] = useState([""]);
-const [mappedData, setMappedData] = useState({});
-const [locations, setLocations] = useState([]);
-const [subLocations, setSubLocations] = useState([]);
-const [devices, setDevices] = useState([]);
-const [parameters, setParameters] = useState([]);
+  const [mappedData, setMappedData] = useState({});
+  const [locations, setLocations] = useState([]);
+  const [subLocations, setSubLocations] = useState([]);
+  const [devices, setDevices] = useState([]);
+  const [parameters, setParameters] = useState([]);
 
   const priorityLabels = {
     1: "Priority 1",
@@ -133,22 +146,26 @@ const [parameters, setParameters] = useState([]);
   // Store the initial comparable snapshot for update mode
   const initialComparableRef = useRef(null);
 
-useEffect(() => {
-  const fetchMappedData = async () => {
-    try {
-      const response = await fetch(`${config.BASE_URL}/alarms/mapped-location`);
-      const data = await response.json();
+  useEffect(() => {
+    const fetchMappedData = async () => {
+      try {
+        const response = await fetch(
+          `${config.BASE_URL}/alarms/mapped-location`,
+        );
+        const data = await response.json();
 
-      setMappedData(data || {});
-      // ✅ Only keep keys without a dot
-      const topLevelLocations = Object.keys(data || {}).filter(key => !key.includes("."));
-      setLocations(topLevelLocations);
-    } catch (error) {
-      console.error("Error fetching mapped location data:", error);
-    }
-  };
-  fetchMappedData();
-}, []);
+        setMappedData(data || {});
+        // ✅ Only keep keys without a dot
+        const topLevelLocations = Object.keys(data || {}).filter(
+          (key) => !key.includes("."),
+        );
+        setLocations(topLevelLocations);
+      } catch (error) {
+        console.error("Error fetching mapped location data:", error);
+      }
+    };
+    fetchMappedData();
+  }, []);
 
   /* =========================
      Fetch persist seconds options
@@ -185,40 +202,37 @@ useEffect(() => {
   /* =========================
      Initialize from rowData (update mode)
      ========================= */
+
   useEffect(() => {
-    const rs = searchParams.get("rowData");
-    const rd = rs ? JSON.parse(rs) : null;
+    if (!rowData) return;
 
-    if (rd) {
-      setLocation(rd.location || "");
-      setSubLocation(rd.subLocation || "");
-      setDevice(rd.device || "");
-      setParameter(rd.parameter || "");
-      setActions(rd.actions || [""]);
-      setTriggerPersistChecked(!!(rd?.raw?.alarmTriggerConfig?.persistenceTime));
-      setTriggerOccursChecked(!!(rd?.raw?.alarmTriggerConfig?.occursCount));
+    setLocation(rowData.location || "");
+    setSubLocation(rowData.subLocation || "");
+    setDevice(rowData.device || "");
+    setParameter(rowData.parameter || "");
+    setActions(rowData.actions || [""]);
+    setAlarmName(rowData.name || "");
 
-      const alarmTriggerConfig = rd.raw?.alarmTriggerConfig || {};
-      setPersistSeconds(
-        alarmTriggerConfig.persistenceTime ? String(alarmTriggerConfig.persistenceTime) : ""
-      );
-      setOccurTimes(
-        alarmTriggerConfig.occursCount ? String(alarmTriggerConfig.occursCount) : ""
-      );
+    const alarmTriggerConfig = rowData.raw?.alarmTriggerConfig || {};
 
-      const firstThreshold = alarmTriggerConfig.thresholds?.[0] || {};
-      setThresholdComparison(firstThreshold.operator || ">");
-      setThresholdValue(
-        firstThreshold.value !== undefined ? String(firstThreshold.value) : ""
-      );
-      setAlarmName(rd.name || "");
+    const persistenceTime = Number(alarmTriggerConfig.persistenceTime || 0);
+    const occursCount = Number(alarmTriggerConfig.occursCount || 0);
 
-      // Capture initial comparable snapshot ONCE
-      if (!initialComparableRef.current) {
-        initialComparableRef.current = buildComparableFromRowData(rd);
-      }
+    setTriggerPersistChecked(persistenceTime > 0);
+    setTriggerOccursChecked(occursCount > 0);
+    setPersistSeconds(persistenceTime ? String(persistenceTime) : "");
+    setOccurTimes(occursCount ? String(occursCount) : "");
+
+    const firstThreshold = alarmTriggerConfig.thresholds?.[0] || {};
+    setThresholdComparison(firstThreshold.operator || ">");
+    setThresholdValue(
+      firstThreshold.value !== undefined ? String(firstThreshold.value) : "",
+    );
+
+    if (!initialComparableRef.current) {
+      initialComparableRef.current = buildComparableFromRowData(rowData);
     }
-  }, [searchParams]);
+  }, [rowData]);
 
   /* =========================
      Change detection
@@ -252,10 +266,11 @@ useEffect(() => {
       occurTimes,
       thresholdValue,
       thresholdComparison,
-    ]
+    ],
   );
 
   const isUpdateMode = !!(rowData && rowData.name);
+
   const isChanged = useMemo(() => {
     if (!isUpdateMode) return true; // In Add mode, always allow submit
     if (!initialComparableRef.current) return true;
@@ -272,36 +287,36 @@ useEffect(() => {
     setActions(newActions);
   };
 
-const handleLocationChange = (selectedLocation) => {
-  setLocation(selectedLocation);
-  setSubLocation("");
-  setDevice("");
-  setParameter("");
+  const handleLocationChange = (selectedLocation) => {
+    setLocation(selectedLocation);
+    setSubLocation("");
+    setDevice("");
+    setParameter("");
 
-  const subLocs = mappedData[selectedLocation] || []; // ✅ use array directly
-  setSubLocations(subLocs);
-  setDevices([]);
-  setParameters([]);
-};
+    const subLocs = mappedData[selectedLocation] || []; // ✅ use array directly
+    setSubLocations(subLocs);
+    setDevices([]);
+    setParameters([]);
+  };
 
-const handleSubLocationChange = (selectedSubLocation) => {
-  setSubLocation(selectedSubLocation);
-  setDevice("");
-  setParameter("");
+  const handleSubLocationChange = (selectedSubLocation) => {
+    setSubLocation(selectedSubLocation);
+    setDevice("");
+    setParameter("");
 
-  const devs = mappedData[`${location}.${selectedSubLocation}`] || []; // ✅ correct path
-  setDevices(devs);
-  setParameters([]);
-};
+    const devs = mappedData[`${location}.${selectedSubLocation}`] || []; // ✅ correct path
+    setDevices(devs);
+    setParameters([]);
+  };
 
-const handleDeviceChange = (selectedDevice) => {
-  setDevice(selectedDevice);
-  setParameter("");
+  const handleDeviceChange = (selectedDevice) => {
+    setDevice(selectedDevice);
+    setParameter("");
 
-  const params = mappedData[`${location}.${subLocation}.${selectedDevice}`] || []; // ✅ correct path
-  setParameters(params);
-};
-
+    const params =
+      mappedData[`${location}.${subLocation}.${selectedDevice}`] || []; // ✅ correct path
+    setParameters(params);
+  };
 
   const handleSubmit = async () => {
     if ((isUpdateMode && !isChanged) || loading) return;
@@ -343,7 +358,7 @@ const handleDeviceChange = (selectedDevice) => {
     setFormErrors({});
 
     const payload = {
-      alarmTypeId: alarm?._id,
+      alarmTypeId: singleAlarm?._id,
       alarmName: alarmName,
       alarmLocation: location,
       alarmSubLocation: subLocation,
@@ -396,7 +411,9 @@ const handleDeviceChange = (selectedDevice) => {
       }
     } catch (error) {
       console.error("Error occurred while adding the alarm:", error);
-      toast.error(error?.message || "An error occurred while adding the alarm.");
+      toast.error(
+        error?.message || "An error occurred while adding the alarm.",
+      );
     } finally {
       setLoading(false);
     }
@@ -413,7 +430,7 @@ const handleDeviceChange = (selectedDevice) => {
 
     const payload = {
       alarmConfigId: rowData?._id,
-      alarmTypeId: alarm?._id,
+      alarmTypeId: singleAlarm?._id,
       alarmName: alarmName,
       alarmLocation: location,
       alarmSubLocation: subLocation,
@@ -434,11 +451,14 @@ const handleDeviceChange = (selectedDevice) => {
 
     try {
       setLoading(true);
-      const response = await fetch(`${config.BASE_URL}/alarms/update-alarm-config`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        `${config.BASE_URL}/alarms/update-alarm-config`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
 
       const result = await response.json();
       if (response.ok) {
@@ -449,7 +469,9 @@ const handleDeviceChange = (selectedDevice) => {
       }
     } catch (error) {
       console.error("Error occurred while updating the alarm:", error);
-      toast.error(error?.message || "An error occurred while updating the alarm.");
+      toast.error(
+        error?.message || "An error occurred while updating the alarm.",
+      );
     } finally {
       setLoading(false);
     }
@@ -464,34 +486,39 @@ const handleDeviceChange = (selectedDevice) => {
               className="w-5 h-5 text-gray-600 cursor-pointer dark:text-white"
               onClick={() => router.back()}
             />
-            <span className="ml-2">{rowData?.name ? "Update Alarm" : "Add Alarm"}</span>
+            <span className="ml-2">
+              {rowData?.name ? "Update Alarm" : "Add Alarm"}
+            </span>
           </span>
         </div>
       </div>
 
-      {alarm ? (
+      {singleAlarm ? (
         <div className="w-full px-7 flex flex-wrap gap-6 text-sm text-[#17282FCF] dark:text-white font-[Inter] mb-4">
           <span>
             <strong>Alarm Priority:</strong>{" "}
             <span className="text-[#025697] font-semibold">
-              {priorityLabels[alarm.priority] || `Priority ${alarm.priority}`}
+              {priorityLabels[singleAlarm.priority] ||
+                `Priority ${singleAlarm.priority}`}
             </span>
           </span>
           <span>
             <strong>Alarm Type:</strong>{" "}
-            <span className="text-[#025697] font-semibold">{alarm.type}</span>
+            <span className="text-[#025697] font-semibold">
+              {singleAlarm.type}
+            </span>
           </span>
           <span className="flex items-center">
             <strong>Alarm Color:</strong>
             <div
               className="ml-2 w-4 h-4 rounded-sm border border-black/20"
-              style={{ backgroundColor: alarm.color }}
+              style={{ backgroundColor: singleAlarm.color }}
             />
           </span>
           <span>
             <strong>Acknowledgement Type:</strong>{" "}
             <span className="text-[#025697] cursor-pointer">
-              {alarm.acknowledgeType === "Both"
+              {singleAlarm.acknowledgeType === "Both"
                 ? "Single + Mass Acknowledgement"
                 : "Single Acknowledgement"}
             </span>
@@ -519,7 +546,9 @@ const handleDeviceChange = (selectedDevice) => {
               className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-[#025697] dark:text-white dark:bg-gray-700 !font-[Inter]"
             />
             {formErrors.alarmName && (
-              <p className="text-red-500 text-xs mt-1">{formErrors.alarmName}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {formErrors.alarmName}
+              </p>
             )}
           </div>
 
@@ -551,14 +580,16 @@ const handleDeviceChange = (selectedDevice) => {
               width="w-full"
             />
             {formErrors.subLocation && (
-              <p className="text-red-500 text-xs mt-1">{formErrors.subLocation}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {formErrors.subLocation}
+              </p>
             )}
           </div>
 
           <div>
             <SelectDropdown
               label="Device"
-  options={devices}
+              options={devices}
               selectedValue={device}
               onChange={handleDeviceChange}
               className={`!font-[Inter] ${formErrors.device ? "border-red-500" : ""}`}
@@ -583,7 +614,9 @@ const handleDeviceChange = (selectedDevice) => {
               width="w-full"
             />
             {formErrors.parameter && (
-              <p className="text-red-500 text-xs mt-1">{formErrors.parameter}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {formErrors.parameter}
+              </p>
             )}
           </div>
 
@@ -620,61 +653,67 @@ const handleDeviceChange = (selectedDevice) => {
             </div>
 
             {formErrors.thresholdValue && (
-              <p className="text-red-500 text-xs mt-1">{formErrors.thresholdValue}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {formErrors.thresholdValue}
+              </p>
             )}
           </div>
         </div>
 
         {/* Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 mt-2">
-  <div className="w-full">
-    <label className="text-[14px] text-black dark:text-white !font-[Inter] font-semibold">
-      Actions on Acknowledgement
-    </label>
-    <div className="flex flex-col space-y-2 w-full">
-      {actions.map((action, index) => (
-        <div
-          key={index}
-          className="grid grid-cols-[86%_9%] gap-2 w-full items-center"
-        >
-          <input
-            type="text"
-            placeholder="Enter Recommended Action"
-            className="dark:bg-gray-700 w-full border border-gray-300 dark:border-gray-600 pl-1 rounded-md text-[13px] text-[#025697] dark:text-white placeholder-[#025697] resize-none !font-[Inter] flex items-center justify-center min-h-[40px] py-2"
-            value={action}
-            onChange={(e) => handleChange(index, e.target.value)}
-          />
+          <div className="w-full">
+            <label className="text-[14px] text-black dark:text-white !font-[Inter] font-semibold">
+              Actions on Acknowledgement
+            </label>
+            <div className="flex flex-col space-y-2 w-full">
+              {actions.map((action, index) => (
+                <div
+                  key={index}
+                  className="grid grid-cols-[86%_9%] gap-2 w-full items-center"
+                >
+                  <input
+                    type="text"
+                    placeholder="Enter Recommended Action"
+                    className="dark:bg-gray-700 w-full border border-gray-300 dark:border-gray-600 pl-1 rounded-md text-[13px] text-[#025697] dark:text-white placeholder-[#025697] resize-none !font-[Inter] flex items-center justify-center min-h-[40px] py-2"
+                    value={action}
+                    onChange={(e) => handleChange(index, e.target.value)}
+                  />
 
-          {/* If last field → show + button */}
-          {index === actions.length - 1 ? (
-            <button
-              type="button"
-              className="flex items-center justify-center w-10 h-10 bg-[#025697] rounded-md text-white !font-[Inter]"
-              onClick={handleAddAction}
-            >
-              +
-            </button>
-          ) : (
-            // For other fields → show cancel button
-            <button
-              type="button"
-              className="flex items-center justify-center w-10 h-10 bg-[#C40233] rounded-md text-white !font-[Inter]"
-              onClick={() => {
-                const newActions = actions.filter((_, i) => i !== index);
-                setActions(newActions);
-              }}
-            >
-              ✕
-            </button>
-          )}
+                  {/* If last field → show + button */}
+                  {index === actions.length - 1 ? (
+                    <button
+                      type="button"
+                      className="flex items-center justify-center w-10 h-10 bg-[#025697] rounded-md text-white !font-[Inter]"
+                      onClick={handleAddAction}
+                    >
+                      +
+                    </button>
+                  ) : (
+                    // For other fields → show cancel button
+                    <button
+                      type="button"
+                      className="flex items-center justify-center w-10 h-10 bg-[#C40233] rounded-md text-white !font-[Inter]"
+                      onClick={() => {
+                        const newActions = actions.filter(
+                          (_, i) => i !== index,
+                        );
+                        setActions(newActions);
+                      }}
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
+              {formErrors.actions && (
+                <p className="text-red-500 text-xs mt-1">
+                  {formErrors.actions}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
-      ))}
-      {formErrors.actions && (
-        <p className="text-red-500 text-xs mt-1">{formErrors.actions}</p>
-      )}
-    </div>
-  </div>
-</div>
 
         {/* Trigger Configuration */}
         <div className="space-y-4">
@@ -699,7 +738,9 @@ const handleDeviceChange = (selectedDevice) => {
               </label>
 
               {persistSeconds && (
-                <span className="mr-2 text-[#025697]">{persistSeconds} sec</span>
+                <span className="mr-2 text-[#025697]">
+                  {persistSeconds} sec
+                </span>
               )}
 
               <div className="relative">
@@ -743,7 +784,9 @@ const handleDeviceChange = (selectedDevice) => {
                     <SelectDropdown
                       label=""
                       options={persistSecondsOptions}
-                      selectedValue={persistSeconds ? `${persistSeconds} sec` : ""}
+                      selectedValue={
+                        persistSeconds ? `${persistSeconds} sec` : ""
+                      }
                       onChange={(val) => {
                         const num = parseInt(val, 10);
                         setPersistSeconds(Number.isNaN(num) ? "" : String(num));
@@ -762,7 +805,9 @@ const handleDeviceChange = (selectedDevice) => {
                 </div>
               </div>
               {formErrors.persistSeconds && (
-                <p className="text-red-500 text-xs mt-1">{formErrors.persistSeconds}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {formErrors.persistSeconds}
+                </p>
               )}
             </div>
 
@@ -829,7 +874,9 @@ const handleDeviceChange = (selectedDevice) => {
                       label=""
                       options={occurTimesOptions}
                       selectedValue={
-                        occurTimes ? `${occurTimes} ${occurTimes === "1" ? "time" : "times"}` : ""
+                        occurTimes
+                          ? `${occurTimes} ${occurTimes === "1" ? "time" : "times"}`
+                          : ""
                       }
                       onChange={(val) => {
                         const n = parseInt(val, 10);
@@ -850,7 +897,9 @@ const handleDeviceChange = (selectedDevice) => {
                 </div>
               </div>
               {formErrors.occurTimes && (
-                <p className="text-red-500 text-xs mt-1">{formErrors.occurTimes}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {formErrors.occurTimes}
+                </p>
               )}
             </div>
           </div>
