@@ -57,7 +57,7 @@ const getDateRangeFromString = (rangeType) => {
 
     default:
       throw new Error(
-        `Invalid range type: "${rangeType}". Use one of: today, yesterday, thisWeek, last7Days, thisMonth, last30Days, or thisYear.`
+        `Invalid range type: "${rangeType}". Use one of: today, yesterday, thisWeek, last7Days, thisMonth, last30Days, or thisYear.`,
       );
   }
 
@@ -144,7 +144,7 @@ const MainSankeyTimeSelector = ({ onRangeChange }) => {
         <span className="text-[15px] font-medium">Select Date Range:</span>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 px-3 py-[3px] rounded border border-gray-300 bg-white"
+          className="flex items-center gap-2 px-3 py-[3px] rounded border border-gray-300 bg-white dark:bg-gray-900"
         >
           {options.find((o) => o.value === selected)?.label}
           <HiChevronDown
@@ -153,7 +153,7 @@ const MainSankeyTimeSelector = ({ onRangeChange }) => {
         </button>
 
         {isOpen && (
-          <div className="absolute top-[120%] left-20 z-50 bg-white border rounded w-40 shadow">
+          <div className="absolute top-[120%] left-20 z-50 bg-white dark:bg-gray-900 border rounded w-40 shadow">
             {options.map((o) => (
               <label
                 key={o.value}

@@ -21,6 +21,7 @@ const UnitLt41Page = () => {
   const fetchLt1SankyData = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
+
     setLoading(true);
     try {
       const response = await fetch(
@@ -32,7 +33,7 @@ const UnitLt41Page = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(range),
-        }
+        },
       );
       const resResult = await response.json();
       if (response.ok) {

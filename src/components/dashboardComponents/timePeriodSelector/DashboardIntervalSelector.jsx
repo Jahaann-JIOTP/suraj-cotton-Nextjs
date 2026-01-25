@@ -190,11 +190,11 @@ export default function DashboardIntervalSelector({ onChange, title = "" }) {
         </button>
 
         {dropdownOpen && (
-          <div className="absolute z-20 w-full mt-1 bg-white border rounded shadow">
+          <div className="absolute z-20 w-full mt-1 bg-white dark:bg-gray-900 border rounded shadow">
             {intervalOptions.map((opt) => (
               <label
                 key={opt.value}
-                className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"
+                className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <input
                   type="radio"
